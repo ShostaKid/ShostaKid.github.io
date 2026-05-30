@@ -433,10 +433,11 @@ function openFic(i) {
 }
 
 function enterSite() {
-  document.getElementById('intro').classList.add('fade-out');
-  setTimeout(()=>{document.getElementById('intro').style.display='none';document.getElementById('site').classList.add('visible');},800);
+  const intro = document.getElementById('intro');
+  intro.style.pointerEvents = 'none';
+  intro.classList.add('fade-out');
+  setTimeout(()=>{intro.style.display='none';document.getElementById('site').classList.add('visible');},800);
 }
-
 function playMusic(i) {
   const f = fics[i];
   const m = f.music;
