@@ -371,7 +371,19 @@ async function loadChapter(ficIdx, chapterIdx) {
   body.innerHTML = '<div class="loading">Loading</div>';
   document.getElementById('reading-footer').style.display = 'none';
 
-
+  try {
+    const url = REPO + encodeURIComponent(fic.files[chapterIdx]);
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Not found');
+    const text = await res.text();
+    body.innerHTML = `<div class="fic-body">${txtToHtml(text)}</div>`;
+    document.getElementById('reading-footer').style.display = 'block';
+  } catch(e) {
+    body.innerHTML = `<div class="fic-body"><p><em>Could not load chapter. Please check back later.</em></p></div>`;
+  }
+  updateChapterNav(ficIdx, chapterIdx);
+  window.scrollTo(0,0);
+}
 
 function updateChapterNav(ficIdx, chapterIdx) {
   const fic = fics[ficIdx];
