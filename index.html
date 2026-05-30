@@ -286,7 +286,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   </div>
 </div>
 
-<audio id="bgAudio" loop></audio>
+<!-- YouTube player ẩn — tự inject bằng JS -->
 
 <script>
 // =============================================
@@ -298,10 +298,8 @@ const fics = [
     subtitle: '"Totentanz"',
     fandom: '重返未来：1999 · Reverse: 1999',
     warning: 'Rape/Non-Con — This fic is not healthy and may cause discomfort. Please proceed at your own risk.',
-    music: 'Dance of the Knights.mp3',
-    musicName: 'Prokofiev — Dance of the Knights',
-    // one-shot: 1 file txt
-    // nhiều chương: ['chuong1.txt','chuong2.txt',...]
+    music: { id: 'bAzZcKB6LO8', start: 351, end: 534 },
+    musicName: 'Shostakovich — Symphony No. 14',
     files: ['Toccata no.1.txt'],
     chapters: ['I. Totentanz']
   },
@@ -310,18 +308,18 @@ const fics = [
     subtitle: '"Desires"',
     fandom: '重返未来：1999 · Reverse: 1999',
     warning: 'Rape/Non-Con',
-    music: 'Danse Macabre.mp3',
-    musicName: 'Saint-Saëns — Danse Macabre',
-    files: ['Fantasia no.1.txt'], // chưa có file txt, dùng preview
+    music: { id: 'Lb4Asov1eKY', start: 94 },
+    musicName: 'Prokofiev — Dance of the Knights',
+    files: ['Fantasia no.1.txt'],
     chapters: ['I. Desires']
   },
   {
-    title: 'Piano Concerto in G Minor',
+    title: 'Piano Concerto no.2 in G Minor',
     subtitle: '"Нет, только тот, кто знал"',
     fandom: 'Figure Skating RPF',
     warning: null,
-    music: 'ShostaSymphony9.mp3',
-    musicName: 'Shostakovich — Symphony No. 9',
+    music: { id: 'HLlxUFlv1mo', start: 488, end: 894 },
+    musicName: 'Shostakovich — Piano Concerto No. 2',
     files: ['Piano Concerto no.1.txt'],
     chapters: ['Chapter 1', 'Chapter 2', 'Chapter 3']
   },
@@ -330,8 +328,8 @@ const fics = [
     subtitle: '"None but the Lonely Heart"',
     fandom: '重返未来：1999 · Reverse: 1999',
     warning: null,
-    music: "Tchaikovsky's Symphony 6.mp3",
-    musicName: "Tchaikovsky — Symphony No. 6 'Pathétique'",
+    music: { id: 'QDW4VJGKLAQ', start: 0 },
+    musicName: 'Shostakovich — Gadfly Romance',
     files: ['Piano concerto no.2.txt'],
     chapters: ['I. None but the Lonely Heart']
   }
@@ -342,7 +340,6 @@ const fics = [
 // =============================================
 let currentPage='home', prevPage='home', musicPlaying=false;
 let currentFic=0, currentChapter=0;
-const audio = document.getElementById('bgAudio');
 const REPO = 'https://raw.githubusercontent.com/lavaknight2017-rgb/ShostaKid.github.io/main/';
 
 function txtToHtml(text) {
@@ -442,7 +439,19 @@ function enterSite() {
 
 function playMusic(i) {
   const f = fics[i];
-  audio.src = f.music; audio.volume = 0.55; audio.play().catch(()=>{});
+  const m = f.music;
+  // Xóa iframe cũ nếu có
+  const old = document.getElementById('yt-player');
+  if (old) old.remove();
+  // Tạo iframe YouTube ẩn
+  const iframe = document.createElement('iframe');
+  iframe.id = 'yt-player';
+  iframe.style.cssText = 'position:fixed;width:1px;height:1px;bottom:-10px;left:-10px;opacity:0;pointer-events:none;';
+  const end = m.end ? `&end=${m.end}` : '';
+  iframe.src = `https://www.youtube.com/embed/${m.id}?autoplay=1&start=${m.start||0}${end}&loop=1&playlist=${m.id}&enablejsapi=1`;
+  iframe.allow = 'autoplay; encrypted-media';
+  iframe.frameBorder = '0';
+  document.body.appendChild(iframe);
   musicPlaying = true;
   document.getElementById('music-bar').classList.remove('hidden');
   document.getElementById('music-title').textContent = f.musicName;
@@ -451,17 +460,24 @@ function playMusic(i) {
 }
 
 function stopMusic() {
-  audio.pause(); audio.src = ''; musicPlaying = false;
+  const yt = document.getElementById('yt-player');
+  if (yt) yt.remove();
+  musicPlaying = false;
   document.getElementById('music-bar').classList.add('hidden');
 }
 
 function toggleMusic() {
+  const yt = document.getElementById('yt-player');
+  if (!yt) return;
   if (musicPlaying) {
-    audio.pause(); musicPlaying = false;
+    // Pause bằng cách xóa autoplay khỏi src
+    yt.src = yt.src.replace('autoplay=1','autoplay=0');
+    musicPlaying = false;
     document.getElementById('musicBars').classList.add('paused');
     document.querySelector('.music-toggle').textContent = 'Play';
   } else {
-    audio.play().catch(()=>{}); musicPlaying = true;
+    yt.src = yt.src.replace('autoplay=0','autoplay=1');
+    musicPlaying = true;
     document.getElementById('musicBars').classList.remove('paused');
     document.querySelector('.music-toggle').textContent = 'Pause';
   }
