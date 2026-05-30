@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ShostaKid</title>
+<title>ShostaKid — Works in Prose & Passion</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -14,61 +14,21 @@
 body{background:var(--cream);color:var(--ink);font-family:Georgia,'Times New Roman',serif;min-height:100vh;overflow-x:hidden;}
 
 /* GOTHIC PATTERN */
-.gothic-bg{
-  position:relative;
-  background-color:var(--cream);
-}
-.gothic-bg::before{
-  content:'';
-  position:absolute;inset:0;
-  background-image:
-    repeating-linear-gradient(45deg, rgba(184,151,42,0.07) 0px, rgba(184,151,42,0.07) 1px, transparent 1px, transparent 56px),
-    repeating-linear-gradient(-45deg, rgba(184,151,42,0.07) 0px, rgba(184,151,42,0.07) 1px, transparent 1px, transparent 56px);
-  pointer-events:none;
-  z-index:0;
-}
-/* Vignette — đậm 2 bên, nhạt giữa */
-.gothic-bg::after{
-  content:'';
-  position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse 60% 100% at 50% 50%, transparent 40%, rgba(212,180,100,0.13) 70%, rgba(184,151,42,0.22) 100%);
-  pointer-events:none;
-  z-index:0;
-}
-.gothic-bg > *{position:relative;z-index:1;}
+.gothic-bg{position:relative;background-color:var(--cream);}
+.gothic-bg::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(184,151,42,0.07) 0px,rgba(184,151,42,0.07) 1px,transparent 1px,transparent 56px),repeating-linear-gradient(-45deg,rgba(184,151,42,0.07) 0px,rgba(184,151,42,0.07) 1px,transparent 1px,transparent 56px);pointer-events:none;z-index:0;}
+.gothic-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 100% at 50% 50%,transparent 40%,rgba(212,180,100,0.13) 70%,rgba(184,151,42,0.22) 100%);pointer-events:none;z-index:0;}
+.gothic-bg>*{position:relative;z-index:1;}
 
-/* INTRO SCREEN */
-#intro{
-  position:fixed;inset:0;z-index:9999;
-  background:#0a0805;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  cursor:pointer;transition:opacity 0.8s ease;
-}
+/* INTRO */
+#intro{position:fixed;inset:0;z-index:9999;background:#0a0805;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.8s ease;}
 #intro.fade-out{opacity:0;pointer-events:none;}
-.intro-ornament{
-  font-family:'Playfair Display',serif;font-size:5rem;
-  color:rgba(184,151,42,0.15);line-height:1;margin-bottom:2rem;
-  animation:float 3s ease-in-out infinite;
-}
+.intro-ornament{font-family:'Playfair Display',serif;font-size:5rem;color:rgba(184,151,42,0.15);line-height:1;margin-bottom:2rem;animation:float 3s ease-in-out infinite;}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.intro-title{
-  font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:400;
-  letter-spacing:8px;text-transform:uppercase;color:#e8dfc8;margin-bottom:0.8rem;
-  text-align:center;
-}
+.intro-title{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:400;letter-spacing:8px;text-transform:uppercase;color:#e8dfc8;margin-bottom:0.8rem;text-align:center;}
 .intro-title span{color:var(--gold);}
-.intro-sub{
-  font-family:Georgia,serif;font-style:italic;font-size:1.1rem;
-  color:rgba(232,223,200,0.5);letter-spacing:2px;margin-bottom:4rem;
-  text-align:center;
-}
+.intro-sub{font-family:Georgia,serif;font-style:italic;font-size:1.1rem;color:rgba(232,223,200,0.5);letter-spacing:2px;margin-bottom:4rem;text-align:center;}
 .intro-cta{display:flex;flex-direction:column;align-items:center;gap:0.8rem;}
-.intro-cta-text{
-  font-family:'Playfair Display',serif;font-size:0.72rem;letter-spacing:4px;
-  text-transform:uppercase;color:rgba(184,151,42,0.7);
-  animation:blink 2s ease-in-out infinite;
-}
+.intro-cta-text{font-family:'Playfair Display',serif;font-size:0.72rem;letter-spacing:4px;text-transform:uppercase;color:rgba(184,151,42,0.7);animation:blink 2s ease-in-out infinite;}
 @keyframes blink{0%,100%{opacity:0.4}50%{opacity:1}}
 .intro-bars{display:flex;align-items:flex-end;gap:4px;height:24px;}
 .intro-bars span{width:3px;background:rgba(184,151,42,0.4);border-radius:2px;animation:bar 1.2s ease-in-out infinite;}
@@ -80,7 +40,7 @@ body{background:var(--cream);color:var(--ink);font-family:Georgia,'Times New Rom
 @keyframes bar{0%,100%{transform:scaleY(0.4)}50%{transform:scaleY(1)}}
 .intro-line{width:1px;height:60px;background:linear-gradient(to bottom,transparent,rgba(184,151,42,0.4),transparent);margin-bottom:1rem;}
 
-/* MAIN SITE */
+/* SITE */
 #site{opacity:0;transition:opacity 0.8s ease;}
 #site.visible{opacity:1;}
 
@@ -91,7 +51,7 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .nav-links a{font-family:'Playfair Display',serif;font-size:0.72rem;letter-spacing:2.5px;color:var(--ink2);text-decoration:none;text-transform:uppercase;cursor:pointer;transition:color 0.2s;}
 .nav-links a:hover,.nav-links a.active{color:var(--gold);}
 
-#music-bar{background:rgba(242,237,224,0.95);border-bottom:1px solid var(--border);padding:8px 3rem;display:flex;align-items:center;gap:1rem;font-family:'Playfair Display',serif;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);min-height:36px;transition:all 0.4s ease;}
+#music-bar{background:rgba(242,237,224,0.95);border-bottom:1px solid var(--border);padding:8px 3rem;display:flex;align-items:center;gap:1rem;font-family:'Playfair Display',serif;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);min-height:36px;}
 #music-bar.hidden{display:none;}
 .music-now{display:flex;align-items:center;gap:8px;flex:1;}
 .music-bars{display:flex;align-items:flex-end;gap:2px;height:14px;}
@@ -110,8 +70,7 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .page.active{display:block;}
 @keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-/* HERO */
-.hero{padding:6rem 3rem 5rem;text-align:center;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.hero{padding:6rem 3rem 5rem;text-align:center;border-bottom:1px solid var(--border);}
 .hero-ornament{font-family:'Playfair Display',serif;font-size:5rem;color:var(--gold);opacity:0.18;line-height:1;margin-bottom:-1rem;}
 .hero-title{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:400;letter-spacing:6px;text-transform:uppercase;margin-bottom:1rem;color:var(--ink);}
 .hero-subtitle{font-family:'Playfair Display',serif;font-style:italic;font-size:1.3rem;color:var(--ink2);letter-spacing:1px;margin-bottom:2rem;}
@@ -120,7 +79,6 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .hero-divider::after{background:linear-gradient(to left,transparent,var(--border));}
 .hero-tagline{font-family:Georgia,serif;font-size:1rem;color:var(--ink3);letter-spacing:3px;text-transform:uppercase;}
 
-/* FICS */
 .fics-section{max-width:860px;margin:0 auto;padding:3.5rem 2rem;}
 .section-heading{font-family:'Playfair Display',serif;font-size:0.78rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:2.5rem;display:flex;align-items:center;gap:1rem;}
 .section-heading::after{content:'';flex:1;height:1px;background:var(--border);}
@@ -136,18 +94,34 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .fic-tags{margin-top:0.9rem;display:flex;flex-wrap:wrap;gap:6px;}
 .tag{font-family:'Playfair Display',serif;font-size:0.6rem;letter-spacing:1.5px;color:var(--ink3);border:1px solid var(--border);padding:3px 10px;text-transform:uppercase;}
 
-/* READING — no pattern, clean bg */
+/* READING PAGE */
 .reading-wrap{max-width:720px;margin:0 auto;padding:4rem 2rem;}
 .back-btn{font-family:'Playfair Display',serif;font-size:0.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink3);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:3rem;transition:color 0.2s;}
 .back-btn:hover{color:var(--gold);}
-.reading-title{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:400;line-height:1.2;color:var(--ink);margin-bottom:0.5rem;}
+.reading-title{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:400;line-height:1.2;color:var(--ink);margin-bottom:0.5rem;}
 .reading-title em{font-style:italic;color:var(--gold-dark);}
-.reading-meta{font-family:'Playfair Display',serif;font-size:0.65rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;margin-bottom:0.5rem;}
+.reading-fandom{font-family:'Playfair Display',serif;font-size:0.65rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;margin-bottom:0.5rem;}
 .reading-warning{font-family:Georgia,serif;font-style:italic;color:#993C1D;font-size:0.9rem;border-left:2px solid #D85A30;padding-left:1rem;margin:1.2rem 0;}
 .reading-divider{text-align:center;margin:2rem 0;color:var(--gold);font-size:1.3rem;letter-spacing:8px;}
+
+/* Chapter nav */
+.chapter-nav{display:flex;align-items:center;justify-content:space-between;margin:2.5rem 0;padding:1rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.chapter-nav button{font-family:'Playfair Display',serif;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);background:none;border:1px solid var(--border);padding:8px 16px;cursor:pointer;transition:all 0.2s;}
+.chapter-nav button:hover{border-color:var(--gold);color:var(--gold);}
+.chapter-nav button:disabled{opacity:0.3;cursor:default;}
+.chapter-label{font-family:'Playfair Display',serif;font-size:0.72rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;}
+
+/* Fic body */
 .fic-body{font-family:Georgia,'Times New Roman',serif;font-size:1.12rem;line-height:2;color:var(--ink);}
-.fic-body p{margin-bottom:1.4em;}
+.fic-body p{margin-bottom:1.5em;}
 .fic-body em{font-style:italic;color:var(--ink2);}
+.fic-body .scene-break{text-align:center;color:var(--gold);letter-spacing:8px;margin:2rem 0;font-size:1.1rem;}
+
+/* Loading spinner */
+.loading{text-align:center;padding:4rem;font-family:'Playfair Display',serif;font-size:0.78rem;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);}
+.loading::after{content:'';display:block;width:30px;height:1px;background:var(--gold);margin:1rem auto 0;animation:loadbar 1.2s ease-in-out infinite;}
+@keyframes loadbar{0%,100%{width:20px;opacity:0.3}50%{width:60px;opacity:1}}
+
 .ao3-link{display:inline-flex;align-items:center;gap:8px;margin-top:2.5rem;font-family:'Playfair Display',serif;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);border:1px solid var(--border);padding:10px 20px;text-decoration:none;transition:all 0.2s;cursor:pointer;background:none;}
 .ao3-link:hover{border-color:var(--gold);color:var(--gold);}
 
@@ -170,12 +144,10 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 <div id="intro" onclick="enterSite()">
   <div class="intro-ornament">♩</div>
   <div class="intro-title">Shosta<span>Kid</span></div>
-  <div class="intro-sub">A place where I write anything I want</div>
+  <div class="intro-sub">Works in Prose & Passion</div>
   <div class="intro-line"></div>
   <div class="intro-cta">
-    <div class="intro-bars">
-      <span></span><span></span><span></span><span></span><span></span>
-    </div>
+    <div class="intro-bars"><span></span><span></span><span></span><span></span><span></span></div>
     <div class="intro-cta-text">Click anywhere to enter</div>
   </div>
 </div>
@@ -204,45 +176,43 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
     <div class="hero">
       <div class="hero-ornament">♩</div>
       <h1 class="hero-title">ShostaKid</h1>
-      <p class="hero-subtitle">A place where I write anything I want</p>
+      <p class="hero-subtitle">Works in Prose & Passion</p>
       <div class="hero-divider"><span style="color:var(--gold);letter-spacing:4px;">✦ ✦ ✦</span></div>
-      <p class="hero-tagline">Take a $ip y'all and enjoy</p>
+      <p class="hero-tagline">Fanfiction · Classical Motifs · Dark Themes</p>
     </div>
     <div class="fics-section">
       <div class="section-heading">Latest Works</div>
       <div class="fic-card" onclick="openFic(0)">
         <div class="fic-title">Toccata in D sharp Minor: <em>"Totentanz"</em></div>
         <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span><span>533 words</span><span>28 May 2026</span></div>
-        <div class="fic-warning">⚠ Rape/Non-Con</div>
-        <div class="fic-summary">This fic is not healthy, and may cause discomfort for some readers.</div>
-        <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
+        <div class="fic-warning">⚠ Rape/Non-Con — please proceed at your own risk</div>
+        <div class="fic-summary">This fic is not healthy, and may cause discomfort for some readers. A dance with death in D sharp minor.</div>
+        <div class="fic-tags"><span class="tag">Aleph/Recoleta</span><span class="tag">Dark</span><span class="tag">One-shot</span></div>
       </div>
       <div class="fic-card" onclick="openFic(1)">
         <div class="fic-title">Fantasia no.1 in C minor: <em>"Desires"</em></div>
         <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span><span>1,534 words</span><span>25 May 2026</span></div>
         <div class="fic-warning">⚠ Rape/Non-Con</div>
-        <div class="fic-summary">Allegretto con Appassionato</div>
-        <div class="fic-tags"><span class="tag">Corvus/Pyrrhos</span></div>
+        <div class="fic-summary">Allegretto con Appassionato. A fantasia in the key of wanting.</div>
+        <div class="fic-tags"><span class="tag">Corvus/Pyrrhos</span><span class="tag">Passionate</span><span class="tag">One-shot</span></div>
       </div>
       <div class="fic-card" onclick="openFic(2)">
         <div class="fic-title">Piano Concerto in G Minor: <em>"Нет, только тот, кто знал"</em></div>
         <div class="fic-meta"><span>Figure Skating RPF</span><span>1,204 words</span><span>22 May 2026</span></div>
         <div class="fic-summary">"None but the lonely heart / Can know my sadness / Alone and parted / Far from joy and gladness"</div>
-        <div class="fic-tags"><span class="tag">TrusoKova</span></div>
+        <div class="fic-tags"><span class="tag">Anna Shcherbakova</span><span class="tag">Alexandra Trusova</span><span class="tag">In Progress</span></div>
       </div>
       <div class="fic-card" onclick="openFic(3)">
-        <div class="fic-title">Nocturne in C sharp Minor</div>
-        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span><span>1,643 words</span><span>16 April 2026</span></div>
-        <div class="fic-summary">.</div>
-        <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
+        <div class="fic-title">Piano Concerto no.1 in C sharp Minor: <em>"None but the Lonely Heart"</em></div>
+        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span><span>One-shot</span><span>22 May 2026</span></div>
+        <div class="fic-summary">Net, tol'ko tot, kto znal svidan'ja, zhazhdu... A lament in C sharp minor.</div>
+        <div class="fic-tags"><span class="tag">Aleph/Recoleta</span><span class="tag">Melancholic</span></div>
       </div>
       <div style="text-align:center;margin-top:2rem;">
         <button class="ao3-link" onclick="showPage('works',document.querySelector('.nav-links a:nth-child(2)'))">View All Works →</button>
       </div>
     </div>
-    <footer>
-      <span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · All works posted with love and a little madness &nbsp; <span style="color:var(--gold);">✦</span>
-    </footer>
+    <footer><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · All works posted with love and a little madness &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
 
   <!-- WORKS -->
@@ -276,23 +246,24 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <div class="fic-tags"><span class="tag">Aleph/Recoleta</span><span class="tag">Aleph</span><span class="tag">Recoleta</span></div>
       </div>
     </div>
-    <footer>
-      <span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · All works posted with love and a little madness &nbsp; <span style="color:var(--gold);">✦</span>
-    </footer>
+    <footer><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · All works posted with love and a little madness &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
 
-  <!-- READING — nền sáng sạch -->
+  <!-- READING -->
   <div class="page" id="page-reading" style="background:var(--cream);">
     <div class="reading-wrap">
       <button class="back-btn" onclick="goBack()">← Back</button>
-      <div id="reading-content"></div>
+      <div id="reading-header"></div>
+      <div id="reading-body"></div>
+      <div id="reading-footer" style="margin-top:3rem;border-top:1px solid var(--border);padding-top:2rem;display:none;">
+        <p style="font-family:'Playfair Display',serif;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:1rem;">Read the full work on AO3</p>
+        <a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid/works" target="_blank">Continue on AO3 →</a>
+      </div>
     </div>
-    <footer style="margin-top:4rem;">
-      <span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · All works posted with love and a little madness &nbsp; <span style="color:var(--gold);">✦</span>
-    </footer>
+    <footer style="margin-top:2rem;"><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · All works posted with love and a little madness &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
 
-  <!-- ABOUT — nền sáng sạch -->
+  <!-- ABOUT -->
   <div class="page" id="page-about" style="background:var(--cream);">
     <div class="about-wrap">
       <div class="about-ornament">𝄞</div>
@@ -309,89 +280,215 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <div class="stat-box"><span class="stat-num">243</span><span class="stat-label">Hits</span></div>
       </div>
       <div class="about-sig">— ShostaKid</div>
-      <div style="margin-top:2rem;">
-        <a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid" target="_blank">View on AO3 →</a>
-      </div>
+      <div style="margin-top:2rem;"><a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid" target="_blank">View on AO3 →</a></div>
     </div>
-    <footer style="margin-top:4rem;">
-      <span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · All works posted with love and a little madness &nbsp; <span style="color:var(--gold);">✦</span>
-    </footer>
+    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · All works posted with love and a little madness &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
 </div>
 
 <audio id="bgAudio" loop></audio>
 
 <script>
-const fics=[
-  {title:'Toccata in D sharp Minor',subtitle:'"Totentanz"',fandom:'重返未来：1999 · Reverse: 1999',warning:'Rape/Non-Con — This fic is not healthy and may cause discomfort. Please proceed at your own risk.',music:'Dance of the Knights.mp3',musicName:'Prokofiev — Dance of the Knights',body:`<p>The music begins before the candles are lit.</p><p>Aleph does not look at him — not at first. There is a kind of power in withholding the gaze, in making someone wait for the weight of your attention. Recoleta has learned this lesson poorly; his eyes have always been too hungry, too honest in their wanting.</p><p><em>Totentanz.</em> The dance of death. It is an old name for an old thing: the procession of the living toward their end, each figure leading the next in an endless, terrible waltz.</p><p>Aleph lifts the lid of the piano and sets his fingers to the keys without a sound.</p><p>"You could simply ask," Recoleta says, from somewhere behind him.</p><p>Aleph plays the first chord. D sharp minor — a key that has no business being as beautiful as it is.</p><p>"I never ask," he says. "You already know what I want."</p><p><em>[ Replace this with your full fic text. ]</em></p>`},
-  {title:'Fantasia no.1 in C minor',subtitle:'"Desires"',fandom:'重返未来：1999 · Reverse: 1999',warning:'Rape/Non-Con',music:'Danse Macabre.mp3',musicName:'Saint-Saëns — Danse Macabre',body:`<p><em>Allegretto con Appassionato.</em></p><p>The tempo marking is a lie, or a prayer, or both. Pyrrhos has never been able to decide which.</p><p>Corvus does not play the piano so much as he argues with it — each phrase a statement of intent, each resolution a small surrender.</p><p>"You're staring," Corvus says, without turning.</p><p>"I'm watching," Pyrrhos corrects. "There's a difference."</p><p>"Is there." It is not a question.</p><p><em>[ Replace this with your full fic text. ]</em></p>`},
-  {title:'Piano Concerto in G Minor',subtitle:'"Нет, только тот, кто знал"',fandom:'Figure Skating RPF',warning:null,music:'ShostaSymphony9.mp3',musicName:'Shostakovich — Symphony No. 9',body:`<p><em>None but the lonely heart<br>Can know my sadness<br>Alone and parted<br>Far from joy and gladness</em></p><p>Anna watches the ice like it owes her something.</p><p>She has always skated this way — with a kind of fierce, quiet accounting, as though every rotation is a debt being paid.</p><p><em>[ Replace this with your full fic text. ]</em></p>`},
-  {title:'Piano Concerto no.1 in C sharp Minor',subtitle:'"None but the Lonely Heart"',fandom:'重返未来：1999 · Reverse: 1999',warning:null,music:"Tchaikovsky's Symphony 6.mp3",musicName:"Tchaikovsky — Symphony No. 6 'Pathétique'",body:`<p><em>Net, tol'ko tot,<br>kto znal svidan'ja, zhazhdu,<br>poimet, kak ya stradal<br>i kak ya strazhdу.</em></p><p>Recoleta finds the letter on a Tuesday, tucked beneath the strings of the piano where no one would think to look and everyone who knew Aleph would look immediately.</p><p>He does not open it for three days.</p><p><em>[ Replace this with your full fic text. ]</em></p>`}
+// =============================================
+// FIC DATA — chỉnh sửa phần này khi thêm truyện
+// =============================================
+const fics = [
+  {
+    title: 'Toccata in D sharp Minor',
+    subtitle: '"Totentanz"',
+    fandom: '重返未来：1999 · Reverse: 1999',
+    warning: 'Rape/Non-Con — This fic is not healthy and may cause discomfort. Please proceed at your own risk.',
+    music: 'Dance of the Knights.mp3',
+    musicName: 'Prokofiev — Dance of the Knights',
+    // one-shot: 1 file txt
+    // nhiều chương: ['chuong1.txt','chuong2.txt',...]
+    files: ['Toccata no.1.txt'],
+    chapters: ['I. Totentanz']
+  },
+  {
+    title: 'Fantasia no.1 in C minor',
+    subtitle: '"Desires"',
+    fandom: '重返未来：1999 · Reverse: 1999',
+    warning: 'Rape/Non-Con',
+    music: 'Danse Macabre.mp3',
+    musicName: 'Saint-Saëns — Danse Macabre',
+    files: null, // chưa có file txt, dùng preview
+    chapters: ['I. Desires']
+  },
+  {
+    title: 'Piano Concerto in G Minor',
+    subtitle: '"Нет, только тот, кто знал"',
+    fandom: 'Figure Skating RPF',
+    warning: null,
+    music: 'ShostaSymphony9.mp3',
+    musicName: 'Shostakovich — Symphony No. 9',
+    files: null,
+    chapters: ['Chapter 1', 'Chapter 2', 'Chapter 3']
+  },
+  {
+    title: 'Piano Concerto no.1 in C sharp Minor',
+    subtitle: '"None but the Lonely Heart"',
+    fandom: '重返未来：1999 · Reverse: 1999',
+    warning: null,
+    music: "Tchaikovsky's Symphony 6.mp3",
+    musicName: "Tchaikovsky — Symphony No. 6 'Pathétique'",
+    files: null,
+    chapters: ['I. None but the Lonely Heart']
+  }
 ];
 
-let currentPage='home',prevPage='home',musicPlaying=false;
-const audio=document.getElementById('bgAudio');
+// fallback preview khi chưa có file txt
+const previews = [
+  null, // Toccata dùng file thật
+  `<p><em>Allegretto con Appassionato.</em></p><p>The tempo marking is a lie, or a prayer, or both.</p><p><em>[ Full text coming soon. ]</em></p>`,
+  `<p><em>None but the lonely heart / Can know my sadness</em></p><p>Anna watches the ice like it owes her something.</p><p><em>[ Full text coming soon. ]</em></p>`,
+  `<p><em>Net, tol'ko tot, kto znal svidan'ja, zhazhdu...</em></p><p>Recoleta finds the letter on a Tuesday.</p><p><em>[ Full text coming soon. ]</em></p>`
+];
 
-function enterSite(){
-  const intro=document.getElementById('intro');
-  intro.classList.add('fade-out');
-  setTimeout(()=>{intro.style.display='none';document.getElementById('site').classList.add('visible');},800);
+// =============================================
+// ENGINE
+// =============================================
+let currentPage='home', prevPage='home', musicPlaying=false;
+let currentFic=0, currentChapter=0;
+const audio = document.getElementById('bgAudio');
+const REPO = 'https://raw.githubusercontent.com/lavaknight2017-rgb/ShostaKid.github.io/main/';
+
+function txtToHtml(text) {
+  // Split thành paragraphs theo dòng trống
+  const paragraphs = text.split(/\n\s*\n/);
+  return paragraphs.map(p => {
+    p = p.trim();
+    if (!p) return '';
+    // --- thành scene break
+    if (/^-{3,}$/.test(p)) return '<div class="scene-break">✦ ✦ ✦</div>';
+    // Xuống dòng đơn trong đoạn → <br>
+    const lines = p.split('\n').map(l => l.trim()).join('<br>');
+    return `<p>${lines}</p>`;
+  }).join('');
 }
 
-function playMusic(i){
-  const f=fics[i];
-  audio.src=f.music;audio.volume=0.55;audio.play().catch(()=>{});
-  musicPlaying=true;
-  document.getElementById('music-bar').classList.remove('hidden');
-  document.getElementById('music-title').textContent=f.musicName;
-  document.getElementById('musicBars').classList.remove('paused');
-  document.querySelector('.music-toggle').textContent='Pause';
-}
+async function loadChapter(ficIdx, chapterIdx) {
+  const fic = fics[ficIdx];
+  const body = document.getElementById('reading-body');
 
-function stopMusic(){
-  audio.pause();audio.src='';musicPlaying=false;
-  document.getElementById('music-bar').classList.add('hidden');
-}
+  if (!fic.files || !fic.files[chapterIdx]) {
+    // Dùng preview
+    body.innerHTML = `<div class="fic-body">${previews[ficIdx] || '<p><em>Coming soon.</em></p>'}</div>`;
+    document.getElementById('reading-footer').style.display = 'block';
+    updateChapterNav(ficIdx, chapterIdx);
+    return;
+  }
 
-function toggleMusic(){
-  if(musicPlaying){audio.pause();musicPlaying=false;document.getElementById('musicBars').classList.add('paused');document.querySelector('.music-toggle').textContent='Play';}
-  else{audio.play().catch(()=>{});musicPlaying=true;document.getElementById('musicBars').classList.remove('paused');document.querySelector('.music-toggle').textContent='Pause';}
-}
+  body.innerHTML = '<div class="loading">Loading</div>';
+  document.getElementById('reading-footer').style.display = 'none';
 
-function showPage(id,el){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
-  if(el)el.classList.add('active');
-  prevPage=currentPage;currentPage=id;
-  if(id!=='reading')stopMusic();
+  try {
+    const url = REPO + encodeURIComponent(fic.files[chapterIdx]);
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Not found');
+    const text = await res.text();
+    body.innerHTML = `<div class="fic-body">${txtToHtml(text)}</div>`;
+    document.getElementById('reading-footer').style.display = 'block';
+  } catch(e) {
+    body.innerHTML = `<div class="fic-body"><p><em>Could not load chapter. Please check back later.</em></p></div>`;
+  }
+  updateChapterNav(ficIdx, chapterIdx);
   window.scrollTo(0,0);
 }
 
-function openFic(i){
-  prevPage=currentPage;
-  const f=fics[i];
-  document.getElementById('reading-content').innerHTML=`
+function updateChapterNav(ficIdx, chapterIdx) {
+  const fic = fics[ficIdx];
+  const nav = document.getElementById('chapter-nav');
+  if (!nav) return;
+  if (fic.chapters.length <= 1) { nav.style.display='none'; return; }
+  nav.style.display = 'flex';
+  document.getElementById('ch-label').textContent = fic.chapters[chapterIdx] || `Chapter ${chapterIdx+1}`;
+  document.getElementById('ch-prev').disabled = chapterIdx === 0;
+  document.getElementById('ch-next').disabled = chapterIdx >= fic.chapters.length - 1;
+}
+
+function prevChapter() {
+  if (currentChapter > 0) { currentChapter--; loadChapter(currentFic, currentChapter); }
+}
+function nextChapter() {
+  if (currentChapter < fics[currentFic].chapters.length - 1) { currentChapter++; loadChapter(currentFic, currentChapter); }
+}
+
+function openFic(i) {
+  prevPage = currentPage;
+  currentFic = i;
+  currentChapter = 0;
+  const f = fics[i];
+
+  // Header
+  const chapterNavHtml = f.chapters.length > 1 ? `
+    <div class="chapter-nav" id="chapter-nav">
+      <button id="ch-prev" onclick="prevChapter()">← Prev</button>
+      <span class="chapter-label" id="ch-label">${f.chapters[0]}</span>
+      <button id="ch-next" onclick="nextChapter()">Next →</button>
+    </div>` : '<div id="chapter-nav" style="display:none"></div>';
+
+  document.getElementById('reading-header').innerHTML = `
     <div class="reading-title">${f.title}: ${f.subtitle}</div>
-    <div class="reading-meta">${f.fandom}</div>
-    ${f.warning?`<div class="reading-warning">⚠ ${f.warning}</div>`:''}
+    <div class="reading-fandom">${f.fandom}</div>
+    ${f.warning ? `<div class="reading-warning">⚠ ${f.warning}</div>` : ''}
     <div class="reading-divider">✦ ✦ ✦</div>
-    <div class="fic-body">${f.body}</div>
-    <div style="margin-top:3rem;border-top:1px solid var(--border);padding-top:2rem;">
-      <p style="font-family:'Playfair Display',serif;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:1rem;">Read the full work on AO3</p>
-      <a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid/works" target="_blank">Continue on AO3 →</a>
-    </div>`;
+    ${chapterNavHtml}`;
+
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-reading').classList.add('active');
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
   window.scrollTo(0,0);
+  loadChapter(i, 0);
   playMusic(i);
 }
 
-function goBack(){
+function enterSite() {
+  document.getElementById('intro').classList.add('fade-out');
+  setTimeout(()=>{document.getElementById('intro').style.display='none';document.getElementById('site').classList.add('visible');},800);
+}
+
+function playMusic(i) {
+  const f = fics[i];
+  audio.src = f.music; audio.volume = 0.55; audio.play().catch(()=>{});
+  musicPlaying = true;
+  document.getElementById('music-bar').classList.remove('hidden');
+  document.getElementById('music-title').textContent = f.musicName;
+  document.getElementById('musicBars').classList.remove('paused');
+  document.querySelector('.music-toggle').textContent = 'Pause';
+}
+
+function stopMusic() {
+  audio.pause(); audio.src = ''; musicPlaying = false;
+  document.getElementById('music-bar').classList.add('hidden');
+}
+
+function toggleMusic() {
+  if (musicPlaying) {
+    audio.pause(); musicPlaying = false;
+    document.getElementById('musicBars').classList.add('paused');
+    document.querySelector('.music-toggle').textContent = 'Play';
+  } else {
+    audio.play().catch(()=>{}); musicPlaying = true;
+    document.getElementById('musicBars').classList.remove('paused');
+    document.querySelector('.music-toggle').textContent = 'Pause';
+  }
+}
+
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+  if (el) el.classList.add('active');
+  prevPage = currentPage; currentPage = id;
+  if (id !== 'reading') stopMusic();
+  window.scrollTo(0,0);
+}
+
+function goBack() {
   stopMusic();
-  showPage(prevPage,null);
-  if(prevPage==='works')document.querySelector('.nav-links a:nth-child(2)').classList.add('active');
+  showPage(prevPage, null);
+  if (prevPage==='works') document.querySelector('.nav-links a:nth-child(2)').classList.add('active');
   else document.querySelector('.nav-links a:nth-child(1)').classList.add('active');
 }
 </script>
