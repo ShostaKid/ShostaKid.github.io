@@ -20,7 +20,7 @@ body{background:var(--cream);color:var(--ink);font-family:Georgia,'Times New Rom
 .gothic-bg>*{position:relative;z-index:1;}
 
 /* INTRO */
-#intro{position:fixed;inset:0;z-index:9999;background:#0a0805;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.8s ease;}
+#intro{position:fixed;inset:0;z-index:2147483647;background:#0a0805;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.8s ease;}
 #intro.fade-out{opacity:0;pointer-events:none;}
 .intro-ornament{font-family:'Playfair Display',serif;font-size:5rem;color:rgba(184,151,42,0.15);line-height:1;margin-bottom:2rem;animation:float 3s ease-in-out infinite;}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
@@ -141,7 +141,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 <body>
 
 <!-- INTRO -->
-<div id="intro" onclick="enterSite()">
+<div id="intro">
   <div class="intro-ornament">♩</div>
   <div class="intro-title">Shosta<span>Kid</span></div>
   <div class="intro-sub">I write anything I want here</div>
@@ -460,6 +460,14 @@ function enterSite() {
   intro.classList.add('fade-out');
   setTimeout(()=>{intro.style.display='none';document.getElementById('site').classList.add('visible');},800);
 }
+
+// Gắn click cho intro ngay khi DOM sẵn sàng
+document.addEventListener('DOMContentLoaded', () => {
+  const intro = document.getElementById('intro');
+  intro.addEventListener('click', enterSite);
+  // Backup: bấm phím bất kỳ cũng vào được
+  document.addEventListener('keydown', () => { if(intro.style.display !== 'none') enterSite(); }, {once: true});
+});
 function playMusic(i) {
   const f = fics[i];
   const m = f.music;
