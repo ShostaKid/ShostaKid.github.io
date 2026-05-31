@@ -190,25 +190,18 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
       </div>
       <div class="fic-card" onclick="openFic(1)">
-        <div class="fic-title">Fantasia no.1 in C minor: <em>"Desires"</em></div>
-        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-        <div class="fic-warning">⚠ Rape/Non-Con</div>
-        <div class="fic-summary">Allegretto con Appassionato</div>
-        <div class="fic-tags"><span class="tag">Corvus/Pyrrhos</span></div>
-      </div>
-      <div class="fic-card" onclick="openFic(2)">
-        <div class="fic-title">Piano Concerto no.2 in G Minor: <em>"Нет, только тот, кто знал"</em></div>
-        <div class="fic-meta"><span>Figure Skating RPF</span></div>
-        <div class="fic-summary">Andante Dolce con Tempo di Garbo, poi Largo non troppo e Smorzando</div>
-        <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
-      </div>
-      <div class="fic-card" onclick="openFic(3)">
         <div class="fic-title">Piano Concerto no.1 in C sharp Minor: <em>"None but the Lonely Heart"</em></div>
         <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
         <div class="fic-summary">Allegretto Amore, poi Largo non troppo con Smorzando</div>
         <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
       </div>
-       <div class="fic-card" onclick="openFic(4)">
+      <div class="fic-card" onclick="openFic(2)">
+        <div class="fic-title">Pas de Deux</div>
+        <div class="fic-meta"><span>Honkai: Star Rail</span></div>
+        <div class="fic-summary">Lagro</div>
+        <div class="fic-tags"><span class="tag">Phainon/Cyrene</span></div>
+      </div>
+      <div class="fic-card" onclick="openFic(3)">
         <div class="fic-title">String Quartet no.8: <em>"Lie"</em></div>
         <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
         <div class="fic-summary">Presto</div>
@@ -310,6 +303,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 // FIC DATA — chỉnh sửa phần này khi thêm truyện
 // =============================================
 const fics = [
+  // index 0 — AlephReco ưu tiên đầu
   {
     title: 'Toccata in D sharp Minor',
     subtitle: '"Totentanz"',
@@ -320,6 +314,51 @@ const fics = [
     files: ['Toccata no.1.txt'],
     chapters: ['I. Totentanz']
   },
+  // index 1 — AlephReco
+  {
+    title: 'Piano Concerto no.1 in C sharp Minor',
+    subtitle: '"None but the Lonely Heart"',
+    fandom: '重返未来：1999 · Reverse: 1999',
+    warning: null,
+    music: { id: 'QDW4VJGKLAQ', start: 0 },
+    musicName: 'Shostakovich — Gadfly Romance',
+    files: ['Piano concerto no.2.txt'],
+    chapters: ['I. None but the Lonely Heart']
+  },
+  // index 2 — Phainon/Cyrene ưu tiên
+  {
+    title: 'Pas de Deux',
+    subtitle: null,
+    fandom: 'Honkai: Star Rail',
+    warning: null,
+    music: { id: 'o_Go1ah3Vds', start: 84 },
+    musicName: 'Tchaikovsky — Pas de Deux',
+    files: ['Pas de Deux.txt'],
+    chapters: ['Chapter 1']
+  },
+  // index 3 — AlephReco
+  {
+    title: 'String Quartet no.8',
+    subtitle: '"Lie"',
+    fandom: '重返未来：1999 · Reverse: 1999',
+    warning: null,
+    music: { id: 'Vv3ghWE2txg', start: 1 },
+    musicName: 'Shostakovich — String Quartet No. 8',
+    files: ['String Quartet 8.txt'],
+    chapters: ['Chapter 1']
+  },
+  // index 4 — Le Suicide (nhạc để trống, tự chèn sau)
+  {
+    title: 'Le Suicide',
+    subtitle: null,
+    fandom: '重返未来：1999 · Reverse: 1999',
+    warning: null,
+    music: { id: 'YOUTUBE_ID_HERE', start: 0 },
+    musicName: 'TBD',
+    files: ['Le Suicide.txt'],
+    chapters: ['Chapter 1']
+  },
+  // index 5
   {
     title: 'Fantasia no.1 in C minor',
     subtitle: '"Desires"',
@@ -330,6 +369,7 @@ const fics = [
     files: ['Fantasia no.1.txt'],
     chapters: ['I. Desires']
   },
+  // index 6
   {
     title: 'Piano Concerto no.2 in G Minor',
     subtitle: '"Нет, только тот, кто знал"',
@@ -339,36 +379,6 @@ const fics = [
     musicName: 'Shostakovich — Piano Concerto No. 2',
     files: ['Piano concerto no.1.txt'],
     chapters: ['Chapter 1', 'Chapter 2', 'Chapter 3']
-  },
-  {
-    title: 'Piano Concerto no.1 in C sharp Minor',
-    subtitle: '"None but the Lonely Heart"',
-    fandom: '重返未来：1999 · Reverse: 1999',
-    warning: null,
-    music: { id: 'QDW4VJGKLAQ', start: 0 },
-    musicName: 'Shostakovich — Gadfly Romance',
-    files: ['Piano concerto no.2.txt'],
-    chapters: ['I. None but the Lonely Heart']        // nhiều chương thì: ['Chapter 1', 'Chapter 2', ...]
-  },
-  {
-    title: 'String Quartet no.8',
-    subtitle: '"Lie"',
-    fandom: '重返未来：1999 · Reverse: 1999',
-    warning: null,   // hoặc null nếu không có
-    music: { id: 'Vv3ghWE2txg', start: 1 },
-    musicName: 'Shostakovich - String Quartet no.8',
-    files: ['String Quartet 8.txt'],
-    chapters: ['Chapter 1']
-  },
-  {
-    title: 'Pas de Deux',
-    subtitle: null,
-    fandom: 'Honkai: Star Rail',
-    warning: null,   // hoặc null nếu không có
-    music: { id: 'o_Go1ah3Vds', start: 84 },
-    musicName: 'Tchaikovsky-Pas de Deux',
-    files: ['Pas de Deux.txt'],
-    chapters: ['Chapter 1']
   },
 ];
 
