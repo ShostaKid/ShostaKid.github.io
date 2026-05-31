@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShostaKid — I write anything I want here</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--cream:#FAF7F0;--cream2:#F2EDE0;--gold:#B8972A;--gold-light:#D4AF5A;--gold-dark:#8A6E1A;
+--ink:#2C2318;--ink2:#5C4F3A;--ink3:#8C7D66;--border:#D4C49A;
+}
+body{background:var(--cream);color:var(--ink);font-family:Georgia,'Times New Roman',serif;min-height:100vh;overflow-x:hidden;}
+
+/* GOTHIC PATTERN */
+.gothic-bg{position:relative;background-color:var(--cream);}
+.gothic-bg::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(184,151,42,0.07) 0px,rgba(184,151,42,0.07) 1px,transparent 1px,transparent 56px),repeating-linear-gradient(-45deg,rgba(184,151,42,0.07) 0px,rgba(184,151,42,0.07) 1px,transparent 1px,transparent 56px);pointer-events:none;z-index:0;}
+.gothic-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 100% at 50% 50%,transparent 40%,rgba(212,180,100,0.13) 70%,rgba(184,151,42,0.22) 100%);pointer-events:none;z-index:0;}
+.gothic-bg>*{position:relative;z-index:1;}
+
+/* INTRO */
+#intro{position:fixed;inset:0;z-index:2147483647;background:#0a0805;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.8s ease;}
+#intro.fade-out{opacity:0;pointer-events:none;}
+.intro-ornament{font-family:'Playfair Display',serif;font-size:5rem;color:rgba(184,151,42,0.15);line-height:1;margin-bottom:2rem;animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.intro-title{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:400;letter-spacing:8px;text-transform:uppercase;color:#e8dfc8;margin-bottom:0.8rem;text-align:center;}
+.intro-title span{color:var(--gold);}
+.intro-sub{font-family:Georgia,serif;font-style:italic;font-size:1.1rem;color:rgba(232,223,200,0.5);letter-spacing:2px;margin-bottom:4rem;text-align:center;}
+.intro-cta{display:flex;flex-direction:column;align-items:center;gap:0.8rem;}
+.intro-cta-text{font-family:'Playfair Display',serif;font-size:0.72rem;letter-spacing:4px;text-transform:uppercase;color:rgba(184,151,42,0.7);animation:blink 2s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:0.4}50%{opacity:1}}
+.intro-bars{display:flex;align-items:flex-end;gap:4px;height:24px;}
+.intro-bars span{width:3px;background:rgba(184,151,42,0.4);border-radius:2px;animation:bar 1.2s ease-in-out infinite;}
+.intro-bars span:nth-child(1){height:8px;animation-delay:0s;}
+.intro-bars span:nth-child(2){height:16px;animation-delay:0.15s;}
+.intro-bars span:nth-child(3){height:24px;animation-delay:0.3s;}
+.intro-bars span:nth-child(4){height:16px;animation-delay:0.45s;}
+.intro-bars span:nth-child(5){height:8px;animation-delay:0.6s;}
+@keyframes bar{0%,100%{transform:scaleY(0.4)}50%{transform:scaleY(1)}}
+.intro-line{width:1px;height:60px;background:linear-gradient(to bottom,transparent,rgba(184,151,42,0.4),transparent);margin-bottom:1rem;}
+
+/* SITE */
+#site{opacity:0;transition:opacity 0.8s ease;}
+#site.visible{opacity:1;}
+
+nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padding:0 3rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(4px);}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.1rem;letter-spacing:3px;color:var(--ink);padding:1.2rem 0;text-transform:uppercase;}
+.nav-logo span{color:var(--gold);}
+.nav-links{display:flex;gap:2.5rem;}
+.nav-links a{font-family:'Playfair Display',serif;font-size:0.72rem;letter-spacing:2.5px;color:var(--ink2);text-decoration:none;text-transform:uppercase;cursor:pointer;transition:color 0.2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--gold);}
+
+#music-bar{background:rgba(242,237,224,0.95);border-bottom:1px solid var(--border);padding:8px 3rem;display:flex;align-items:center;gap:1rem;font-family:'Playfair Display',serif;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);min-height:36px;}
+#music-bar.hidden{display:none;}
+.music-now{display:flex;align-items:center;gap:8px;flex:1;}
+.music-bars{display:flex;align-items:flex-end;gap:2px;height:14px;}
+.music-bars span{width:2px;background:var(--gold);border-radius:1px;animation:bar 0.8s ease-in-out infinite;}
+.music-bars span:nth-child(1){height:4px;animation-delay:0s;}
+.music-bars span:nth-child(2){height:10px;animation-delay:0.1s;}
+.music-bars span:nth-child(3){height:14px;animation-delay:0.2s;}
+.music-bars span:nth-child(4){height:10px;animation-delay:0.3s;}
+.music-bars span:nth-child(5){height:4px;animation-delay:0.4s;}
+.music-bars.paused span{animation:none;transform:scaleY(0.3);}
+#music-title{color:var(--ink2);font-style:italic;}
+.music-toggle{background:none;border:1px solid var(--border);padding:4px 12px;font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);cursor:pointer;transition:all 0.2s;}
+.music-toggle:hover{border-color:var(--gold);color:var(--gold);}
+
+.page{display:none;animation:fadein 0.5s ease;}
+.page.active{display:block;}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.hero{padding:6rem 3rem 5rem;text-align:center;border-bottom:1px solid var(--border);}
+.hero-ornament{font-family:'Playfair Display',serif;font-size:5rem;color:var(--gold);opacity:0.18;line-height:1;margin-bottom:-1rem;}
+.hero-title{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:400;letter-spacing:6px;text-transform:uppercase;margin-bottom:1rem;color:var(--ink);}
+.hero-subtitle{font-family:'Playfair Display',serif;font-style:italic;font-size:1.3rem;color:var(--ink2);letter-spacing:1px;margin-bottom:2rem;}
+.hero-divider{display:flex;align-items:center;justify-content:center;gap:1.2rem;margin:1.5rem 0;}
+.hero-divider::before,.hero-divider::after{content:'';flex:1;max-width:120px;height:1px;background:linear-gradient(to right,transparent,var(--border));}
+.hero-divider::after{background:linear-gradient(to left,transparent,var(--border));}
+.hero-tagline{font-family:Georgia,serif;font-size:1rem;color:var(--ink3);letter-spacing:3px;text-transform:uppercase;}
+
+.fics-section{max-width:860px;margin:0 auto;padding:3.5rem 2rem;}
+.section-heading{font-family:'Playfair Display',serif;font-size:0.78rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:2.5rem;display:flex;align-items:center;gap:1rem;}
+.section-heading::after{content:'';flex:1;height:1px;background:var(--border);}
+.fic-card{border:1px solid var(--border);padding:1.8rem 2rem;margin-bottom:1.5rem;background:rgba(250,247,240,0.85);cursor:pointer;transition:all 0.25s;position:relative;backdrop-filter:blur(2px);}
+.fic-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);opacity:0;transition:opacity 0.2s;}
+.fic-card:hover{background:rgba(251,248,240,0.97);border-color:var(--gold-light);}
+.fic-card:hover::before{opacity:1;}
+.fic-title{font-family:'Playfair Display',serif;font-size:1.45rem;font-weight:500;color:var(--ink);margin-bottom:0.3rem;}
+.fic-title em{font-style:italic;color:var(--gold-dark);}
+.fic-meta{font-family:'Playfair Display',serif;font-size:0.65rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;margin-bottom:0.8rem;display:flex;gap:1.5rem;flex-wrap:wrap;}
+.fic-warning{font-size:0.85rem;color:#993C1D;font-family:Georgia,serif;font-style:italic;margin-bottom:0.6rem;}
+.fic-summary{font-family:Georgia,serif;font-size:0.97rem;color:var(--ink2);line-height:1.7;font-style:italic;}
+.fic-tags{margin-top:0.9rem;display:flex;flex-wrap:wrap;gap:6px;}
+.tag{font-family:'Playfair Display',serif;font-size:0.6rem;letter-spacing:1.5px;color:var(--ink3);border:1px solid var(--border);padding:3px 10px;text-transform:uppercase;}
+
+/* READING PAGE */
+.reading-wrap{max-width:720px;margin:0 auto;padding:4rem 2rem;}
+.back-btn{font-family:'Playfair Display',serif;font-size:0.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink3);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:3rem;transition:color 0.2s;}
+.back-btn:hover{color:var(--gold);}
+.reading-title{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:400;line-height:1.2;color:var(--ink);margin-bottom:0.5rem;}
+.reading-title em{font-style:italic;color:var(--gold-dark);}
+.reading-fandom{font-family:'Playfair Display',serif;font-size:0.65rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;margin-bottom:0.5rem;}
+.reading-warning{font-family:Georgia,serif;font-style:italic;color:#993C1D;font-size:0.9rem;border-left:2px solid #D85A30;padding-left:1rem;margin:1.2rem 0;}
+.reading-divider{text-align:center;margin:2rem 0;color:var(--gold);font-size:1.3rem;letter-spacing:8px;}
+
+/* Chapter nav */
+.chapter-nav{display:flex;align-items:center;justify-content:space-between;margin:2.5rem 0;padding:1rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.chapter-nav button{font-family:'Playfair Display',serif;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);background:none;border:1px solid var(--border);padding:8px 16px;cursor:pointer;transition:all 0.2s;}
+.chapter-nav button:hover{border-color:var(--gold);color:var(--gold);}
+.chapter-nav button:disabled{opacity:0.3;cursor:default;}
+.chapter-label{font-family:'Playfair Display',serif;font-size:0.72rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;}
+
+/* Fic body */
+.fic-body{font-family:Georgia,'Times New Roman',serif;font-size:1.12rem;line-height:2;color:var(--ink);}
+.fic-body p{margin-bottom:1.5em;}
+.fic-body em{font-style:italic;color:var(--ink2);}
+.fic-body .scene-break{text-align:center;color:var(--gold);letter-spacing:8px;margin:2rem 0;font-size:1.1rem;}
+
+/* Loading spinner */
+.loading{text-align:center;padding:4rem;font-family:'Playfair Display',serif;font-size:0.78rem;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);}
+.loading::after{content:'';display:block;width:30px;height:1px;background:var(--gold);margin:1rem auto 0;animation:loadbar 1.2s ease-in-out infinite;}
+@keyframes loadbar{0%,100%{width:20px;opacity:0.3}50%{width:60px;opacity:1}}
+
+.ao3-link{display:inline-flex;align-items:center;gap:8px;margin-top:2.5rem;font-family:'Playfair Display',serif;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);border:1px solid var(--border);padding:10px 20px;text-decoration:none;transition:all 0.2s;cursor:pointer;background:none;}
+.ao3-link:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ABOUT */
+.about-wrap{max-width:720px;margin:0 auto;padding:4rem 2rem;}
+.about-ornament{text-align:center;font-family:'Playfair Display',serif;font-size:3.5rem;color:var(--gold);opacity:0.25;margin-bottom:-1rem;}
+.about-body{font-family:Georgia,serif;font-size:1.08rem;line-height:1.9;color:var(--ink2);}
+.about-body p{margin-bottom:1.4em;}
+.about-sig{font-family:'Playfair Display',serif;font-style:italic;font-size:1.3rem;color:var(--gold-dark);margin-top:2.5rem;}
+.stat-row{display:flex;gap:2rem;margin:2.5rem 0;flex-wrap:wrap;}
+.stat-box{text-align:center;padding:1.2rem 1.8rem;border:1px solid var(--border);background:rgba(250,247,240,0.7);}
+.stat-num{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--gold);display:block;}
+.stat-label{font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);}
+footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="intro">
+  <div class="intro-ornament">♩</div>
+  <div class="intro-title">Shosta<span>Kid</span></div>
+  <div class="intro-sub">I write anything I want here</div>
+  <div class="intro-line"></div>
+  <div class="intro-cta">
+    <div class="intro-bars"><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="intro-cta-text">Click anywhere to enter</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="site">
+  <nav>
+    <div class="nav-logo">Shosta<span>Kid</span></div>
+    <div class="nav-links">
+      <a class="active" onclick="showPage('home',this)">Home</a>
+      <a onclick="showPage('works',this)">Works</a>
+      <a onclick="showPage('about',this)">About</a>
+    </div>
+  </nav>
+
+  <div id="music-bar" class="hidden">
+    <div class="music-now">
+      <div class="music-bars" id="musicBars"><span></span><span></span><span></span><span></span><span></span></div>
+      <span id="music-title">—</span>
+    </div>
+    <button class="music-toggle" onclick="toggleMusic()">Pause</button>
+  </div>
+
+  <!-- HOME -->
+  <div class="page active gothic-bg" id="page-home">
+    <div class="hero">
+      <div class="hero-ornament">♩</div>
+      <h1 class="hero-title">ShostaKid</h1>
+      <p class="hero-subtitle">I write anything I want here</p>
+      <div class="hero-divider"><span style="color:var(--gold);letter-spacing:4px;">✦ ✦ ✦</span></div>
+      <p class="hero-tagline">Take a $ip y'all and enjoy</p>
+    </div>
+    <div class="fics-section">
+      <div class="section-heading">Latest Works</div>
+      <div class="fic-card" onclick="openFic(0)">
+        <div class="fic-title">Toccata in D sharp Minor: <em>"Totentanz"</em></div>
+        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+        <div class="fic-warning">⚠ Rape/Non-Con — please proceed at your own risk</div>
+        <div class="fic-summary"><em>Largo Tenebroso, con molto Amore</em></div>
+        <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
+      </div>
+      <div class="fic-card" onclick="openFic(1)">
+        <div class="fic-title">Piano Concerto no.1 in C sharp Minor: <em>"None but the Lonely Heart"</em></div>
+        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+        <div class="fic-summary">Allegretto Amore, poi Largo non troppo con Smorzando</div>
+        <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
+      </div>
+      <div class="fic-card" onclick="openFic(2)">
+        <div class="fic-title">Pas de Deux</div>
+        <div class="fic-meta"><span>Honkai: Star Rail</span></div>
+        <div class="fic-summary">Lagro</div>
+        <div class="fic-tags"><span class="tag">Phainon/Cyrene</span></div>
+      </div>
+      <div class="fic-card" onclick="openFic(3)">
+        <div class="fic-title">String Quartet no.8: <em>"Lie"</em></div>
+        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+        <div class="fic-summary">Presto</div>
+        <div class="fic-tags"><span class="tag">Aleph/Recoleta</span><span class="tag">Merlin/Recoleta</span></div>
+      </div>
+      <div style="text-align:center;margin-top:2rem;">
+        <button class="ao3-link" onclick="showPage('works',document.querySelector('.nav-links a:nth-child(2)'))">View All Works →</button>
+      </div>
+    </div>
+    <footer><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · All works posted with love and a little madness &nbsp; <span style="color:var(--gold);">✦</span></footer>
+  </div>
+
+  <!-- WORKS -->
+  <div class="page gothic-bg" id="page-works">
+    <div class="fics-section">
+      <div class="section-heading">All Works</div>
+      <div class="fic-card" onclick="openFic(0)">
+         <div class="fic-title">Toccata in D sharp Minor: <em>"Totentanz"</em></div>
+        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+        <div class="fic-warning">⚠ Rape/Non-Con — please proceed at your own risk</div>
+        <div class="fic-summary"><em>Largo Tenebroso, con molto Amore</em></div>
+        <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
+      </div>
+      <div class="fic-card" onclick="openFic(1)">
+        <div class="fic-title">Fantasia no.1 in C minor: <em>"Desires"</em></div>
+        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+        <div class="fic-warning">⚠ Rape/Non-Con</div>
+        <div class="fic-summary">Allegretto con Appassionato</div>
+        <div class="fic-tags"><span class="tag">Corvus/Pyrrhos</span></div>
+      </div>
+      <div class="fic-card" onclick="openFic(2)">
+        <div class="fic-title">Piano Concerto no.2 in G Minor: <em>"Нет, только тот, кто знал"</em></div>
+        <div class="fic-meta"><span>Figure Skating RPF</span></div>
+        <div class="fic-summary">Andante Dolce con Tempo di Garbo, poi Largo non troppo e Smorzando</div>
+        <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
+      </div>
+      <div class="fic-card" onclick="openFic(3)">
+        <div class="fic-title">Piano Concerto no.1 in C sharp Minor: <em>"None but the Lonely Heart"</em></div>
+        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+        <div class="fic-summary">Allegretto Amore, poi Largo non troppo con Smorzando</div>
+        <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
+      </div>
+       <div class="fic-card" onclick="openFic(4)">
+        <div class="fic-title">String Quartet no.8: <em>"Lie"</em></div>
+        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+        <div class="fic-summary">Presto</div>
+        <div class="fic-tags"><span class="tag">Aleph/Recoleta</span><span class="tag">Merlin/Recoleta</span></div>
+      <div class="fic-card" onclick="openFic(5)">
+        <div class="fic-title">Pas de Deux</div>
+        <div class="fic-meta"><span>Honkai: Star Rail</span></div>
+        <div class="fic-summary">Lagro</div>
+        <div class="fic-tags"><span class="tag">Phainon/Cyrene</span></div>
+      </div>
+    </div>
+    <footer><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · All works posted with love and a little madness &nbsp; <span style="color:var(--gold);">✦</span></footer>
+  </div><!-- /#fics-section -->
+  </div><!-- /#page-works -->
+
+  <!-- READING -->
+  <div class="page" id="page-reading" style="background:var(--cream);">
+    <div class="reading-wrap">
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <div id="reading-header"></div>
+      <div id="reading-body"></div>
+      <div id="reading-footer" style="margin-top:3rem;border-top:1px solid var(--border);padding-top:2rem;display:none;">
+        <p style="font-family:'Playfair Display',serif;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:1rem;">Read the full work on AO3</p>
+        <a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid/works" target="_blank">Continue on AO3 →</a>
+      </div>
+    </div>
+    <footer style="margin-top:2rem;"><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · All works posted with love and a little madness &nbsp; <span style="color:var(--gold);">✦</span></footer>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="page" id="page-about" style="background:var(--cream);">
+    <div class="about-wrap">
+      <div class="about-ornament">𝄞</div>
+      <div class="section-heading" style="margin-top:1rem;">About the Author</div>
+      <div class="about-body">
+        <p>Welcome. I write under the name <strong>ShostaKid</strong>, so you can say that I'm a child of Dmitry Dmitrievich Shostakovich (kind of lol)</p>
+        <p>My works, most of the time, are my random thoughts that live inside my head. I write what I want in here, so enjoy as much as you can.</p>
+        <p>I write primarily for the <em>Reverse: 1999</em>, <em>Figure Skating RPF</em>, <em>Honkai: Star Rail</em> and sometimes <em>Genshin Impact</em> fandoms. There will be more, but right now those are my primary</p>
+        <p>I hope you have a great time here. Thank you for stoping by.</p>
+      </div>
+      <div class="stat-row">
+        <div class="stat-box"><span class="stat-num">4</span><span class="stat-label">Works</span></div>
+      </div>
+      <div class="about-sig">— ShostaKid</div>
+      <div style="margin-top:2rem;"><a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid" target="_blank">My AO3 →</a></div>
+      <div style="margin-top:2rem;"><a class="fb-link" href="https://www.facebook.com/share/1GgjNoECvD/" target="_blank">My Facebook Fanpage →</a></div>
+      <div style="margin-top:2rem;"><a class="Twitter-link" href="https://x.com/Texas1k6" target="_blank">My X →</a></div>
+    </div>
+    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · Enjoy &nbsp; <span style="color:var(--gold);">✦</span></footer>
+  </div>
+</div>
+
+<!-- YouTube player ẩn — tự inject bằng JS -->
+
+<script>
+// =============================================
+// FIC DATA — chỉnh sửa phần này khi thêm truyện
+// =============================================
+const fics = [
+  // index 0 — AlephReco ưu tiên đầu
+  {
+    title: 'Toccata in D sharp Minor',
+    subtitle: '"Totentanz"',
+    fandom: '重返未来：1999 · Reverse: 1999',
+    warning: 'Rape/Non-Con — This fic is not healthy and may cause discomfort. Please proceed at your own risk.',
+    music: { id: 'bAzZcKB6LO8', start: 512, end: 700 },
+    musicName: 'Shostakovich — Symphony No. 14',
+    files: ['Toccata no.1.txt'],
+    chapters: ['I. Totentanz']
+  },
+  // index 1 — AlephReco
+  {
+    title: 'Piano Concerto no.1 in C sharp Minor',
+    subtitle: '"None but the Lonely Heart"',
+    fandom: '重返未来：1999 · Reverse: 1999',
+    warning: null,
+    music: { id: '7PtIHBCuR-Q', start: 5 },
+    musicName: 'Tchaikovsky - None But The Lonely Heart',
+    files: ['Piano concerto no.1.txt'],
+    chapters: ['I. None but the Lonely Heart']
+  },
+  // index 2 — Phainon/Cyrene ưu tiên
+  {
+    title: 'Pas de Deux',
+    subtitle: null,
+    fandom: 'Honkai: Star Rail',
+    warning: null,
+    music: { id: 'o_Go1ah3Vds', start: 84 },
+    musicName: 'Tchaikovsky — Pas de Deux',
+    files: ['Pas de Deux.txt'],
+    chapters: ['Chapter 1']
+  },
+  // index 3 — AlephReco
+  {
+    title: 'String Quartet no.8',
+    subtitle: '"Lie"',
+    fandom: '重返未来：1999 · Reverse: 1999',
+    warning: 'Cuckold',
+    music: { id: 'Vv3ghWE2txg', start: 1 },
+    musicName: 'Shostakovich — String Quartet No. 8',
+    files: ['String Quartet 8.txt'],
+    chapters: ['Chapter 1']
+  },
+  // index 4 — Le Suicide (nhạc để trống, tự chèn sau)
+  {
+    title: 'Dirge in F sharp Minor',
+    subtitle: 'Le Suicide',
+    fandom: '重返未来：1999 · Reverse: 1999',
+    warning: null,
+    music: { id: 'bAzZcKB6LO8', start: 1073, end: 1200 },
+    musicName: 'Shostakovich - Symphony no.14',
+    files: ['Le Suicide.txt'],
+    chapters: ['Chapter 1']
+  },
+  // index 5
+  {
+    title: 'Fantasia no.1 in C minor',
+    subtitle: '"Desires"',
+    fandom: '重返未来：1999 · Reverse: 1999',
+    warning: 'Rape/Non-Con',
+    music: { id: 'Lb4Asov1eKY', start: 94 },
+    musicName: 'Prokofiev — Dance of the Knights',
+    files: ['Fantasia no.1.txt'],
+    chapters: ['I. Desires']
+  },
+  // index 6
+  {
+    title: 'Piano Concerto no.2 in G Minor',
+    subtitle: '"Нет, только тот, кто знал"',
+    fandom: 'Figure Skating RPF',
+    warning: null,
+    music: { id: 'HLlxUFlv1mo', start: 488, end: 894 },
+    musicName: 'Shostakovich — Piano Concerto No. 2',
+    files: ['Piano concerto no.2.txt'],
+    chapters: ['Chapter 1', 'Chapter 2', 'Chapter 3']
+  },
+];
+
+// =============================================
+// ENGINE
+// =============================================
+let currentPage='home', prevPage='home', musicPlaying=false;
+let currentFic=0, currentChapter=0;
+const REPO = 'https://raw.githubusercontent.com/lavaknight2017-rgb/ShostaKid.github.io/main/';
+
+function txtToHtml(text) {
+  // Split thành paragraphs theo dòng trống
+  const paragraphs = text.split(/\n\s*\n/);
+  return paragraphs.map(p => {
+    p = p.trim();
+    if (!p) return '';
+    // --- thành scene break
+    if (/^-{3,}$/.test(p)) return '<div class="scene-break">✦ ✦ ✦</div>';
+    // Xuống dòng đơn trong đoạn → <br>
+    const lines = p.split('\n').map(l => l.trim()).join('<br>');
+    return `<p>${lines}</p>`;
+  }).join('');
+}
+
+async function loadChapter(ficIdx, chapterIdx) {
+  const fic = fics[ficIdx];
+  const body = document.getElementById('reading-body');
+
+  if (!fic.files || !fic.files[chapterIdx]) {
+    // Dùng preview
+    body.innerHTML = `<div class="fic-body">${previews[ficIdx] || '<p><em>Coming soon.</em></p>'}</div>`;
+    document.getElementById('reading-footer').style.display = 'block';
+    updateChapterNav(ficIdx, chapterIdx);
+    return;
+  }
+
+  body.innerHTML = '<div class="loading">Loading</div>';
+  document.getElementById('reading-footer').style.display = 'none';
+
+  try {
+    const url = REPO + encodeURIComponent(fic.files[chapterIdx]);
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Not found');
+    const text = await res.text();
+    body.innerHTML = `<div class="fic-body">${txtToHtml(text)}</div>`;
+    document.getElementById('reading-footer').style.display = 'block';
+  } catch(e) {
+    body.innerHTML = `<div class="fic-body"><p><em>Could not load chapter. Please check back later.</em></p></div>`;
+  }
+  updateChapterNav(ficIdx, chapterIdx);
+  window.scrollTo(0,0);
+}
+
+function updateChapterNav(ficIdx, chapterIdx) {
+  const fic = fics[ficIdx];
+  const nav = document.getElementById('chapter-nav');
+  if (!nav) return;
+  if (fic.chapters.length <= 1) { nav.style.display='none'; return; }
+  nav.style.display = 'flex';
+  document.getElementById('ch-label').textContent = fic.chapters[chapterIdx] || `Chapter ${chapterIdx+1}`;
+  document.getElementById('ch-prev').disabled = chapterIdx === 0;
+  document.getElementById('ch-next').disabled = chapterIdx >= fic.chapters.length - 1;
+}
+
+function prevChapter() {
+  if (currentChapter > 0) { currentChapter--; loadChapter(currentFic, currentChapter); }
+}
+function nextChapter() {
+  if (currentChapter < fics[currentFic].chapters.length - 1) { currentChapter++; loadChapter(currentFic, currentChapter); }
+}
+
+function openFic(i) {
+  history.pushState({page: 'reading', fic: i}, '', '#reading');
+  prevPage = currentPage;
+  currentFic = i;
+  currentChapter = 0;
+  const f = fics[i];
+
+  // Header
+  const chapterNavHtml = f.chapters.length > 1 ? `
+    <div class="chapter-nav" id="chapter-nav">
+      <button id="ch-prev" onclick="prevChapter()">← Prev</button>
+      <span class="chapter-label" id="ch-label">${f.chapters[0]}</span>
+      <button id="ch-next" onclick="nextChapter()">Next →</button>
+    </div>` : '<div id="chapter-nav" style="display:none"></div>';
+
+  document.getElementById('reading-header').innerHTML = `
+    <div class="reading-title">${f.title}: ${f.subtitle}</div>
+    <div class="reading-fandom">${f.fandom}</div>
+    ${f.warning ? `<div class="reading-warning">⚠ ${f.warning}</div>` : ''}
+    <div class="reading-divider">✦ ✦ ✦</div>
+    ${chapterNavHtml}`;
+
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-reading').classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+  window.scrollTo(0,0);
+  loadChapter(i, 0);
+  playMusic(i);
+}
+
+function enterSite() {
+  const intro = document.getElementById('intro');
+  intro.style.pointerEvents = 'none';
+  intro.classList.add('fade-out');
+  setTimeout(()=>{intro.style.display='none';document.getElementById('site').classList.add('visible');},800);
+}
+
+// Gắn click cho intro ngay khi DOM sẵn sàng
+document.addEventListener('DOMContentLoaded', () => {
+  const intro = document.getElementById('intro');
+  intro.addEventListener('click', enterSite);
+  // Backup: bấm phím bất kỳ cũng vào được
+  document.addEventListener('keydown', () => { if(intro.style.display !== 'none') enterSite(); }, {once: true});
+});
+function playMusic(i) {
+  const f = fics[i];
+  const m = f.music;
+  // Xóa iframe cũ nếu có
+  const old = document.getElementById('yt-player');
+  if (old) old.remove();
+  // Tạo iframe YouTube ẩn
+  const iframe = document.createElement('iframe');
+  iframe.id = 'yt-player';
+  iframe.style.cssText = 'position:fixed;width:1px;height:1px;bottom:-10px;left:-10px;opacity:0;pointer-events:none;';
+  const end = m.end ? `&end=${m.end}` : '';
+  iframe.src = `https://www.youtube.com/embed/${m.id}?autoplay=1&start=${m.start||0}${end}&loop=1&playlist=${m.id}&enablejsapi=1`;
+  iframe.allow = 'autoplay; encrypted-media';
+  iframe.frameBorder = '0';
+  document.body.appendChild(iframe);
+  musicPlaying = true;
+  document.getElementById('music-bar').classList.remove('hidden');
+  document.getElementById('music-title').textContent = f.musicName;
+  document.getElementById('musicBars').classList.remove('paused');
+  document.querySelector('.music-toggle').textContent = 'Pause';
+}
+
+function stopMusic() {
+  const yt = document.getElementById('yt-player');
+  if (yt) yt.remove();
+  musicPlaying = false;
+  document.getElementById('music-bar').classList.add('hidden');
+}
+
+function toggleMusic() {
+  const yt = document.getElementById('yt-player');
+  if (!yt) return;
+  if (musicPlaying) {
+    // Pause bằng cách xóa autoplay khỏi src
+    yt.src = yt.src.replace('autoplay=1','autoplay=0');
+    musicPlaying = false;
+    document.getElementById('musicBars').classList.add('paused');
+    document.querySelector('.music-toggle').textContent = 'Play';
+  } else {
+    yt.src = yt.src.replace('autoplay=0','autoplay=1');
+    musicPlaying = true;
+    document.getElementById('musicBars').classList.remove('paused');
+    document.querySelector('.music-toggle').textContent = 'Pause';
+  }
+}
+
+function showPage(id, el) {
+  history.pushState({page: id}, '', '#' + id);
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+  if (el) el.classList.add('active');
+  prevPage = currentPage; currentPage = id;
+  if (id !== 'reading') stopMusic();
+  window.scrollTo(0,0);
+}
+
+function goBack() {
+  stopMusic();
+  showPage(prevPage, null);
+  if (prevPage==='works') document.querySelector('.nav-links a:nth-child(2)').classList.add('active');
+  else document.querySelector('.nav-links a:nth-child(1)').classList.add('active');
+}
+  // Xử lý nút Back/Forward của trình duyệt
+window.addEventListener('popstate', (e) => {
+  if (!e.state) { showPage('home', document.querySelector('.nav-links a:first-child')); return; }
+  if (e.state.page === 'reading') { openFic(e.state.fic); return; }
+  const el = document.querySelector(`.nav-links a[onclick*="${e.state.page}"]`);
+  showPage(e.state.page, el);
+});
+</script>
+</body>
+</html>
