@@ -256,6 +256,12 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
         <div class="fic-summary">Presto</div>
         <div class="fic-tags"><span class="tag">Aleph/Recoleta</span><span class="tag">Merlin/Recoleta</span></div>
+      <div class="fic-card" onclick="openFic(5)">
+        <div class="fic-title">Pas de Deux</div>
+        <div class="fic-meta"><span>Honkai: Star Rail</span></div>
+        <div class="fic-summary">Lagro</div>
+        <div class="fic-tags"><span class="tag">Phainon/Cyrene</span></div>
+      </div>
       </div>
     </div>
     <footer><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · All works posted with love and a little madness &nbsp; <span style="color:var(--gold);">✦</span></footer>
@@ -354,7 +360,16 @@ const fics = [
     musicName: 'Shostakovich - String Quartet no.8',
     files: ['String Quartet 8.txt'],
     chapters: ['Chapter 1']
-  }
+  },
+  {
+    title: 'Pas de Deux',
+    subtitle: null,
+    fandom: 'Honkai: Star Rail',
+    warning: null,   // hoặc null nếu không có
+    music: { id: 'o_Go1ah3Vds', start: 84 },
+    musicName: 'Tchaikovsky-Pas de Deux',
+    files: ['Pas de Deux.txt'],
+    chapters: ['Chapter 1']
 ];
 
 // =============================================
