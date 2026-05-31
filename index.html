@@ -441,6 +441,7 @@ function nextChapter() {
 }
 
 function openFic(i) {
+  history.pushState({page: 'reading', fic: i}, '', '#reading');
   prevPage = currentPage;
   currentFic = i;
   currentChapter = 0;
@@ -530,6 +531,7 @@ function toggleMusic() {
 }
 
 function showPage(id, el) {
+  history.pushState({page: id}, '', '#' + id);
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
@@ -545,6 +547,13 @@ function goBack() {
   if (prevPage==='works') document.querySelector('.nav-links a:nth-child(2)').classList.add('active');
   else document.querySelector('.nav-links a:nth-child(1)').classList.add('active');
 }
+  // Xử lý nút Back/Forward của trình duyệt
+window.addEventListener('popstate', (e) => {
+  if (!e.state) { showPage('home', document.querySelector('.nav-links a:first-child')); return; }
+  if (e.state.page === 'reading') { openFic(e.state.fic); return; }
+  const el = document.querySelector(`.nav-links a[onclick*="${e.state.page}"]`);
+  showPage(e.state.page, el);
+});
 </script>
 </body>
 </html>
