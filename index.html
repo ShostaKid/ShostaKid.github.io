@@ -136,6 +136,8 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .stat-num{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--gold);display:block;}
 .stat-label{font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);}
 footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;}
+.filter-btn{font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--border);padding:5px 14px;color:var(--ink3);cursor:pointer;transition:all 0.2s;}
+.filter-btn:hover,.filter-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(184,151,42,0.06);}
 </style>
 </head>
 <body>
@@ -217,6 +219,12 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   <!-- WORKS -->
   <div class="page gothic-bg" id="page-works">
     <div class="fics-section">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:2rem;" id="filter-bar">
+  <button class="filter-btn active" onclick="filterFics('all')">All</button>
+  <button class="filter-btn" onclick="filterFics('Reverse: 1999')">Reverse: 1999</button>
+  <button class="filter-btn" onclick="filterFics('Figure Skating')">Figure Skating RPF</button>
+  <button class="filter-btn" onclick="filterFics('Honkai')">Honkai: Star Rail</button>
+</div>
       <div class="section-heading">All Works</div>
 
       <!-- fics[0] -->
@@ -345,6 +353,14 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 
 <!-- YouTube player ẩn — tự inject bằng JS -->
 
+function filterFics(keyword) {
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('#page-works .fic-card').forEach(card => {
+    if (keyword === 'all') { card.style.display='block'; return; }
+    card.style.display = card.innerText.includes(keyword) ? 'block' : 'none';
+  });
+}
 <script>
 // =============================================
 // FIC DATA — chỉnh sửa phần này khi thêm truyện
