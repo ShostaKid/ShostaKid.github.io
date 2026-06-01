@@ -136,11 +136,22 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .stat-num{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--gold);display:block;}
 .stat-label{font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);}
 footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;}
-.filter-btn{font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--border);padding:5px 14px;color:var(--ink3);cursor:pointer;transition:all 0.2s;}
+/* PROGRESS BAR */
+#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(to right,var(--gold-dark),var(--gold-light));width:0%;z-index:9999;transition:width 0.08s linear;pointer-events:none;display:none;}
+#progress-bar.visible{display:block;}
+
+/* WORKS SIDEBAR LAYOUT */
+.works-layout{display:flex;max-width:1100px;margin:0 auto;padding:3rem 2rem;gap:2.5rem;align-items:flex-start;}
+.fandom-sidebar{width:170px;flex-shrink:0;position:sticky;top:90px;display:flex;flex-direction:column;gap:6px;}
+.sidebar-heading{font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:0.8rem;padding-bottom:0.6rem;border-bottom:1px solid var(--border);}
+.works-main{flex:1;min-width:0;}
+.filter-btn{font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--border);padding:7px 12px;color:var(--ink3);cursor:pointer;transition:all 0.2s;text-align:left;width:100%;}
 .filter-btn:hover,.filter-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(184,151,42,0.06);}
 </style>
 </head>
 <body>
+
+<div id="progress-bar"></div>
 
 <!-- INTRO -->
 <div id="intro">
@@ -218,99 +229,93 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 
   <!-- WORKS -->
   <div class="page gothic-bg" id="page-works">
-    <div class="fics-section">
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:2rem;" id="filter-bar">
-  <button class="filter-btn active" onclick="filterFics('all')">All</button>
-  <button class="filter-btn" onclick="filterFics('Reverse: 1999')">Reverse: 1999</button>
-  <button class="filter-btn" onclick="filterFics('Figure Skating')">Figure Skating RPF</button>
-  <button class="filter-btn" onclick="filterFics('Honkai')">Honkai: Star Rail</button>
-</div>
-      <div class="section-heading">All Works</div>
+    <div class="works-layout">
 
-      <!-- fics[0] -->
-      <div class="fic-card" onclick="openFic(0)">
-        <div class="fic-title">Toccata in D sharp Minor: <em>"Totentanz"</em></div>
-        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-        <div class="fic-warning">⚠ Rape/Non-Con — please proceed at your own risk</div>
-        <div class="fic-summary"><em>Largo Tenebroso, con molto Amore</em></div>
-        <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
-        <div style="position:absolute;top:1.2rem;right:1.5rem;text-align:right;font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);">
-        <div>28 May 2026</div>
-        <div style="margin-top:3px;">1397 words</div>
+      <aside class="fandom-sidebar">
+        <div class="sidebar-heading">Fandom</div>
+        <button class="filter-btn active" onclick="filterFics('all',this)">All</button>
+        <button class="filter-btn" onclick="filterFics('Reverse: 1999',this)">Reverse: 1999</button>
+        <button class="filter-btn" onclick="filterFics('Figure Skating',this)">Figure Skating RPF</button>
+        <button class="filter-btn" onclick="filterFics('Honkai',this)">Honkai: Star Rail</button>
+      </aside>
+
+      <div class="works-main">
+        <div class="section-heading">All Works</div>
+
+        <div class="fic-card" onclick="openFic(0)" data-fandom="Reverse: 1999">
+          <div class="fic-title">Toccata in D sharp Minor: <em>"Totentanz"</em></div>
+          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+          <div class="fic-warning">⚠ Rape/Non-Con — please proceed at your own risk</div>
+          <div class="fic-summary"><em>Largo Tenebroso, con molto Amore</em></div>
+          <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
         </div>
-      </div>
 
-      <!-- fics[1] -->
-      <div class="fic-card" onclick="openFic(1)">
-        <div class="fic-title">Piano Concerto no.1 in C sharp Minor: <em>"None but the Lonely Heart"</em></div>
-        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-        <div class="fic-summary">Allegretto Amore, poi Largo non troppo con Smorzando</div>
-        <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
-      </div>
+        <div class="fic-card" onclick="openFic(1)" data-fandom="Reverse: 1999">
+          <div class="fic-title">Piano Concerto no.1 in C sharp Minor: <em>"None but the Lonely Heart"</em></div>
+          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+          <div class="fic-summary">Allegretto Amore, poi Largo non troppo con Smorzando</div>
+          <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
+        </div>
 
-      <!-- fics[2] -->
-      <div class="fic-card" onclick="openFic(2)">
-        <div class="fic-title">Pas de Deux</div>
-        <div class="fic-meta"><span>Honkai: Star Rail</span></div>
-        <div class="fic-summary">Largo</div>
-        <div class="fic-tags"><span class="tag">Phainon/Cyrene</span></div>
-      </div>
+        <div class="fic-card" onclick="openFic(2)" data-fandom="Honkai">
+          <div class="fic-title">Pas de Deux</div>
+          <div class="fic-meta"><span>Honkai: Star Rail</span></div>
+          <div class="fic-summary">Largo</div>
+          <div class="fic-tags"><span class="tag">Phainon/Cyrene</span></div>
+        </div>
 
-      <!-- fics[3] -->
-      <div class="fic-card" onclick="openFic(3)">
-        <div class="fic-title">String Quartet no.8: <em>"Lie"</em></div>
-        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-        <div class="fic-summary">Presto</div>
-        <div class="fic-tags"><span class="tag">Aleph/Recoleta</span><span class="tag">Merlin/Recoleta</span></div>
-      </div>
+        <div class="fic-card" onclick="openFic(3)" data-fandom="Reverse: 1999">
+          <div class="fic-title">String Quartet no.8: <em>"Lie"</em></div>
+          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+          <div class="fic-summary">Presto</div>
+          <div class="fic-tags"><span class="tag">Aleph/Recoleta</span><span class="tag">Merlin/Recoleta</span></div>
+        </div>
 
-      <!-- fics[4] -->
-      <div class="fic-card" onclick="openFic(4)">
-        <div class="fic-title">Dirge in F sharp Minor: <em>"Le Suicide"</em></div>
-        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-        <div class="fic-summary"><em>Adagio Lugubre</em></div>
-        <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
-      </div>
+        <div class="fic-card" onclick="openFic(4)" data-fandom="Reverse: 1999">
+          <div class="fic-title">Dirge in F sharp Minor: <em>"Le Suicide"</em></div>
+          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+          <div class="fic-summary"><em>Adagio Lugubre</em></div>
+          <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
+        </div>
 
-      <!-- fics[5] -->
-      <div class="fic-card" onclick="openFic(5)">
-        <div class="fic-title">Fantasia no.1 in C minor: <em>"Desires"</em></div>
-        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-        <div class="fic-warning">⚠ Rape/Non-Con</div>
-        <div class="fic-summary">Allegretto con Appassionato</div>
-        <div class="fic-tags"><span class="tag">Corvus/Pyrrhos</span></div>
-      </div>
+        <div class="fic-card" onclick="openFic(5)" data-fandom="Reverse: 1999">
+          <div class="fic-title">Fantasia no.1 in C minor: <em>"Desires"</em></div>
+          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+          <div class="fic-warning">⚠ Rape/Non-Con</div>
+          <div class="fic-summary">Allegretto con Appassionato</div>
+          <div class="fic-tags"><span class="tag">Corvus/Pyrrhos</span></div>
+        </div>
 
-      <!-- fics[6] -->
-      <div class="fic-card" onclick="openFic(6)">
-        <div class="fic-title">Piano Concerto no.2 in G Minor: <em>"Нет, только тот, кто знал"</em></div>
-        <div class="fic-meta"><span>Figure Skating RPF</span></div>
-        <div class="fic-summary">Andante Dolce con Tempo di Garbo, poi Largo non troppo e Smorzando</div>
-        <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
-      </div>
-      
-      <div class="fic-card" onclick="openFic(7)">
-        <div class="fic-title">Nocturne in C Sharp Minor: <em>"Love"</em></div>
-        <div class="fic-meta"><span>Figure Skating RPF</span></div>
-        <div class="fic-summary">Lento con gran espressione</div>
-        <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
-      </div>
+        <div class="fic-card" onclick="openFic(6)" data-fandom="Figure Skating">
+          <div class="fic-title">Piano Concerto no.2 in G Minor: <em>"Нет, только тот, кто знал"</em></div>
+          <div class="fic-meta"><span>Figure Skating RPF</span></div>
+          <div class="fic-summary">Andante Dolce con Tempo di Garbo, poi Largo non troppo e Smorzando</div>
+          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
+        </div>
 
-      <div class="fic-card" onclick="openFic(8)">
-        <div class="fic-title">Nocturne in B Flat Minor: <em>Tenderness</em></div>
-        <div class="fic-meta"><span>Honkai: Star Rail</span></div>
-        <div class="fic-summary">Larghetto Amore</div>
-        <div class="fic-tags"><span class="tag">Phainon/Cyrene</span></div>
-      </div>
+        <div class="fic-card" onclick="openFic(7)" data-fandom="Figure Skating">
+          <div class="fic-title">Nocturne in C Sharp Minor: <em>"Love"</em></div>
+          <div class="fic-meta"><span>Figure Skating RPF</span></div>
+          <div class="fic-summary">Lento con gran espressione</div>
+          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
+        </div>
 
-      <div class="fic-card" onclick="openFic(9)">
-        <div class="fic-title">Romance de Amour</div>
-        <div class="fic-meta"><span>Honkai: Star Rail</span></div>
-        <div class="fic-summary">Andante Moderato, molto Amore</div>
-        <div class="fic-tags"><span class="tag">Phainon/Cyrene</span></div>
-      </div>
-      
-    </div><!-- /#fics-section -->
+        <div class="fic-card" onclick="openFic(8)" data-fandom="Honkai">
+          <div class="fic-title">Nocturne in B Flat Minor: <em>Tenderness</em></div>
+          <div class="fic-meta"><span>Honkai: Star Rail</span></div>
+          <div class="fic-summary">Larghetto Amore</div>
+          <div class="fic-tags"><span class="tag">Phainon/Cyrene</span></div>
+        </div>
+
+        <div class="fic-card" onclick="openFic(9)" data-fandom="Honkai">
+          <div class="fic-title">Romance de Amour</div>
+          <div class="fic-meta"><span>Honkai: Star Rail</span></div>
+          <div class="fic-summary">Andante Moderato, molto Amore</div>
+          <div class="fic-tags"><span class="tag">Phainon/Cyrene</span></div>
+        </div>
+
+      </div><!-- /.works-main -->
+    </div><!-- /.works-layout -->
     <footer><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · Enjoy &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div><!-- /#page-works -->
 
@@ -458,10 +463,10 @@ const fics = [
   },
   {
     title: 'Romance de Amour',
-    subtitle: 'null',
+    subtitle: null,
     fandom: 'Honkai: Star Rail',
     warning: null,
-    music: { id: 'v=7psI60ZCOdw', start: 0 },
+    music: { id: '7psI60ZCOdw', start: 0 },
     musicName: 'Dvorak - Serenade for Strings',
     files: ['Romance de Amour.txt'],
     chapters: ['Chapter 1']
@@ -475,18 +480,41 @@ let currentPage='home', prevPage='home', musicPlaying=false;
 let currentFic=0, currentChapter=0;
 const REPO = 'https://raw.githubusercontent.com/lavaknight2017-rgb/ShostaKid.github.io/main/';
 
+// --- Scroll progress bar ---
+window.addEventListener('scroll', () => {
+  const bar = document.getElementById('progress-bar');
+  if (currentPage !== 'reading') { bar.style.width = '0%'; return; }
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = total > 0 ? (window.scrollY / total * 100) : 0;
+  bar.style.width = pct + '%';
+});
+
+// --- Fandom filter ---
+function filterFics(keyword, btn) {
+  document.querySelectorAll('.fandom-sidebar .filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.querySelectorAll('#page-works .fic-card').forEach(card => {
+    card.style.display = (keyword === 'all' || (card.dataset.fandom || '').includes(keyword)) ? 'block' : 'none';
+  });
+}
+
 function txtToHtml(text) {
-  // Split thành paragraphs theo dòng trống
   const paragraphs = text.split(/\n\s*\n/);
   return paragraphs.map(p => {
     p = p.trim();
     if (!p) return '';
-    // --- thành scene break
     if (/^-{3,}$/.test(p)) return '<div class="scene-break">✦ ✦ ✦</div>';
-    // Xuống dòng đơn trong đoạn → <br>
     const lines = p.split('\n').map(l => l.trim()).join('<br>');
     return `<p>${lines}</p>`;
   }).join('');
+}
+
+// --- Per-chapter music helper ---
+function getMusicData(ficIdx, chapterIdx) {
+  const f = fics[ficIdx];
+  const m = Array.isArray(f.music) ? (f.music[chapterIdx] || f.music[0]) : f.music;
+  const name = Array.isArray(f.musicName) ? (f.musicName[chapterIdx] || f.musicName[0]) : f.musicName;
+  return { m, name };
 }
 
 async function loadChapter(ficIdx, chapterIdx) {
@@ -494,7 +522,6 @@ async function loadChapter(ficIdx, chapterIdx) {
   const body = document.getElementById('reading-body');
 
   if (!fic.files || !fic.files[chapterIdx]) {
-    // Dùng preview
     body.innerHTML = `<div class="fic-body">${previews[ficIdx] || '<p><em>Coming soon.</em></p>'}</div>`;
     document.getElementById('reading-footer').style.display = 'block';
     updateChapterNav(ficIdx, chapterIdx);
@@ -515,6 +542,8 @@ async function loadChapter(ficIdx, chapterIdx) {
     body.innerHTML = `<div class="fic-body"><p><em>Could not load chapter. Please check back later.</em></p></div>`;
   }
   updateChapterNav(ficIdx, chapterIdx);
+  // If fic has per-chapter music, swap track when chapter changes
+  if (Array.isArray(fics[ficIdx].music)) playMusic(ficIdx, chapterIdx);
   window.scrollTo(0,0);
 }
 
@@ -543,7 +572,6 @@ function openFic(i) {
   currentChapter = 0;
   const f = fics[i];
 
-  // Header
   const chapterNavHtml = f.chapters.length > 1 ? `
     <div class="chapter-nav" id="chapter-nav">
       <button id="ch-prev" onclick="prevChapter()">← Prev</button>
@@ -552,7 +580,7 @@ function openFic(i) {
     </div>` : '<div id="chapter-nav" style="display:none"></div>';
 
   document.getElementById('reading-header').innerHTML = `
-    <div class="reading-title">${f.title}: ${f.subtitle}</div>
+    <div class="reading-title">${f.title}${f.subtitle ? ': ' + f.subtitle : ''}</div>
     <div class="reading-fandom">${f.fandom}</div>
     ${f.warning ? `<div class="reading-warning">⚠ ${f.warning}</div>` : ''}
     <div class="reading-divider">✦ ✦ ✦</div>
@@ -561,9 +589,11 @@ function openFic(i) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-reading').classList.add('active');
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+  currentPage = 'reading';
+  document.getElementById('progress-bar').classList.add('visible');
   window.scrollTo(0,0);
   loadChapter(i, 0);
-  playMusic(i);
+  playMusic(i, 0);
 }
 
 function enterSite() {
@@ -573,20 +603,16 @@ function enterSite() {
   setTimeout(()=>{intro.style.display='none';document.getElementById('site').classList.add('visible');},800);
 }
 
-// Gắn click cho intro ngay khi DOM sẵn sàng
 document.addEventListener('DOMContentLoaded', () => {
   const intro = document.getElementById('intro');
   intro.addEventListener('click', enterSite);
-  // Backup: bấm phím bất kỳ cũng vào được
   document.addEventListener('keydown', () => { if(intro.style.display !== 'none') enterSite(); }, {once: true});
 });
-function playMusic(i) {
-  const f = fics[i];
-  const m = f.music;
-  // Xóa iframe cũ nếu có
+
+function playMusic(ficIdx, chapterIdx) {
+  const { m, name } = getMusicData(ficIdx, chapterIdx);
   const old = document.getElementById('yt-player');
   if (old) old.remove();
-  // Tạo iframe YouTube ẩn
   const iframe = document.createElement('iframe');
   iframe.id = 'yt-player';
   iframe.style.cssText = 'position:fixed;width:1px;height:1px;bottom:-10px;left:-10px;opacity:0;pointer-events:none;';
@@ -597,7 +623,7 @@ function playMusic(i) {
   document.body.appendChild(iframe);
   musicPlaying = true;
   document.getElementById('music-bar').classList.remove('hidden');
-  document.getElementById('music-title').textContent = f.musicName;
+  document.getElementById('music-title').textContent = name;
   document.getElementById('musicBars').classList.remove('paused');
   document.querySelector('.music-toggle').textContent = 'Pause';
 }
@@ -613,7 +639,6 @@ function toggleMusic() {
   const yt = document.getElementById('yt-player');
   if (!yt) return;
   if (musicPlaying) {
-    // Pause bằng cách xóa autoplay khỏi src
     yt.src = yt.src.replace('autoplay=1','autoplay=0');
     musicPlaying = false;
     document.getElementById('musicBars').classList.add('paused');
@@ -633,17 +658,23 @@ function showPage(id, el) {
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
   if (el) el.classList.add('active');
   prevPage = currentPage; currentPage = id;
-  if (id !== 'reading') stopMusic();
+  if (id !== 'reading') {
+    stopMusic();
+    document.getElementById('progress-bar').classList.remove('visible');
+    document.getElementById('progress-bar').style.width = '0%';
+  }
   window.scrollTo(0,0);
 }
 
 function goBack() {
   stopMusic();
+  document.getElementById('progress-bar').classList.remove('visible');
+  document.getElementById('progress-bar').style.width = '0%';
   showPage(prevPage, null);
   if (prevPage==='works') document.querySelector('.nav-links a:nth-child(2)').classList.add('active');
   else document.querySelector('.nav-links a:nth-child(1)').classList.add('active');
 }
-  // Xử lý nút Back/Forward của trình duyệt
+
 window.addEventListener('popstate', (e) => {
   if (!e.state) { showPage('home', document.querySelector('.nav-links a:first-child')); return; }
   if (e.state.page === 'reading') { openFic(e.state.fic); return; }
