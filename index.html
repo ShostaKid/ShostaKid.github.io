@@ -182,12 +182,11 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
     </div>
     <div class="fics-section">
       <div class="section-heading">Latest Works</div>
-      <div class="fic-card" onclick="openFic(0)">
-        <div class="fic-title">Toccata in D sharp Minor: <em>"Totentanz"</em></div>
-        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-        <div class="fic-warning">⚠ Rape/Non-Con — please proceed at your own risk</div>
-        <div class="fic-summary"><em>Largo Tenebroso, con molto Amore</em></div>
-        <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
+      <div class="fic-card" onclick="openFic(7)">
+        <div class="fic-title">Nocturne in C Sharp Minor: <em>"Love"</em></div>
+        <div class="fic-meta"><span>Figure Skating RPF</span></div>
+        <div class="fic-summary">Lento con gran espressione</div>
+        <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
       </div>
       <div class="fic-card" onclick="openFic(1)">
         <div class="fic-title">Piano Concerto no.1 in C sharp Minor: <em>"None but the Lonely Heart"</em></div>
@@ -195,17 +194,18 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <div class="fic-summary">Allegretto Amore, poi Largo non troppo con Smorzando</div>
         <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
       </div>
-      <div class="fic-card" onclick="openFic(2)">
-        <div class="fic-title">Pas de Deux</div>
+      <div class="fic-card" onclick="openFic(8)">
+        <div class="fic-title">Nocturne in B Flat Minor: <em>Tenderness</em></div>
         <div class="fic-meta"><span>Honkai: Star Rail</span></div>
-        <div class="fic-summary">Lagro</div>
+        <div class="fic-summary">Larghetto Amore</div>
         <div class="fic-tags"><span class="tag">Phainon/Cyrene</span></div>
       </div>
-      <div class="fic-card" onclick="openFic(3)">
-        <div class="fic-title">String Quartet no.8: <em>"Lie"</em></div>
+      <div class="fic-card" onclick="openFic(5)">
+        <div class="fic-title">Fantasia no.1 in C minor: <em>"Desires"</em></div>
         <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-        <div class="fic-summary">Presto</div>
-        <div class="fic-tags"><span class="tag">Aleph/Recoleta</span><span class="tag">Merlin/Recoleta</span></div>
+        <div class="fic-warning">⚠ Rape/Non-Con</div>
+        <div class="fic-summary">Allegretto con Appassionato</div>
+        <div class="fic-tags"><span class="tag">Corvus/Pyrrhos</span></div>
       </div>
       <div style="text-align:center;margin-top:2rem;">
         <button class="ao3-link" onclick="showPage('works',document.querySelector('.nav-links a:nth-child(2)'))">View All Works →</button>
@@ -416,6 +416,7 @@ const fics = [
     files: ['Piano concerto no.2.txt'],
     chapters: ['Chapter 1', 'Chapter 2', 'Chapter 3']
   },
+  //index 7
   {
     title: 'Nocturne in C Sharp Minor',
     subtitle: 'Love',
@@ -426,6 +427,7 @@ const fics = [
     files: ['Nocturne Trusokova.txt'],
     chapters: ['Chapter 1']
   },
+  //index 8
   {
     title: 'Nocturne in B Flat Minor',
     subtitle: 'Tenderness',
