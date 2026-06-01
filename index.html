@@ -352,15 +352,6 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 </div>
 
 <!-- YouTube player ẩn — tự inject bằng JS -->
-
-function filterFics(keyword) {
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  event.target.classList.add('active');
-  document.querySelectorAll('#page-works .fic-card').forEach(card => {
-    if (keyword === 'all') { card.style.display='block'; return; }
-    card.style.display = card.innerText.includes(keyword) ? 'block' : 'none';
-  });
-}
 <script>
 // =============================================
 // FIC DATA — chỉnh sửa phần này khi thêm truyện
