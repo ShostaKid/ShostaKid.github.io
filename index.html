@@ -6,43 +6,6 @@
 <title>ShostaKid — I write anything I want here</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
 <style>
-@media (max-width: 768px) {
-  /* Works page: sidebar chuyển thành horizontal scroll bar */
-  .works-layout {
-    flex-direction: column;
-    padding: 1.5rem 1rem;
-    gap: 1rem;
-  }
-  .fandom-sidebar {
-    width: 100%;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    position: static;   /* bỏ sticky trên mobile */
-    gap: 8px;
-    padding-bottom: 4px;
-    -webkit-overflow-scrolling: touch;
-  }
-  .sidebar-heading { display: None; } /* ẩn chữ "Fandom" cho gọn */
-  .filter-btn {
-    width: auto;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  /* Nav */
-  nav { padding: 0 1rem; }
-  .nav-links { gap: 1.2rem; }
-
-  /* Hero */
-  .hero { padding: 3.5rem 1.2rem 3rem; }
-  .hero-title { font-size: 2rem; }
-
-  /* Fic cards */
-  .fics-section { padding: 2rem 1rem; }
-  .reading-wrap { padding: 2rem 1rem; }
-  .reading-title { font-size: 1.7rem; }
-}
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
 --cream:#FAF7F0;--cream2:#F2EDE0;--gold:#B8972A;--gold-light:#D4AF5A;--gold-dark:#8A6E1A;
@@ -184,6 +147,43 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .works-main{flex:1;min-width:0;}
 .filter-btn{font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--border);padding:7px 12px;color:var(--ink3);cursor:pointer;transition:all 0.2s;text-align:left;width:100%;}
 .filter-btn:hover,.filter-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(184,151,42,0.06);}
+@media (max-width: 768px) {
+  /* Works page: sidebar chuyển thành horizontal scroll bar */
+  .works-layout {
+    flex-direction: column;
+    padding: 1.5rem 1rem;
+    gap: 1rem;
+  }
+  .fandom-sidebar {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    position: static;   /* bỏ sticky trên mobile */
+    gap: 8px;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .sidebar-heading { display: None; } /* ẩn chữ "Fandom" cho gọn */
+  .filter-btn {
+    width: auto;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Nav */
+  nav { padding: 0 1rem; }
+  .nav-links { gap: 1.2rem; }
+
+  /* Hero */
+  .hero { padding: 3.5rem 1.2rem 3rem; }
+  .hero-title { font-size: 2rem; }
+
+  /* Fic cards */
+  .fics-section { padding: 2rem 1rem; }
+  .reading-wrap { padding: 2rem 1rem; }
+  .reading-title { font-size: 1.7rem; }
+}
 </style>
 </head>
 <body>
