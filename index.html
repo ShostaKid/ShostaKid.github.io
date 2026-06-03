@@ -166,6 +166,34 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .works-main{flex:1;min-width:0;}
 .filter-btn{font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--border);padding:7px 12px;color:var(--ink3);cursor:pointer;transition:all 0.2s;text-align:left;width:100%;}
 .filter-btn:hover,.filter-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(184,151,42,0.06);}
+
+/* NAV mobile */
+nav {
+  padding: 0 1rem;
+  flex-wrap: nowrap;
+  gap: 0;
+}
+.nav-logo { font-size: 0.85rem; letter-spacing: 2px; }
+.nav-links { gap: 1rem; }
+.nav-links a { font-size: 0.6rem; letter-spacing: 1.5px; }
+
+/* Theme button — nổi bật hơn trên mobile */
+#theme-btn {
+  font-size: 1.1rem;
+  padding: 6px 10px;
+  border: 1px solid var(--border) !important;
+  border-radius: 50%;
+  color: var(--gold) !important;
+  flex-shrink: 0;
+}
+
+/* About + Reading content không bị cắt trái */
+.about-wrap,
+.reading-wrap { padding: 2rem 1.2rem; }
+
+/* Hero text không bị cắt */
+.hero { padding: 3rem 1.2rem; }
+.hero-title { font-size: 1.8rem; letter-spacing: 3px; }
 </style>
 </head>
 <body>
