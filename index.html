@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ShostaKid — I write anything I want here</title>
+<title>ShostaKid — Where I blend music with fiction</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -368,7 +368,14 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
           <div class="fic-title">Libertango</div>
           <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
           <div class="fic-summary">Merlin cuck Aleph with Recoleta</div>
-          <div class="fic-tags"><span class="tag">Merlin/Recoleta</span><span>Aleph/Recoleta</span></div>
+          <div class="fic-tags"><span class="tag">Merlin/Recoleta</span><span class="tag">Aleph/Recoleta</span></div>
+        </div>
+
+        <div class="fic-card" onclick="openFic(12)" data-fandom="Reverse: 1999">
+          <div class="fic-title">Fantasia no.3 in B Flat Major: <em>"Thrist for Lust"</em></div>
+          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+          <div class="fic-summary"><em>Andantino Scherzando, con Amore e Grazioso</em></div>
+          <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
         </div>
       </div><!-- /.works-main -->
     </div><!-- /.works-layout -->
@@ -493,7 +500,6 @@ const fics = [
     subtitle: '"Desires"',
     fandom: '重返未来：1999 · Reverse: 1999',
     warning: 'Rape/Non-Con',
-    // Prokofiev → SoundCloud
     music: { source: 'soundcloud', url: 'https://soundcloud.com/charliefin/franz-liszt-transcendental-etude-no4-in-d-minor-mazeppa', start: 0 },
     musicName: 'Liszt - Etude no.4 in D minor',
     files: ['Fantasia no.1.txt'],
@@ -505,7 +511,6 @@ const fics = [
     subtitle: '"Нет, только тот, кто знал"',
     fandom: 'Figure Skating RPF',
     warning: null,
-    // Shostakovich → SoundCloud
     music: { source: 'soundcloud', url: 'https://soundcloud.com/magued-adel/valse-sentimentale-tchaikovsky-op51-no-6', start: 12 },
     musicName: 'Tchaikovsky — Valse Sentimentale',
     files: ['Piano concerto no.2.txt'],
@@ -517,7 +522,6 @@ const fics = [
     subtitle: 'Love',
     fandom: 'Figure Skating RPF',
     warning: null,
-    // Chopin → Musopen
     music: { source: 'musopen', url: 'https://dl.musopen.org/recordings/586da022-00a5-459d-a401-9abff984f964.mp3?filename=Nocturne%20in%20C%20sharp%20minor%20%27Lento%20con%20gran%20espressione%27%2C%20B.%2049%20%28Op.%20posth.%29.mp3', start: 0 },
     musicName: 'Chopin — Nocturne in C Sharp Minor',
     files: ['Nocturne Trusokova.txt'],
@@ -571,6 +575,16 @@ const fics = [
     musicName:['Piazolla - Libertango', 'Saint-Saens - Danse Macabre'],
     files: ['Libertango 1.txt', 'Libertango 2.txt'],
     chapters: ['Chapter 1', 'Chapter 2'],
+  },
+  {
+    title: 'Fantasia no.3 in B Flat Major',
+    subtitle: '"Thirst for Lust"',
+    fandom: '重返未来：1999 · Reverse: 1999',
+    warning: null,
+    music: { source: 'musopen', url: 'https://dl.musopen.org/recordings/0a19d999-046a-4c22-a28b-89f044f82c83.mp3?filename=Blauen%20Donau.mp3', start: 0 },
+    musicName: 'Strauss II - The Blue Danube',
+    files: ['Fantasia Alephreco.txt'],
+    chapters: ['I. Desires']
   },
 ];
 
