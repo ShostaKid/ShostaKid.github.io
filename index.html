@@ -245,12 +245,12 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <div class="fic-summary">Lento con gran espressione</div>
         <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
       </div>
-      <div class="fic-card" onclick="openFic(1)">
-        <div class="fic-title">Piano Concerto no.1 in C sharp Minor: <em>"None but the Lonely Heart"</em></div>
-        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-        <div class="fic-summary">Allegretto Amore, poi Largo non troppo con Smorzando</div>
-        <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
-      </div>
+        <div class="fic-card" onclick="openFic(11)" data-fandom="Reverse: 1999">
+          <div class="fic-title">Libertango</div>
+          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+          <div class="fic-summary">Merlin cuck Aleph with Recoleta</div>
+          <div class="fic-tags"><span class="tag">Merlin/Recoleta</span><span>Aleph/Recoleta</span></div>
+        </div>
       <div class="fic-card" onclick="openFic(8)">
         <div class="fic-title">Nocturne in B Flat Minor: <em>Tenderness</em></div>
         <div class="fic-meta"><span>Honkai: Star Rail</span></div>
@@ -364,6 +364,12 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
           <div class="fic-tags"><span class="tag">Corvus/Pyrrhos</span></div>
         </div>
 
+        <div class="fic-card" onclick="openFic(11)" data-fandom="Reverse: 1999">
+          <div class="fic-title">Libertango</div>
+          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+          <div class="fic-summary">Merlin cuck Aleph with Recoleta</div>
+          <div class="fic-tags"><span class="tag">Merlin/Recoleta</span><span>Aleph/Recoleta</span></div>
+        </div>
       </div><!-- /.works-main -->
     </div><!-- /.works-layout -->
     <footer><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · Enjoy &nbsp; <span style="color:var(--gold);">✦</span></footer>
@@ -551,6 +557,19 @@ const fics = [
     ],
     musicName:['Strauss II - The Blue Danube', 'Schubert - Serenade'],
     files: ['Danube 1.txt', 'Danube 2.txt'],
+    chapters: ['Chapter 1', 'Chapter 2'],
+  },
+    {
+    title: 'Libertango',
+    subtitle: null,
+    fandom: '重返未来：1999 · Reverse: 1999',
+    warning: null,
+    music: [ 
+      {source: 'soundcloud', url: 'https://soundcloud.com/akira-901504330/libertango-arr-for-orchestra', start: 0},
+      {source: 'soundcloud', url: 'https://soundcloud.com/fauxharmonic/danse-macabre-op-40-saint-saens', start: 0 },
+    ],
+    musicName:['Piazolla - Libertango', 'Saint-Saens - Danse Macabre'],
+    files: ['Libertango 1.txt', 'Libertango 2.txt'],
     chapters: ['Chapter 1', 'Chapter 2'],
   },
 ];
