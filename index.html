@@ -405,6 +405,13 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 // =============================================
 // FIC DATA — chỉnh sửa phần này khi thêm truyện
 // =============================================
+const aboutMusic = {
+  source: 'soundcloud',          // hoặc 'soundcloud' / 'youtube'
+  url: 'https://soundcloud.com/chicagosymphony/shostakovich-symphony-no-7-3',         // link nhạc
+  start: 2,
+  name: 'Shostakovich - Symphony no.7 "Leningrad"'
+};
+  
 const fics = [
   // index 0 — AlephReco ưu tiên đầu
   {
@@ -689,7 +696,48 @@ function toggleTheme() {
 // =============================================
 // MUSIC — hỗ trợ 3 nguồn: musopen / soundcloud / youtube
 // =============================================
-function playMusic(ficIdx, chapterIdx) {
+function playMusicDirect(source, url, id, start, end, name) {
+  stopMusic();
+  const m = { source, url, id, start, end };
+
+  if (source === 'musopen') {
+    const audio = document.createElement('audio');
+    audio.id = 'audio-player';
+    audio.loop = true;
+    audio.style.display = 'none';
+    audio.src = url;
+    document.body.appendChild(audio);
+    audio.addEventListener('canplay', () => {
+      if (start) audio.currentTime = start;
+      audio.play().catch(()=>{});
+    }, { once: true });
+
+  } else if (source === 'soundcloud') {
+    const iframe = document.createElement('iframe');
+    iframe.id = 'sc-player';
+    iframe.style.cssText = 'position:fixed;width:1px;height:1px;bottom:-10px;left:-10px;opacity:0;pointer-events:none;';
+    iframe.src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&auto_play=true&hide_related=true&show_comments=false&show_user=false&start_time=${(start||0)*1000}`;
+    iframe.allow = 'autoplay';
+    document.body.appendChild(iframe);
+
+  } else {
+    const iframe = document.createElement('iframe');
+    iframe.id = 'yt-player';
+    iframe.style.cssText = 'position:fixed;width:1px;height:1px;bottom:-10px;left:-10px;opacity:0;pointer-events:none;';
+    iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&start=${start||0}${end?'&end='+end:''}&loop=1&playlist=${id}`;
+    iframe.allow = 'autoplay; encrypted-media';
+    iframe.frameBorder = '0';
+    document.body.appendChild(iframe);
+  }
+
+  musicPlaying = true;
+  document.getElementById('music-bar').classList.remove('hidden');
+  document.getElementById('music-title').textContent = name;
+  document.getElementById('musicBars').classList.remove('paused');
+  document.querySelector('.music-toggle').textContent = 'Pause';
+}
+  
+  function playMusic(ficIdx, chapterIdx) {
   const { m, name } = getMusicData(ficIdx, chapterIdx);
   stopMusic();
 
@@ -773,14 +821,20 @@ function showPage(id, el) {
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
   if (el) el.classList.add('active');
   prevPage = currentPage; currentPage = id;
-  if (id !== 'reading') {
-    stopMusic();
-    document.getElementById('progress-bar').classList.remove('visible');
-    document.getElementById('progress-bar').style.width = '0%';
-  }
+  if (id === 'about') {
+  playMusicDirect(
+    aboutMusic.source,
+    aboutMusic.url,
+    aboutMusic.id || null,
+    aboutMusic.start,
+    aboutMusic.end || null,
+    aboutMusic.name
+  );
+} else if (id !== 'reading') {
+  stopMusic();  // home, works → tắt nhạc
+}
   window.scrollTo(0,0);
 }
-
 function goBack() {
   stopMusic();
   document.getElementById('progress-bar').classList.remove('visible');
