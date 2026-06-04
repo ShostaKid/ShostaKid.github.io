@@ -189,6 +189,18 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   .filter-btn { width: auto; white-space: nowrap; }
   .hero { padding: 3rem 1.2rem; }
   .hero-title { font-size: 1.8rem; letter-spacing: 3px; }
+
+  .home-columns { flex-direction: column; gap: 0; }
+}
+  /* Home: 2 cột trên desktop */
+.home-columns {
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+}
+.home-col {
+  flex: 1;
+  min-width: 0;
 }
 </style>
 </head>
@@ -237,17 +249,24 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
       <div class="hero-divider"><span style="color:var(--gold);letter-spacing:4px;">✦ ✦ ✦</span></div>
       <p class="hero-tagline">Take a $ip y'all and enjoy</p>
     </div>
-    <div class="fics-section">
+  <div style="max-width:1100px;margin:0 auto;padding:3.5rem 2rem;">
+  <div class="home-columns">
+
+    <div class="home-col">
       <div class="section-heading">Latest Works</div>
       <div id="home-latest"></div>
-
-      <div class="section-heading" style="margin-top:3rem;">Favourite Works</div>
-      <div id="home-favorites"></div>
-
-      <div style="text-align:center;margin-top:2rem;">
-        <button class="ao3-link" onclick="showPage('works',document.querySelector('.nav-links a:nth-child(2)'))">View All Works →</button>
-      </div>
     </div>
+
+    <div class="home-col">
+      <div class="section-heading">Favourite Works</div>
+      <div id="home-favorites"></div>
+    </div>
+
+  </div>
+  <div style="text-align:center;margin-top:2rem;">
+    <button class="ao3-link" onclick="showPage('works',document.querySelector('.nav-links a:nth-child(2)'))">View All Works →</button>
+  </div>
+</div>
     <footer><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · Enjoy &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
 
