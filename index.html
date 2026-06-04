@@ -202,6 +202,8 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   flex: 1;
   min-width: 0;
 }
+#search-input:focus{border-color:var(--gold);}
+#search-input::placeholder{color:var(--ink3);}
 </style>
 </head>
 <body>
@@ -283,6 +285,12 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
       </aside>
 
       <div class="works-main">
+        <div style="margin-bottom:1.5rem;position:relative;">
+  <input id="search-input" type="text" placeholder="Search by title..."
+    oninput="searchFics(this.value)"
+    style="width:100%;font-family:'Playfair Display',serif;font-size:0.85rem;letter-spacing:1px;color:var(--ink2);background:var(--cream);border:1px solid var(--border);padding:10px 16px 10px 40px;outline:none;transition:border-color 0.2s;">
+  <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--ink3);font-size:0.9rem;">🔍</span>
+</div>
         <div class="section-heading">All Works</div>
 
         <div class="fic-card" onclick="openFic(0)" data-fandom="Reverse: 1999">
@@ -511,7 +519,7 @@ const fics = [
     warning: null,
     summary: 'Andante Dolce con Tempo di Garbo, poi Largo non troppo e Smorzando',
     tags: ['Anna Shcherbakova/Alexandra Trusova'],
-    date: '2026-05-22', featured: false,
+    date: '2026-05-22', featured: true,
     music: { source: 'archive', url: 'https://archive.org/download/lp_waltzes-of-tchaikovsky_vitya-vronsky-victor-babin/disc1/01.02.%20Valse%20Sentimentale%2C%20Op.%2051%2C%20No.%206.mp3', start: 5 },
     musicName: 'Tchaikovsky — Valse Sentimentale',
     files: ['Piano concerto no.2.txt'], chapters: ['Chapter 1', 'Chapter 2', 'Chapter 3']
@@ -574,7 +582,7 @@ const fics = [
     warning: null,
     summary: 'Merlin cuck Aleph with Recoleta',
     tags: ['Merlin/Recoleta', 'Aleph/Recoleta'],
-    date: '2026-06-04', featured: true,
+    date: '2026-06-04', featured: false,
     music: [
       { source: 'soundcloud', url: 'https://soundcloud.com/akira-901504330/libertango-arr-for-orchestra', start: 0 },
       { source: 'archive', url: 'https://archive.org/download/DanseMacabreOp.40/Danse%20Macabre%2C%20Op.%2040.mp3', start: 20 },
@@ -956,6 +964,14 @@ window.addEventListener('popstate', (e) => {
   const el = document.querySelector(`.nav-links a[onclick*="${e.state.page}"]`);
   showPage(e.state.page, el);
 });
+
+  function searchFics(query) {
+  const q = query.toLowerCase().trim();
+  document.querySelectorAll('#page-works .fic-card').forEach(card => {
+    const title = card.querySelector('.fic-title').textContent.toLowerCase();
+    card.style.display = (!q || title.includes(q)) ? 'block' : 'none';
+  });
+}
 </script>
 </body>
 </html>
