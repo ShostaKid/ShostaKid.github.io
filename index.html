@@ -253,7 +253,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   <div class="home-columns">
 
     <div class="home-col">
-      <div class="section-heading">My Lastest Works</div>
+      <div class="section-heading">My Latest Works</div>
       <div id="home-latest"></div>
     </div>
 
@@ -372,7 +372,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         </div>
 
         <div class="fic-card" onclick="openFic(12)" data-fandom="Reverse: 1999">
-          <div class="fic-title">Fantasia no.3 in B Flat Major: <em>"Thrist for Lust"</em></div>
+          <div class="fic-title">Fantasia no.3 in B Flat Major: <em>"Thirst for Lust"</em></div>
           <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
           <div class="fic-summary"><em>Andantino Scherzando, con Amore e Grazioso</em></div>
           <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
@@ -408,7 +408,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <p>I hope you have a great time here. Thank you for stopping by.</p>
       </div>
       <div class="stat-row">
-        <div class="stat-box"><span class="stat-num">9</span><span class="stat-label">Works</span></div>
+        <div class="stat-box"><span class="stat-num">13</span><span class="stat-label">Works</span></div>
       </div>
       <div class="about-sig">— ShostaKid</div>
       <div style="margin-top:2rem;"><a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid" target="_blank">My AO3 →</a></div>
@@ -500,7 +500,7 @@ const fics = [
     summary: 'Allegretto con Appassionato',
     tags: ['Corvus/Pyrrhos'],
     date: '2026-05-25', featured: false,
-    music: { source: 'archive', url: 'https://archive.org/download/liszt-mazeppa-symphonic-poem-no.-6-s.-100-herbert-von-karajan-dvg/Liszt%20-%20%20Mazeppa%2C%20Symphonic%20Poem%20no.%206%2C%20S.%20100%20%28Herbert%20von%20Karajan%29.mp3', start: 0 },
+    music: { source: 'archive', url: 'https://archive.org/download/41FranzLisztMazeppa1852/41%20Franz%20Liszt%20-%20Mazeppa%2C%201852.mp3', start: 0 },
     musicName: 'Liszt — Etude no.4 in D minor',
     files: ['Fantasia no.1.txt'], chapters: ['I. Desires']
   },
@@ -706,9 +706,17 @@ function updateChapterNav(ficIdx, chapterIdx) {
   if (!nav) return;
   if (fic.chapters.length <= 1) { nav.style.display='none'; return; }
   nav.style.display = 'flex';
-  document.getElementById('ch-label').textContent = fic.chapters[chapterIdx] || `Chapter ${chapterIdx+1}`;
-  document.getElementById('ch-prev').disabled = chapterIdx === 0;
-  document.getElementById('ch-next').disabled = chapterIdx >= fic.chapters.length - 1;
+  
+  const options = fic.chapters.map((ch, i) =>
+    `<option value="${i}" ${i === chapterIdx ? 'selected' : ''}>${ch}</option>`
+  ).join('');
+
+  nav.innerHTML = `
+    <button id="ch-prev" onclick="prevChapter()" ${chapterIdx === 0 ? 'disabled' : ''}>← Prev</button>
+    <select id="ch-select" onchange="jumpChapter(this.value)" style="font-family:'Playfair Display',serif;font-size:0.72rem;letter-spacing:1px;text-transform:uppercase;color:var(--ink2);background:var(--cream);border:1px solid var(--border);padding:6px 12px;cursor:pointer;">
+      ${options}
+    </select>
+    <button id="ch-next" onclick="nextChapter()" ${chapterIdx >= fic.chapters.length - 1 ? 'disabled' : ''}>Next →</button>`;
 }
 
 function prevChapter() {
@@ -716,6 +724,12 @@ function prevChapter() {
 }
 function nextChapter() {
   if (currentChapter < fics[currentFic].chapters.length - 1) { currentChapter++; loadChapter(currentFic, currentChapter); }
+}
+
+function jumpChapter(idx) {
+  currentChapter = parseInt(idx);
+  loadChapter(currentFic, currentChapter);
+  playMusic(currentFic, currentChapter);
 }
 
 function openFic(i) {
