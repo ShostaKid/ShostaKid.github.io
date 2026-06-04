@@ -239,30 +239,11 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
     </div>
     <div class="fics-section">
       <div class="section-heading">Latest Works</div>
-      <div class="fic-card" onclick="openFic(7)">
-        <div class="fic-title">Nocturne in C Sharp Minor: <em>"Love"</em></div>
-        <div class="fic-meta"><span>Figure Skating RPF</span></div>
-        <div class="fic-summary">Lento con gran espressione</div>
-        <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
-      </div>
-        <div class="fic-card" onclick="openFic(11)" data-fandom="Reverse: 1999">
-          <div class="fic-title">Libertango</div>
-          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-          <div class="fic-summary">Merlin cuck Aleph with Recoleta</div>
-          <div class="fic-tags"><span class="tag">Merlin/Recoleta</span><span>Aleph/Recoleta</span></div>
-        </div>
-      <div class="fic-card" onclick="openFic(8)">
-        <div class="fic-title">Nocturne in B Flat Minor: <em>Tenderness</em></div>
-        <div class="fic-meta"><span>Honkai: Star Rail</span></div>
-        <div class="fic-summary">Larghetto Amore</div>
-        <div class="fic-tags"><span class="tag">Phainon/Cyrene</span></div>
-      </div>
-        <div class="fic-card" onclick="openFic(10)" data-fandom="Reverse: 1999">
-          <div class="fic-title">Elegy in G Minor <em>"By the Banks of the Danube"</em></div>
-          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-          <div class="fic-summary">Andante Scherzando, poi Larghissimo Morendo</div>
-          <div class="fic-tags"><span class="tag">Corvus/Pyrrhos</span></div>
-        </div>
+      <div id="home-latest"></div>
+
+      <div class="section-heading" style="margin-top:3rem;">Favourite Works</div>
+      <div id="home-favorites"></div>
+
       <div style="text-align:center;margin-top:2rem;">
         <button class="ao3-link" onclick="showPage('works',document.querySelector('.nav-links a:nth-child(2)'))">View All Works →</button>
       </div>
@@ -432,159 +413,167 @@ const aboutMusic = {
 };
   
 const fics = [
-  // index 0 — AlephReco ưu tiên đầu
+  // index 0
   {
-    title: 'Toccata in D sharp Minor',
-    subtitle: '"Totentanz"',
+    title: 'Toccata in D sharp Minor', subtitle: '"Totentanz"',
     fandom: '重返未来：1999 · Reverse: 1999',
     warning: 'Rape/Non-Con — This fic is not healthy and may cause discomfort. Please proceed at your own risk.',
-    // Shostakovich → SoundCloud (còn copyright)
-    // Lấy URL: vào soundcloud.com → tìm "Shostakovich Symphony 14" → copy URL trang → paste vào 'url'
+    summary: 'Largo Tenebroso, con molto Amore',
+    tags: ['Aleph/Recoleta'],
+    date: '2026-05-28', featured: false,
     music: { source: 'soundcloud', url: 'https://soundcloud.com/lava-knight-553165735/symphony-14-shostakovich', start: 0 },
     musicName: 'Shostakovich — Symphony No. 14',
-    files: ['Toccata no.1.txt'],
-    chapters: ['I. Totentanz']
+    files: ['Toccata no.1.txt'], chapters: ['I. Totentanz']
   },
-  // index 1 — AlephReco
+  // index 1
   {
-    title: 'Piano Concerto no.1 in C sharp Minor',
-    subtitle: '"None but the Lonely Heart"',
+    title: 'Piano Concerto no.1 in C sharp Minor', subtitle: '"None but the Lonely Heart"',
     fandom: '重返未来：1999 · Reverse: 1999',
     warning: null,
-    // Tchaikovsky → Musopen
-    // Lấy URL: vào musopen.org → tìm piece → click "Download MP3" → copy URL file .mp3
+    summary: 'Allegretto Amore, poi Largo non troppo con Smorzando',
+    tags: ['Aleph/Recoleta'],
+    date: '2026-05-22', featured: false,
     music: { source: 'soundcloud', url: 'https://soundcloud.com/bosbos1273/ronnie-aldrich-and-his-two-pianos-none-but-the-lonely-heart-tchaikovsky', start: 0 },
     musicName: 'Tchaikovsky — None But The Lonely Heart',
-    files: ['Piano concerto no.1.txt'],
-    chapters: ['I. None but the Lonely Heart']
+    files: ['Piano concerto no.1.txt'], chapters: ['I. None but the Lonely Heart']
   },
-  // index 2 — Phainon/Cyrene
+  // index 2
   {
-    title: 'Pas de Deux',
-    subtitle: 'Last dance',
+    title: 'Pas de Deux', subtitle: 'Last dance',
     fandom: 'Honkai: Star Rail',
     warning: null,
-    // Tchaikovsky → Musopen
+    summary: 'Largo',
+    tags: ['Phainon/Cyrene'],
+    date: '2026-05-22', featured: false,
     music: { source: 'soundcloud', url: 'https://soundcloud.com/dreamworldofyoppy/tchaikovsky-pas-de-deux', start: 13 },
     musicName: 'Tchaikovsky — Pas de Deux',
-    files: ['Pas de Deux.txt'],
-    chapters: ['Chapter 1']
+    files: ['Pas de Deux.txt'], chapters: ['Chapter 1']
   },
-  // index 3 — AlephReco
+  // index 3
   {
-    title: 'String Quartet no.8',
-    subtitle: '"Lie"',
+    title: 'String Quartet no.8', subtitle: '"Lie"',
     fandom: '重返未来：1999 · Reverse: 1999',
     warning: 'Cuckold',
-    // Shostakovich → SoundCloud
+    summary: 'Presto',
+    tags: ['Aleph/Recoleta', 'Merlin/Recoleta'],
+    date: '2026-05-22', featured: false,
     music: { source: 'soundcloud', url: 'https://soundcloud.com/emaly-389853445/dover-quartet-string-quartet', start: 0 },
     musicName: 'Shostakovich — String Quartet No. 8',
-    files: ['String Quartet 8.txt'],
-    chapters: ['Chapter 1']
+    files: ['String Quartet 8.txt'], chapters: ['Chapter 1']
   },
-  // index 4 — Le Suicide
+  // index 4
   {
-    title: 'Dirge in F sharp Minor',
-    subtitle: 'Le Suicide',
+    title: 'Dirge in F sharp Minor', subtitle: 'Le Suicide',
     fandom: '重返未来：1999 · Reverse: 1999',
     warning: null,
-    // Shostakovich → SoundCloud
+    summary: 'Adagio Lugubre',
+    tags: ['Aleph/Recoleta'],
+    date: '2026-05-31', featured: false,
     music: { source: 'soundcloud', url: 'https://soundcloud.com/cromano-string-quartet/string-quartet-no-8-op-110', start: 520 },
     musicName: 'Shostakovich — String Quartet no.8',
-    files: ['Le Suicide.txt'],
-    chapters: ['Chapter 1']
+    files: ['Le Suicide.txt'], chapters: ['Chapter 1']
   },
   // index 5
   {
-    title: 'Fantasia no.1 in C minor',
-    subtitle: '"Desires"',
+    title: 'Fantasia no.1 in C minor', subtitle: '"Desires"',
     fandom: '重返未来：1999 · Reverse: 1999',
     warning: 'Rape/Non-Con',
+    summary: 'Allegretto con Appassionato',
+    tags: ['Corvus/Pyrrhos'],
+    date: '2026-05-25', featured: false,
     music: { source: 'soundcloud', url: 'https://soundcloud.com/charliefin/franz-liszt-transcendental-etude-no4-in-d-minor-mazeppa', start: 0 },
-    musicName: 'Liszt - Etude no.4 in D minor',
-    files: ['Fantasia no.1.txt'],
-    chapters: ['I. Desires']
+    musicName: 'Liszt — Etude no.4 in D minor',
+    files: ['Fantasia no.1.txt'], chapters: ['I. Desires']
   },
   // index 6
   {
-    title: 'Piano Concerto no.2 in G Minor',
-    subtitle: '"Нет, только тот, кто знал"',
+    title: 'Piano Concerto no.2 in G Minor', subtitle: '"Нет, только тот, кто знал"',
     fandom: 'Figure Skating RPF',
     warning: null,
+    summary: 'Andante Dolce con Tempo di Garbo, poi Largo non troppo e Smorzando',
+    tags: ['Anna Shcherbakova/Alexandra Trusova'],
+    date: '2026-05-22', featured: false,
     music: { source: 'soundcloud', url: 'https://soundcloud.com/magued-adel/valse-sentimentale-tchaikovsky-op51-no-6', start: 12 },
     musicName: 'Tchaikovsky — Valse Sentimentale',
-    files: ['Piano concerto no.2.txt'],
-    chapters: ['Chapter 1', 'Chapter 2', 'Chapter 3']
+    files: ['Piano concerto no.2.txt'], chapters: ['Chapter 1', 'Chapter 2', 'Chapter 3']
   },
   // index 7
   {
-    title: 'Nocturne in C Sharp Minor',
-    subtitle: 'Love',
+    title: 'Nocturne in C Sharp Minor', subtitle: '"Love"',
     fandom: 'Figure Skating RPF',
     warning: null,
+    summary: 'Lento con gran espressione',
+    tags: ['Anna Shcherbakova/Alexandra Trusova'],
+    date: '2026-04-21', featured: true,
     music: { source: 'musopen', url: 'https://dl.musopen.org/recordings/586da022-00a5-459d-a401-9abff984f964.mp3?filename=Nocturne%20in%20C%20sharp%20minor%20%27Lento%20con%20gran%20espressione%27%2C%20B.%2049%20%28Op.%20posth.%29.mp3', start: 0 },
     musicName: 'Chopin — Nocturne in C Sharp Minor',
-    files: ['Nocturne Trusokova.txt'],
-    chapters: ['Chapter 1']
+    files: ['Nocturne Trusokova.txt'], chapters: ['Chapter 1']
   },
   // index 8
   {
-    title: 'Nocturne in B Flat Minor',
-    subtitle: 'Tenderness',
+    title: 'Nocturne in B Flat Minor', subtitle: 'Tenderness',
     fandom: 'Honkai: Star Rail',
     warning: null,
-    // Chopin → Musopen
+    summary: 'Larghetto Amore',
+    tags: ['Phainon/Cyrene'],
+    date: '2026-04-28', featured: true,
     music: { source: 'musopen', url: 'https://dl.musopen.org/recordings/8476ae47-3751-4a07-a6db-a602e9dc5ffd.mp3?filename=Nocturne%20in%20B%20flat%20minor%2C%20Op.%209%20no.%201.mp3', start: 0 },
     musicName: 'Chopin — Nocturne in B Flat Minor',
-    files: ['Tenderness Phairene.txt'],
-    chapters: ['Chapter 1']
+    files: ['Tenderness Phairene.txt'], chapters: ['Chapter 1']
   },
   // index 9
   {
-    title: 'Romance de Amour',
-    subtitle: null,
+    title: 'Romance de Amour', subtitle: null,
     fandom: 'Honkai: Star Rail',
     warning: null,
+    summary: 'Andante Moderato, molto Amore',
+    tags: ['Phainon/Cyrene'],
+    date: '2026-04-28', featured: false,
     music: { source: 'musopen', url: 'https://dl.musopen.org/recordings/c0a4e3d8-da06-4aaa-ac42-81f69c70e0db.mp3?filename=Serenade%20for%20Strings%2C%20Op.%2022%20-%20IV%20Larghetto.mp3', start: 0 },
     musicName: 'Dvorak — Serenade for Strings',
-    files: ['Romance de Amour.txt'],
-    chapters: ['Chapter 1']
+    files: ['Romance de Amour.txt'], chapters: ['Chapter 1']
   },
+  // index 10
   {
-    title: 'Elegy in G Minor',
-    subtitle: '"By the Banks of the Danube"',
+    title: 'Elegy in G Minor', subtitle: '"By the Banks of the Danube"',
     fandom: '重返未来：1999 · Reverse: 1999',
     warning: null,
-    music: [ 
-      {source: 'musopen', url: 'https://dl.musopen.org/recordings/0a19d999-046a-4c22-a28b-89f044f82c83.mp3?filename=Blauen%20Donau.mp3', start: 0},
-      {source: 'soundcloud', url: 'https://soundcloud.com/adham-safena-70418000/schubert-serenade', start: 0 },
+    summary: 'Andante Scherzando, poi Larghissimo Morendo',
+    tags: ['Corvus/Pyrrhos'],
+    date: '2026-05-06', featured: true,
+    music: [
+      { source: 'musopen', url: 'https://dl.musopen.org/recordings/0a19d999-046a-4c22-a28b-89f044f82c83.mp3?filename=Blauen%20Donau.mp3', start: 0 },
+      { source: 'soundcloud', url: 'https://soundcloud.com/adham-safena-70418000/schubert-serenade', start: 0 },
     ],
-    musicName:['Strauss II - The Blue Danube', 'Schubert - Serenade'],
-    files: ['Danube 1.txt', 'Danube 2.txt'],
-    chapters: ['Chapter 1', 'Chapter 2'],
+    musicName: ['Strauss II — The Blue Danube', 'Schubert — Serenade'],
+    files: ['Danube 1.txt', 'Danube 2.txt'], chapters: ['Chapter 1', 'Chapter 2']
   },
-    {
-    title: 'Libertango',
-    subtitle: null,
-    fandom: '重返未来：1999 · Reverse: 1999',
-    warning: null,
-    music: [ 
-      {source: 'soundcloud', url: 'https://soundcloud.com/akira-901504330/libertango-arr-for-orchestra', start: 0},
-      {source: 'soundcloud', url: 'https://soundcloud.com/fauxharmonic/danse-macabre-op-40-saint-saens', start: 0 },
-    ],
-    musicName:['Piazolla - Libertango', 'Saint-Saens - Danse Macabre'],
-    files: ['Libertango 1.txt', 'Libertango 2.txt'],
-    chapters: ['Chapter 1', 'Chapter 2'],
-  },
+  // index 11
   {
-    title: 'Fantasia no.3 in B Flat Major',
-    subtitle: '"Thirst for Lust"',
+    title: 'Libertango', subtitle: null,
     fandom: '重返未来：1999 · Reverse: 1999',
     warning: null,
+    summary: 'Merlin cuck Aleph with Recoleta',
+    tags: ['Merlin/Recoleta', 'Aleph/Recoleta'],
+    date: '2026-06-04', featured: true,
+    music: [
+      { source: 'soundcloud', url: 'https://soundcloud.com/akira-901504330/libertango-arr-for-orchestra', start: 0 },
+      { source: 'soundcloud', url: 'https://soundcloud.com/fauxharmonic/danse-macabre-op-40-saint-saens', start: 0 },
+    ],
+    musicName: ['Piazolla — Libertango', 'Saint-Saens — Danse Macabre'],
+    files: ['Libertango 1.txt', 'Libertango 2.txt'], chapters: ['Chapter 1', 'Chapter 2']
+  },
+  // index 12
+  {
+    title: 'Fantasia no.3 in B Flat Major', subtitle: '"Thirst for Lust"',
+    fandom: '重返未来：1999 · Reverse: 1999',
+    warning: null,
+    summary: 'Andantino Scherzando, con Amore e Grazioso',
+    tags: ['Aleph/Recoleta'],
+    date: '2026-06-04', featured: false,
     music: { source: 'musopen', url: 'https://dl.musopen.org/recordings/0a19d999-046a-4c22-a28b-89f044f82c83.mp3?filename=Blauen%20Donau.mp3', start: 0 },
-    musicName: 'Strauss II - The Blue Danube',
-    files: ['Fantasia Alephreco.txt'],
-    chapters: ['I. Desires']
+    musicName: 'Strauss II — The Blue Danube',
+    files: ['Fantasia Alephreco.txt'], chapters: ['I. Desires']
   },
 ];
 
@@ -611,6 +600,36 @@ function filterFics(keyword, btn) {
   document.querySelectorAll('#page-works .fic-card').forEach(card => {
     card.style.display = (keyword === 'all' || (card.dataset.fandom || '').includes(keyword)) ? 'block' : 'none';
   });
+}
+
+// --- Home page: auto-render từ fics[] ---
+function makeCard(f) {
+  const titleHtml = f.subtitle
+    ? `${f.title}: <em>${f.subtitle}</em>`
+    : f.title;
+  const tagsHtml = (f.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+  return `
+    <div class="fic-card" onclick="openFic(${f.idx})">
+      <div class="fic-title">${titleHtml}</div>
+      <div class="fic-meta"><span>${f.fandom}</span></div>
+      ${f.warning ? `<div class="fic-warning">⚠ ${f.warning}</div>` : ''}
+      <div class="fic-summary">${f.summary || ''}</div>
+      ${tagsHtml ? `<div class="fic-tags">${tagsHtml}</div>` : ''}
+    </div>`;
+}
+
+function renderHome() {
+  // Latest: 4 fic mới nhất sort theo date
+  const withIdx = fics.map((f, i) => ({ ...f, idx: i }));
+  const latest = [...withIdx]
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .slice(0, 4);
+
+  // Favorites: fic có featured: true, giữ nguyên thứ tự trong fics[]
+  const favorites = withIdx.filter(f => f.featured);
+
+  document.getElementById('home-latest').innerHTML   = latest.map(makeCard).join('');
+  document.getElementById('home-favorites').innerHTML = favorites.map(makeCard).join('');
 }
 
 function txtToHtml(text) {
@@ -722,6 +741,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const intro = document.getElementById('intro');
   intro.addEventListener('click', enterSite);
   document.addEventListener('keydown', () => { if(intro.style.display !== 'none') enterSite(); }, {once: true});
+  renderHome();
 });
 
 // =============================================
