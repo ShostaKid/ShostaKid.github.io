@@ -629,7 +629,7 @@ function makeCard(f) {
   const tagsHtml = (f.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
   return `
     <div class="fic-card" onclick="openFic(${f.idx})">
-      <div class="fic-title">${titleHtml}</div>
+      <div class="reading-title">${f.title}${f.subtitle ? ': <em>'+f.subtitle+'</em>' : ''}</div>
       <div class="fic-meta"><span>${f.fandom}</span></div>
       ${f.warning ? `<div class="fic-warning">⚠ ${f.warning}</div>` : ''}
       <div class="fic-summary">${f.summary || ''}</div>
