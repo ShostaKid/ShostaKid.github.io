@@ -790,12 +790,13 @@ function playMusicDirect(source, url, id, start, end, name) {
   stopMusic();
   const m = { source, url, id, start, end };
 
-  if (source === 'musopen') {
+  if (source === 'musopen' || source === 'archive') {
     const audio = document.createElement('audio');
     audio.id = 'audio-player';
     audio.loop = true;
     audio.style.display = 'none';
     audio.src = url;
+    audio.volume = 0.55;
     document.body.appendChild(audio);
     audio.addEventListener('canplay', () => {
       if (start) audio.currentTime = start;
@@ -833,13 +834,14 @@ function playMusicDirect(source, url, id, start, end, name) {
 
   const source = m.source || 'youtube';
 
-  if (source === 'musopen') {
-    // HTML5 audio — direct MP3 link từ musopen.org
+  if (source === 'musopen' || source === 'archive') {
+    // HTML5 audio — direct MP3 link từ musopen.org hoặc archive.org
     const audio = document.createElement('audio');
     audio.id = 'audio-player';
     audio.loop = true;
     audio.style.display = 'none';
     audio.src = m.url;
+    audio.volume = 0.55;
     document.body.appendChild(audio);
     audio.addEventListener('canplay', () => {
       if (m.start) audio.currentTime = m.start;
