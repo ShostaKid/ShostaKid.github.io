@@ -936,7 +936,7 @@ function playMusicDirect(source, url, id, start, end, name) {
     audio.loop = true;
     audio.style.display = 'none';
     audio.src = m.url;
-    audio.volume = 0.55;
+    audio.volume = 1;
     document.body.appendChild(audio);
     audio.addEventListener('canplay', () => {
       if (m.start) audio.currentTime = m.start;
