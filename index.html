@@ -893,10 +893,10 @@ function playMusicDirect(source, url, id, start, end, name) {
     audio.src = url;
     audio.volume = 1;
     document.body.appendChild(audio);
+    audio.play().catch(()=>{});  // ← gọi NGAY, vẫn trong user gesture
     audio.addEventListener('canplay', () => {
-      if (start) audio.currentTime = start;
-      audio.play().catch(()=>{});
-    }, { once: true });
+  if (m.start) audio.currentTime = m.start;  // ← chỉ seek sau khi ready
+      }, { once: true });
 
   } else if (source === 'soundcloud') {
     const iframe = document.createElement('iframe');
@@ -938,9 +938,9 @@ function playMusicDirect(source, url, id, start, end, name) {
     audio.src = m.url;
     audio.volume = 1;
     document.body.appendChild(audio);
+    audio.play().catch(()=>{});  // ← gọi NGAY, vẫn trong user gesture
     audio.addEventListener('canplay', () => {
-      if (m.start) audio.currentTime = m.start;
-      audio.play().catch(()=>{});
+      if (m.start) audio.currentTime = m.start;  // ← chỉ seek sau khi ready
     }, { once: true });
 
   } else if (source === 'soundcloud') {
