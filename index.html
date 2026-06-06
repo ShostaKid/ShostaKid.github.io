@@ -94,15 +94,6 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .fic-tags{margin-top:0.9rem;display:flex;flex-wrap:wrap;gap:6px;}
 .tag{font-family:'Playfair Display',serif;font-size:0.6rem;letter-spacing:1.5px;color:var(--ink2);border:1px solid var(--gold);padding:3px 10px;text-transform:uppercase;background:rgba(184,151,42,0.06);}
 
-#page-reading{position:relative;}
-#page-reading::before{
-  content:'';position:fixed;inset:0;
-  backdrop-filter:blur(12px);
-  background:rgba(10,8,5,0.65);
-  z-index:0;
-}
-#page-reading .reading-wrap,
-#page-reading footer{position:relative;z-index:1;}
 /* READING PAGE */
 .reading-wrap{max-width:720px;margin:0 auto;padding:4rem 2rem;}
 .back-btn{font-family:'Playfair Display',serif;font-size:0.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink3);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:3rem;transition:color 0.2s;}
@@ -596,7 +587,6 @@ const fics = [
   // index 9
   {
     title: 'Romance de Amour', subtitle: null,
-    cover: 'https://i.ibb.co/T9y4v0Z/20260511-231929.jpg',
     fandom: 'Honkai: Star Rail',
     warning: null,
     summary: "Yeah, everything will be okay, won't it?",
@@ -864,15 +854,6 @@ function openFic(i) {
 
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-reading').classList.add('active');
-  const readingPage = document.getElementById('page-reading');
-  if (f.cover) {
-  readingPage.style.backgroundImage = `url('${f.cover}')`;
-  readingPage.style.backgroundSize = 'cover';
-  readingPage.style.backgroundPosition = 'center';
-  readingPage.style.backgroundAttachment = 'fixed';
-    } else {
-  readingPage.style.backgroundImage = '';
-    }
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
   currentPage = 'reading';
   document.getElementById('progress-bar').classList.add('visible');
