@@ -51,7 +51,7 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .nav-links a{font-family:'Playfair Display',serif;font-size:0.72rem;letter-spacing:2.5px;color:var(--ink2);text-decoration:none;text-transform:uppercase;cursor:pointer;transition:color 0.2s;}
 .nav-links a:hover,.nav-links a.active{color:var(--gold);}
 
-#music-bar{background:rgba(242,237,224,0.95);border-bottom:1px solid var(--border);padding:8px 3rem;display:flex;align-items:center;gap:1rem;font-family:'Playfair Display',serif;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);min-height:36px;position:relative;z-index:10;}
+#music-bar{background:rgba(242,237,224,0.95);border-bottom:1px solid var(--border);padding:8px 3rem;display:flex;align-items:center;gap:1rem;font-family:'Playfair Display',serif;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);min-height:36px;}
 #music-bar.hidden{display:none;}
 .music-now{display:flex;align-items:center;gap:8px;flex:1;}
 .music-bars{display:flex;align-items:flex-end;gap:2px;height:14px;}
@@ -97,20 +97,9 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 #page-reading{position:relative;}
 #page-reading::before{
   content:'';position:fixed;inset:0;
-  background:inherit;
-  filter:var(--cover-blur, none);
-  background-size:cover;
-  background-position:center;
-  background-attachment:fixed;
+  backdrop-filter:blur(12px);
+  background:rgba(10,8,5,0.65);
   z-index:0;
-  pointer-events:none;
-  transform:scale(1.05);
-}
-#page-reading::after{
-  content:'';position:fixed;inset:0;
-  background:rgba(10,8,5,0.6);
-  z-index:0;
-  pointer-events:none;
 }
 #page-reading .reading-wrap,
 #page-reading footer{position:relative;z-index:1;}
@@ -877,15 +866,13 @@ function openFic(i) {
   document.getElementById('page-reading').classList.add('active');
   const readingPage = document.getElementById('page-reading');
   if (f.cover) {
-    readingPage.style.backgroundImage = `url('${f.cover}')`;
-    readingPage.style.backgroundSize = 'cover';
-    readingPage.style.backgroundPosition = 'center';
-    readingPage.style.backgroundAttachment = 'fixed';
-    readingPage.style.setProperty('--cover-blur', 'blur(8px)');
-  } else {
-    readingPage.style.backgroundImage = '';
-    readingPage.style.setProperty('--cover-blur', 'none');
-  }
+  readingPage.style.backgroundImage = `url('${f.cover}')`;
+  readingPage.style.backgroundSize = 'cover';
+  readingPage.style.backgroundPosition = 'center';
+  readingPage.style.backgroundAttachment = 'fixed';
+    } else {
+  readingPage.style.backgroundImage = '';
+    }
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
   currentPage = 'reading';
   document.getElementById('progress-bar').classList.add('visible');
