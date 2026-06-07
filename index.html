@@ -443,6 +443,11 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <p style="font-family:'Playfair Display',serif;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:1rem;">Read the work on AO3</p>
         <a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid/works" target="_blank">Continue on AO3 →</a>
       </div>
+      <!-- DISQUS COMMENT SECTION -->
+      <div id="disqus-wrap" style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);display:none;">
+        <div style="font-family:'Playfair Display',serif;font-size:0.78rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;">Comments<span style="flex:1;height:1px;background:var(--border);display:block;"></span></div>
+        <div id="disqus_thread"></div>
+      </div>
     </div>
     <footer style="margin-top:2rem;"><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · Have a great day:) &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
@@ -878,6 +883,8 @@ function openFic(i) {
   window.scrollTo(0,0);
   loadChapter(i, 0);
   playMusic(i, 0);
+  // Load Disqus comment section
+  loadDisqus(i);
 }
 
 function enterSite() {
@@ -1089,6 +1096,42 @@ window.addEventListener('load', () => {
     if (!isNaN(idx) && fics[idx]) openFic(idx);
   }
 });
+
+// =============================================
+// DISQUS
+// =============================================
+var disqusLoaded = false;
+
+function loadDisqus(ficIdx) {
+  const wrap = document.getElementById('disqus-wrap');
+  if (!wrap) return;
+  wrap.style.display = 'block';
+
+  const pageId = 'fic-' + ficIdx;
+  const pageUrl = 'https://shostakid.github.io/#fic-' + ficIdx;
+
+  if (!disqusLoaded) {
+    window.disqus_config = function() {
+      this.page.url = pageUrl;
+      this.page.identifier = pageId;
+    };
+    const d = document, s = d.createElement('script');
+    s.src = 'https://http-shostakid-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    disqusLoaded = true;
+  } else {
+    if (window.DISQUS) {
+      window.DISQUS.reset({
+        reload: true,
+        config: function() {
+          this.page.url = pageUrl;
+          this.page.identifier = pageId;
+        }
+      });
+    }
+  }
+}
 </script>
 </body>
 </html>
