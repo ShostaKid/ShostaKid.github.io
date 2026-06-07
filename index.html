@@ -850,7 +850,7 @@ function jumpChapter(idx) {
 }
 
 function openFic(i) {
-  history.pushState({page: 'reading', fic: i}, '', '#reading');
+  history.pushState({page: 'reading', fic: i}, '', '#fic-' + i);
   prevPage = currentPage;
   currentFic = i;
   currentChapter = 0;
@@ -1081,6 +1081,14 @@ window.addEventListener('popstate', (e) => {
     card.style.display = (!q || title.includes(q)) ? 'block' : 'none';
   });
 }
+
+window.addEventListener('load', () => {
+  const hash = window.location.hash;
+  if (hash.startsWith('#fic-')) {
+    const idx = parseInt(hash.replace('#fic-', ''));
+    if (!isNaN(idx) && fics[idx]) openFic(idx);
+  }
+});
 </script>
 </body>
 </html>
