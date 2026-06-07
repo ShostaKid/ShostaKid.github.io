@@ -444,10 +444,10 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid/works" target="_blank">Continue on AO3 →</a>
       </div>
       <!-- DISQUS COMMENT SECTION -->
-      <div id="disqus-wrap" style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);display:none;">
-        <div style="font-family:'Playfair Display',serif;font-size:0.78rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;">Comments<span style="flex:1;height:1px;background:var(--border);display:block;"></span></div>
-        <div id="disqus_thread"></div>
-      </div>
+<div id="disqus-wrap" style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);display:none;">
+  <div style="font-family:'Playfair Display',serif;font-size:0.78rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;">Comments<span style="flex:1;height:1px;background:var(--border);display:block;"></span></div>
+  <div id="disqus_thread"></div>
+</div>
     </div>
     <footer style="margin-top:2rem;"><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · Have a great day:) &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
@@ -1131,6 +1131,16 @@ function loadDisqus(ficIdx) {
       });
     }
   }
+}
+
+function toggleComments() {
+  const thread = document.getElementById('disqus_thread');
+  const label = document.getElementById('comments-label');
+  const arrow = document.getElementById('comments-arrow');
+  const isHidden = thread.style.display === 'none';
+  thread.style.display = isHidden ? 'block' : 'none';
+  label.textContent = isHidden ? 'Hide Comments' : 'Show Comments';
+  arrow.textContent = isHidden ? '▲' : '▼';
 }
 </script>
 </body>
