@@ -166,6 +166,13 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .works-main{flex:1;min-width:0;}
 .filter-btn{font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--border);padding:7px 12px;color:var(--ink3);cursor:pointer;transition:all 0.2s;text-align:left;width:100%;}
 .filter-btn:hover,.filter-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(184,151,42,0.06);}
+.filter-btn.ship-btn{font-size:0.58rem;letter-spacing:1px;padding:5px 10px;border-color:transparent;color:var(--ink3);}
+.filter-btn.ship-btn:hover,.filter-btn.ship-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(184,151,42,0.06);}
+.sidebar-divider{height:1px;background:var(--border);margin:0.8rem 0;}
+.active-filters{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:1rem;}
+.active-filter-tag{font-family:'Playfair Display',serif;font-size:0.58rem;letter-spacing:1px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:2px 8px;display:flex;align-items:center;gap:4px;background:rgba(184,151,42,0.06);}
+.active-filter-tag button{background:none;border:none;color:var(--gold);cursor:pointer;font-size:0.7rem;padding:0;line-height:1;}
+.no-results{text-align:center;padding:3rem 1rem;font-family:'Playfair Display',serif;font-style:italic;font-size:0.9rem;color:var(--ink3);display:none;}
 
 @media (max-width: 768px) {
   nav { padding: 0 1rem; }
@@ -278,20 +285,25 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 
       <aside class="fandom-sidebar">
         <div class="sidebar-heading">Fandom</div>
-        <button class="filter-btn active" onclick="filterFics('all',this)">All</button>
-        <button class="filter-btn" onclick="filterFics('Reverse: 1999',this)">Reverse: 1999</button>
-        <button class="filter-btn" onclick="filterFics('Figure Skating',this)">Figure Skating RPF</button>
-        <button class="filter-btn" onclick="filterFics('Honkai',this)">Honkai: Star Rail</button>
+        <button class="filter-btn active" onclick="setFandom('all',this)">All</button>
+        <button class="filter-btn" onclick="setFandom('Reverse: 1999',this)">Reverse: 1999</button>
+        <button class="filter-btn" onclick="setFandom('Figure Skating',this)">Figure Skating RPF</button>
+        <button class="filter-btn" onclick="setFandom('Honkai',this)">Honkai: Star Rail</button>
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-heading">Ship</div>
+        <div id="ship-filter-list"></div>
       </aside>
 
       <div class="works-main">
         <div style="margin-bottom:1.5rem;position:relative;">
   <input id="search-input" type="text" placeholder="Search by title..."
-    oninput="searchFics(this.value)"
+    oninput="applyFilters()"
     style="width:100%;font-family:'Playfair Display',serif;font-size:0.85rem;letter-spacing:1px;color:var(--ink2);background:var(--cream);border:1px solid var(--border);padding:10px 16px 10px 40px;outline:none;transition:border-color 0.2s;">
   <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--ink3);font-size:0.9rem;">🔍</span>
 </div>
+        <div id="active-filters" class="active-filters"></div>
         <div class="section-heading">All Works</div>
+        <div id="no-results" class="no-results">No works found for this filter.</div>
 
         <div class="fic-card" onclick="openFic(0)" data-fandom="Reverse: 1999">
           <div class="fic-title">Toccata in D sharp Minor: <em>"Totentanz"</em></div>
@@ -739,13 +751,106 @@ window.addEventListener('scroll', () => {
 });
 
 // --- Fandom filter ---
-function filterFics(keyword, btn) {
-  document.querySelectorAll('.fandom-sidebar .filter-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
+// =============================================
+// FILTER SYSTEM — fandom + ship kết hợp
+// =============================================
+let activeShips = new Set();
+let activeFandom = 'all';
+
+function buildShipFilter() {
+  // Thu thập tất cả ships từ fic cards trong Works
+  const allShips = new Set();
   document.querySelectorAll('#page-works .fic-card').forEach(card => {
-    card.style.display = (keyword === 'all' || (card.dataset.fandom || '').includes(keyword)) ? 'block' : 'none';
+    card.querySelectorAll('.tag').forEach(tag => allShips.add(tag.textContent.trim()));
+  });
+
+  const container = document.getElementById('ship-filter-list');
+  if (!container) return;
+  container.innerHTML = '';
+  [...allShips].sort().forEach(ship => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn ship-btn';
+    btn.textContent = ship;
+    btn.onclick = () => toggleShip(ship, btn);
+    container.appendChild(btn);
   });
 }
+
+function setFandom(fandom, btn) {
+  activeFandom = fandom;
+  document.querySelectorAll('.fandom-sidebar .filter-btn:not(.ship-btn)').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  applyFilters();
+}
+
+function toggleShip(ship, btn) {
+  if (activeShips.has(ship)) {
+    activeShips.delete(ship);
+    btn.classList.remove('active');
+  } else {
+    activeShips.add(ship);
+    btn.classList.add('active');
+  }
+  applyFilters();
+}
+
+function applyFilters() {
+  const query = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
+  let visibleCount = 0;
+
+  document.querySelectorAll('#page-works .fic-card').forEach(card => {
+    const fandomMatch = activeFandom === 'all' || (card.dataset.fandom || '').includes(activeFandom);
+    const titleMatch = !query || card.querySelector('.fic-title').textContent.toLowerCase().includes(query);
+
+    let shipMatch = true;
+    if (activeShips.size > 0) {
+      const cardTags = new Set([...card.querySelectorAll('.tag')].map(t => t.textContent.trim()));
+      shipMatch = [...activeShips].every(s => cardTags.has(s));
+    }
+
+    const show = fandomMatch && titleMatch && shipMatch;
+    card.style.display = show ? 'block' : 'none';
+    if (show) visibleCount++;
+  });
+
+  // No results message
+  const noResults = document.getElementById('no-results');
+  if (noResults) noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+
+  // Active filter tags display
+  renderActiveFilters();
+}
+
+function renderActiveFilters() {
+  const container = document.getElementById('active-filters');
+  if (!container) return;
+  container.innerHTML = '';
+
+  if (activeFandom !== 'all') {
+    const tag = document.createElement('div');
+    tag.className = 'active-filter-tag';
+    tag.innerHTML = `${activeFandom} <button onclick="setFandom('all', document.querySelector('.fandom-sidebar .filter-btn:not(.ship-btn)'))">×</button>`;
+    container.appendChild(tag);
+  }
+
+  activeShips.forEach(ship => {
+    const tag = document.createElement('div');
+    tag.className = 'active-filter-tag';
+    tag.innerHTML = `${ship} <button onclick="removeShip('${ship}')">×</button>`;
+    container.appendChild(tag);
+  });
+}
+
+function removeShip(ship) {
+  activeShips.delete(ship);
+  // Update button state
+  document.querySelectorAll('.ship-btn').forEach(btn => {
+    if (btn.textContent.trim() === ship) btn.classList.remove('active');
+  });
+  applyFilters();
+}
+
+function searchFics(query) { applyFilters(); }
 
 // --- Home page: auto-render từ fics[] ---
 function makeCard(f) {
@@ -903,6 +1008,7 @@ document.addEventListener('DOMContentLoaded', () => {
   intro.addEventListener('click', enterSite);
   document.addEventListener('keydown', () => { if(intro.style.display !== 'none') enterSite(); }, {once: true});
   renderHome();
+  buildShipFilter();
 });
 
 // =============================================
