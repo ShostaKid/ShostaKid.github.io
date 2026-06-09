@@ -295,6 +295,31 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   color: var(--gold-dark);
   background: rgba(184,151,42,0.08);
 }
+
+/* ACCORDION SIDEBAR */
+.accordion-item { margin-bottom: 4px; }
+.accordion-header {
+  width: 100%;
+  display: flex !important;
+  justify-content: space-between;
+  align-items: center;
+}
+.acc-arrow { font-size: 0.6rem; transition: transform 0.25s; opacity: 0.6; }
+.accordion-item.open .acc-arrow { transform: rotate(180deg); }
+.accordion-ships {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, margin 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.accordion-item.open .accordion-ships {
+  max-height: 500px;
+  margin: 4px 0 6px 8px;
+  padding-left: 10px;
+  border-left: 2px solid var(--border);
+}
   /* Home: 2 cột trên desktop */
 .home-columns {
   display: flex;
@@ -380,14 +405,9 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
     <div class="works-layout">
 
       <aside class="fandom-sidebar">
-        <div class="sidebar-heading">Fandom</div>
-        <button class="filter-btn active" onclick="setFandom('all',this)">All</button>
-        <button class="filter-btn" onclick="setFandom('Reverse: 1999',this)">Reverse: 1999</button>
-        <button class="filter-btn" onclick="setFandom('Figure Skating',this)">Figure Skating RPF</button>
-        <button class="filter-btn" onclick="setFandom('Honkai',this)">Honkai: Star Rail</button>
-        <div class="sidebar-divider"></div>
-        <div class="sidebar-heading">Ship</div>
-        <div id="ship-filter-list"></div>
+        <div class="sidebar-heading">Browse</div>
+        <button class="filter-btn all-btn active" onclick="setFandom('all',this)">All</button>
+        <div id="fandom-accordion"></div>
       </aside>
 
       <div class="works-main">
@@ -875,29 +895,60 @@ window.addEventListener('scroll', () => {
 let activeShips = new Set();
 let activeFandom = 'all';
 
-function buildShipFilter() {
-  const allShips = new Set();
+function buildSidebar() {
+  // Display names cho từng data-fandom key
+  const fandomLabels = {
+    'Reverse: 1999': 'Reverse: 1999',
+    'Figure Skating': 'Figure Skating RPF',
+    'Honkai': 'Honkai: Star Rail'
+  };
+
+  // Scan fic cards → build fandom → ships map (giữ thứ tự xuất hiện)
+  const fandomShips = {};
   document.querySelectorAll('#page-works .fic-card').forEach(card => {
-    card.querySelectorAll('.tag').forEach(tag => allShips.add(tag.textContent.trim()));
+    const fandom = card.dataset.fandom;
+    if (!fandom) return;
+    if (!fandomShips[fandom]) fandomShips[fandom] = new Set();
+    card.querySelectorAll('.tag').forEach(tag => fandomShips[fandom].add(tag.textContent.trim()));
   });
 
-  // Desktop sidebar
-  const container = document.getElementById('ship-filter-list');
-  if (container) {
-    container.innerHTML = '';
-    [...allShips].sort().forEach(ship => {
-      const btn = document.createElement('button');
-      btn.className = 'filter-btn ship-btn';
-      btn.textContent = ship;
-      btn.onclick = () => toggleShip(ship, btn);
-      container.appendChild(btn);
+  // --- Desktop accordion ---
+  const accordion = document.getElementById('fandom-accordion');
+  if (accordion) {
+    accordion.innerHTML = '';
+    Object.entries(fandomShips).forEach(([fandom, ships]) => {
+      const label = fandomLabels[fandom] || fandom;
+      const item = document.createElement('div');
+      item.className = 'accordion-item';
+      item.dataset.fandom = fandom;
+
+      const header = document.createElement('button');
+      header.className = 'filter-btn accordion-header';
+      header.innerHTML = `<span>${label}</span><span class="acc-arrow">▾</span>`;
+      header.onclick = () => toggleAccordion(item, fandom);
+
+      const shipsDiv = document.createElement('div');
+      shipsDiv.className = 'accordion-ships';
+      [...ships].sort().forEach(ship => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn ship-btn';
+        btn.textContent = ship;
+        btn.onclick = () => toggleShip(ship, btn);
+        shipsDiv.appendChild(btn);
+      });
+
+      item.appendChild(header);
+      item.appendChild(shipsDiv);
+      accordion.appendChild(item);
     });
   }
 
-  // Mobile ship list
+  // --- Mobile ship list (flat, unchanged) ---
   const mobileContainer = document.getElementById('mobile-ship-list');
   if (mobileContainer) {
     mobileContainer.innerHTML = '';
+    const allShips = new Set();
+    Object.values(fandomShips).forEach(set => set.forEach(s => allShips.add(s)));
     [...allShips].sort().forEach(ship => {
       const btn = document.createElement('button');
       btn.className = 'mobile-pill';
@@ -911,16 +962,11 @@ function buildShipFilter() {
   document.querySelectorAll('#page-works .fic-card .tag').forEach(tag => {
     tag.classList.add('clickable');
     tag.onclick = (e) => {
-      e.stopPropagation(); // không mở fic khi bấm tag
+      e.stopPropagation();
       const ship = tag.textContent.trim();
-      // Chuyển sang works page nếu chưa ở đó
-      if (currentPage !== 'works') {
-        showPage('works', document.querySelector('.nav-links a:nth-child(2)'));
-      }
-      // Set ship filter
+      if (currentPage !== 'works') showPage('works', document.querySelector('.nav-links a:nth-child(2)'));
       activeShips.clear();
       activeShips.add(ship);
-      // Update button states
       document.querySelectorAll('.ship-btn, .mobile-pill').forEach(btn => {
         btn.classList.toggle('active', btn.textContent.trim() === ship);
       });
@@ -928,6 +974,40 @@ function buildShipFilter() {
       window.scrollTo(0, 0);
     };
   });
+}
+
+function toggleAccordion(item, fandom) {
+  const isOpen = item.classList.contains('open');
+
+  // Đóng tất cả accordion item đang mở
+  document.querySelectorAll('.accordion-item.open').forEach(i => i.classList.remove('open'));
+
+  if (!isOpen) {
+    // Mở item này + filter theo fandom
+    item.classList.add('open');
+    activeFandom = fandom;
+    // Deactivate All button
+    document.querySelector('.all-btn')?.classList.remove('active');
+    // Sync mobile fandom pills
+    document.querySelectorAll('#mobile-filter-panel .mobile-pill').forEach(b => {
+      const inShipList = document.getElementById('mobile-ship-list')?.contains(b);
+      if (!inShipList) b.classList.toggle('active', b.textContent.includes(fandom));
+    });
+  } else {
+    // Đóng → về All
+    activeFandom = 'all';
+    document.querySelector('.all-btn')?.classList.add('active');
+    document.querySelectorAll('#mobile-filter-panel .mobile-pill').forEach(b => {
+      const inShipList = document.getElementById('mobile-ship-list')?.contains(b);
+      if (!inShipList) b.classList.remove('active');
+    });
+  }
+
+  // Clear ship filters khi đổi fandom
+  activeShips.clear();
+  document.querySelectorAll('.ship-btn, .mobile-pill').forEach(b => b.classList.remove('active'));
+  updateMobileFilterCount();
+  applyFilters();
 }
 
 function toggleMobileFilter() {
@@ -945,21 +1025,25 @@ function updateMobileFilterCount() {
 
 function setFandom(fandom, btn, isMobile) {
   activeFandom = fandom;
-  // Sync desktop buttons
-  document.querySelectorAll('.fandom-sidebar .filter-btn:not(.ship-btn)').forEach(b => b.classList.remove('active'));
-  // Sync mobile buttons
+
+  // Close all accordion items when All is selected
+  if (fandom === 'all') {
+    document.querySelectorAll('.accordion-item.open').forEach(i => i.classList.remove('open'));
+    document.querySelector('.all-btn')?.classList.add('active');
+  } else {
+    document.querySelector('.all-btn')?.classList.remove('active');
+  }
+
+  // Sync mobile fandom pills
   document.querySelectorAll('#mobile-filter-panel .mobile-pill').forEach(b => {
-    if (!document.getElementById('mobile-ship-list')?.contains(b)) b.classList.remove('active');
+    const inShipList = document.getElementById('mobile-ship-list')?.contains(b);
+    if (!inShipList) {
+      const matches = (fandom === 'all' && b.textContent.trim() === 'All') || b.textContent.includes(fandom);
+      b.classList.toggle('active', matches);
+    }
   });
+
   if (btn) btn.classList.add('active');
-  // Sync counterpart button (mobile↔desktop)
-  const selector = isMobile
-    ? `.fandom-sidebar .filter-btn:not(.ship-btn)`
-    : `#mobile-filter-panel .mobile-pill`;
-  document.querySelectorAll(selector).forEach(b => {
-    const matches = (fandom === 'all' && b.textContent.trim() === 'All') || b.textContent.includes(fandom);
-    if (matches) b.classList.add('active');
-  });
   updateMobileFilterCount();
   applyFilters();
 }
@@ -1196,7 +1280,7 @@ document.addEventListener('DOMContentLoaded', () => {
   intro.addEventListener('click', enterSite);
   document.addEventListener('keydown', () => { if(intro.style.display !== 'none') enterSite(); }, {once: true});
   renderHome();
-  buildShipFilter();
+  buildSidebar();
 });
 
 // =============================================
