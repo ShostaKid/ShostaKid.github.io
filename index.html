@@ -1411,7 +1411,7 @@ function playMusicDirect(source, url, id, start, end, name) {
   stopMusic();
   const m = { source, url, id, start, end };
 
-  if (source === 'musopen' || source === 'archive') {
+  if (source === 'musopen' || source === 'archive' || source === 'github') {
     const audio = document.createElement('audio');
     audio.id = 'audio-player';
     audio.loop = true;
@@ -1455,7 +1455,7 @@ function playMusicDirect(source, url, id, start, end, name) {
 
   const source = m.source || 'youtube';
 
-  if (source === 'musopen' || source === 'archive') {
+  if (source === 'musopen' || source === 'archive' || source === 'github') {
     // HTML5 audio — direct MP3 link từ musopen.org hoặc archive.org
     const audio = document.createElement('audio');
     audio.id = 'audio-player';
