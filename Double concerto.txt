@@ -1,6 +1,5 @@
-DOUBLE CONCERTO FOR VIOLIN AND ACCORDION: "THE DEATH OF THE AUTHOR"
-Allegretto poco adagio, poi velocissimo risoluto, gravemente con fuoco 
-***
+<p align="center"><em>Allegretto poco adagio, poi velocissimo risoluto, gravemente con fuoco</em></p>
+<p align="center">***</p>
 "She doesn't understand a thing about literature."
 
 Aleph fell out of his own thoughts, pulled from the matrix of ideas he had been weaving together in his mind. Before him stood the man with red hair and black leather clothes.
@@ -27,7 +26,7 @@ Aleph fell out of his own thoughts, pulled from the matrix of ideas he had been 
 
 "We are counselors of the world, Merlin. Or at least I am. Every request will be handled by us, every problem will be resolved without extraneous questioning. And that child—" Aleph gently closed his eyes, as though wishing to end this debate he knew would lead nowhere, "—that child does not need to reach the Transcendent. She only wants us to take her by the hand and guide her as she writes each word into a world of her own. And I will continue to do so, whether you like it or not."
 
-***
+**
 
 "Aleph! Read this for me, there's a manuscript—"
 
@@ -53,7 +52,7 @@ Merlin had already risen from his chair, so Recoleta understood that the golden 
 
 Recoleta had never given any of her manuscripts to Merlin to read. Partly because her relationship with him was nothing like her relationship with Aleph, but also partly because… she felt a certain unease about him. Of course, all such judgments were merely subjective impressions, especially since she had never once let him read her work. Yet Recoleta always felt a vague discomfort in his proximity, and so she had almost never wanted him to see her earliest drafts, things that, in her view, were no different from a naked image of herself laid bare across words still unfinished.
 
-Like right now, as the man in the wide-brimmed hat studied the sheaf of pages, the ink still not quite dry. If one were to be objective, the postures of both Merlin and Aleph while reading were strikingly similar, yet the feelings each evoked in the writer were worlds apart. With Aleph, Recoleta always felt a sense of reassurance and peace, that he would offer some useful advice once he finished and speak in the gentlest voice possible. With Merlin, it felt as though Recoleta herself were being *assessed*, scrutinized through every stroke of her pen.
+Like right now, as the man in the wide-brimmed hat studied the sheaf of pages, the ink still not quite dry. If one were to be objective, the postures of both Merlin and Aleph while reading were strikingly similar, yet the feelings each evoked in the writer were worlds apart. With Aleph, Recoleta always felt a sense of reassurance and peace, that he would offer some useful advice once he finished and speak in the gentlest voice possible. With Merlin, it felt as though Recoleta herself were being <em>assessed</em>, scrutinized through every stroke of her pen.
 
 Outside, the soft glow of the moon had been swallowed by dark clouds, and the cawing of crows grew sharper as they sensed the sudden turn in the weather. The space grew darker by the moment, the mournful cries of the birds thickening the air inside the room, and that prickling sensation along the novelist's spine, as though someone were examining her, grew ever more distinct.
 
@@ -61,9 +60,9 @@ Outside, the soft glow of the moon had been swallowed by dark clouds, and the ca
 
 "You think so?" Merlin's compliment was a deliverance, freeing Recoleta from the dread that had gripped her. As if unshackled, the writer felt comfort return. "Well, I did try to accomplish that, at least compared to the previous manuscript I gave Aleph to read. You know, I tried to infuse at least a small part of my own self into this draft, and I'm glad it worked, that you noticed, at least. Incorporating the author's sense of self into the story really is—"
 
-"*A book is not an isolated entity; it is a dialogue established with the reader.*" Merlin slowly cut in, placing the manuscript back on the desk, his eyes still fixed on the novelist. "Do you know this quote, lady author?"
+"<em>A book is not an isolated entity; it is a dialogue established with the reader.</em>" Merlin slowly cut in, placing the manuscript back on the desk, his eyes still fixed on the novelist. "Do you know this quote, lady author?"
 
-"The essay *Nota sobre Bernard Shaw*, published in 1952 by Jorge Luis Borges." Somewhat surprised by Merlin's abrupt question, the brown-haired young woman answered with composure. "Borges wanted each of his works to become a living entity, one that could help the reader connect with literature and with the author himself."
+"The essay <em>Nota sobre Bernard Shaw</em>, published in 1952 by Jorge Luis Borges." Somewhat surprised by Merlin's abrupt question, the brown-haired young woman answered with composure. "Borges wanted each of his works to become a living entity, one that could help the reader connect with literature and with the author himself."
 
 "But that's absurd, isn't it? You can't treat a work as a 'living entity.' And how could one possibly perceive an author through a single work?"
 
@@ -71,11 +70,11 @@ Outside, the soft glow of the moon had been swallowed by dark clouds, and the ca
 
 Merlin gently picked up the small silver spoon, stirring the thick concoction he called "tea" inside the porcelain cup, producing faint, small sounds that echoed steadily through the dim, shadow-softened space of the room. Surprisingly, though they seemed like random noises, they rang out in a rhythm as regular as a metronome.
 
-"*More than one person, doubtless like me, writes in order to have no face*. Surely you've heard this from Foucault? A literary work is not something for the author to breathe their soul into. No, Miss Recoleta, the author serves no function within a story other than to rearrange the discourses within it. The things you believe reflect the author's spirit are merely the re-establishment of a system in which language reigns and the author is nothing more than one tasked with restructuring those words into a work."
+"<em>More than one person, doubtless like me, writes in order to have no face</em>. Surely you've heard this from Foucault? A literary work is not something for the author to breathe their soul into. No, Miss Recoleta, the author serves no function within a story other than to rearrange the discourses within it. The things you believe reflect the author's spirit are merely the re-establishment of a system in which language reigns and the author is nothing more than one tasked with restructuring those words into a work."
 
-"You're being unreasonable, Merlin. Systems? Discourses? Those may be words suited to your own works, but not to mine. Romanticism isn't about writing merely to reconstruct what already exists, it exists so that authors may create something new, embedding within it their own reflections, their own convictions. *'Writing is nothing other than a guided dream,'* and dreams, doctor, aren't they also reflections of your subconscious?"
+"You're being unreasonable, Merlin. Systems? Discourses? Those may be words suited to your own works, but not to mine. Romanticism isn't about writing merely to reconstruct what already exists, it exists so that authors may create something new, embedding within it their own reflections, their own convictions. <em>'Writing is nothing other than a guided dream,'</em> and dreams, doctor, aren't they also reflections of your subconscious?"
 
-"The dialogue with readers through works is not a dialogue between the author and those people. It is the universality of a discursive system shaped within society. It reflects nothing of any author, even if you try to force it into being so. *'Writing today has freed itself from the theme of expression. It refers only to itself… unfolding like a game that invariably exceeds its own rules and transgresses its own limits.'* Perhaps it is precisely because you have always misunderstood the meaning of writing that you can never find your own ending through your literature?"
+"The dialogue with readers through works is not a dialogue between the author and those people. It is the universality of a discursive system shaped within society. It reflects nothing of any author, even if you try to force it into being so. <em>'Writing today has freed itself from the theme of expression. It refers only to itself… unfolding like a game that invariably exceeds its own rules and transgresses its own limits.'</em> Perhaps it is precisely because you have always misunderstood the meaning of writing that you can never find your own ending through your literature?"
 
 "My literature…" Recoleta pressed her lips together slightly, feeling every word catch in her throat. She was growing helpless against each of Merlin's assertions. She didn't want to admit he was right, and she knew he wasn't right. But she couldn't find a single word to counter the nauseating erudition of this doctor.
 
@@ -85,7 +84,7 @@ Merlin gently picked up the small silver spoon, stirring the thick concoction he
 
 Observing the author from the corner of his eye, the doctor was silent for a long while. His fingers, sheathed in velvet, still tapped rhythmically against the wooden armrest, but there was no longer the mechanical steadiness from before. There were beats that fell off tempo, taps slightly too quick, the pace of a quarter note, or sometimes too slow, dragging like a whole note. Beats that deviated from Merlin's own original design.
 
-The Transcendent does not accept any deviation, no matter how slight.
+<em>The Transcendent does not accept any deviation, no matter how slight.</em>
 
 "I understand." Contrary to what Recoleta had expected, Merlin spoke with extraordinary gentleness after the long silence. He did not raise his voice, did not tremble with anger or loss of control. It was like a velvet blanket of warmth: soft, gentle, and perfectly composed. "Forgive me for behaving below the proper standard and for allowing emotions to govern our conversation just now, Recoleta. It was merely a small misunderstanding, and a momentary lapse in control that led me to place you in this uncomfortable position. You clearly have your own perspectives, and they differ greatly from mine. As a counselor, I should have accepted that rather than attempting to steer you in any particular direction. Please accept my most sincere apology, Miss Recoleta."
 
@@ -101,7 +100,7 @@ The tea tasted sweeter than Recoleta had expected, bringing her the pleasant fla
 
 The author smiled, and gave a small nod. Unconsciously, as she felt her eyelids growing heavier and her awareness no longer holding firm. Merlin's fingers were moving faster now.
 
-The tempo was shifting.
+<em>The tempo was shifting.</em>
 
 "I say this with complete sincerity, Miss Recoleta. What I heard from you earlier was truly impressive and fascinating…"
 
@@ -109,7 +108,7 @@ They were growing fainter. Merlin's words, as though echoing from somewhere far 
 
 "For… forgive me, perhaps I need to return to my room…" With her last remaining strength, Recoleta tried to stand and speak, but the gentlest push sent her falling back into the chair.
 
-The fingers were moving faster. Two consecutive strikes within a single beat.
+<em>The fingers were moving faster. Two consecutive strikes within a single beat.</em>
 
 "Literature cannot be chaos. There is no room for disorder, or for the intrusion of any ego into that harmonious canvas, not even the smallest."
 
@@ -117,7 +116,7 @@ Everything around Recoleta was fading, her consciousness entirely engulfed by a 
 
 "Al… Aleph…"
 
-Four consecutive strikes.
+<em>Four consecutive strikes.</em>
 
 "The Transcendent does not accept any irregularity, no matter how slight, novelist Recoleta."
 
@@ -125,4 +124,4 @@ Recoleta tried to reach out, tried to grasp at something invisible in the air. T
 
 "Sweet dreams, author. I promise it will be quick"
 
-*Subito Silenzio.*
+<em>Subito Silenzio.</em>
