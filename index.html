@@ -742,7 +742,7 @@ const aboutMusic = {
   source: 'github',     
   url: 'https://github.com/ShostaKid/ShostaKid.github.io/releases/download/music-v1/Shos.sym.no.5.IV.mp3',         // link nhạc
   start: 0,
-  name: 'Shostakovich - Symphony no.7 "Leningrad"'
+  name: 'Shostakovich - Symphony no.5'
 };
   
 const fics = [
@@ -765,10 +765,13 @@ const fics = [
     warning: null,
     summary: '"In the small office, under the flickering oil lamp, the red-haired man let a heavy blot of black ink fall onto the parchment—dark and stagnant, much like his own mind in that very moment"',
     tags: ['Aleph/Recoleta'],
-    date: '2026-05-22', featured: false,
-    music: { source: 'github', url: 'https://github.com/ShostaKid/ShostaKid.github.io/releases/download/music-v1/None.but.the.lonely.heart.mp3', start: 2 },
-    musicName: 'Tchaikovsky — None But The Lonely Heart',
-    files: ['Piano concerto no.1.txt'], chapters: ['I. None but the Lonely Heart']
+    date: '2026-06-25', featured: false,
+    music: [
+      { source: 'github', url: 'https://github.com/ShostaKid/ShostaKid.github.io/releases/download/music-v1/None.but.the.lonely.heart.mp3', start: 1 },
+      { source: 'github', url: 'https://github.com/ShostaKid/ShostaKid.github.io/releases/download/music-v1/Valse.Sentimentale.mp3', start: 0 },
+      ],
+    musicName: ['Tchaikovsky — None But The Lonely Heart', 'Valse Sentimentale'],
+    files: ['Piano concerto no.1.txt', 'Concerto 1.2.txt'], chapters: ['I. None but the Lonely Heart', 'II. Farewell']
   },
   // index 2
   {
