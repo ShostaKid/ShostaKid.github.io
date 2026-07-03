@@ -677,6 +677,13 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
           <div class="fic-summary">Because Anna Shcherbakova was a girl who had spent her entire life learning to be strong enough to stand alone, and calling Sasha now, broken and humiliated and tasteless in every sense of the word, felt like admitting that the strength she had built her identity around was not strength at all but merely the absence of anyone close enough to see her fall.</p></div>
           <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
         </div>
+
+        <div class="fic-card" onclick="openFic(23)" data-fandom="Genshin">
+          <div class="fic-title">Nocturne in C sharp minor: <em>"Love"</em></div>
+          <div class="fic-meta"><span>Genshin Impact</span></div>
+          <div class="fic-summary">"Cheater," she whispered.</p></div>
+          <div class="fic-tags"><span class="tag">Neuvillette/Furina</span></div>
+        </div>
       </div><!-- /.works-main -->
     </div><!-- /.works-layout -->
     <footer><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · Have a great day:) &nbsp; <span style="color:var(--gold);">✦</span></footer>
@@ -729,11 +736,10 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <p>I hope you have a great time here. Thank you for stopping by.</p>
       </div>
       <div class="stat-row">
-        <div class="stat-box"><span class="stat-num">19</span><span class="stat-label">Works</span></div>
+        <div class="stat-box"><span class="stat-num">24</span><span class="stat-label">Works</span></div>
       </div>
       <div class="about-sig">— ShostaKid</div>
       <div style="margin-top:2rem;"><a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid" target="_blank">My AO3 →</a></div>
-      <div style="margin-top:2rem;"><a class="ao3-link" href="https://www.facebook.com/share/1GgjNoECvD/" target="_blank">My Facebook Fanpage →</a></div>
       <div style="margin-top:2rem;"><a class="ao3-link" href="https://x.com/Texas1k6" target="_blank">My X →</a></div>
     </div>
     <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid ·Have a great day:) &nbsp; <span style="color:var(--gold);">✦</span></footer>
@@ -1037,6 +1043,17 @@ const fics = [
     musicName: ['Shostakovich - Prelude and Fugue no.17', 'Shostakovich - Prelude and Fugue no.17'],
     files: ['Piano concerto 2.1.txt'], chapters: ['Movement I', 'Fugue']
   },
+  {
+    title: 'Nocturne in C Sharp Minor', subtitle: '"Love"',
+    fandom: 'Genshin Impact',
+    warning: null,
+    summary: '"Cheater," she whispered.',
+    tags: ['Neuvillette/Furina'],
+    date: '2026-07-03', featured: false,
+    music: { source: 'github', url: 'https://github.com/ShostaKid/ShostaKid.github.io/releases/download/music-v1/Nocturne.c.sharp.violin.mp3', start: 0 },
+    musicName: 'Chopin — Nocturne in C Sharp Minor',
+    files: ['Nocturne neuvifuri.txt'], chapters: ['Chapter 1']
+  },
 ];
 
 // =============================================
@@ -1068,6 +1085,7 @@ function buildSidebar() {
     'Reverse: 1999': 'Reverse: 1999',
     'Figure Skating': 'Figure Skating RPF',
     'Honkai': 'Honkai: Star Rail'
+    'Genshin Impact': 'Genshin Impact'
   };
 
   // Scan fic cards → build fandom → ships map (giữ thứ tự xuất hiện)
