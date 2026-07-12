@@ -720,6 +720,12 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
           <div class="fic-summary">"Honestly, who knows if you were just acting or if it was real. But even if it was acting… who exactly were you acting for, Anna?<p>It wasn’t for me to watch, was it?”</p></div>
           <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
         </div>
+        <div class="fic-card" onclick="openFic(25)" data-fandom="Spider-Verse">
+          <div class="fic-title">Nocturne in C sharp minor: <em>""Pavane""</em></div>
+          <div class="fic-meta"><span>Honkai: Star Rail</span></div>
+          <div class="fic-summary">"Don't worry about steps. Just, like, listen. You count everything anyway, right? So count this one. It'll tell you what to do way better than I could." He said it easily, as if he had not noticed the tension coming off her like static, and turned the record up one notch. "Let it lead. That's the whole trick."</div>
+          <div class="fic-tags"><span class="tag">Miles Morales/Gwen Stacy</span></div>
+        </div>
       </div><!-- /.works-main -->
     </div><!-- /.works-layout -->
     <footer><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · Have a great day:) &nbsp; <span style="color:var(--gold);">✦</span></footer>
@@ -1109,6 +1115,17 @@ const fics = [
     musicName: 'Stravinsky - Infernal Danse',
     files: ['Rhapsody 3.1.txt', 'Rhapsody 3.2.txt'], chapters: ['Chapter 1', 'Chapter 2']
   },
+  {
+    title: 'Nocturne in C sharp minor', subtitle: '"Pavane"',
+    fandom: 'Spider-Verse',
+    warning: null,
+    summary: '"Don\'t worry about steps. Just, like, listen. You count everything anyway, right? So count this one. It\'ll tell you what to do way better than I could." He said it easily, as if he had not noticed the tension coming off her like static, and turned the record up one notch. "Let it lead. That\'s the whole trick."',
+    tags: ['Miles Morales/Gwen Stacy'],
+    date: '2026-07-12', featured: false,
+    music: { source: 'github', url: 'https://github.com/ShostaKid/ShostaKid.github.io/releases/download/music-v1/Nocturne.c.sharp.violin.mp3', start: 0 },
+    musicName: 'Chopin - Nocturne in C sharp minor',
+    files: ['Nocturne gwiles'], chapters: ['Chapter 1']
+  },
 ];
 
 // =============================================
@@ -1141,6 +1158,7 @@ function buildSidebar() {
     'Figure Skating': 'Figure Skating RPF',
     'Honkai': 'Honkai: Star Rail',
     'Genshin Impact': 'Genshin Impact',
+    'Spider-Verse': 'Spider-Verse',
   };
 
   // Scan fic cards → build fandom → ships map (giữ thứ tự xuất hiện)
