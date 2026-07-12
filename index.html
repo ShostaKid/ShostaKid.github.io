@@ -136,6 +136,29 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .stat-num{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--gold);display:block;}
 .stat-label{font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);}
 footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;}
+/* CONTINUE READING BANNER */
+#continue-banner{display:none;max-width:860px;margin:0 auto 0;padding:1rem 2rem;}
+#continue-banner .continue-inner{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--border);padding:12px 20px;background:rgba(184,151,42,0.04);cursor:pointer;transition:all 0.2s;gap:1rem;}
+#continue-banner .continue-inner:hover{border-color:var(--gold);background:rgba(184,151,42,0.08);}
+.continue-text{font-family:'Playfair Display',serif;font-size:0.72rem;letter-spacing:1.5px;color:var(--ink2);}
+.continue-text strong{color:var(--gold-dark);}
+.continue-arrow{color:var(--gold);font-size:1rem;}
+.continue-dismiss{background:none;border:none;color:var(--ink3);cursor:pointer;font-size:0.9rem;padding:4px;transition:color 0.2s;}
+.continue-dismiss:hover{color:var(--gold);}
+
+/* FONT SIZE TOGGLE */
+#font-controls{position:fixed;right:1.5rem;bottom:5rem;display:none;flex-direction:column;gap:4px;z-index:90;}
+#font-controls button{width:36px;height:36px;border-radius:50%;background:var(--cream);border:1px solid var(--border);font-family:'Playfair Display',serif;font-size:0.85rem;color:var(--ink2);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;}
+#font-controls button:hover{border-color:var(--gold);color:var(--gold);}
+#font-controls.visible{display:flex;}
+[data-theme="dark"] #font-controls button{background:var(--cream);}
+
+/* BACK TO TOP */
+#back-top{position:fixed;right:1.5rem;bottom:2rem;width:36px;height:36px;border-radius:50%;background:var(--cream);border:1px solid var(--border);color:var(--ink3);cursor:pointer;font-size:1rem;display:none;align-items:center;justify-content:center;transition:all 0.2s;z-index:90;}
+#back-top:hover{border-color:var(--gold);color:var(--gold);}
+#back-top.visible{display:flex;}
+[data-theme="dark"] #back-top{background:var(--cream);}
+
 /* PROGRESS BAR */
 #progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(to right,var(--gold-dark),var(--gold-light));width:0%;z-index:9999;transition:width 0.08s linear;pointer-events:none;display:none;}
 #progress-bar.visible{display:block;}
@@ -450,6 +473,14 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
       <div class="hero-divider"><span style="color:var(--gold);letter-spacing:4px;">✦ ✦ ✦</span></div>
       <p class="hero-tagline">Take a $ip y'all and enjoy</p>
     </div>
+
+    <!-- Continue Reading Banner -->
+    <div id="continue-banner">
+      <div class="continue-inner" onclick="resumeReading()">
+        <span class="continue-text">Continue reading: <strong id="continue-title"></strong></span>
+        <span class="continue-arrow">→</span>
+      </div>
+    </div>
   <div style="max-width:1100px;margin:0 auto;padding:3.5rem 2rem;">
   <div class="home-columns">
 
@@ -741,7 +772,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <p>I hope you have a great time here. Thank you for stopping by.</p>
       </div>
       <div class="stat-row">
-        <div class="stat-box"><span class="stat-num">25</span><span class="stat-label">Works</span></div>
+        <div class="stat-box"><span class="stat-num" id="stat-works">—</span><span class="stat-label">Works</span></div>
       </div>
       <div class="about-sig">— ShostaKid</div>
       <div style="margin-top:2rem;"><a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid" target="_blank">My AO3 →</a></div>
@@ -750,6 +781,13 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
     <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid ·Have a great day:) &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
 </div>
+
+<!-- Font size + Back to top -->
+<div id="font-controls">
+  <button onclick="changeFontSize(1)" title="Larger text">A+</button>
+  <button onclick="changeFontSize(-1)" title="Smaller text">A−</button>
+</div>
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
 
 <!-- YouTube player ẩn — tự inject bằng JS -->
 <script>
@@ -1395,6 +1433,7 @@ async function loadChapter(ficIdx, chapterIdx) {
     if (!res.ok) throw new Error('Not found');
     const text = await res.text();
     body.innerHTML = `<div class="fic-body">${txtToHtml(text)}</div>`;
+    applyFontSize();
     document.getElementById('reading-footer').style.display = 'block';
   } catch(e) {
     body.innerHTML = `<div class="fic-body"><p><em>Could not load chapter. Please check back later.</em></p></div>`;
@@ -1463,6 +1502,7 @@ function openFic(i) {
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
   currentPage = 'reading';
   document.getElementById('progress-bar').classList.add('visible');
+  document.getElementById('font-controls').classList.add('visible');
   window.scrollTo(0,0);
   loadChapter(i, 0);
   playMusic(i, 0);
@@ -1483,6 +1523,107 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', () => { if(intro.style.display !== 'none') enterSite(); }, {once: true});
   renderHome();
   buildSidebar();
+  showContinueBanner();
+  initFontSize();
+  // Auto-count works
+  const statEl = document.getElementById('stat-works');
+  if (statEl) statEl.textContent = fics.length;
+});
+
+// =============================================
+// CONTINUE READING (localStorage)
+// =============================================
+function saveReadingProgress() {
+  const fic = fics[currentFic];
+  if (!fic) return;
+  const data = {
+    ficIdx: currentFic,
+    chapter: currentChapter,
+    scrollY: window.scrollY,
+    title: fic.title + (fic.subtitle ? ': ' + fic.subtitle : ''),
+    timestamp: Date.now()
+  };
+  localStorage.setItem('sk-continue', JSON.stringify(data));
+}
+
+function showContinueBanner() {
+  const raw = localStorage.getItem('sk-continue');
+  if (!raw) return;
+  try {
+    const data = JSON.parse(raw);
+    // Only show if less than 30 days old
+    if (Date.now() - data.timestamp > 30 * 24 * 60 * 60 * 1000) return;
+    if (!fics[data.ficIdx]) return;
+    document.getElementById('continue-title').textContent = data.title;
+    document.getElementById('continue-banner').style.display = 'block';
+  } catch(e) {}
+}
+
+function resumeReading() {
+  const raw = localStorage.getItem('sk-continue');
+  if (!raw) return;
+  try {
+    const data = JSON.parse(raw);
+    openFic(data.ficIdx);
+    if (data.chapter > 0) {
+      currentChapter = data.chapter;
+      loadChapter(data.ficIdx, data.chapter);
+    }
+    // Restore scroll position after content loads
+    setTimeout(() => window.scrollTo(0, data.scrollY || 0), 600);
+  } catch(e) {}
+}
+
+// Save progress periodically while reading
+let saveTimer = null;
+window.addEventListener('scroll', () => {
+  if (currentPage !== 'reading') return;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveReadingProgress, 500);
+
+  // Back to top button visibility
+  const btn = document.getElementById('back-top');
+  if (btn) btn.classList.toggle('visible', window.scrollY > 600);
+});
+
+// =============================================
+// FONT SIZE TOGGLE
+// =============================================
+let currentFontStep = 0; // -2 to +3
+const FONT_SIZES = [0.92, 1.0, 1.12, 1.22, 1.32, 1.44]; // rem
+const BASE_STEP = 2; // index 2 = 1.12rem (default)
+
+function initFontSize() {
+  const saved = localStorage.getItem('sk-fontsize');
+  if (saved !== null) {
+    currentFontStep = parseInt(saved);
+    applyFontSize();
+  }
+}
+
+function changeFontSize(delta) {
+  currentFontStep = Math.max(-2, Math.min(3, currentFontStep + delta));
+  localStorage.setItem('sk-fontsize', currentFontStep);
+  applyFontSize();
+}
+
+function applyFontSize() {
+  const size = FONT_SIZES[currentFontStep + BASE_STEP] || 1.12;
+  document.querySelectorAll('.fic-body').forEach(el => {
+    el.style.fontSize = size + 'rem';
+  });
+}
+
+// =============================================
+// KEYBOARD SHORTCUTS
+// =============================================
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (currentPage === 'reading') {
+    if (e.key === 'ArrowLeft') prevChapter();
+    else if (e.key === 'ArrowRight') nextChapter();
+    else if (e.key === 'Escape') goBack();
+  }
 });
 
 // =============================================
@@ -1653,6 +1794,8 @@ function goBack() {
   stopMusic();
   document.getElementById('progress-bar').classList.remove('visible');
   document.getElementById('progress-bar').style.width = '0%';
+  document.getElementById('font-controls').classList.remove('visible');
+  document.getElementById('back-top').classList.remove('visible');
   showPage(prevPage, null);
   if (prevPage==='works') document.querySelector('.nav-links a:nth-child(2)').classList.add('active');
   else document.querySelector('.nav-links a:nth-child(1)').classList.add('active');
