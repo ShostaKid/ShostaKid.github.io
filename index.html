@@ -732,6 +732,12 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
           <div class="fic-summary">"A few times," she said. "You're the worst liar in this building."</div>
           <div class="fic-tags"><span class="tag">Anna Shcherbakova/Kamila Valieva</span></div>
         </div>
+        <div class="fic-card" onclick="openFic(27)" data-fandom="Figure Skating">
+          <div class="fic-title">Piano Trio in C minor: <em>""For Anna""</em></div>
+          <div class="fic-meta"><span>Figure Skating RPF</span></div>
+          <div class="fic-summary">For my Anna</div>
+          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Kamila Valieva</span><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
+        </div>
       </div><!-- /.works-main -->
     </div><!-- /.works-layout -->
     <footer><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · Have a great day:) &nbsp; <span style="color:var(--gold);">✦</span></footer>
@@ -928,7 +934,7 @@ const fics = [
     warning: null,
     summary: '“You can not even imagine…” Cyrene whispered, “…how real you are. To me… you are so real.”',
     tags: ['Phainon/Cyrene'],
-    date: '2026-04-28', featured: true,
+    date: '2026-04-28', featured: false,
     music: { source: 'musopen', url: 'https://dl.musopen.org/recordings/8476ae47-3751-4a07-a6db-a602e9dc5ffd.mp3?filename=Nocturne%20in%20B%20flat%20minor%2C%20Op.%209%20no.%201.mp3', start: 0 },
     musicName: 'Chopin — Nocturne in B Flat Minor',
     files: ['Tenderness Phairene.txt'], chapters: ['Chapter 1']
@@ -1150,6 +1156,17 @@ const fics = [
       ],
     musicName: 'Shostakovich - Prelude and Fugue no.3',
     files: ['Prelude 3.txt', 'Fugue 3.txt'], chapters: ['Prelude', 'Fugue']
+  },
+  {
+    title: 'Piano Trio in C minor', subtitle: '"For Anna"',
+    fandom: 'Figure Skating RPF',
+    warning: null,
+    summary: 'For my Anna',
+    tags: ['Anna Shcherbakova/Kamila Valieva', 'Anna Shcherbakova/Alexandra Trusova'],
+    date: '2026-07-20', featured: true,
+    music: { source: 'github', url: 'https://github.com/ShostaKid/ShostaKid.github.io/releases/download/music-v1/Dmitri.Shostakovich.-.Piano.Trio.No.1.in.C.minor.Op.8.-.192.Kbps.mp3', start: 256 },
+    musicName: 'Shostakovich - Piano trio no.1',
+    files: ['Piano trio 1.txt'], chapters: ['Chapter 1']
   },
 ];
 
