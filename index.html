@@ -147,17 +147,25 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .continue-dismiss:hover{color:var(--gold);}
 
 /* FONT SIZE TOGGLE */
-#font-controls{position:fixed;right:1.5rem;bottom:5rem;display:none;flex-direction:column;gap:4px;z-index:90;}
+#font-controls{position:fixed;right:1.5rem;bottom:5rem;display:none;flex-direction:column;gap:4px;z-index:90;transition:opacity 0.2s;}
 #font-controls button{width:36px;height:36px;border-radius:50%;background:var(--cream);border:1px solid var(--border);font-family:'Playfair Display',serif;font-size:0.85rem;color:var(--ink2);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;}
 #font-controls button:hover{border-color:var(--gold);color:var(--gold);}
 #font-controls.visible{display:flex;}
+#font-controls.tucked{opacity:0;pointer-events:none;}
 [data-theme="dark"] #font-controls button{background:var(--cream);}
 
 /* BACK TO TOP */
 #back-top{position:fixed;right:1.5rem;bottom:2rem;width:36px;height:36px;border-radius:50%;background:var(--cream);border:1px solid var(--border);color:var(--ink3);cursor:pointer;font-size:1rem;display:none;align-items:center;justify-content:center;transition:all 0.2s;z-index:90;}
 #back-top:hover{border-color:var(--gold);color:var(--gold);}
 #back-top.visible{display:flex;}
+#back-top.tucked{opacity:0;pointer-events:none;}
 [data-theme="dark"] #back-top{background:var(--cream);}
+
+/* FLOATING TOGGLE */
+#float-toggle{position:fixed;right:0.6rem;bottom:8.5rem;width:24px;height:24px;border-radius:50%;background:var(--cream);border:1px solid var(--border);color:var(--ink3);cursor:pointer;font-size:0.6rem;display:none;align-items:center;justify-content:center;transition:all 0.2s;z-index:91;opacity:0.5;}
+#float-toggle:hover{opacity:1;border-color:var(--gold);color:var(--gold);}
+#float-toggle.visible{display:flex;}
+[data-theme="dark"] #float-toggle{background:var(--cream);}
 
 /* PROGRESS BAR */
 #progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(to right,var(--gold-dark),var(--gold-light));width:0%;z-index:9999;transition:width 0.08s linear;pointer-events:none;display:none;}
@@ -846,6 +854,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   <button onclick="changeFontSize(1)" title="Larger text">A+</button>
   <button onclick="changeFontSize(-1)" title="Smaller text">A−</button>
 </div>
+<button id="float-toggle" onclick="toggleFloatingButtons()" title="Hide/Show controls">●</button>
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
 
 <!-- YouTube player ẩn — tự inject bằng JS -->
@@ -1695,6 +1704,7 @@ function openFic(i) {
   currentPage = 'reading';
   document.getElementById('progress-bar').classList.add('visible');
   document.getElementById('font-controls').classList.add('visible');
+  document.getElementById('float-toggle').classList.add('visible');
   window.scrollTo(0,0);
   loadChapter(i, 0);
   playMusic(i, 0);
@@ -1804,6 +1814,15 @@ function applyFontSize() {
   document.querySelectorAll('.fic-body').forEach(el => {
     el.style.fontSize = size + 'rem';
   });
+}
+
+// Toggle floating buttons visibility
+let floatsTucked = false;
+function toggleFloatingButtons() {
+  floatsTucked = !floatsTucked;
+  document.getElementById('font-controls').classList.toggle('tucked', floatsTucked);
+  document.getElementById('back-top').classList.toggle('tucked', floatsTucked);
+  document.getElementById('float-toggle').textContent = floatsTucked ? '○' : '●';
 }
 
 // =============================================
@@ -1987,7 +2006,10 @@ function goBack() {
   document.getElementById('progress-bar').classList.remove('visible');
   document.getElementById('progress-bar').style.width = '0%';
   document.getElementById('font-controls').classList.remove('visible');
+  document.getElementById('font-controls').classList.remove('tucked');
   document.getElementById('back-top').classList.remove('visible');
+  document.getElementById('back-top').classList.remove('tucked');
+  document.getElementById('float-toggle').classList.remove('visible');
   showPage(prevPage, null);
   if (prevPage==='works') document.querySelector('.nav-links a:nth-child(2)').classList.add('active');
   else document.querySelector('.nav-links a:nth-child(1)').classList.add('active');
