@@ -4,13 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ShostaKid</title>
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Nunito:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
 --cream:#FAF7F0;--cream2:#F2EDE0;--gold:#B8972A;--gold-light:#D4AF5A;--gold-dark:#8A6E1A;
 --ink:#2C2318;--ink2:#5C4F3A;--ink3:#8C7D66;--border:#D4C49A;
+--font-ui:'Playfair Display',serif;
 }
+/* UI tiếng Việt dùng Nunito cho dấu hiển thị chuẩn */
+[data-lang="vi"]{--font-ui:'Nunito',sans-serif;}
+[data-lang="vi"] .nav-links a,[data-lang="vi"] .section-heading,[data-lang="vi"] .filter-btn{letter-spacing:1.8px;}
+[data-lang="vi"] .hero-title,[data-lang="vi"] .intro-title{letter-spacing:4px;}
+#lang-btn{background:none;border:1px solid var(--border);font-family:var(--font-ui);font-size:0.6rem;letter-spacing:1.5px;cursor:pointer;color:var(--ink3);padding:4px 9px;transition:all 0.2s;line-height:1;}
+#lang-btn:hover{border-color:var(--gold);color:var(--gold);}
+.nav-utils{display:flex;align-items:center;gap:8px;}
 body{background:var(--cream);color:var(--ink);font-family:Georgia,'Times New Roman',serif;min-height:100vh;overflow-x:hidden;}
 
 /* GOTHIC PATTERN */
@@ -22,13 +30,13 @@ body{background:var(--cream);color:var(--ink);font-family:Georgia,'Times New Rom
 /* INTRO */
 #intro{position:fixed;inset:0;z-index:2147483647;background:#0a0805;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.8s ease;}
 #intro.fade-out{opacity:0;pointer-events:none;}
-.intro-ornament{font-family:'Playfair Display',serif;font-size:5rem;color:rgba(184,151,42,0.15);line-height:1;margin-bottom:2rem;animation:float 3s ease-in-out infinite;}
+.intro-ornament{font-family:var(--font-ui);font-size:5rem;color:rgba(184,151,42,0.15);line-height:1;margin-bottom:2rem;animation:float 3s ease-in-out infinite;}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.intro-title{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:400;letter-spacing:8px;text-transform:uppercase;color:#e8dfc8;margin-bottom:0.8rem;text-align:center;}
+.intro-title{font-family:var(--font-ui);font-size:2.2rem;font-weight:400;letter-spacing:8px;text-transform:uppercase;color:#e8dfc8;margin-bottom:0.8rem;text-align:center;}
 .intro-title span{color:var(--gold);}
 .intro-sub{font-family:Georgia,serif;font-style:italic;font-size:1.1rem;color:rgba(232,223,200,0.5);letter-spacing:2px;margin-bottom:4rem;text-align:center;}
 .intro-cta{display:flex;flex-direction:column;align-items:center;gap:0.8rem;}
-.intro-cta-text{font-family:'Playfair Display',serif;font-size:0.72rem;letter-spacing:4px;text-transform:uppercase;color:rgba(184,151,42,0.7);animation:blink 2s ease-in-out infinite;}
+.intro-cta-text{font-family:var(--font-ui);font-size:0.72rem;letter-spacing:4px;text-transform:uppercase;color:rgba(184,151,42,0.7);animation:blink 2s ease-in-out infinite;}
 @keyframes blink{0%,100%{opacity:0.4}50%{opacity:1}}
 .intro-bars{display:flex;align-items:flex-end;gap:4px;height:24px;}
 .intro-bars span{width:3px;background:rgba(184,151,42,0.4);border-radius:2px;animation:bar 1.2s ease-in-out infinite;}
@@ -45,13 +53,13 @@ body{background:var(--cream);color:var(--ink);font-family:Georgia,'Times New Rom
 #site.visible{opacity:1;}
 
 nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padding:0 3rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(4px);}
-.nav-logo{font-family:'Playfair Display',serif;font-size:1.1rem;letter-spacing:3px;color:var(--ink);padding:1.2rem 0;text-transform:uppercase;}
+.nav-logo{font-family:var(--font-ui);font-size:1.1rem;letter-spacing:3px;color:var(--ink);padding:1.2rem 0;text-transform:uppercase;}
 .nav-logo span{color:var(--gold);}
 .nav-links{display:flex;gap:2.5rem;}
-.nav-links a{font-family:'Playfair Display',serif;font-size:0.72rem;letter-spacing:2.5px;color:var(--ink2);text-decoration:none;text-transform:uppercase;cursor:pointer;transition:color 0.2s;}
+.nav-links a{font-family:var(--font-ui);font-size:0.72rem;letter-spacing:2.5px;color:var(--ink2);text-decoration:none;text-transform:uppercase;cursor:pointer;transition:color 0.2s;}
 .nav-links a:hover,.nav-links a.active{color:var(--gold);}
 
-#music-bar{background:rgba(242,237,224,0.95);border-bottom:1px solid var(--border);padding:8px 3rem;display:flex;align-items:center;gap:1rem;font-family:'Playfair Display',serif;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);min-height:36px;}
+#music-bar{background:rgba(242,237,224,0.95);border-bottom:1px solid var(--border);padding:8px 3rem;display:flex;align-items:center;gap:1rem;font-family:var(--font-ui);font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);min-height:36px;}
 #music-bar.hidden{display:none;}
 .music-now{display:flex;align-items:center;gap:8px;flex:1;}
 .music-bars{display:flex;align-items:flex-end;gap:2px;height:14px;}
@@ -63,7 +71,7 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .music-bars span:nth-child(5){height:4px;animation-delay:0.4s;}
 .music-bars.paused span{animation:none;transform:scaleY(0.3);}
 #music-title{color:var(--ink2);font-style:italic;}
-.music-toggle{background:none;border:1px solid var(--border);padding:4px 12px;font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);cursor:pointer;transition:all 0.2s;}
+.music-toggle{background:none;border:1px solid var(--border);padding:4px 12px;font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);cursor:pointer;transition:all 0.2s;}
 .music-toggle:hover{border-color:var(--gold);color:var(--gold);}
 
 .page{display:none;animation:fadein 0.5s ease;}
@@ -71,45 +79,45 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 @keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
 .hero{padding:6rem 3rem 5rem;text-align:center;border-bottom:1px solid var(--border);}
-.hero-ornament{font-family:'Playfair Display',serif;font-size:5rem;color:var(--gold);opacity:0.18;line-height:1;margin-bottom:-1rem;}
-.hero-title{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:400;letter-spacing:6px;text-transform:uppercase;margin-bottom:1rem;color:var(--ink);}
-.hero-subtitle{font-family:'Playfair Display',serif;font-style:italic;font-size:1.3rem;color:var(--ink2);letter-spacing:1px;margin-bottom:2rem;}
+.hero-ornament{font-family:var(--font-ui);font-size:5rem;color:var(--gold);opacity:0.18;line-height:1;margin-bottom:-1rem;}
+.hero-title{font-family:var(--font-ui);font-size:2.8rem;font-weight:400;letter-spacing:6px;text-transform:uppercase;margin-bottom:1rem;color:var(--ink);}
+.hero-subtitle{font-family:var(--font-ui);font-style:italic;font-size:1.3rem;color:var(--ink2);letter-spacing:1px;margin-bottom:2rem;}
 .hero-divider{display:flex;align-items:center;justify-content:center;gap:1.2rem;margin:1.5rem 0;}
 .hero-divider::before,.hero-divider::after{content:'';flex:1;max-width:120px;height:1px;background:linear-gradient(to right,transparent,var(--border));}
 .hero-divider::after{background:linear-gradient(to left,transparent,var(--border));}
 .hero-tagline{font-family:Georgia,serif;font-size:1rem;color:var(--ink3);letter-spacing:3px;text-transform:uppercase;}
 
 .fics-section{max-width:860px;margin:0 auto;padding:3.5rem 2rem;}
-.section-heading{font-family:'Playfair Display',serif;font-size:0.78rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:2.5rem;display:flex;align-items:center;gap:1rem;}
+.section-heading{font-family:var(--font-ui);font-size:0.78rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:2.5rem;display:flex;align-items:center;gap:1rem;}
 .section-heading::after{content:'';flex:1;height:1px;background:var(--border);}
 .fic-card{border:1px solid var(--border);padding:1.8rem 2rem;margin-bottom:1.5rem;background:rgba(250,247,240,0.85);cursor:pointer;transition:all 0.25s;position:relative;backdrop-filter:blur(2px);}
 .fic-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);opacity:0;transition:opacity 0.2s;}
 .fic-card:hover{background:rgba(251,248,240,0.97);border-color:var(--gold-light);}
 .fic-card:hover::before{opacity:1;}
-.fic-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:500;color:var(--ink);margin-bottom:0.3rem;}
+.fic-title{font-family:var(--font-ui);font-size:1.1rem;font-weight:500;color:var(--ink);margin-bottom:0.3rem;}
 .fic-title em{font-style:italic;color:var(--gold-dark);}
-.fic-meta{font-family:'Playfair Display',serif;font-size:0.65rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;margin-bottom:0.8rem;display:flex;gap:1.5rem;flex-wrap:wrap;}
+.fic-meta{font-family:var(--font-ui);font-size:0.65rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;margin-bottom:0.8rem;display:flex;gap:1.5rem;flex-wrap:wrap;}
 .fic-warning{font-size:0.85rem;color:#993C1D;font-family:'Lora',Georgia,serif;font-style:italic;margin-bottom:0.6rem;}
 .fic-summary{font-family:'Lora',Georgia,serif;font-size:0.97rem;color:var(--ink2);line-height:1.7;font-style:italic;}
 .fic-tags{margin-top:0.9rem;display:flex;flex-wrap:wrap;gap:6px;}
-.tag{font-family:'Playfair Display',serif;font-size:0.6rem;letter-spacing:1.5px;color:var(--ink2);border:1px solid var(--gold);padding:3px 10px;text-transform:uppercase;background:rgba(184,151,42,0.06);}
+.tag{font-family:var(--font-ui);font-size:0.6rem;letter-spacing:1.5px;color:var(--ink2);border:1px solid var(--gold);padding:3px 10px;text-transform:uppercase;background:rgba(184,151,42,0.06);}
 
 /* READING PAGE */
 .reading-wrap{max-width:720px;margin:0 auto;padding:4rem 2rem;}
-.back-btn{font-family:'Playfair Display',serif;font-size:0.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink3);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:3rem;transition:color 0.2s;}
+.back-btn{font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink3);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:3rem;transition:color 0.2s;}
 .back-btn:hover{color:var(--gold);}
-.reading-title{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:400;line-height:1.2;color:var(--ink);margin-bottom:0.5rem;}
+.reading-title{font-family:var(--font-ui);font-size:2.4rem;font-weight:400;line-height:1.2;color:var(--ink);margin-bottom:0.5rem;}
 .reading-title em{font-style:italic;color:var(--gold-dark);}
-.reading-fandom{font-family:'Playfair Display',serif;font-size:0.65rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;margin-bottom:0.5rem;}
+.reading-fandom{font-family:var(--font-ui);font-size:0.65rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;margin-bottom:0.5rem;}
 .reading-warning{font-family:Georgia,serif;font-style:italic;color:#993C1D;font-size:0.9rem;border-left:2px solid #D85A30;padding-left:1rem;margin:1.2rem 0;}
 .reading-divider{text-align:center;margin:2rem 0;color:var(--gold);font-size:1.3rem;letter-spacing:8px;}
 
 /* Chapter nav */
 .chapter-nav{display:flex;align-items:center;justify-content:space-between;margin:2.5rem 0;padding:1rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
-.chapter-nav button{font-family:'Playfair Display',serif;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);background:none;border:1px solid var(--border);padding:8px 16px;cursor:pointer;transition:all 0.2s;}
+.chapter-nav button{font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);background:none;border:1px solid var(--border);padding:8px 16px;cursor:pointer;transition:all 0.2s;}
 .chapter-nav button:hover{border-color:var(--gold);color:var(--gold);}
 .chapter-nav button:disabled{opacity:0.3;cursor:default;}
-.chapter-label{font-family:'Playfair Display',serif;font-size:0.72rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;}
+.chapter-label{font-family:var(--font-ui);font-size:0.72rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;}
 
 /* Fic body */
 .fic-body{font-family:'Lora',Georgia,'Times New Roman',serif;font-size:1.12rem;line-height:2;color:var(--ink);}
@@ -118,29 +126,29 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .fic-body .scene-break{text-align:center;color:var(--gold);letter-spacing:8px;margin:2rem 0;font-size:1.1rem;}
 
 /* Loading spinner */
-.loading{text-align:center;padding:4rem;font-family:'Playfair Display',serif;font-size:0.78rem;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);}
+.loading{text-align:center;padding:4rem;font-family:var(--font-ui);font-size:0.78rem;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);}
 .loading::after{content:'';display:block;width:30px;height:1px;background:var(--gold);margin:1rem auto 0;animation:loadbar 1.2s ease-in-out infinite;}
 @keyframes loadbar{0%,100%{width:20px;opacity:0.3}50%{width:60px;opacity:1}}
 
-.ao3-link{display:inline-flex;align-items:center;gap:8px;margin-top:2.5rem;font-family:'Playfair Display',serif;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);border:1px solid var(--border);padding:10px 20px;text-decoration:none;transition:all 0.2s;cursor:pointer;background:none;}
+.ao3-link{display:inline-flex;align-items:center;gap:8px;margin-top:2.5rem;font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);border:1px solid var(--border);padding:10px 20px;text-decoration:none;transition:all 0.2s;cursor:pointer;background:none;}
 .ao3-link:hover{border-color:var(--gold);color:var(--gold);}
 
 /* ABOUT */
 .about-wrap{max-width:720px;margin:0 auto;padding:4rem 2rem;}
-.about-ornament{text-align:center;font-family:'Playfair Display',serif;font-size:3.5rem;color:var(--gold);opacity:0.25;margin-bottom:-1rem;}
+.about-ornament{text-align:center;font-family:var(--font-ui);font-size:3.5rem;color:var(--gold);opacity:0.25;margin-bottom:-1rem;}
 .about-body{font-family:'Lora',Georgia,serif;font-size:1.08rem;line-height:1.9;color:var(--ink2);}
 .about-body p{margin-bottom:1.4em;}
-.about-sig{font-family:'Playfair Display',serif;font-style:italic;font-size:1.3rem;color:var(--gold-dark);margin-top:2.5rem;}
+.about-sig{font-family:var(--font-ui);font-style:italic;font-size:1.3rem;color:var(--gold-dark);margin-top:2.5rem;}
 .stat-row{display:flex;gap:2rem;margin:2.5rem 0;flex-wrap:wrap;}
 .stat-box{text-align:center;padding:1.2rem 1.8rem;border:1px solid var(--border);background:rgba(250,247,240,0.7);}
-.stat-num{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--gold);display:block;}
-.stat-label{font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);}
-footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;}
+.stat-num{font-family:var(--font-ui);font-size:2.2rem;color:var(--gold);display:block;}
+.stat-label{font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);}
+footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;}
 /* CONTINUE READING BANNER */
 #continue-banner{display:none;max-width:860px;margin:0 auto 0;padding:1rem 2rem;}
 #continue-banner .continue-inner{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--border);padding:12px 20px;background:rgba(184,151,42,0.04);cursor:pointer;transition:all 0.2s;gap:1rem;}
 #continue-banner .continue-inner:hover{border-color:var(--gold);background:rgba(184,151,42,0.08);}
-.continue-text{font-family:'Playfair Display',serif;font-size:0.72rem;letter-spacing:1.5px;color:var(--ink2);}
+.continue-text{font-family:var(--font-ui);font-size:0.72rem;letter-spacing:1.5px;color:var(--ink2);}
 .continue-text strong{color:var(--gold-dark);}
 .continue-arrow{color:var(--gold);font-size:1rem;}
 .continue-dismiss{background:none;border:none;color:var(--ink3);cursor:pointer;font-size:0.9rem;padding:4px;transition:color 0.2s;}
@@ -148,7 +156,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 
 /* FONT SIZE TOGGLE */
 #font-controls{position:fixed;right:1.5rem;bottom:5rem;display:none;flex-direction:column;gap:4px;z-index:90;transition:opacity 0.2s;}
-#font-controls button{width:36px;height:36px;border-radius:50%;background:var(--cream);border:1px solid var(--border);font-family:'Playfair Display',serif;font-size:0.85rem;color:var(--ink2);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;}
+#font-controls button{width:36px;height:36px;border-radius:50%;background:var(--cream);border:1px solid var(--border);font-family:var(--font-ui);font-size:0.85rem;color:var(--ink2);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;}
 #font-controls button:hover{border-color:var(--gold);color:var(--gold);}
 #font-controls.visible{display:flex;}
 #font-controls.tucked{opacity:0;pointer-events:none;}
@@ -193,17 +201,17 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 /* WORKS SIDEBAR LAYOUT */
 .works-layout{display:flex;max-width:1100px;margin:0 auto;padding:3rem 2rem;gap:2.5rem;align-items:flex-start;min-height:calc(100vh - 60px);}
 .fandom-sidebar{width:170px;flex-shrink:0;position:sticky;top:90px;display:flex;flex-direction:column;gap:6px;}
-.sidebar-heading{font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:0.8rem;padding-bottom:0.6rem;border-bottom:1px solid var(--border);}
+.sidebar-heading{font-family:var(--font-ui);font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:0.8rem;padding-bottom:0.6rem;border-bottom:1px solid var(--border);}
 .works-main{flex:1;min-width:0;}
-.filter-btn{font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--border);padding:7px 12px;color:var(--ink3);cursor:pointer;transition:all 0.2s;text-align:left;width:100%;}
+.filter-btn{font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--border);padding:7px 12px;color:var(--ink3);cursor:pointer;transition:all 0.2s;text-align:left;width:100%;}
 .filter-btn:hover,.filter-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(184,151,42,0.06);}
 .filter-btn.ship-btn{font-size:0.58rem;letter-spacing:1px;padding:5px 10px;border-color:transparent;color:var(--ink3);}
 .filter-btn.ship-btn:hover,.filter-btn.ship-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(184,151,42,0.06);}
 .sidebar-divider{height:1px;background:var(--border);margin:0.8rem 0;}
 .active-filters{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:1rem;}
-.active-filter-tag{font-family:'Playfair Display',serif;font-size:0.58rem;letter-spacing:1px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:2px 8px;display:flex;align-items:center;gap:4px;background:rgba(184,151,42,0.06);}
+.active-filter-tag{font-family:var(--font-ui);font-size:0.58rem;letter-spacing:1px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:2px 8px;display:flex;align-items:center;gap:4px;background:rgba(184,151,42,0.06);}
 .active-filter-tag button{background:none;border:none;color:var(--gold);cursor:pointer;font-size:0.7rem;padding:0;line-height:1;}
-.no-results{text-align:center;padding:3rem 1rem;font-family:'Playfair Display',serif;font-style:italic;font-size:0.9rem;color:var(--ink3);display:none;}
+.no-results{text-align:center;padding:3rem 1rem;font-family:var(--font-ui);font-style:italic;font-size:0.9rem;color:var(--ink3);display:none;}
 
 @media (max-width: 768px) {
   nav { padding: 0 1rem; }
@@ -256,7 +264,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   background: none;
   border: 1px solid var(--border);
   padding: 10px 16px;
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-ui);
   font-size: 0.72rem;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -283,7 +291,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .mobile-filter-section { margin-bottom: 1rem; }
 .mobile-filter-section:last-child { margin-bottom: 0; }
 .mobile-filter-label {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-ui);
   font-size: 0.6rem;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -297,7 +305,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   gap: 6px;
 }
 .mobile-pill {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-ui);
   font-size: 0.6rem;
   letter-spacing: 1.5px;
   text-transform: uppercase;
@@ -348,7 +356,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   margin-bottom: 0.4rem;
 }
 .comment-author {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-ui);
   font-size: 0.78rem;
   letter-spacing: 1.5px;
   text-transform: uppercase;
@@ -444,11 +452,11 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 <div id="intro">
   <div class="intro-ornament">♩</div>
   <div class="intro-title">Shosta<span>Kid</span></div>
-  <div class="intro-sub">Don't ask. Just read:)</div>
+  <div class="intro-sub" data-i18n="intro_sub">Don't ask. Just read:)</div>
   <div class="intro-line"></div>
   <div class="intro-cta">
     <div class="intro-bars"><span></span><span></span><span></span><span></span><span></span></div>
-    <div class="intro-cta-text">Click anywhere to enter</div>
+    <div class="intro-cta-text" data-i18n="intro_cta">Click anywhere to enter</div>
   </div>
 </div>
 
@@ -457,11 +465,14 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   <nav>
     <div class="nav-logo">Shosta<span>Kid</span></div>
     <div class="nav-links">
-      <a class="active" onclick="showPage('home',this)">Home</a>
-      <a onclick="showPage('works',this)">Works</a>
-      <a onclick="showPage('about',this)">About</a>
+      <a class="active" data-i18n="nav_home" onclick="showPage('home',this)">Home</a>
+      <a data-i18n="nav_works" onclick="showPage('works',this)">Works</a>
+      <a data-i18n="nav_about" onclick="showPage('about',this)">About</a>
     </div>
-    <button id="theme-btn" onclick="toggleTheme()" title="Toggle theme">☾</button>
+    <div class="nav-utils">
+      <button id="lang-btn" onclick="toggleLang()" title="Đổi ngôn ngữ / Switch language">VI</button>
+      <button id="theme-btn" onclick="toggleTheme()" title="Toggle theme">☾</button>
+    </div>
   </nav>
 
   <div id="music-bar" class="hidden">
@@ -477,15 +488,15 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
     <div class="hero">
       <div class="hero-ornament">♩</div>
       <h1 class="hero-title">ShostaKid</h1>
-      <p class="hero-subtitle">I blend classical music with my thoughts</p>
+      <p class="hero-subtitle" data-i18n="hero_sub">I blend classical music with my thoughts</p>
       <div class="hero-divider"><span style="color:var(--gold);letter-spacing:4px;">✦ ✦ ✦</span></div>
-      <p class="hero-tagline">Take a $ip y'all and enjoy</p>
+      <p class="hero-tagline" data-i18n="hero_tag">Take a $ip y'all and enjoy</p>
     </div>
 
     <!-- Continue Reading Banner -->
     <div id="continue-banner">
       <div class="continue-inner" onclick="resumeReading()">
-        <span class="continue-text">Continue reading: <strong id="continue-title"></strong></span>
+        <span class="continue-text"><span data-i18n="continue">Continue reading:</span> <strong id="continue-title"></strong></span>
         <span class="continue-arrow">→</span>
       </div>
     </div>
@@ -493,21 +504,21 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   <div class="home-columns">
 
     <div class="home-col">
-      <div class="section-heading">My Latest Works</div>
+      <div class="section-heading" data-i18n="head_latest">My Latest Works</div>
       <div id="home-latest"></div>
     </div>
 
     <div class="home-col">
-      <div class="section-heading">My Favorite Children</div>
+      <div class="section-heading" data-i18n="head_fav">My Favorite Children</div>
       <div id="home-favorites"></div>
     </div>
 
   </div>
   <div style="text-align:center;margin-top:2rem;">
-    <button class="ao3-link" onclick="showPage('works',document.querySelector('.nav-links a:nth-child(2)'))">View All Works →</button>
+    <button class="ao3-link" onclick="showPage('works',document.querySelector('.nav-links a:nth-child(2)'))" data-i18n="view_all">View All Works →</button>
   </div>
 </div>
-    <footer><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · Have a great day:) &nbsp; <span style="color:var(--gold);">✦</span></footer>
+    <footer><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
 
   <!-- WORKS -->
@@ -515,8 +526,8 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
     <div class="works-layout">
 
       <aside class="fandom-sidebar">
-        <div class="sidebar-heading">Browse</div>
-        <button class="filter-btn all-btn active" onclick="setFandom('all',this)">All</button>
+        <div class="sidebar-heading" data-i18n="browse">Browse</div>
+        <button class="filter-btn all-btn active" data-i18n="all" onclick="setFandom('all',this)">All</button>
         <div id="fandom-accordion"></div>
       </aside>
 
@@ -524,34 +535,34 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 
         <!-- Mobile filter toggle (chỉ hiện trên mobile) -->
         <button id="mobile-filter-toggle" onclick="toggleMobileFilter()">
-          <span>Filter <span id="mobile-filter-count"></span></span>
+          <span><span data-i18n="filter">Filter</span> <span id="mobile-filter-count"></span></span>
           <span class="toggle-arrow">▼</span>
         </button>
         <div id="mobile-filter-panel">
           <div class="mobile-filter-section">
-            <span class="mobile-filter-label">Fandom</span>
+            <span class="mobile-filter-label" data-i18n="fandom">Fandom</span>
             <div class="mobile-filter-pills">
-              <button class="mobile-pill active" onclick="setFandom('all',this,true)">All</button>
+              <button class="mobile-pill active" data-i18n="all" onclick="setFandom('all',this,true)">All</button>
               <button class="mobile-pill" onclick="setFandom('Reverse: 1999',this,true)">Reverse: 1999</button>
               <button class="mobile-pill" onclick="setFandom('Figure Skating',this,true)">Figure Skating RPF</button>
               <button class="mobile-pill" onclick="setFandom('Honkai',this,true)">Honkai: Star Rail</button>
             </div>
           </div>
           <div class="mobile-filter-section">
-            <span class="mobile-filter-label">Ship</span>
+            <span class="mobile-filter-label" data-i18n="ship">Ship</span>
             <div class="mobile-filter-pills" id="mobile-ship-list"></div>
           </div>
         </div>
 
         <div style="margin-bottom:1.5rem;position:relative;">
-  <input id="search-input" type="text" placeholder="Search by title..."
+  <input id="search-input" type="text" data-i18n-ph="search_ph" placeholder="Search by title..."
     oninput="applyFilters()"
-    style="width:100%;font-family:'Playfair Display',serif;font-size:0.85rem;letter-spacing:1px;color:var(--ink2);background:var(--cream);border:1px solid var(--border);padding:10px 16px 10px 40px;outline:none;transition:border-color 0.2s;">
+    style="width:100%;font-family:var(--font-ui);font-size:0.85rem;letter-spacing:1px;color:var(--ink2);background:var(--cream);border:1px solid var(--border);padding:10px 16px 10px 40px;outline:none;transition:border-color 0.2s;">
   <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--ink3);font-size:0.9rem;">🔍</span>
 </div>
         <div id="active-filters" class="active-filters"></div>
-        <div class="section-heading">All Works</div>
-        <div id="no-results" class="no-results">No works found for this filter.</div>
+        <div class="section-heading" data-i18n="head_all">All Works</div>
+        <div id="no-results" class="no-results" data-i18n="no_results">No works found for this filter.</div>
 
         <div class="fic-card" onclick="openFic(0)" data-fandom="Reverse: 1999">
           <div class="fic-title">Toccata in D sharp Minor: <em>"Totentanz"</em></div>
@@ -784,27 +795,27 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         </div>
       </div><!-- /.works-main -->
     </div><!-- /.works-layout -->
-    <footer><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · Have a great day:) &nbsp; <span style="color:var(--gold);">✦</span></footer>
+    <footer><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div><!-- /#page-works -->
 
   <!-- READING -->
   <div class="page" id="page-reading" style="background:var(--cream);">
     <div class="reading-wrap">
-      <button class="back-btn" onclick="goBack()">← Back</button>
+      <button class="back-btn" data-i18n="back" onclick="goBack()">← Back</button>
       <div id="reading-header"></div>
       <div id="reading-body"></div>
       <div class="chapter-nav" id="chapter-nav-bot" style="display:none">
-        <button id="ch-prev-bot" onclick="prevChapter()">← Prev</button>
+        <button id="ch-prev-bot" data-i18n="prev" onclick="prevChapter()">← Prev</button>
         <span class="chapter-label" id="ch-label-bot"></span>
-        <button id="ch-next-bot" onclick="nextChapter()">Next →</button>
+        <button id="ch-next-bot" data-i18n="next" onclick="nextChapter()">Next →</button>
       </div>
       <div id="reading-footer" style="margin-top:3rem;border-top:1px solid var(--border);padding-top:2rem;display:none;">
-        <p style="font-family:'Playfair Display',serif;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:1rem;">Read the work on AO3</p>
-        <a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid/works" target="_blank">Continue on AO3 →</a>
+        <p style="font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:1rem;" data-i18n="read_ao3">Read the work on AO3</p>
+        <a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid/works" target="_blank" data-i18n="cont_ao3">Continue on AO3 →</a>
       </div>
       <!-- COMMENT SECTION (Supabase) -->
       <div id="comments-wrap" style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);display:none;">
-        <button onclick="toggleComments()" style="font-family:'Playfair Display',serif;font-size:0.78rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:1rem;width:100%;padding:0;">
+        <button onclick="toggleComments()" style="font-family:var(--font-ui);font-size:0.78rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:1rem;width:100%;padding:0;">
           <span id="comments-label">Show Comments</span>
           <span style="flex:1;height:1px;background:var(--border);display:block;"></span>
           <span id="comments-arrow">▼</span>
@@ -813,8 +824,8 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <div id="comments-body" style="display:none;margin-top:1.5rem;">
           <!-- Form -->
           <div class="comment-form">
-            <input type="text" id="comment-name" placeholder="Name (optional)" maxlength="50">
-            <textarea id="comment-text" placeholder="Leave a comment..." rows="3" maxlength="2000"></textarea>
+            <input type="text" id="comment-name" data-i18n-ph="cmt_name_ph" placeholder="Name (optional)" maxlength="50">
+            <textarea id="comment-text" data-i18n-ph="cmt_body_ph" placeholder="Leave a comment..." rows="3" maxlength="2000"></textarea>
             <div style="display:flex;justify-content:flex-end;margin-top:0.6rem;">
               <button class="ao3-link" id="comment-submit" onclick="submitComment()">Post Comment →</button>
             </div>
@@ -824,28 +835,28 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         </div>
       </div>
     </div>
-    <footer style="margin-top:2rem;"><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · Have a great day:) &nbsp; <span style="color:var(--gold);">✦</span></footer>
+    <footer style="margin-top:2rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
 
   <!-- ABOUT -->
   <div class="page" id="page-about" style="background:var(--cream);">
     <div class="about-wrap">
       <div class="about-ornament">𝄞</div>
-      <div class="section-heading" style="margin-top:1rem;">About the Author</div>
+      <div class="section-heading" style="margin-top:1rem;" data-i18n="about_head">About the Author</div>
       <div class="about-body">
-        <p>Welcome. I write under the name <strong>ShostaKid</strong>, so you can say that I'm a child of Dmitry Dmitrievich Shostakovich (kind of lol)</p>
-        <p>My works, most of the time, are random thoughts that live inside my head. I write what I want here, so don't question me and enjoy as much as you can:).</p>
-        <p>I write primarily for the <em>Reverse: 1999</em>, <em>Figure Skating RPF</em>, <em>Honkai: Star Rail</em> and sometimes <em>Genshin Impact</em> fandoms. There will be more, but right now those are my primary</p>
-        <p>I hope you have a great time here. Thank you for stopping by.</p>
+        <p data-i18n-html="about_p1">Welcome. I write under the name <strong>ShostaKid</strong>, so you can say that I'm a child of Dmitry Dmitrievich Shostakovich (kind of lol)</p>
+        <p data-i18n-html="about_p2">My works, most of the time, are random thoughts that live inside my head. I write what I want here, so don't question me and enjoy as much as you can:).</p>
+        <p data-i18n-html="about_p3">I write primarily for the <em>Reverse: 1999</em>, <em>Figure Skating RPF</em>, <em>Honkai: Star Rail</em> and sometimes <em>Genshin Impact</em> fandoms. There will be more, but right now those are my primary</p>
+        <p data-i18n-html="about_p4">I hope you have a great time here. Thank you for stopping by.</p>
       </div>
       <div class="stat-row">
-        <div class="stat-box"><span class="stat-num" id="stat-works">—</span><span class="stat-label">Works</span></div>
+        <div class="stat-box"><span class="stat-num" id="stat-works">—</span><span class="stat-label" data-i18n="stat_works">Works</span></div>
       </div>
       <div class="about-sig">— ShostaKid</div>
-      <div style="margin-top:2rem;"><a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid" target="_blank">My AO3 →</a></div>
-      <div style="margin-top:2rem;"><a class="ao3-link" href="https://x.com/Texas1k6" target="_blank">My X →</a></div>
+      <div style="margin-top:2rem;"><a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid" target="_blank" data-i18n="my_ao3">My AO3 →</a></div>
+      <div style="margin-top:2rem;"><a class="ao3-link" href="https://x.com/Texas1k6" target="_blank" data-i18n="my_x">My X →</a></div>
     </div>
-    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid ·Have a great day:) &nbsp; <span style="color:var(--gold);">✦</span></footer>
+    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
 </div>
 
@@ -1600,13 +1611,13 @@ async function loadChapter(ficIdx, chapterIdx) {
   const body = document.getElementById('reading-body');
 
   if (!fic.files || !fic.files[chapterIdx]) {
-    body.innerHTML = `<div class="fic-body">${previews[ficIdx] || '<p><em>Coming soon.</em></p>'}</div>`;
+    body.innerHTML = `<div class="fic-body">${previews[ficIdx] || `<p><em>${t('soon')}</em></p>`}</div>`;
     document.getElementById('reading-footer').style.display = 'block';
     updateChapterNav(ficIdx, chapterIdx);
     return;
   }
 
-  body.innerHTML = '<div class="loading">Loading</div>';
+  body.innerHTML = `<div class="loading">${t('loading')}</div>`;
   document.getElementById('reading-footer').style.display = 'none';
 
   try {
@@ -1618,7 +1629,7 @@ async function loadChapter(ficIdx, chapterIdx) {
     applyFontSize();
     document.getElementById('reading-footer').style.display = 'block';
   } catch(e) {
-    body.innerHTML = `<div class="fic-body"><p><em>Could not load chapter. Please check back later.</em></p></div>`;
+    body.innerHTML = `<div class="fic-body"><p><em>${t('ch_err')}</em></p></div>`;
   }
   updateChapterNav(ficIdx, chapterIdx);
   // If fic has per-chapter music, swap track when chapter changes
@@ -1648,11 +1659,11 @@ function updateChapterNav(ficIdx, chapterIdx) {
       `<option value="${i}" ${i === chapterIdx ? 'selected' : ''}>${ch}</option>`
     ).join('');
     navTop.innerHTML = `
-      <button id="ch-prev-top" onclick="prevChapter()" ${isFirst ? 'disabled' : ''}>← Prev</button>
-      <select id="ch-select" onchange="jumpChapter(this.value)" style="font-family:'Playfair Display',serif;font-size:0.72rem;letter-spacing:1px;text-transform:uppercase;color:var(--ink2);background:var(--cream);border:1px solid var(--border);padding:6px 12px;cursor:pointer;">
+      <button id="ch-prev-top" onclick="prevChapter()" ${isFirst ? 'disabled' : ''}>${t('prev')}</button>
+      <select id="ch-select" onchange="jumpChapter(this.value)" style="font-family:var(--font-ui);font-size:0.72rem;letter-spacing:1px;text-transform:uppercase;color:var(--ink2);background:var(--cream);border:1px solid var(--border);padding:6px 12px;cursor:pointer;">
         ${options}
       </select>
-      <button id="ch-next-top" onclick="nextChapter()" ${isLast ? 'disabled' : ''}>Next →</button>`;
+      <button id="ch-next-top" onclick="nextChapter()" ${isLast ? 'disabled' : ''}>${t('next')}</button>`;
   }
 
   // Bottom nav — simple prev/label/next
@@ -1686,9 +1697,9 @@ function openFic(i) {
 
   const chapterNavHtml = f.chapters.length > 1 ? `
     <div class="chapter-nav" id="chapter-nav-top">
-      <button id="ch-prev-top" onclick="prevChapter()">← Prev</button>
+      <button id="ch-prev-top" onclick="prevChapter()">${t('prev')}</button>
       <span class="chapter-label" id="ch-label-top">${f.chapters[0]}</span>
-      <button id="ch-next-top" onclick="nextChapter()">Next →</button>
+      <button id="ch-next-top" onclick="nextChapter()">${t('next')}</button>
     </div>` : '<div id="chapter-nav-top" style="display:none"></div>';
 
   document.getElementById('reading-header').innerHTML = `
@@ -1727,6 +1738,7 @@ document.addEventListener('DOMContentLoaded', () => {
   buildSidebar();
   showContinueBanner();
   initFontSize();
+  applyLang();
   // Auto-count works
   const statEl = document.getElementById('stat-works');
   if (statEl) statEl.textContent = fics.length;
@@ -1838,6 +1850,117 @@ document.addEventListener('keydown', (e) => {
 });
 
 // =============================================
+// LANGUAGE (UI only — nội dung fic giữ nguyên)
+// =============================================
+const i18n = {
+  en: {
+    nav_home:'Home', nav_works:'Works', nav_about:'About',
+    intro_sub:"Don't ask. Just read:)", intro_cta:'Click anywhere to enter',
+    hero_sub:'I blend classical music with my thoughts',
+    hero_tag:"Take a $ip y'all and enjoy",
+    continue:'Continue reading:',
+    head_latest:'My Latest Works', head_fav:'My Favorite Children',
+    view_all:'View All Works →',
+    browse:'Browse', all:'All', filter:'Filter', fandom:'Fandom', ship:'Ship',
+    head_all:'All Works', no_results:'No works found for this filter.',
+    search_ph:'Search by title...',
+    back:'← Back', prev:'← Prev', next:'Next →',
+    read_ao3:'Read the work on AO3', cont_ao3:'Continue on AO3 →',
+    about_head:'About the Author', stat_works:'Works',
+    my_ao3:'My AO3 →', my_x:'My X →',
+    footer:'ShostaKid · Have a great day:)',
+    cmt_show:'Show Comments', cmt_hide:'Hide Comments',
+    cmt_name_ph:'Name (optional)', cmt_body_ph:'Leave a comment...',
+    cmt_post:'Post Comment →', cmt_posting:'Posting…',
+    cmt_loading:'Loading…', cmt_empty:'No comments yet. Be the first ♪',
+    cmt_err:'Could not load comments.', cmt_post_err:'Could not post comment. Please try again.',
+    anon:'Anonymous',
+    loading:'Loading', ch_err:'Could not load chapter. Please check back later.',
+    soon:'Coming soon.', pause:'Pause', play:'Play',
+    about_p1:"Welcome. I write under the name <strong>ShostaKid</strong>, so you can say that I'm a child of Dmitry Dmitrievich Shostakovich (kind of lol)",
+    about_p2:"My works, most of the time, are random thoughts that live inside my head. I write what I want here, so don't question me and enjoy as much as you can:).",
+    about_p3:'I write primarily for the <em>Reverse: 1999</em>, <em>Figure Skating RPF</em>, <em>Honkai: Star Rail</em> and sometimes <em>Genshin Impact</em> fandoms. There will be more, but right now those are my primary',
+    about_p4:'I hope you have a great time here. Thank you for stopping by.'
+  },
+  vi: {
+    nav_home:'Trang chủ', nav_works:'Các đầu truyện', nav_about:'Về Web',
+    intro_sub:'Viết là tự nhiên', intro_cta:'Bấm vào bất cứ đâu để vào',
+    hero_sub:'Tôi trộn nhạc cổ điển với những suy nghĩ của mình',
+    hero_tag:'Take a $ip y\'all',
+    continue:'Đang đọc dở:',
+    head_latest:'Truyện mới nhất trên Web', head_fav:'Những đứa con tôi thích nhất',
+    view_all:'Xem tất cả truyện →',
+    browse:'Duyệt', all:'Tất cả', filter:'Lọc', fandom:'Fandom', ship:'Ship',
+    head_all:'Tất cả truyện', no_results:'Không tìm thấy truyện nào với bộ lọc này.',
+    search_ph:'Tìm theo tên truyện...',
+    back:'← Quay lại', prev:'← Trước', next:'Tiếp →',
+    read_ao3:'Đọc bản đầy đủ trên AO3', cont_ao3:'Đọc trên AO3 →',
+    about_head:'Giới thiệu', stat_works:'Truyện',
+    my_ao3:'Link AO3 →', my_x:'Link X →',
+    footer:'ShostaKid · Chúc bạn một ngày tốt lành:)',
+    cmt_show:'Hiện bình luận', cmt_hide:'Ẩn bình luận',
+    cmt_name_ph:'Tên (không bắt buộc)', cmt_body_ph:'Để lại bình luận...',
+    cmt_post:'Gửi bình luận →', cmt_posting:'Đang gửi…',
+    cmt_loading:'Đang tải…', cmt_empty:'Chưa có bình luận nào. Bạn là người đầu tiên ♪',
+    cmt_err:'Không thể tải bình luận.', cmt_post_err:'Không thể gửi bình luận. Vui lòng thử lại.',
+    anon:'Ẩn danh',
+    loading:'Đang tải', ch_err:'Không thể tải chương. Vui lòng thử lại sau.',
+    soon:'Sắp ra mắt.', pause:'Dừng', play:'Phát',
+    about_p1:'Xin chào, tôi viết dưới cái tên <strong>ShostaKid</strong>, nên có thể nói tôi là một đứa con của Dmitry Dmitrievich Shostakovich (kiểu vậy lol)',
+    about_p2:'Các tác phẩm của tôi, phần lớn thời gian, là những suy nghĩ vẩn vơ sống trong đầu tôi. Tôi viết những gì tôi thích ở đây, nên đừng hỏi tại sao, cứ đọc và tận hưởng thôi:).',
+    about_p3:'Tôi chủ yếu viết cho các fandom <em>Reverse: 1999</em>, <em>Figure Skating RPF</em>, <em>Honkai: Star Rail</em> và đôi khi cả <em>Genshin Impact</em>. Sau này sẽ có thêm, nhưng hiện tại đó là những fandom chính.',
+    about_p4:'Hy vọng bạn có khoảng thời gian vui vẻ ở đây. Cảm ơn vì đã ghé qua.'
+  }
+};
+
+let currentLang = localStorage.getItem('sk-lang') || 'en';
+function t(key) { return (i18n[currentLang] && i18n[currentLang][key]) || i18n.en[key] || ''; }
+
+function applyLang() {
+  document.documentElement.setAttribute('data-lang', currentLang);
+  document.documentElement.setAttribute('lang', currentLang);
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const v = t(el.dataset.i18n);
+    if (v) el.textContent = v;
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const v = t(el.dataset.i18nHtml);
+    if (v) el.innerHTML = v;
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const v = t(el.dataset.i18nPh);
+    if (v) el.placeholder = v;
+  });
+
+  // Nút chuyển: hiện ngôn ngữ sẽ đổi sang
+  const lb = document.getElementById('lang-btn');
+  if (lb) lb.textContent = currentLang === 'en' ? 'VI' : 'EN';
+
+  // Các phần render động
+  const cmtLabel = document.getElementById('comments-label');
+  if (cmtLabel) {
+    const body = document.getElementById('comments-body');
+    const open = body && body.style.display !== 'none';
+    cmtLabel.textContent = open ? t('cmt_hide') : t('cmt_show');
+  }
+  const cmtSubmit = document.getElementById('comment-submit');
+  if (cmtSubmit && !cmtSubmit.disabled) cmtSubmit.textContent = t('cmt_post');
+
+  const mt = document.querySelector('.music-toggle');
+  if (mt) mt.textContent = musicPlaying ? t('pause') : t('play');
+
+  if (currentPage === 'reading') updateChapterNav(currentFic, currentChapter);
+  renderActiveFilters();
+}
+
+function toggleLang() {
+  currentLang = currentLang === 'en' ? 'vi' : 'en';
+  localStorage.setItem('sk-lang', currentLang);
+  applyLang();
+}
+
+// =============================================
 // THEME
 // =============================================
 function toggleTheme() {
@@ -1899,7 +2022,7 @@ function playMusicDirect(source, url, id, start, end, name) {
   document.getElementById('music-bar').classList.remove('hidden');
   document.getElementById('music-title').textContent = name;
   document.getElementById('musicBars').classList.remove('paused');
-  document.querySelector('.music-toggle').textContent = 'Pause';
+  document.querySelector('.music-toggle').textContent = t('pause');
 }
   
   function playMusic(ficIdx, chapterIdx) {
@@ -1949,7 +2072,7 @@ function playMusicDirect(source, url, id, start, end, name) {
   document.getElementById('music-bar').classList.remove('hidden');
   document.getElementById('music-title').textContent = name;
   document.getElementById('musicBars').classList.remove('paused');
-  document.querySelector('.music-toggle').textContent = 'Pause';
+  document.querySelector('.music-toggle').textContent = t('pause');
 }
 
 function stopMusic() {
@@ -1977,7 +2100,7 @@ function toggleMusic() {
   }
   musicPlaying = !musicPlaying;
   document.getElementById('musicBars').classList.toggle('paused', !musicPlaying);
-  document.querySelector('.music-toggle').textContent = musicPlaying ? 'Pause' : 'Play';
+  document.querySelector('.music-toggle').textContent = musicPlaying ? t('pause') : t('play');
 }
 
 function showPage(id, el) {
@@ -2051,7 +2174,7 @@ function loadComments(ficIdx) {
 
   // Reset toggle state when switching fics
   document.getElementById('comments-body').style.display = 'none';
-  document.getElementById('comments-label').textContent = 'Show Comments';
+  document.getElementById('comments-label').textContent = t('cmt_show');
   document.getElementById('comments-arrow').textContent = '▼';
   document.getElementById('comments-list').innerHTML = '';
   document.getElementById('comment-name').value = '';
@@ -2064,14 +2187,14 @@ function toggleComments() {
   const arrow = document.getElementById('comments-arrow');
   const isHidden = body.style.display === 'none';
   body.style.display = isHidden ? 'block' : 'none';
-  label.textContent = isHidden ? 'Hide Comments' : 'Show Comments';
+  label.textContent = isHidden ? t('cmt_hide') : t('cmt_show');
   arrow.textContent = isHidden ? '▲' : '▼';
   if (isHidden) fetchComments();
 }
 
 async function fetchComments() {
   const list = document.getElementById('comments-list');
-  list.innerHTML = '<div class="comments-empty">Loading…</div>';
+  list.innerHTML = `<div class="comments-empty">${t('cmt_loading')}</div>`;
 
   try {
     const res = await fetch(
@@ -2082,12 +2205,12 @@ async function fetchComments() {
     const comments = await res.json();
 
     if (comments.length === 0) {
-      list.innerHTML = '<div class="comments-empty">No comments yet. Be the first ♪</div>';
+      list.innerHTML = `<div class="comments-empty">${t('cmt_empty')}</div>`;
       return;
     }
 
     list.innerHTML = comments.map(c => {
-      const name = escapeHtml(c.name || 'Anonymous');
+      const name = escapeHtml(c.name || t('anon'));
       const body = escapeHtml(c.body);
       const date = new Date(c.created_at).toLocaleDateString('en-GB', {
         day: 'numeric', month: 'short', year: 'numeric'
@@ -2102,7 +2225,7 @@ async function fetchComments() {
         </div>`;
     }).join('');
   } catch(e) {
-    list.innerHTML = '<div class="comments-empty">Could not load comments.</div>';
+    list.innerHTML = `<div class="comments-empty">${t('cmt_err')}</div>`;
   }
 }
 
@@ -2114,8 +2237,8 @@ async function submitComment() {
   const body = textInput.value.trim();
   if (!body) { textInput.focus(); return; }
 
-  const name = nameInput.value.trim() || 'Anonymous';
-  submitBtn.textContent = 'Posting…';
+  const name = nameInput.value.trim() || t('anon');
+  submitBtn.textContent = t('cmt_posting');
   submitBtn.disabled = true;
 
   try {
@@ -2133,9 +2256,9 @@ async function submitComment() {
     textInput.value = '';
     fetchComments();
   } catch(e) {
-    alert('Could not post comment. Please try again.');
+    alert(t('cmt_post_err'));
   }
-  submitBtn.textContent = 'Post Comment →';
+  submitBtn.textContent = t('cmt_post');
   submitBtn.disabled = false;
 }
 
