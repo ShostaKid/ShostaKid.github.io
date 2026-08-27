@@ -1,0 +1,44 @@
+name: Build fics.json
+
+# Chạy mỗi khi có push vào main làm thay đổi file trong fics/ hoặc script build
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'fics/**'
+      - 'scripts/build_fics.py'
+  workflow_dispatch: {}   # cho phép bấm "Run workflow" thủ công trên GitHub
+
+# Cho phép Action commit ngược lại vào repo
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Cài PyYAML
+        run: pip install pyyaml
+
+      - name: Build fics.json
+        run: python3 scripts/build_fics.py
+
+      - name: Commit fics.json nếu có thay đổi
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add fics.json
+          if git diff --cached --quiet; then
+            echo "Không có gì thay đổi, bỏ qua commit."
+          else
+            git commit -m "Auto-build fics.json [skip ci]"
+            git push
+          fi
