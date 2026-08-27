@@ -8,8 +8,11 @@ tags:
 date: '2026-08-24'
 featured: false
 music:
-  source: github
+- source: github
   url: https://github.com/ShostaKid/ShostaKid.github.io/releases/download/music-v1/Shostakovich.Symphony.No.6.in.B.Minor.Op.54.I.Largo.mp3
+  start: 0
+- source: github
+  url: https://github.com/ShostaKid/ShostaKid.github.io/releases/download/music-v1/Shostakovich_.Symphony.No.6.in.B.Minor.Op.54_.II.Allegro.mp3
   start: 0
 musicName: Shostakovich - Symphony no.6
 files:
