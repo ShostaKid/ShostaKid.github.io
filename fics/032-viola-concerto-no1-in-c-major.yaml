@@ -1,0 +1,20 @@
+title: Viola concerto no.1 in C major
+subtitle: '"Hummingbird"'
+fandom: Figure Skating RPF
+warning: null
+summary: '"I hope you''re all right, Kamilochka. Anna worries about you. She doesn''t say so, obviously. She just goes quiet, and then I have to guess which of the fourteen things she''s being quiet about it is, and lately it''s always been you, so."'
+tags:
+- Anna Shcherbakova/Kamila Valieva
+date: '2026-07-31'
+featured: false
+music:
+  source: github
+  url: https://github.com/ShostaKid/ShostaKid.github.io/releases/download/music-v1/Clair.de.Lune.mp3
+  start: 0
+musicName: Debussy - Clair de Lune
+files:
+- Viola concerto 1.1.txt
+- Viola concerto 1.2.txt
+chapters:
+- Movement I
+- Movement II

@@ -1,0 +1,22 @@
+title: Violin concerto no.2 in A minor
+subtitle: '"A day with you"'
+fandom: Figure Skating RPF
+warning: null
+summary: '"Everything is cheating with you." Sasha''s forehead came down against hers for a moment. "You said it about the corners as well."'
+tags:
+- Anna Shcherbakova/Alexandra Trusova
+date: '2026-08-24'
+featured: false
+music:
+  source: github
+  url: https://github.com/ShostaKid/ShostaKid.github.io/releases/download/music-v1/Shostakovich.Symphony.No.6.in.B.Minor.Op.54.I.Largo.mp3
+  start: 0
+musicName: Shostakovich - Symphony no.6
+files:
+- Violin concerto 2.1.txt
+- Violin concerto 2.2.txt
+- Violin concerto 2.3.txt
+chapters:
+- Movement 1
+- Movement 2
+- Movement 3
