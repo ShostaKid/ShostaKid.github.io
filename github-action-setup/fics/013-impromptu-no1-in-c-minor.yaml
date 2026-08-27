@@ -1,0 +1,18 @@
+title: 'Impromptu no.1 in C Minor: '
+subtitle: '"Dangerous Affairs"'
+fandom: 'Honkai: Star Rail'
+warning: null
+summary: The title said the content
+tags:
+- Phainon/Cyrene
+date: '2026-06-04'
+featured: false
+music:
+  source: github
+  url: https://github.com/ShostaKid/ShostaKid.github.io/releases/download/music-v1/Etude.no4.Liszt.mp3
+  start: 0
+musicName: Liszt — Etude no.4 in D minor
+files:
+- Impromptu no.1.txt
+chapters:
+- Chapter 1
