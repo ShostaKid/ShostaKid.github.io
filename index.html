@@ -3,14 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ShostaKid — I write anything I want here</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<title>ShostaKid</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Nunito:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
 --cream:#FAF7F0;--cream2:#F2EDE0;--gold:#B8972A;--gold-light:#D4AF5A;--gold-dark:#8A6E1A;
 --ink:#2C2318;--ink2:#5C4F3A;--ink3:#8C7D66;--border:#D4C49A;
+--font-ui:'Playfair Display',serif;
 }
+/* UI tiếng Việt dùng Nunito cho dấu hiển thị chuẩn */
+[data-lang="vi"]{--font-ui:'Nunito',sans-serif;}
+[data-lang="vi"] .nav-links a,[data-lang="vi"] .section-heading,[data-lang="vi"] .filter-btn{letter-spacing:1.8px;}
+[data-lang="vi"] .hero-title,[data-lang="vi"] .intro-title{letter-spacing:4px;}
+#lang-btn{background:none;border:1px solid var(--border);font-family:var(--font-ui);font-size:0.6rem;letter-spacing:1.5px;cursor:pointer;color:var(--ink3);padding:4px 9px;transition:all 0.2s;line-height:1;}
+#lang-btn:hover{border-color:var(--gold);color:var(--gold);}
+.nav-utils{display:flex;align-items:center;gap:8px;}
 body{background:var(--cream);color:var(--ink);font-family:Georgia,'Times New Roman',serif;min-height:100vh;overflow-x:hidden;}
 
 /* GOTHIC PATTERN */
@@ -20,15 +28,15 @@ body{background:var(--cream);color:var(--ink);font-family:Georgia,'Times New Rom
 .gothic-bg>*{position:relative;z-index:1;}
 
 /* INTRO */
-#intro{position:fixed;inset:0;z-index:9999;background:#0a0805;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.8s ease;}
+#intro{position:fixed;inset:0;z-index:2147483647;background:#0a0805;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.8s ease;}
 #intro.fade-out{opacity:0;pointer-events:none;}
-.intro-ornament{font-family:'Playfair Display',serif;font-size:5rem;color:rgba(184,151,42,0.15);line-height:1;margin-bottom:2rem;animation:float 3s ease-in-out infinite;}
+.intro-ornament{font-family:var(--font-ui);font-size:5rem;color:rgba(184,151,42,0.15);line-height:1;margin-bottom:2rem;animation:float 3s ease-in-out infinite;}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.intro-title{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:400;letter-spacing:8px;text-transform:uppercase;color:#e8dfc8;margin-bottom:0.8rem;text-align:center;}
+.intro-title{font-family:var(--font-ui);font-size:2.2rem;font-weight:400;letter-spacing:8px;text-transform:uppercase;color:#e8dfc8;margin-bottom:0.8rem;text-align:center;}
 .intro-title span{color:var(--gold);}
 .intro-sub{font-family:Georgia,serif;font-style:italic;font-size:1.1rem;color:rgba(232,223,200,0.5);letter-spacing:2px;margin-bottom:4rem;text-align:center;}
 .intro-cta{display:flex;flex-direction:column;align-items:center;gap:0.8rem;}
-.intro-cta-text{font-family:'Playfair Display',serif;font-size:0.72rem;letter-spacing:4px;text-transform:uppercase;color:rgba(184,151,42,0.7);animation:blink 2s ease-in-out infinite;}
+.intro-cta-text{font-family:var(--font-ui);font-size:0.72rem;letter-spacing:4px;text-transform:uppercase;color:rgba(184,151,42,0.7);animation:blink 2s ease-in-out infinite;}
 @keyframes blink{0%,100%{opacity:0.4}50%{opacity:1}}
 .intro-bars{display:flex;align-items:flex-end;gap:4px;height:24px;}
 .intro-bars span{width:3px;background:rgba(184,151,42,0.4);border-radius:2px;animation:bar 1.2s ease-in-out infinite;}
@@ -45,13 +53,13 @@ body{background:var(--cream);color:var(--ink);font-family:Georgia,'Times New Rom
 #site.visible{opacity:1;}
 
 nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padding:0 3rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(4px);}
-.nav-logo{font-family:'Playfair Display',serif;font-size:1.1rem;letter-spacing:3px;color:var(--ink);padding:1.2rem 0;text-transform:uppercase;}
+.nav-logo{font-family:var(--font-ui);font-size:1.1rem;letter-spacing:3px;color:var(--ink);padding:1.2rem 0;text-transform:uppercase;}
 .nav-logo span{color:var(--gold);}
 .nav-links{display:flex;gap:2.5rem;}
-.nav-links a{font-family:'Playfair Display',serif;font-size:0.72rem;letter-spacing:2.5px;color:var(--ink2);text-decoration:none;text-transform:uppercase;cursor:pointer;transition:color 0.2s;}
+.nav-links a{font-family:var(--font-ui);font-size:0.72rem;letter-spacing:2.5px;color:var(--ink2);text-decoration:none;text-transform:uppercase;cursor:pointer;transition:color 0.2s;}
 .nav-links a:hover,.nav-links a.active{color:var(--gold);}
 
-#music-bar{background:rgba(242,237,224,0.95);border-bottom:1px solid var(--border);padding:8px 3rem;display:flex;align-items:center;gap:1rem;font-family:'Playfair Display',serif;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);min-height:36px;}
+#music-bar{background:rgba(242,237,224,0.95);border-bottom:1px solid var(--border);padding:8px 3rem;display:flex;align-items:center;gap:1rem;font-family:var(--font-ui);font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);min-height:36px;}
 #music-bar.hidden{display:none;}
 .music-now{display:flex;align-items:center;gap:8px;flex:1;}
 .music-bars{display:flex;align-items:flex-end;gap:2px;height:14px;}
@@ -63,7 +71,7 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .music-bars span:nth-child(5){height:4px;animation-delay:0.4s;}
 .music-bars.paused span{animation:none;transform:scaleY(0.3);}
 #music-title{color:var(--ink2);font-style:italic;}
-.music-toggle{background:none;border:1px solid var(--border);padding:4px 12px;font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);cursor:pointer;transition:all 0.2s;}
+.music-toggle{background:none;border:1px solid var(--border);padding:4px 12px;font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);cursor:pointer;transition:all 0.2s;}
 .music-toggle:hover{border-color:var(--gold);color:var(--gold);}
 
 .page{display:none;animation:fadein 0.5s ease;}
@@ -71,84 +79,384 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 @keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
 .hero{padding:6rem 3rem 5rem;text-align:center;border-bottom:1px solid var(--border);}
-.hero-ornament{font-family:'Playfair Display',serif;font-size:5rem;color:var(--gold);opacity:0.18;line-height:1;margin-bottom:-1rem;}
-.hero-title{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:400;letter-spacing:6px;text-transform:uppercase;margin-bottom:1rem;color:var(--ink);}
-.hero-subtitle{font-family:'Playfair Display',serif;font-style:italic;font-size:1.3rem;color:var(--ink2);letter-spacing:1px;margin-bottom:2rem;}
+.hero-ornament{font-family:var(--font-ui);font-size:5rem;color:var(--gold);opacity:0.18;line-height:1;margin-bottom:-1rem;}
+.hero-title{font-family:var(--font-ui);font-size:2.8rem;font-weight:400;letter-spacing:6px;text-transform:uppercase;margin-bottom:1rem;color:var(--ink);}
+.hero-subtitle{font-family:var(--font-ui);font-style:italic;font-size:1.3rem;color:var(--ink2);letter-spacing:1px;margin-bottom:2rem;}
 .hero-divider{display:flex;align-items:center;justify-content:center;gap:1.2rem;margin:1.5rem 0;}
 .hero-divider::before,.hero-divider::after{content:'';flex:1;max-width:120px;height:1px;background:linear-gradient(to right,transparent,var(--border));}
 .hero-divider::after{background:linear-gradient(to left,transparent,var(--border));}
 .hero-tagline{font-family:Georgia,serif;font-size:1rem;color:var(--ink3);letter-spacing:3px;text-transform:uppercase;}
 
 .fics-section{max-width:860px;margin:0 auto;padding:3.5rem 2rem;}
-.section-heading{font-family:'Playfair Display',serif;font-size:0.78rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:2.5rem;display:flex;align-items:center;gap:1rem;}
+.section-heading{font-family:var(--font-ui);font-size:0.78rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:2.5rem;display:flex;align-items:center;gap:1rem;}
 .section-heading::after{content:'';flex:1;height:1px;background:var(--border);}
 .fic-card{border:1px solid var(--border);padding:1.8rem 2rem;margin-bottom:1.5rem;background:rgba(250,247,240,0.85);cursor:pointer;transition:all 0.25s;position:relative;backdrop-filter:blur(2px);}
 .fic-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);opacity:0;transition:opacity 0.2s;}
 .fic-card:hover{background:rgba(251,248,240,0.97);border-color:var(--gold-light);}
 .fic-card:hover::before{opacity:1;}
-.fic-title{font-family:'Playfair Display',serif;font-size:1.45rem;font-weight:500;color:var(--ink);margin-bottom:0.3rem;}
+.fic-title{font-family:var(--font-ui);font-size:1.1rem;font-weight:500;color:var(--ink);margin-bottom:0.3rem;}
 .fic-title em{font-style:italic;color:var(--gold-dark);}
-.fic-meta{font-family:'Playfair Display',serif;font-size:0.65rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;margin-bottom:0.8rem;display:flex;gap:1.5rem;flex-wrap:wrap;}
-.fic-warning{font-size:0.85rem;color:#993C1D;font-family:Georgia,serif;font-style:italic;margin-bottom:0.6rem;}
-.fic-summary{font-family:Georgia,serif;font-size:0.97rem;color:var(--ink2);line-height:1.7;font-style:italic;}
+.fic-meta{font-family:var(--font-ui);font-size:0.65rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;margin-bottom:0.8rem;display:flex;gap:1.5rem;flex-wrap:wrap;}
+.fic-warning{font-size:0.85rem;color:#993C1D;font-family:'Lora',Georgia,serif;font-style:italic;margin-bottom:0.6rem;}
+.fic-summary{font-family:'Lora',Georgia,serif;font-size:0.97rem;color:var(--ink2);line-height:1.7;font-style:italic;}
 .fic-tags{margin-top:0.9rem;display:flex;flex-wrap:wrap;gap:6px;}
-.tag{font-family:'Playfair Display',serif;font-size:0.6rem;letter-spacing:1.5px;color:var(--ink3);border:1px solid var(--border);padding:3px 10px;text-transform:uppercase;}
+.tag{font-family:var(--font-ui);font-size:0.6rem;letter-spacing:1.5px;color:var(--ink2);border:1px solid var(--gold);padding:3px 10px;text-transform:uppercase;background:rgba(184,151,42,0.06);}
 
 /* READING PAGE */
 .reading-wrap{max-width:720px;margin:0 auto;padding:4rem 2rem;}
-.back-btn{font-family:'Playfair Display',serif;font-size:0.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink3);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:3rem;transition:color 0.2s;}
+.back-btn{font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink3);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:3rem;transition:color 0.2s;}
 .back-btn:hover{color:var(--gold);}
-.reading-title{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:400;line-height:1.2;color:var(--ink);margin-bottom:0.5rem;}
+.reading-title{font-family:var(--font-ui);font-size:2.4rem;font-weight:400;line-height:1.2;color:var(--ink);margin-bottom:0.5rem;}
 .reading-title em{font-style:italic;color:var(--gold-dark);}
-.reading-fandom{font-family:'Playfair Display',serif;font-size:0.65rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;margin-bottom:0.5rem;}
+.reading-fandom{font-family:var(--font-ui);font-size:0.65rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;margin-bottom:0.5rem;}
 .reading-warning{font-family:Georgia,serif;font-style:italic;color:#993C1D;font-size:0.9rem;border-left:2px solid #D85A30;padding-left:1rem;margin:1.2rem 0;}
 .reading-divider{text-align:center;margin:2rem 0;color:var(--gold);font-size:1.3rem;letter-spacing:8px;}
 
 /* Chapter nav */
 .chapter-nav{display:flex;align-items:center;justify-content:space-between;margin:2.5rem 0;padding:1rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
-.chapter-nav button{font-family:'Playfair Display',serif;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);background:none;border:1px solid var(--border);padding:8px 16px;cursor:pointer;transition:all 0.2s;}
+.chapter-nav button{font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);background:none;border:1px solid var(--border);padding:8px 16px;cursor:pointer;transition:all 0.2s;}
 .chapter-nav button:hover{border-color:var(--gold);color:var(--gold);}
 .chapter-nav button:disabled{opacity:0.3;cursor:default;}
-.chapter-label{font-family:'Playfair Display',serif;font-size:0.72rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;}
+.chapter-label{font-family:var(--font-ui);font-size:0.72rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;}
 
 /* Fic body */
-.fic-body{font-family:Georgia,'Times New Roman',serif;font-size:1.12rem;line-height:2;color:var(--ink);}
+.fic-body{font-family:'Lora',Georgia,'Times New Roman',serif;font-size:1.12rem;line-height:2;color:var(--ink);}
 .fic-body p{margin-bottom:1.5em;}
 .fic-body em{font-style:italic;color:var(--ink2);}
 .fic-body .scene-break{text-align:center;color:var(--gold);letter-spacing:8px;margin:2rem 0;font-size:1.1rem;}
 
 /* Loading spinner */
-.loading{text-align:center;padding:4rem;font-family:'Playfair Display',serif;font-size:0.78rem;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);}
+.loading{text-align:center;padding:4rem;font-family:var(--font-ui);font-size:0.78rem;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);}
 .loading::after{content:'';display:block;width:30px;height:1px;background:var(--gold);margin:1rem auto 0;animation:loadbar 1.2s ease-in-out infinite;}
 @keyframes loadbar{0%,100%{width:20px;opacity:0.3}50%{width:60px;opacity:1}}
 
-.ao3-link{display:inline-flex;align-items:center;gap:8px;margin-top:2.5rem;font-family:'Playfair Display',serif;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);border:1px solid var(--border);padding:10px 20px;text-decoration:none;transition:all 0.2s;cursor:pointer;background:none;}
+.ao3-link{display:inline-flex;align-items:center;gap:8px;margin-top:2.5rem;font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);border:1px solid var(--border);padding:10px 20px;text-decoration:none;transition:all 0.2s;cursor:pointer;background:none;}
 .ao3-link:hover{border-color:var(--gold);color:var(--gold);}
 
 /* ABOUT */
 .about-wrap{max-width:720px;margin:0 auto;padding:4rem 2rem;}
-.about-ornament{text-align:center;font-family:'Playfair Display',serif;font-size:3.5rem;color:var(--gold);opacity:0.25;margin-bottom:-1rem;}
-.about-body{font-family:Georgia,serif;font-size:1.08rem;line-height:1.9;color:var(--ink2);}
+.about-ornament{text-align:center;font-family:var(--font-ui);font-size:3.5rem;color:var(--gold);opacity:0.25;margin-bottom:-1rem;}
+.about-body{font-family:'Lora',Georgia,serif;font-size:1.08rem;line-height:1.9;color:var(--ink2);}
 .about-body p{margin-bottom:1.4em;}
-.about-sig{font-family:'Playfair Display',serif;font-style:italic;font-size:1.3rem;color:var(--gold-dark);margin-top:2.5rem;}
+.about-sig{font-family:var(--font-ui);font-style:italic;font-size:1.3rem;color:var(--gold-dark);margin-top:2.5rem;}
 .stat-row{display:flex;gap:2rem;margin:2.5rem 0;flex-wrap:wrap;}
 .stat-box{text-align:center;padding:1.2rem 1.8rem;border:1px solid var(--border);background:rgba(250,247,240,0.7);}
-.stat-num{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--gold);display:block;}
-.stat-label{font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);}
-footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;font-family:'Playfair Display',serif;font-size:0.62rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;}
+.stat-num{font-family:var(--font-ui);font-size:2.2rem;color:var(--gold);display:block;}
+.stat-label{font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);}
+footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;}
+/* CONTINUE READING BANNER */
+#continue-banner{display:none;max-width:860px;margin:0 auto 0;padding:1rem 2rem;}
+#continue-banner .continue-inner{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--border);padding:12px 20px;background:rgba(184,151,42,0.04);cursor:pointer;transition:all 0.2s;gap:1rem;}
+#continue-banner .continue-inner:hover{border-color:var(--gold);background:rgba(184,151,42,0.08);}
+.continue-text{font-family:var(--font-ui);font-size:0.72rem;letter-spacing:1.5px;color:var(--ink2);}
+.continue-text strong{color:var(--gold-dark);}
+.continue-arrow{color:var(--gold);font-size:1rem;}
+.continue-dismiss{background:none;border:none;color:var(--ink3);cursor:pointer;font-size:0.9rem;padding:4px;transition:color 0.2s;}
+.continue-dismiss:hover{color:var(--gold);}
+
+/* FONT SIZE TOGGLE */
+#font-controls{position:fixed;right:1.5rem;bottom:5rem;display:none;flex-direction:column;gap:4px;z-index:90;transition:opacity 0.2s;}
+#font-controls button{width:36px;height:36px;border-radius:50%;background:var(--cream);border:1px solid var(--border);font-family:var(--font-ui);font-size:0.85rem;color:var(--ink2);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;}
+#font-controls button:hover{border-color:var(--gold);color:var(--gold);}
+#font-controls.visible{display:flex;}
+#font-controls.tucked{opacity:0;pointer-events:none;}
+[data-theme="dark"] #font-controls button{background:var(--cream);}
+
+/* BACK TO TOP */
+#back-top{position:fixed;right:1.5rem;bottom:2rem;width:36px;height:36px;border-radius:50%;background:var(--cream);border:1px solid var(--border);color:var(--ink3);cursor:pointer;font-size:1rem;display:none;align-items:center;justify-content:center;transition:all 0.2s;z-index:90;}
+#back-top:hover{border-color:var(--gold);color:var(--gold);}
+#back-top.visible{display:flex;}
+#back-top.tucked{opacity:0;pointer-events:none;}
+[data-theme="dark"] #back-top{background:var(--cream);}
+
+/* FLOATING TOGGLE */
+#float-toggle{position:fixed;right:0.6rem;bottom:8.5rem;width:24px;height:24px;border-radius:50%;background:var(--cream);border:1px solid var(--border);color:var(--ink3);cursor:pointer;font-size:0.6rem;display:none;align-items:center;justify-content:center;transition:all 0.2s;z-index:91;opacity:0.5;}
+#float-toggle:hover{opacity:1;border-color:var(--gold);color:var(--gold);}
+#float-toggle.visible{display:flex;}
+[data-theme="dark"] #float-toggle{background:var(--cream);}
+
+/* PROGRESS BAR */
+#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(to right,var(--gold-dark),var(--gold-light));width:0%;z-index:9999;transition:width 0.08s linear;pointer-events:none;display:none;}
+#progress-bar.visible{display:block;}
+
+/* DARK THEME */
+[data-theme="dark"]{
+  --cream:#16120D;--cream2:#1E1810;
+  --gold:#C9A84C;--gold-light:#D4B86A;--gold-dark:#A07830;
+  --ink:#E8DFC8;--ink2:#C4B090;--ink3:#7A6D58;--border:#332A1A;
+}
+[data-theme="dark"] nav{background:rgba(22,18,13,0.97);}
+[data-theme="dark"] #music-bar{background:rgba(22,18,13,0.95);}
+[data-theme="dark"] .fic-card{background:rgba(30,24,16,0.9);}
+[data-theme="dark"] .fic-card:hover{background:rgba(38,30,20,0.97);}
+[data-theme="dark"] .stat-box{background:rgba(30,24,16,0.7);}
+[data-theme="dark"] #page-reading,[data-theme="dark"] #page-about{background:var(--cream)!important;}
+[data-theme="dark"] .gothic-bg{background-color:var(--cream);}
+[data-theme="dark"] .gothic-bg::before{background-image:repeating-linear-gradient(45deg,rgba(201,168,76,0.06) 0px,rgba(201,168,76,0.06) 1px,transparent 1px,transparent 56px),repeating-linear-gradient(-45deg,rgba(201,168,76,0.06) 0px,rgba(201,168,76,0.06) 1px,transparent 1px,transparent 56px);}
+[data-theme="dark"] #intro{background:#080604;}
+[data-theme="dark"] footer{border-color:var(--border);}
+#theme-btn{background:none;border:none;font-size:1rem;cursor:pointer;color:var(--ink3);padding:4px 8px;transition:color 0.2s;line-height:1;}
+#theme-btn:hover{color:var(--gold);}
+
+/* WORKS SIDEBAR LAYOUT */
+.works-layout{display:flex;max-width:1100px;margin:0 auto;padding:3rem 2rem;gap:2.5rem;align-items:flex-start;min-height:calc(100vh - 60px);}
+.fandom-sidebar{width:170px;flex-shrink:0;position:sticky;top:90px;display:flex;flex-direction:column;gap:6px;}
+.sidebar-heading{font-family:var(--font-ui);font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:0.8rem;padding-bottom:0.6rem;border-bottom:1px solid var(--border);}
+.works-main{flex:1;min-width:0;}
+.filter-btn{font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--border);padding:7px 12px;color:var(--ink3);cursor:pointer;transition:all 0.2s;text-align:left;width:100%;}
+.filter-btn:hover,.filter-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(184,151,42,0.06);}
+.filter-btn.ship-btn{font-size:0.58rem;letter-spacing:1px;padding:5px 10px;border-color:transparent;color:var(--ink3);}
+.filter-btn.ship-btn:hover,.filter-btn.ship-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(184,151,42,0.06);}
+.sidebar-divider{height:1px;background:var(--border);margin:0.8rem 0;}
+.active-filters{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:1rem;}
+.active-filter-tag{font-family:var(--font-ui);font-size:0.58rem;letter-spacing:1px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:2px 8px;display:flex;align-items:center;gap:4px;background:rgba(184,151,42,0.06);}
+.active-filter-tag button{background:none;border:none;color:var(--gold);cursor:pointer;font-size:0.7rem;padding:0;line-height:1;}
+.no-results{text-align:center;padding:3rem 1rem;font-family:var(--font-ui);font-style:italic;font-size:0.9rem;color:var(--ink3);display:none;}
+
+@media (max-width: 768px) {
+  nav { padding: 0 1rem; }
+  .nav-logo { font-size: 0.85rem; letter-spacing: 2px; }
+  .nav-links { gap: 1rem; }
+  .nav-links a { font-size: 0.6rem; letter-spacing: 1.5px; }
+
+  #theme-btn {
+    font-size: 1.1rem;
+    padding: 6px 10px;
+    border: 1px solid var(--border) !important;
+    border-radius: 50%;
+    color: var(--gold) !important;
+    flex-shrink: 0;
+  }
+
+  .about-wrap,
+  .reading-wrap { padding: 2rem 1.2rem; }
+
+  /* Works layout mobile — stack vertical */
+  .works-layout { flex-direction: column; gap: 0; padding: 1.5rem 1rem; }
+
+  /* Ẩn desktop sidebar */
+  .fandom-sidebar { display: none; }
+
+  /* Mobile filter toggle button */
+  #mobile-filter-toggle { display: flex; }
+
+  /* Mobile filter panel */
+  #mobile-filter-panel { display: none; }
+  #mobile-filter-panel.open { display: block; }
+
+  .filter-btn { width: auto; white-space: nowrap; }
+  .hero { padding: 3rem 1.2rem; }
+  .hero-title { font-size: 1.8rem; letter-spacing: 3px; }
+  .home-columns { flex-direction: column; gap: 0; }
+}
+
+/* Desktop — ẩn mobile filter */
+@media (min-width: 769px) {
+  #mobile-filter-toggle { display: none !important; }
+  #mobile-filter-panel { display: none !important; }
+}
+
+/* Mobile filter toggle button */
+#mobile-filter-toggle {
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: 1px solid var(--border);
+  padding: 10px 16px;
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink2);
+  cursor: pointer;
+  margin-bottom: 0;
+  transition: all 0.2s;
+}
+#mobile-filter-toggle:hover, #mobile-filter-toggle.open {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+#mobile-filter-toggle .toggle-arrow { transition: transform 0.2s; }
+#mobile-filter-toggle.open .toggle-arrow { transform: rotate(180deg); }
+
+/* Mobile filter panel */
+#mobile-filter-panel {
+  border: 1px solid var(--border);
+  border-top: none;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  background: var(--cream);
+}
+.mobile-filter-section { margin-bottom: 1rem; }
+.mobile-filter-section:last-child { margin-bottom: 0; }
+.mobile-filter-label {
+  font-family: var(--font-ui);
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.6rem;
+  display: block;
+}
+.mobile-filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.mobile-pill {
+  font-family: var(--font-ui);
+  font-size: 0.6rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  background: none;
+  border: 1px solid var(--border);
+  padding: 5px 12px;
+  color: var(--ink3);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.mobile-pill:hover, .mobile-pill.active {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(184,151,42,0.06);
+}
+
+/* COMMENT SECTION */
+.comment-form input,
+.comment-form textarea {
+  width: 100%;
+  background: var(--cream2);
+  border: 1px solid var(--border);
+  padding: 10px 14px;
+  font-family: Georgia, serif;
+  font-size: 0.95rem;
+  color: var(--ink);
+  margin-bottom: 0.6rem;
+  resize: vertical;
+  box-sizing: border-box;
+}
+.comment-form input:focus,
+.comment-form textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+.comment-form input::placeholder,
+.comment-form textarea::placeholder { color: var(--ink3); font-style: italic; }
+.comment-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.comment-item:last-child { border-bottom: none; }
+.comment-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  margin-bottom: 0.4rem;
+}
+.comment-author {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+}
+.comment-date {
+  font-size: 0.72rem;
+  color: var(--ink3);
+  font-style: italic;
+}
+.comment-body-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ink2);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.comments-empty {
+  text-align: center;
+  font-style: italic;
+  color: var(--ink3);
+  padding: 1.5rem 0;
+  font-size: 0.9rem;
+}
+
+/* Clickable tags */
+.tag.clickable {
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tag.clickable:hover {
+  border-color: var(--gold);
+  color: var(--gold-dark);
+  background: rgba(184,151,42,0.08);
+}
+
+/* ACCORDION SIDEBAR */
+.accordion-item { margin-bottom: 4px; }
+.accordion-header {
+  width: 100%;
+  display: flex !important;
+  justify-content: space-between;
+  align-items: center;
+}
+.acc-arrow { font-size: 0.6rem; transition: transform 0.25s; opacity: 0.6; }
+.accordion-item.open .acc-arrow { transform: rotate(180deg); }
+.accordion-ships {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, margin 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.accordion-item.open .accordion-ships {
+  max-height: 500px;
+  margin: 4px 0 6px 8px;
+  padding-left: 10px;
+  border-left: 2px solid var(--border);
+}
+  /* Home: 2 cột trên desktop */
+.home-columns {
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+}
+.home-col {
+  flex: 1;
+  min-width: 0;
+}
+#search-input:focus{border-color:var(--gold);}
+#search-input::placeholder{color:var(--ink3);}
+
+.accordion-ships .ship-btn {
+  color: var(--ink2);
+  font-size: 0.58rem;
+  padding: 5px 10px;
+  border-color: transparent;
+  letter-spacing: 1.5px;
+}
+.accordion-ships .ship-btn:hover,
+.accordion-ships .ship-btn.active {
+  color: var(--gold);
+  border-color: var(--gold);
+}
 </style>
 </head>
 <body>
 
+<div id="progress-bar"></div>
+
 <!-- INTRO -->
-<div id="intro" onclick="enterSite()">
+<div id="intro">
   <div class="intro-ornament">♩</div>
   <div class="intro-title">Shosta<span>Kid</span></div>
-  <div class="intro-sub">I write anything I want here</div>
+  <div class="intro-sub" data-i18n="intro_sub">Don't ask. Just read:)</div>
   <div class="intro-line"></div>
   <div class="intro-cta">
     <div class="intro-bars"><span></span><span></span><span></span><span></span><span></span></div>
-    <div class="intro-cta-text">Click anywhere to enter</div>
+    <div class="intro-cta-text" data-i18n="intro_cta">Click anywhere to enter</div>
   </div>
 </div>
 
@@ -157,9 +465,13 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   <nav>
     <div class="nav-logo">Shosta<span>Kid</span></div>
     <div class="nav-links">
-      <a class="active" onclick="showPage('home',this)">Home</a>
-      <a onclick="showPage('works',this)">Works</a>
-      <a onclick="showPage('about',this)">About</a>
+      <a class="active" data-i18n="nav_home" onclick="showPage('home',this)">Home</a>
+      <a data-i18n="nav_works" onclick="showPage('works',this)">Works</a>
+      <a data-i18n="nav_about" onclick="showPage('about',this)">About</a>
+    </div>
+    <div class="nav-utils">
+      <button id="lang-btn" onclick="toggleLang()" title="Đổi ngôn ngữ / Switch language">VI</button>
+      <button id="theme-btn" onclick="toggleTheme()" title="Toggle theme">☾</button>
     </div>
   </nav>
 
@@ -176,164 +488,420 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
     <div class="hero">
       <div class="hero-ornament">♩</div>
       <h1 class="hero-title">ShostaKid</h1>
-      <p class="hero-subtitle">I write anything I want here</p>
+      <p class="hero-subtitle" data-i18n="hero_sub">I blend classical music with my thoughts</p>
       <div class="hero-divider"><span style="color:var(--gold);letter-spacing:4px;">✦ ✦ ✦</span></div>
-      <p class="hero-tagline">Take a $ip y'all and enjoy</p>
+      <p class="hero-tagline" data-i18n="hero_tag">Take a $ip y'all and enjoy</p>
     </div>
-    <div class="fics-section">
-      <div class="section-heading">Latest Works</div>
-      <div class="fic-card" onclick="openFic(0)">
-        <div class="fic-title">Toccata in D sharp Minor: <em>"Totentanz"</em></div>
-        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-        <div class="fic-warning">⚠ Rape/Non-Con — please proceed at your own risk</div>
-        <div class="fic-summary"><em>Largo Tenebroso, con molto Amore</em></div>
-        <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
-      </div>
-      <div class="fic-card" onclick="openFic(1)">
-        <div class="fic-title">Fantasia no.1 in C minor: <em>"Desires"</em></div>
-        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-        <div class="fic-warning">⚠ Rape/Non-Con</div>
-        <div class="fic-summary">Allegretto con Appassionato</div>
-        <div class="fic-tags"><span class="tag">Corvus/Pyrrhos</span></div>
-      </div>
-      <div class="fic-card" onclick="openFic(2)">
-        <div class="fic-title">Piano Concerto no.2 in G Minor: <em>"Нет, только тот, кто знал"</em></div>
-        <div class="fic-meta"><span>Figure Skating RPF</span></div>
-        <div class="fic-summary">Andante Dolce con Tempo di Garbo, poi Largo non troppo e Smorzando</div>
-        <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
-      </div>
-      <div class="fic-card" onclick="openFic(3)">
-        <div class="fic-title">Piano Concerto no.1 in C sharp Minor: <em>"None but the Lonely Heart"</em></div>
-        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-        <div class="fic-summary">Allegretto Amore, poi Largo non troppo con Smorzando</div>
-        <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
-      </div>
-      <div style="text-align:center;margin-top:2rem;">
-        <button class="ao3-link" onclick="showPage('works',document.querySelector('.nav-links a:nth-child(2)'))">View All Works →</button>
+
+    <!-- Continue Reading Banner -->
+    <div id="continue-banner">
+      <div class="continue-inner" onclick="resumeReading()">
+        <span class="continue-text"><span data-i18n="continue">Continue reading:</span> <strong id="continue-title"></strong></span>
+        <span class="continue-arrow">→</span>
       </div>
     </div>
-    <footer><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · All works posted with love and a little madness &nbsp; <span style="color:var(--gold);">✦</span></footer>
+  <div style="max-width:1100px;margin:0 auto;padding:3.5rem 2rem;">
+  <div class="home-columns">
+
+    <div class="home-col">
+      <div class="section-heading" data-i18n="head_latest">My Latest Works</div>
+      <div id="home-latest"></div>
+    </div>
+
+    <div class="home-col">
+      <div class="section-heading" data-i18n="head_fav">My Favorite Children</div>
+      <div id="home-favorites"></div>
+    </div>
+
+  </div>
+  <div style="text-align:center;margin-top:2rem;">
+    <button class="ao3-link" onclick="showPage('works',document.querySelector('.nav-links a:nth-child(2)'))" data-i18n="view_all">View All Works →</button>
+  </div>
+</div>
+    <footer><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
 
   <!-- WORKS -->
   <div class="page gothic-bg" id="page-works">
-    <div class="fics-section">
-      <div class="section-heading">All Works</div>
-      <div class="fic-card" onclick="openFic(0)">
-         <div class="fic-title">Toccata in D sharp Minor: <em>"Totentanz"</em></div>
-        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-        <div class="fic-warning">⚠ Rape/Non-Con — please proceed at your own risk</div>
-        <div class="fic-summary"><em>Largo Tenebroso, con molto Amore</em></div>
-        <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
-      </div>
-      <div class="fic-card" onclick="openFic(1)">
-        <div class="fic-title">Fantasia no.1 in C minor: <em>"Desires"</em></div>
-        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-        <div class="fic-warning">⚠ Rape/Non-Con</div>
-        <div class="fic-summary">Allegretto con Appassionato</div>
-        <div class="fic-tags"><span class="tag">Corvus/Pyrrhos</span></div>
-      </div>
-      <div class="fic-card" onclick="openFic(2)">
-        <div class="fic-title">Piano Concerto no.2 in G Minor: <em>"Нет, только тот, кто знал"</em></div>
-        <div class="fic-meta"><span>Figure Skating RPF</span></div>
-        <div class="fic-summary">Andante Dolce con Tempo di Garbo, poi Largo non troppo e Smorzando</div>
-        <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
-      </div>
-      <div class="fic-card" onclick="openFic(3)">
-        <div class="fic-title">Piano Concerto no.1 in C sharp Minor: <em>"None but the Lonely Heart"</em></div>
-        <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-        <div class="fic-summary">Allegretto Amore, poi Largo non troppo con Smorzando</div>
-        <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
-      </div>
-    </div>
-    <footer><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · All works posted with love and a little madness &nbsp; <span style="color:var(--gold);">✦</span></footer>
-  </div>
+    <div class="works-layout">
+
+      <aside class="fandom-sidebar">
+        <div class="sidebar-heading" data-i18n="browse">Browse</div>
+        <button class="filter-btn all-btn active" data-i18n="all" onclick="setFandom('all',this)">All</button>
+        <div id="fandom-accordion"></div>
+      </aside>
+
+      <div class="works-main">
+
+        <!-- Mobile filter toggle (chỉ hiện trên mobile) -->
+        <button id="mobile-filter-toggle" onclick="toggleMobileFilter()">
+          <span><span data-i18n="filter">Filter</span> <span id="mobile-filter-count"></span></span>
+          <span class="toggle-arrow">▼</span>
+        </button>
+        <div id="mobile-filter-panel">
+          <div class="mobile-filter-section">
+            <span class="mobile-filter-label" data-i18n="fandom">Fandom</span>
+            <div class="mobile-filter-pills">
+              <button class="mobile-pill active" data-i18n="all" onclick="setFandom('all',this,true)">All</button>
+              <button class="mobile-pill" onclick="setFandom('Reverse: 1999',this,true)">Reverse: 1999</button>
+              <button class="mobile-pill" onclick="setFandom('Figure Skating',this,true)">Figure Skating RPF</button>
+              <button class="mobile-pill" onclick="setFandom('Honkai',this,true)">Honkai: Star Rail</button>
+            </div>
+          </div>
+          <div class="mobile-filter-section">
+            <span class="mobile-filter-label" data-i18n="ship">Ship</span>
+            <div class="mobile-filter-pills" id="mobile-ship-list"></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:1.5rem;position:relative;">
+  <input id="search-input" type="text" data-i18n-ph="search_ph" placeholder="Search by title..."
+    oninput="applyFilters()"
+    style="width:100%;font-family:var(--font-ui);font-size:0.85rem;letter-spacing:1px;color:var(--ink2);background:var(--cream);border:1px solid var(--border);padding:10px 16px 10px 40px;outline:none;transition:border-color 0.2s;">
+  <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--ink3);font-size:0.9rem;">🔍</span>
+</div>
+        <div id="active-filters" class="active-filters"></div>
+        <div class="section-heading" data-i18n="head_all">All Works</div>
+        <div id="no-results" class="no-results" data-i18n="no_results">No works found for this filter.</div>
+
+        <div class="fic-card" onclick="openFic(0)" data-fandom="Reverse: 1999">
+          <div class="fic-title">Toccata in D sharp Minor: <em>"Totentanz"</em></div>
+          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+          <div class="fic-warning">⚠ Rape/Non-Con — please proceed at your own risk</div>
+          <div class="fic-summary"><em>“I want you to know… I’d do anything for you, Aleph.”</em></div>
+          <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
+        </div>
+
+        <div class="fic-card" onclick="openFic(1)" data-fandom="Reverse: 1999">
+          <div class="fic-title">Cello Concerto no.1 in C sharp Minor: <em>"None but the Lonely Heart"</em></div>
+          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+          <div class="fic-summary">In the small office, under the flickering oil lamp, the red-haired man let a heavy blot of black ink fall onto the parchment—dark and stagnant, much like his own mind in that very moment</div>
+          <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
+        </div>
+
+        <div class="fic-card" onclick="openFic(2)" data-fandom="Honkai">
+          <div class="fic-title">Pas de Deux</div>
+          <div class="fic-meta"><span>Honkai: Star Rail</span></div>
+          <div class="fic-summary">Their Last Dance</div>
+          <div class="fic-tags"><span class="tag">Phainon/Cyrene</span></div>
+        </div>
+
+        <div class="fic-card" onclick="openFic(3)" data-fandom="Reverse: 1999">
+          <div class="fic-title">String Quartet no.8: <em>"Lie"</em></div>
+          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+          <div class="fic-summary">Read the tag and read the title to decide the fic's content urself:)</div>
+          <div class="fic-tags"><span class="tag">Aleph/Recoleta</span><span class="tag">Merlin/Recoleta</span></div>
+        </div>
+
+        <div class="fic-card" onclick="openFic(4)" data-fandom="Reverse: 1999">
+          <div class="fic-title">Dirge in F sharp Minor: <em>"Le Suicide"</em></div>
+          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+          <div class="fic-summary"><em><p>"Trois grands lys, trois grands lys sur ma tombe sans croix,</p><p>Trois grands lys que le vent et la pluie ont glacés</p><p>S’endorment comme trois amours que j'ai brisés"</p></em></div>
+          <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
+        </div>
+
+        <div class="fic-card" onclick="openFic(5)" data-fandom="Reverse: 1999">
+          <div class="fic-title">Fantasia no.1 in C minor: <em>"Desires"</em></div>
+          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+          <div class="fic-warning">⚠ Rape/Non-Con</div>
+          <div class="fic-summary">“Pyrrhos…” Iglika whispered, her voice hoarse. His name slipped out far too easily in that moan</div>
+          <div class="fic-tags"><span class="tag">Corvus/Pyrrhos</span></div>
+        </div>
+
+        <div class="fic-card" onclick="openFic(6)" data-fandom="Figure Skating">
+          <div class="fic-title">Piano Concerto no.2 in G Minor: <em>"Нет, только тот, кто знал"</em></div>
+          <div class="fic-meta"><span>Figure Skating RPF</span></div>
+          <div class="fic-summary">"Now, their entire universe had shrunk down to the reflection in each other's eyes"</div>
+          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
+        </div>
+
+        <div class="fic-card" onclick="openFic(7)" data-fandom="Figure Skating">
+          <div class="fic-title">Nocturne in C Sharp Minor: <em>"Love"</em></div>
+          <div class="fic-meta"><span>Figure Skating RPF</span></div>
+          <div class="fic-summary">"Sasha opened her eyes and realized her "rival’s" fingers were woven through hers, holding on with just enough strength to radiate warmth"</div>
+          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
+        </div>
+
+        <div class="fic-card" onclick="openFic(8)" data-fandom="Honkai">
+          <div class="fic-title">Nocturne in B Flat Minor: <em>Tenderness</em></div>
+          <div class="fic-meta"><span>Honkai: Star Rail</span></div>
+          <div class="fic-summary">“You can’t even imagine…” Cyrene whispered, “…how real you are. To me… you’re so real.”</div>
+          <div class="fic-tags"><span class="tag">Phainon/Cyrene</span></div>
+        </div>
+
+        <div class="fic-card" onclick="openFic(9)" data-fandom="Honkai">
+          <div class="fic-title">Romance de Amour</div>
+          <div class="fic-meta"><span>Honkai: Star Rail</span></div>
+          <div class="fic-summary">"Yeah, everything will be okay, won't it?"</div>
+          <div class="fic-tags"><span class="tag">Phainon/Cyrene</span><span class="tag">Flame Reaver/Cyrene</span></div>
+        </div>
+
+        <div class="fic-card" onclick="openFic(10)" data-fandom="Reverse: 1999">
+          <div class="fic-title">Elegy in G Minor <em>"By the Banks of the Danube"</em></div>
+          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+          <div class="fic-summary">“Я люблю тебя… и прости меня, Иглика.”</div>
+          <div class="fic-tags"><span class="tag">Corvus/Pyrrhos</span></div>
+        </div>
+
+        <div class="fic-card" onclick="openFic(11)" data-fandom="Reverse: 1999">
+          <div class="fic-title">Libertango</div>
+          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+          <div class="fic-summary">Merlin cuck Aleph with Recoleta</div>
+          <div class="fic-tags"><span class="tag">Merlin/Recoleta</span><span class="tag">Aleph/Recoleta</span></div>
+        </div>
+
+        <div class="fic-card" onclick="openFic(12)" data-fandom="Reverse: 1999">
+          <div class="fic-title">Fantasia no.3 in B Flat Major: <em>"Thirst for Lust"</em></div>
+          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+          <div class="fic-summary"><em>“Still cold?” Aleph whispered, a single fingertip traced the faint silver scars on Recoleta’s shoulder—old training wounds—then dipped lower, circling a nipple until it peaked, aching.</em></div>
+          <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
+        </div>
+
+        <div class="fic-card" onclick="openFic(13)" data-fandom="Honkai">
+          <div class="fic-title">Impromptu no.1 in C Minor: <em>"Dangerous Affairs"</em></div>
+          <div class="fic-meta"><span>Honkai: Star Rail</span></div>
+          <div class="fic-summary">The title said the content</div>
+          <div class="fic-tags"><span class="tag">Phainon/Cyrene</span></div>
+        </div>
+
+        <div class="fic-card" onclick="openFic(14)" data-fandom="Honkai">
+          <div class="fic-title">Impromptu no.2 in A Minor: <em>"Friends"</em></div>
+          <div class="fic-meta"><span>Honkai: Star Rail</span></div>
+          <div class="fic-warning">Cuckold</div>
+          <div class="fic-summary">Cyrene had a trip with her "friend", Khaslana. Or, at least that what Phainon thought about those two relationship</div>
+          <div class="fic-tags"><span class="tag">Phainon/Cyrene</span><span class="tag">Khaslana/Cyrene</span></div>
+        </div>
+
+        <div class="fic-card" onclick="openFic(15)" data-fandom="Honkai">
+          <div class="fic-title">Impromptu no.2 in D Flat Major: <em>"Kindness"</em></div>
+          <div class="fic-meta"><span>Honkai: Star Rail</span></div>
+          <div class="fic-summary">This is an alternative universe. Kind of:)</div>
+          <div class="fic-tags"><span class="tag">Phainon/Cyrene</span></div>
+        </div>
+
+        <div class="fic-card" onclick="openFic(16)" data-fandom="Figure Skating">
+          <div class="fic-title">Rhapsody no.1 in G Minor: <em>"Blood"</em></div>
+          <div class="fic-meta"><span>Figure Skating RPF</span></div>
+          <div class="fic-summary">Sasha is a vampire, and Anna is her Master. Alternative Universe:)</div>
+          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
+        </div>
+
+        <div class="fic-card" onclick="openFic(17)" data-fandom="Figure Skating">
+          <div class="fic-title">Aria in C Minor: <em>"Unspoken Love"</em></div>
+          <div class="fic-meta"><span>Figure Skating RPF</span></div>
+          <div class="fic-summary">Adaption of "The Little Mermaid" for Scherbalieva:)</div>
+          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Kamila Valieva</span></div>
+        </div>
+
+        <div class="fic-card" onclick="openFic(18)" data-fandom="Figure Skating">
+          <div class="fic-title">Rhapsody no.2 in D Major: <em>"I love the way you hug me"</em></div>
+          <div class="fic-meta"><span>Figure Skating RPF</span></div>
+          <div class="fic-summary">NSFW:)</div>
+          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
+        </div>
+        
+        <div class="fic-card" onclick="openFic(19)" data-fandom="Figure Skating">
+          <div class="fic-title">Trio Sonata in G Minor: <em>"What's in my name to you?"</em></div>
+          <div class="fic-meta"><span>Figure Skating RPF</span></div>
+          <div class="fic-summary">"Memories…<p>Between Kamila Valieva and Anna Shcherbakova.</p><p>That Sasha would never know.</p><p>Fragments of memories that perhaps Anya herself didn't even remember.</p><p>But that blonde girl could never forget."</p></div>
+          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span><span class="tag">Anna Shcherbakova/Kamila Valieva</span></div>
+        </div>
+
+        <div class="fic-card" onclick="openFic(20)" data-fandom="Reverse: 1999">
+          <div class="fic-title">Sonata for Violin and Accordion in F sharp Minor: <em>"What is an Author?"</em></div>
+          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+          <div class="fic-summary"><p>"...Whether the author lives or dies, creates something new or doesn't, in the end, the purpose of literature, or if you prefer, the purpose of everything I put into a book of mine, is to bring a part of life to the very people within those pages, and to try to find a point of convergence between the reader's soul and the soul of the book. And that is my literature, Merlin"</p></div>
+          <div class="fic-tags"><span class="tag">Merlin/Recoleta</span><span class="tag">Aleph/Recoleta</span></div>
+        </div>
+
+        <div class="fic-card" onclick="openFic(21)" data-fandom="Figure Skating">
+          <div class="fic-title">Prelude and Fugue in A flat major: <em>"Lips' taste"</em></div>
+          <div class="fic-meta"><span>Figure Skating RPF</span></div>
+          <div class="fic-summary">Anna's small, soft lips had already been claimed at some point, so gently that it took her a full breath to understand what was happening, and by then Sasha's hand had found the curve of her jaw, tilting her face upward, and the pen lay forgotten on the open notebook, and the winter outside had gone very, very quiet.</p></div>
+          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
+        </div>
+        
+        <div class="fic-card" onclick="openFic(22)" data-fandom="Figure Skating">
+          <div class="fic-title">Piano concerto no.2 in F major: <em>"For You"</em></div>
+          <div class="fic-meta"><span>Figure Skating RPF</span></div>
+          <div class="fic-summary">Because Anna Shcherbakova was a girl who had spent her entire life learning to be strong enough to stand alone, and calling Sasha now, broken and humiliated and tasteless in every sense of the word, felt like admitting that the strength she had built her identity around was not strength at all but merely the absence of anyone close enough to see her fall.</p></div>
+          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
+        </div>
+        <div class="fic-card" onclick="openFic(23)" data-fandom="Genshin">
+          <div class="fic-title">Nocturne in C sharp minor: <em>"Love"</em></div>
+          <div class="fic-meta"><span>Genshin Impact</span></div>
+          <div class="fic-summary">"Cheater," she whispered.</p></div>
+          <div class="fic-tags"><span class="tag">Neuvillette/Furina</span></div>
+        </div>
+        <div class="fic-card" onclick="openFic(24)" data-fandom="Figure Skating">
+          <div class="fic-title">Rhapsody no.3 in D major:: <em>""Who are you acting for?""</em></div>
+          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
+          <div class="fic-summary">"Honestly, who knows if you were just acting or if it was real. But even if it was acting… who exactly were you acting for, Anna?<p>It wasn’t for me to watch, was it?”</p></div>
+          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
+        </div>
+        <div class="fic-card" onclick="openFic(25)" data-fandom="Spider-Verse">
+          <div class="fic-title">Nocturne in C sharp minor: <em>""Pavane""</em></div>
+          <div class="fic-meta"><span>Honkai: Star Rail</span></div>
+          <div class="fic-summary">"Don't worry about steps. Just, like, listen. You count everything anyway, right? So count this one. It'll tell you what to do way better than I could." He said it easily, as if he had not noticed the tension coming off her like static, and turned the record up one notch. "Let it lead. That's the whole trick."</div>
+          <div class="fic-tags"><span class="tag">Miles Morales/Gwen Stacy</span></div>
+        </div>
+        <div class="fic-card" onclick="openFic(26)" data-fandom="Figure Skating">
+          <div class="fic-title">Prelude and Fugue:: <em>""Harmony""</em></div>
+          <div class="fic-meta"><span>Figure Skating RPF</span></div>
+          <div class="fic-summary">"A few times," she said. "You're the worst liar in this building."</div>
+          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Kamila Valieva</span></div>
+        </div>
+        <div class="fic-card" onclick="openFic(27)" data-fandom="Figure Skating">
+          <div class="fic-title">Piano Trio in C minor: <em>""For Anna""</em></div>
+          <div class="fic-meta"><span>Figure Skating RPF</span></div>
+          <div class="fic-summary">For my Anna</div>
+          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Kamila Valieva</span><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
+        </div>
+        <div class="fic-card" onclick="openFic(28)" data-fandom="Genshin">
+          <div class="fic-title">Prelude and Fugue no.5 in D major: <em>"Two cups"</em></div>
+          <div class="fic-meta"><span>Genshin Impact</span></div>
+          <div class="fic-summary">"I saw you," he said. "In the court, and in the streets, and at every ceremony where you laughed on cue. I saw the seam in it. Every day, for five hundred years, I saw exactly what it cost you, and I said nothing, because I believed my silence was the shape my duty took." A pause; the rain waited in it. "I was mistaken. It was the shape my cowardice took, and it wore my duty's coat, and I have been unable to look at the sea since without knowing the difference."</div>
+          <div class="fic-tags"><span class="tag">Nevuillette/Furina</span></div>
+        </div>
+        <div class="fic-card" onclick="openFic(29)" data-fandom="Figure Skating">
+          <div class="fic-title">Violin concerto no.1 in A minor: <em>""Unnamed Friend""</em></div>
+          <div class="fic-meta"><span>Figure Skating RPF</span></div>
+          <div class="fic-summary">The federation helped. Separate interview rooms, separate call times, separate photograph angles. When they were placed together for a two-shot they were placed at the correct distance for a headline, which was a distance Sasha noticed and did not correct, because correcting it would have meant explaining why she wanted to stand closer, and explaining why was not a service she offered even to herself</div>
+          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
+        </div>
+        <div class="fic-card" onclick="openFic(30)" data-fandom="Figure Skating">
+          <div class="fic-title">Symphony no.1 in F minor: <em>""The Master and Margarita""</em></div>
+          <div class="fic-meta"><span>Figure Skating RPF</span></div>
+          <div class="fic-summary">And when Sasha found them, across the arena, across the tunnel, across the winter and last night and the hair tie and the almost-hug, Anna smiled.</div>
+          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
+        </div>
+          <div class="fic-card" onclick="openFic(31)" data-fandom="Honkai">
+          <div class="fic-title">Prelude and Fugue no.7 in F sharp minor: <em>""Stalemate""</em></div>
+          <div class="fic-meta"><span>Others</span></div>
+          <div class="fic-summary">Ánh mắt anh, lần đầu tiên trong tối nay, rời khỏi bàn cờ và dừng lại trên gương mặt cô. Và trong quầng sáng vàng nhạt của cây đèn bàn, một con bướm đêm đang bay vòng quanh chao qua lại giữa hai người, chạm vào lớp thủy tinh nóng, bật ra, rồi quay lại, kiên trì với một thứ ánh sáng sẽ không bao giờ cho nó cái nó tìm.</div>
+          <div class="fic-tags"></div>
+        </div>
+        <div class="fic-card" onclick="openFic(32)" data-fandom="Figure Skating">
+          <div class="fic-title">Viola concerto no.1 in C major: <em>""Hummingbird""</em></div>
+          <div class="fic-meta"><span>Figure Skating RPF</span></div>
+          <div class="fic-summary">"I hope you're all right, Kamilochka. Anna worries about you. She doesn't say so, obviously. She just goes quiet, and then I have to guess which of the fourteen things she's being quiet about it is, and lately it's always been you, so."</div>
+          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Kamila Valieva</span></div>
+        </div>
+        <div class="fic-card" onclick="openFic(33)" data-fandom="Others">
+          <div class="fic-title">Somnambule giọng Fa thăng thứ: <em>""Giấc mơ""</em></div>
+          <div class="fic-meta"><span>Others</span></div>
+          <div class="fic-summary">Cả hai đều nói, cùng lúc, và trong một khoảnh khắc giọng của họ trùng khít, Nyara không còn phân biệt được đâu là sự dịu dàng và đâu là sự trống rỗng, bởi vì cả hai nghe giống nhau đến mức hoàn hảo.</div>
+          <div class="fic-tags"><span class="tag">Others</span></div>
+        </div>
+        <div class="fic-card" onclick="openFic(34)" data-fandom="Figure Skating">
+          <div class="fic-title">Violin concerto no.2 in A minor: <em>""A day with you""</em></div>
+          <div class="fic-meta"><span>Figure Skating RPF</span></div>
+          <div class="fic-summary">"Everything's cheating with you." Sasha's forehead came down against hers for a moment. "You said it about the corners as well."</div>
+          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
+        </div>
+        <div class="fic-card" onclick="openFic(35)" data-fandom="Others">
+          <div class="fic-title">Sonata cho Violin và Sáo giọng Sol trưởng: <em>""Mưa sao băng""</em></div>
+          <div class="fic-meta"><span>Others</span></div>
+          <div class="fic-summary">Bàn tay Meraki, trong lúc cô ngửa đầu lên để nhìn theo những cái đuôi dài vụt qua màn đêm ấy, đã đan vào với bàn tay của Kazuha tự lúc nào.</div>
+          <div class="fic-tags"></div>
+        </div>
+      </div><!-- /.works-main -->
+    </div><!-- /.works-layout -->
+    <footer><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+  </div><!-- /#page-works -->
 
   <!-- READING -->
   <div class="page" id="page-reading" style="background:var(--cream);">
     <div class="reading-wrap">
-      <button class="back-btn" onclick="goBack()">← Back</button>
+      <button class="back-btn" data-i18n="back" onclick="goBack()">← Back</button>
       <div id="reading-header"></div>
       <div id="reading-body"></div>
+      <div class="chapter-nav" id="chapter-nav-bot" style="display:none">
+        <button id="ch-prev-bot" data-i18n="prev" onclick="prevChapter()">← Prev</button>
+        <span class="chapter-label" id="ch-label-bot"></span>
+        <button id="ch-next-bot" data-i18n="next" onclick="nextChapter()">Next →</button>
+      </div>
       <div id="reading-footer" style="margin-top:3rem;border-top:1px solid var(--border);padding-top:2rem;display:none;">
-        <p style="font-family:'Playfair Display',serif;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:1rem;">Read the full work on AO3</p>
-        <a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid/works" target="_blank">Continue on AO3 →</a>
+        <p style="font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:1rem;" data-i18n="read_ao3">Read the work on AO3</p>
+        <a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid/works" target="_blank" data-i18n="cont_ao3">Continue on AO3 →</a>
+      </div>
+      <!-- COMMENT SECTION (Supabase) -->
+      <div id="comments-wrap" style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);display:none;">
+        <button onclick="toggleComments()" style="font-family:var(--font-ui);font-size:0.78rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:1rem;width:100%;padding:0;">
+          <span id="comments-label">Show Comments</span>
+          <span style="flex:1;height:1px;background:var(--border);display:block;"></span>
+          <span id="comments-arrow">▼</span>
+        </button>
+
+        <div id="comments-body" style="display:none;margin-top:1.5rem;">
+          <!-- Form -->
+          <div class="comment-form">
+            <input type="text" id="comment-name" data-i18n-ph="cmt_name_ph" placeholder="Name (optional)" maxlength="50">
+            <textarea id="comment-text" data-i18n-ph="cmt_body_ph" placeholder="Leave a comment..." rows="3" maxlength="2000"></textarea>
+            <div style="display:flex;justify-content:flex-end;margin-top:0.6rem;">
+              <button class="ao3-link" id="comment-submit" onclick="submitComment()">Post Comment →</button>
+            </div>
+          </div>
+          <!-- List -->
+          <div id="comments-list" style="margin-top:1.5rem;"></div>
+        </div>
       </div>
     </div>
-    <footer style="margin-top:2rem;"><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · All works posted with love and a little madness &nbsp; <span style="color:var(--gold);">✦</span></footer>
+    <footer style="margin-top:2rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
 
   <!-- ABOUT -->
   <div class="page" id="page-about" style="background:var(--cream);">
     <div class="about-wrap">
       <div class="about-ornament">𝄞</div>
-      <div class="section-heading" style="margin-top:1rem;">About the Author</div>
+      <div class="section-heading" style="margin-top:1rem;" data-i18n="about_head">About the Author</div>
       <div class="about-body">
-        <p>Welcome. I write under the name <strong>ShostaKid</strong>, so you can say that I'm a child of Dmitry Dmitrievich Shostakovich (kind of lol)</p>
-        <p>My works, most of the time, are my random thoughts that live inside my head. I write what I want in here, so enjoy as much as you can.</p>
-        <p>I write primarily for the <em>Reverse: 1999</em>, <em>Figure Skating RPF</em>, <em>Honkai: Star Rail</em> and sometimes <em>Genshin Impact</em> fandoms. There will be more, but right now those are my primary</p>
-        <p>I hope you have a great time here. Thank you for stoping by.</p>
+        <p data-i18n-html="about_p1">Welcome. I write under the name <strong>ShostaKid</strong>, so you can say that I'm a child of Dmitry Dmitrievich Shostakovich (kind of lol)</p>
+        <p data-i18n-html="about_p2">My works, most of the time, are random thoughts that live inside my head. I write what I want here, so don't question me and enjoy as much as you can:).</p>
+        <p data-i18n-html="about_p3">I write primarily for the <em>Reverse: 1999</em>, <em>Figure Skating RPF</em>, <em>Honkai: Star Rail</em> and sometimes <em>Genshin Impact</em> fandoms. There will be more, but right now those are my primary</p>
+        <p data-i18n-html="about_p4">I hope you have a great time here. Thank you for stopping by.</p>
       </div>
       <div class="stat-row">
-        <div class="stat-box"><span class="stat-num">4</span><span class="stat-label">Works</span></div>
+        <div class="stat-box"><span class="stat-num" id="stat-works">—</span><span class="stat-label" data-i18n="stat_works">Works</span></div>
       </div>
       <div class="about-sig">— ShostaKid</div>
-      <div style="margin-top:2rem;"><a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid" target="_blank">My AO3 →</a></div>
-      <div style="margin-top:2rem;"><a class="fb-link" href="https://www.facebook.com/share/1GgjNoECvD/" target="_blank">My Facebook Fanpage →</a></div>
-      <div style="margin-top:2rem;"><a class="Twitter-link" href="https://x.com/Texas1k6" target="_blank">My X →</a></div>
+      <div style="margin-top:2rem;"><a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid" target="_blank" data-i18n="my_ao3">My AO3 →</a></div>
+      <div style="margin-top:2rem;"><a class="ao3-link" href="https://x.com/Texas1k6" target="_blank" data-i18n="my_x">My X →</a></div>
     </div>
-    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; ShostaKid · Enjoy &nbsp; <span style="color:var(--gold);">✦</span></footer>
+    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
 </div>
 
-<!-- YouTube player ẩn — tự inject bằng JS -->
+<!-- Font size + Back to top -->
+<div id="font-controls">
+  <button onclick="changeFontSize(1)" title="Larger text">A+</button>
+  <button onclick="changeFontSize(-1)" title="Smaller text">A−</button>
+</div>
+<button id="float-toggle" onclick="toggleFloatingButtons()" title="Hide/Show controls">●</button>
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
 
+<!-- YouTube player ẩn — tự inject bằng JS -->
 <script>
-// =============================================
-// FIC DATA — chỉnh sửa phần này khi thêm truyện
-// =============================================
-const fics = [
-  {
-    title: 'Toccata in D sharp Minor',
-    subtitle: '"Totentanz"',
-    fandom: '重返未来：1999 · Reverse: 1999',
-    warning: 'Rape/Non-Con — This fic is not healthy and may cause discomfort. Please proceed at your own risk.',
-    music: { id: 'bAzZcKB6LO8', start: 351, end: 534 },
-    musicName: 'Shostakovich — Symphony No. 14',
-    files: ['Toccata no.1.txt'],
-    chapters: ['I. Totentanz']
-  },
-  {
-    title: 'Fantasia no.1 in C minor',
-    subtitle: '"Desires"',
-    fandom: '重返未来：1999 · Reverse: 1999',
-    warning: 'Rape/Non-Con',
-    music: { id: 'Lb4Asov1eKY', start: 94 },
-    musicName: 'Prokofiev — Dance of the Knights',
-    files: ['Fantasia no.1.txt'],
-    chapters: ['I. Desires']
-  },
-  {
-    title: 'Piano Concerto no.2 in G Minor',
-    subtitle: '"Нет, только тот, кто знал"',
-    fandom: 'Figure Skating RPF',
-    warning: null,
-    music: { id: 'HLlxUFlv1mo', start: 488, end: 894 },
-    musicName: 'Shostakovich — Piano Concerto No. 2',
-    files: ['Piano Concerto no.1.txt'],
-    chapters: ['Chapter 1', 'Chapter 2', 'Chapter 3']
-  },
-  {
-    title: 'Piano Concerto no.1 in C sharp Minor',
-    subtitle: '"None but the Lonely Heart"',
-    fandom: '重返未来：1999 · Reverse: 1999',
-    warning: null,
-    music: { id: 'QDW4VJGKLAQ', start: 0 },
-    musicName: 'Shostakovich — Gadfly Romance',
-    files: ['Piano concerto no.2.txt'],
-    chapters: ['I. None but the Lonely Heart']
+  
+const aboutMusic = {
+  source: 'github',     
+  url: 'https://github.com/ShostaKid/ShostaKid.github.io/releases/download/music-v1/Schostakowitsch_.14.Sinfonie.hr-Sinfonieorchester.Varela.Kares.Klaus.Makela_1493_1673.mp3',   
+  start: 0,
+  name: 'Shostakovich - Symphony no.14'
+};
+  
+let fics = [];
+
+async function loadFicsData() {
+  try {
+    const res = await fetch('fics.json', { cache: 'no-cache' });
+    if (!res.ok) throw new Error('fics.json not found');
+    fics = await res.json();
+  } catch (e) {
+    console.error('Không tải được fics.json:', e);
+    fics = [];
   }
-];
+}
 
 // =============================================
 // ENGINE
@@ -342,18 +910,301 @@ let currentPage='home', prevPage='home', musicPlaying=false;
 let currentFic=0, currentChapter=0;
 const REPO = 'https://raw.githubusercontent.com/lavaknight2017-rgb/ShostaKid.github.io/main/';
 
+// --- Scroll progress bar ---
+window.addEventListener('scroll', () => {
+  const bar = document.getElementById('progress-bar');
+  if (currentPage !== 'reading') { bar.style.width = '0%'; return; }
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = total > 0 ? (window.scrollY / total * 100) : 0;
+  bar.style.width = pct + '%';
+});
+
+// --- Fandom filter ---
+// =============================================
+// FILTER SYSTEM — fandom + ship kết hợp
+// =============================================
+let activeShips = new Set();
+let activeFandom = 'all';
+
+function buildSidebar() {
+  // Display names cho từng data-fandom key
+  const fandomLabels = {
+    'Reverse: 1999': 'Reverse: 1999',
+    'Figure Skating': 'Figure Skating RPF',
+    'Honkai': 'Honkai: Star Rail',
+    'Genshin Impact': 'Genshin Impact',
+    'Spider-Verse': 'Spider-Verse',
+    'Others': 'Others',
+  };
+
+  // Scan fic cards → build fandom → ships map (giữ thứ tự xuất hiện)
+  const fandomShips = {};
+  document.querySelectorAll('#page-works .fic-card').forEach(card => {
+    const fandom = card.dataset.fandom;
+    if (!fandom) return;
+    if (!fandomShips[fandom]) fandomShips[fandom] = new Set();
+    card.querySelectorAll('.tag').forEach(tag => fandomShips[fandom].add(tag.textContent.trim()));
+  });
+
+  // --- Desktop accordion ---
+  const accordion = document.getElementById('fandom-accordion');
+  if (accordion) {
+    accordion.innerHTML = '';
+    Object.entries(fandomShips).forEach(([fandom, ships]) => {
+      const label = fandomLabels[fandom] || fandom;
+      const item = document.createElement('div');
+      item.className = 'accordion-item';
+      item.dataset.fandom = fandom;
+
+      const header = document.createElement('button');
+      header.className = 'filter-btn accordion-header';
+      header.innerHTML = `<span>${label}</span><span class="acc-arrow">▾</span>`;
+      header.onclick = () => toggleAccordion(item, fandom);
+
+      const shipsDiv = document.createElement('div');
+      shipsDiv.className = 'accordion-ships';
+      [...ships].sort().forEach(ship => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn ship-btn';
+        btn.textContent = ship;
+        btn.onclick = () => toggleShip(ship, btn);
+        shipsDiv.appendChild(btn);
+      });
+
+      item.appendChild(header);
+      item.appendChild(shipsDiv);
+      accordion.appendChild(item);
+    });
+  }
+
+  // --- Mobile ship list (flat, unchanged) ---
+  const mobileContainer = document.getElementById('mobile-ship-list');
+  if (mobileContainer) {
+    mobileContainer.innerHTML = '';
+    const allShips = new Set();
+    Object.values(fandomShips).forEach(set => set.forEach(s => allShips.add(s)));
+    [...allShips].sort().forEach(ship => {
+      const btn = document.createElement('button');
+      btn.className = 'mobile-pill';
+      btn.textContent = ship;
+      btn.onclick = () => toggleShip(ship, btn, true);
+      mobileContainer.appendChild(btn);
+    });
+  }
+
+  // Make tags in fic cards clickable
+  document.querySelectorAll('#page-works .fic-card .tag').forEach(tag => {
+    tag.classList.add('clickable');
+    tag.onclick = (e) => {
+      e.stopPropagation();
+      const ship = tag.textContent.trim();
+      if (currentPage !== 'works') showPage('works', document.querySelector('.nav-links a:nth-child(2)'));
+      activeShips.clear();
+      activeShips.add(ship);
+      document.querySelectorAll('.ship-btn, .mobile-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.trim() === ship);
+      });
+      applyFilters();
+      window.scrollTo(0, 0);
+    };
+  });
+}
+
+function toggleAccordion(item, fandom) {
+  const isOpen = item.classList.contains('open');
+
+  // Đóng tất cả accordion item đang mở
+  document.querySelectorAll('.accordion-item.open').forEach(i => i.classList.remove('open'));
+
+  if (!isOpen) {
+    // Mở item này + filter theo fandom
+    item.classList.add('open');
+    activeFandom = fandom;
+    // Deactivate All button
+    document.querySelector('.all-btn')?.classList.remove('active');
+    // Sync mobile fandom pills
+    document.querySelectorAll('#mobile-filter-panel .mobile-pill').forEach(b => {
+      const inShipList = document.getElementById('mobile-ship-list')?.contains(b);
+      if (!inShipList) b.classList.toggle('active', b.textContent.includes(fandom));
+    });
+  } else {
+    // Đóng → về All
+    activeFandom = 'all';
+    document.querySelector('.all-btn')?.classList.add('active');
+    document.querySelectorAll('#mobile-filter-panel .mobile-pill').forEach(b => {
+      const inShipList = document.getElementById('mobile-ship-list')?.contains(b);
+      if (!inShipList) b.classList.remove('active');
+    });
+  }
+
+  // Clear ship filters khi đổi fandom
+  activeShips.clear();
+  document.querySelectorAll('.ship-btn, .mobile-pill').forEach(b => b.classList.remove('active'));
+  updateMobileFilterCount();
+  applyFilters();
+}
+
+function toggleMobileFilter() {
+  const btn = document.getElementById('mobile-filter-toggle');
+  const panel = document.getElementById('mobile-filter-panel');
+  btn.classList.toggle('open');
+  panel.classList.toggle('open');
+}
+
+function updateMobileFilterCount() {
+  const count = activeShips.size + (activeFandom !== 'all' ? 1 : 0);
+  const el = document.getElementById('mobile-filter-count');
+  if (el) el.textContent = count > 0 ? `(${count})` : '';
+}
+
+function setFandom(fandom, btn, isMobile) {
+  activeFandom = fandom;
+
+  // Close all accordion items when All is selected
+  if (fandom === 'all') {
+    document.querySelectorAll('.accordion-item.open').forEach(i => i.classList.remove('open'));
+    document.querySelector('.all-btn')?.classList.add('active');
+  } else {
+    document.querySelector('.all-btn')?.classList.remove('active');
+  }
+
+  // Sync mobile fandom pills
+  document.querySelectorAll('#mobile-filter-panel .mobile-pill').forEach(b => {
+    const inShipList = document.getElementById('mobile-ship-list')?.contains(b);
+    if (!inShipList) {
+      const matches = (fandom === 'all' && b.textContent.trim() === 'All') || b.textContent.includes(fandom);
+      b.classList.toggle('active', matches);
+    }
+  });
+
+  if (btn) btn.classList.add('active');
+  updateMobileFilterCount();
+  applyFilters();
+}
+
+function toggleShip(ship, btn, isMobile) {
+  if (activeShips.has(ship)) {
+    activeShips.delete(ship);
+    // Deactivate both desktop + mobile buttons for this ship
+    document.querySelectorAll('.ship-btn, .mobile-pill').forEach(b => {
+      if (b.textContent.trim() === ship) b.classList.remove('active');
+    });
+  } else {
+    activeShips.add(ship);
+    document.querySelectorAll('.ship-btn, .mobile-pill').forEach(b => {
+      if (b.textContent.trim() === ship) b.classList.add('active');
+    });
+  }
+  updateMobileFilterCount();
+  applyFilters();
+}
+
+function applyFilters() {
+  const query = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
+  let visibleCount = 0;
+
+  document.querySelectorAll('#page-works .fic-card').forEach(card => {
+    const fandomMatch = activeFandom === 'all' || (card.dataset.fandom || '').includes(activeFandom);
+    const titleMatch = !query || card.querySelector('.fic-title').textContent.toLowerCase().includes(query);
+
+    let shipMatch = true;
+    if (activeShips.size > 0) {
+      const cardTags = new Set([...card.querySelectorAll('.tag')].map(t => t.textContent.trim()));
+      shipMatch = [...activeShips].every(s => cardTags.has(s));
+    }
+
+    const show = fandomMatch && titleMatch && shipMatch;
+    card.style.display = show ? 'block' : 'none';
+    if (show) visibleCount++;
+  });
+
+  // No results message
+  const noResults = document.getElementById('no-results');
+  if (noResults) noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+
+  // Active filter tags display
+  renderActiveFilters();
+  updateMobileFilterCount();
+}
+
+function renderActiveFilters() {
+  const container = document.getElementById('active-filters');
+  if (!container) return;
+  container.innerHTML = '';
+
+  if (activeFandom !== 'all') {
+    const tag = document.createElement('div');
+    tag.className = 'active-filter-tag';
+    tag.innerHTML = `${activeFandom} <button onclick="setFandom('all', document.querySelector('.fandom-sidebar .filter-btn:not(.ship-btn)'))">×</button>`;
+    container.appendChild(tag);
+  }
+
+  activeShips.forEach(ship => {
+    const tag = document.createElement('div');
+    tag.className = 'active-filter-tag';
+    tag.innerHTML = `${ship} <button onclick="removeShip('${ship}')">×</button>`;
+    container.appendChild(tag);
+  });
+}
+
+function removeShip(ship) {
+  activeShips.delete(ship);
+  document.querySelectorAll('.ship-btn, .mobile-pill').forEach(btn => {
+    if (btn.textContent.trim() === ship) btn.classList.remove('active');
+  });
+  updateMobileFilterCount();
+  applyFilters();
+}
+
+function searchFics(query) { applyFilters(); }
+
+// --- Home page: auto-render từ fics[] ---
+function makeCard(f) {
+  const titleHtml = f.subtitle
+    ? `${f.title}: <em>${f.subtitle}</em>`
+    : f.title;
+  const tagsHtml = (f.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+  return `
+    <div class="fic-card" onclick="openFic(${f.idx})">
+      <div class="fic-title">${f.title}${f.subtitle ? ': <em>'+f.subtitle+'</em>' : ''}</div>
+      <div class="fic-meta"><span>${f.fandom}</span></div>
+      ${f.warning ? `<div class="fic-warning">⚠ ${f.warning}</div>` : ''}
+      <div class="fic-summary">${f.summary || ''}</div>
+      ${tagsHtml ? `<div class="fic-tags">${tagsHtml}</div>` : ''}
+    </div>`;
+}
+
+function renderHome() {
+  // Latest: 4 fic mới nhất sort theo date
+  const withIdx = fics.map((f, i) => ({ ...f, idx: i }));
+  const latest = [...withIdx]
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .slice(0, 4);
+
+  // Favorites: fic có featured: true, giữ nguyên thứ tự trong fics[]
+  const favorites = withIdx.filter(f => f.featured);
+
+  document.getElementById('home-latest').innerHTML   = latest.map(makeCard).join('');
+  document.getElementById('home-favorites').innerHTML = favorites.map(makeCard).join('');
+}
+
 function txtToHtml(text) {
-  // Split thành paragraphs theo dòng trống
   const paragraphs = text.split(/\n\s*\n/);
   return paragraphs.map(p => {
     p = p.trim();
     if (!p) return '';
-    // --- thành scene break
     if (/^-{3,}$/.test(p)) return '<div class="scene-break">✦ ✦ ✦</div>';
-    // Xuống dòng đơn trong đoạn → <br>
     const lines = p.split('\n').map(l => l.trim()).join('<br>');
     return `<p>${lines}</p>`;
   }).join('');
+}
+
+// --- Per-chapter music helper ---
+function getMusicData(ficIdx, chapterIdx) {
+  const f = fics[ficIdx];
+  const m = Array.isArray(f.music) ? (f.music[chapterIdx] || f.music[0]) : f.music;
+  const name = Array.isArray(f.musicName) ? (f.musicName[chapterIdx] || f.musicName[0]) : f.musicName;
+  return { m, name };
 }
 
 async function loadChapter(ficIdx, chapterIdx) {
@@ -361,14 +1212,13 @@ async function loadChapter(ficIdx, chapterIdx) {
   const body = document.getElementById('reading-body');
 
   if (!fic.files || !fic.files[chapterIdx]) {
-    // Dùng preview
-    body.innerHTML = `<div class="fic-body">${previews[ficIdx] || '<p><em>Coming soon.</em></p>'}</div>`;
+    body.innerHTML = `<div class="fic-body">${previews[ficIdx] || `<p><em>${t('soon')}</em></p>`}</div>`;
     document.getElementById('reading-footer').style.display = 'block';
     updateChapterNav(ficIdx, chapterIdx);
     return;
   }
 
-  body.innerHTML = '<div class="loading">Loading</div>';
+  body.innerHTML = `<div class="loading">${t('loading')}</div>`;
   document.getElementById('reading-footer').style.display = 'none';
 
   try {
@@ -377,23 +1227,53 @@ async function loadChapter(ficIdx, chapterIdx) {
     if (!res.ok) throw new Error('Not found');
     const text = await res.text();
     body.innerHTML = `<div class="fic-body">${txtToHtml(text)}</div>`;
+    applyFontSize();
     document.getElementById('reading-footer').style.display = 'block';
   } catch(e) {
-    body.innerHTML = `<div class="fic-body"><p><em>Could not load chapter. Please check back later.</em></p></div>`;
+    body.innerHTML = `<div class="fic-body"><p><em>${t('ch_err')}</em></p></div>`;
   }
   updateChapterNav(ficIdx, chapterIdx);
+  // If fic has per-chapter music, swap track when chapter changes
+  if (Array.isArray(fics[ficIdx].music)) playMusic(ficIdx, chapterIdx);
   window.scrollTo(0,0);
 }
 
 function updateChapterNav(ficIdx, chapterIdx) {
   const fic = fics[ficIdx];
-  const nav = document.getElementById('chapter-nav');
-  if (!nav) return;
-  if (fic.chapters.length <= 1) { nav.style.display='none'; return; }
-  nav.style.display = 'flex';
-  document.getElementById('ch-label').textContent = fic.chapters[chapterIdx] || `Chapter ${chapterIdx+1}`;
-  document.getElementById('ch-prev').disabled = chapterIdx === 0;
-  document.getElementById('ch-next').disabled = chapterIdx >= fic.chapters.length - 1;
+  const navTop = document.getElementById('chapter-nav-top');
+  const navBot = document.getElementById('chapter-nav-bot');
+
+  if (fic.chapters.length <= 1) {
+    if (navTop) navTop.style.display = 'none';
+    if (navBot) navBot.style.display = 'none';
+    return;
+  }
+
+  const label = fic.chapters[chapterIdx] || `Chapter ${chapterIdx+1}`;
+  const isFirst = chapterIdx === 0;
+  const isLast  = chapterIdx >= fic.chapters.length - 1;
+
+  // Top nav — with dropdown select
+  if (navTop) {
+    navTop.style.display = 'flex';
+    const options = fic.chapters.map((ch, i) =>
+      `<option value="${i}" ${i === chapterIdx ? 'selected' : ''}>${ch}</option>`
+    ).join('');
+    navTop.innerHTML = `
+      <button id="ch-prev-top" onclick="prevChapter()" ${isFirst ? 'disabled' : ''}>${t('prev')}</button>
+      <select id="ch-select" onchange="jumpChapter(this.value)" style="font-family:var(--font-ui);font-size:0.72rem;letter-spacing:1px;text-transform:uppercase;color:var(--ink2);background:var(--cream);border:1px solid var(--border);padding:6px 12px;cursor:pointer;">
+        ${options}
+      </select>
+      <button id="ch-next-top" onclick="nextChapter()" ${isLast ? 'disabled' : ''}>${t('next')}</button>`;
+  }
+
+  // Bottom nav — simple prev/label/next
+  if (navBot) {
+    navBot.style.display = 'flex';
+    document.getElementById('ch-label-bot').textContent = label;
+    document.getElementById('ch-prev-bot').disabled = isFirst;
+    document.getElementById('ch-next-bot').disabled = isLast;
+  }
 }
 
 function prevChapter() {
@@ -403,22 +1283,28 @@ function nextChapter() {
   if (currentChapter < fics[currentFic].chapters.length - 1) { currentChapter++; loadChapter(currentFic, currentChapter); }
 }
 
+function jumpChapter(idx) {
+  currentChapter = parseInt(idx);
+  loadChapter(currentFic, currentChapter);
+  playMusic(currentFic, currentChapter);
+}
+
 function openFic(i) {
+  history.pushState({page: 'reading', fic: i}, '', '#fic-' + i);
   prevPage = currentPage;
   currentFic = i;
   currentChapter = 0;
   const f = fics[i];
 
-  // Header
   const chapterNavHtml = f.chapters.length > 1 ? `
-    <div class="chapter-nav" id="chapter-nav">
-      <button id="ch-prev" onclick="prevChapter()">← Prev</button>
-      <span class="chapter-label" id="ch-label">${f.chapters[0]}</span>
-      <button id="ch-next" onclick="nextChapter()">Next →</button>
-    </div>` : '<div id="chapter-nav" style="display:none"></div>';
+    <div class="chapter-nav" id="chapter-nav-top">
+      <button id="ch-prev-top" onclick="prevChapter()">${t('prev')}</button>
+      <span class="chapter-label" id="ch-label-top">${f.chapters[0]}</span>
+      <button id="ch-next-top" onclick="nextChapter()">${t('next')}</button>
+    </div>` : '<div id="chapter-nav-top" style="display:none"></div>';
 
   document.getElementById('reading-header').innerHTML = `
-    <div class="reading-title">${f.title}: ${f.subtitle}</div>
+    <div class="reading-title">${f.title}${f.subtitle ? ': ' + f.subtitle : ''}</div>
     <div class="reading-fandom">${f.fandom}</div>
     ${f.warning ? `<div class="reading-warning">⚠ ${f.warning}</div>` : ''}
     <div class="reading-divider">✦ ✦ ✦</div>
@@ -427,77 +1313,565 @@ function openFic(i) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-reading').classList.add('active');
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+  currentPage = 'reading';
+  document.getElementById('progress-bar').classList.add('visible');
+  document.getElementById('font-controls').classList.add('visible');
+  document.getElementById('float-toggle').classList.add('visible');
   window.scrollTo(0,0);
   loadChapter(i, 0);
-  playMusic(i);
+  playMusic(i, 0);
+  // Load comment section
+  loadComments(i);
 }
 
 function enterSite() {
-  document.getElementById('intro').classList.add('fade-out');
-  setTimeout(()=>{document.getElementById('intro').style.display='none';document.getElementById('site').classList.add('visible');},800);
+  const intro = document.getElementById('intro');
+  intro.style.pointerEvents = 'none';
+  intro.classList.add('fade-out');
+  setTimeout(()=>{intro.style.display='none';document.getElementById('site').classList.add('visible');},800);
 }
 
-function playMusic(i) {
-  const f = fics[i];
-  const m = f.music;
-  // Xóa iframe cũ nếu có
-  const old = document.getElementById('yt-player');
-  if (old) old.remove();
-  // Tạo iframe YouTube ẩn
-  const iframe = document.createElement('iframe');
-  iframe.id = 'yt-player';
-  iframe.style.cssText = 'position:fixed;width:1px;height:1px;bottom:-10px;left:-10px;opacity:0;pointer-events:none;';
-  const end = m.end ? `&end=${m.end}` : '';
-  iframe.src = `https://www.youtube.com/embed/${m.id}?autoplay=1&start=${m.start||0}${end}&loop=1&playlist=${m.id}&enablejsapi=1`;
-  iframe.allow = 'autoplay; encrypted-media';
-  iframe.frameBorder = '0';
-  document.body.appendChild(iframe);
+document.addEventListener('DOMContentLoaded', async () => {
+  const intro = document.getElementById('intro');
+  intro.addEventListener('click', enterSite);
+  document.addEventListener('keydown', () => { if(intro.style.display !== 'none') enterSite(); }, {once: true});
+
+  await loadFicsData();
+
+  renderHome();
+  buildSidebar();
+  showContinueBanner();
+  initFontSize();
+  applyLang();
+  // Auto-count works
+  const statEl = document.getElementById('stat-works');
+  if (statEl) statEl.textContent = fics.length;
+
+  // Xử lý mở thẳng 1 fic nếu URL có #fic-N (share link)
+  const hash = window.location.hash;
+  if (hash.startsWith('#fic-')) {
+    const idx = parseInt(hash.replace('#fic-', ''));
+    if (!isNaN(idx) && fics[idx]) openFic(idx);
+  }
+});
+
+// =============================================
+// CONTINUE READING (localStorage)
+// =============================================
+function saveReadingProgress() {
+  const fic = fics[currentFic];
+  if (!fic) return;
+  const data = {
+    ficIdx: currentFic,
+    chapter: currentChapter,
+    scrollY: window.scrollY,
+    title: fic.title + (fic.subtitle ? ': ' + fic.subtitle : ''),
+    timestamp: Date.now()
+  };
+  localStorage.setItem('sk-continue', JSON.stringify(data));
+}
+
+function showContinueBanner() {
+  const raw = localStorage.getItem('sk-continue');
+  if (!raw) return;
+  try {
+    const data = JSON.parse(raw);
+    // Only show if less than 30 days old
+    if (Date.now() - data.timestamp > 30 * 24 * 60 * 60 * 1000) return;
+    if (!fics[data.ficIdx]) return;
+    document.getElementById('continue-title').textContent = data.title;
+    document.getElementById('continue-banner').style.display = 'block';
+  } catch(e) {}
+}
+
+function resumeReading() {
+  const raw = localStorage.getItem('sk-continue');
+  if (!raw) return;
+  try {
+    const data = JSON.parse(raw);
+    openFic(data.ficIdx);
+    if (data.chapter > 0) {
+      currentChapter = data.chapter;
+      loadChapter(data.ficIdx, data.chapter);
+    }
+    // Restore scroll position after content loads
+    setTimeout(() => window.scrollTo(0, data.scrollY || 0), 600);
+  } catch(e) {}
+}
+
+// Save progress periodically while reading
+let saveTimer = null;
+window.addEventListener('scroll', () => {
+  if (currentPage !== 'reading') return;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveReadingProgress, 500);
+
+  // Back to top button visibility
+  const btn = document.getElementById('back-top');
+  if (btn) btn.classList.toggle('visible', window.scrollY > 600);
+});
+
+// =============================================
+// FONT SIZE TOGGLE
+// =============================================
+let currentFontStep = 0; // -2 to +3
+const FONT_SIZES = [0.92, 1.0, 1.12, 1.22, 1.32, 1.44]; // rem
+const BASE_STEP = 2; // index 2 = 1.12rem (default)
+
+function initFontSize() {
+  const saved = localStorage.getItem('sk-fontsize');
+  if (saved !== null) {
+    currentFontStep = parseInt(saved);
+    applyFontSize();
+  }
+}
+
+function changeFontSize(delta) {
+  currentFontStep = Math.max(-2, Math.min(3, currentFontStep + delta));
+  localStorage.setItem('sk-fontsize', currentFontStep);
+  applyFontSize();
+}
+
+function applyFontSize() {
+  const size = FONT_SIZES[currentFontStep + BASE_STEP] || 1.12;
+  document.querySelectorAll('.fic-body').forEach(el => {
+    el.style.fontSize = size + 'rem';
+  });
+}
+
+// Toggle floating buttons visibility
+let floatsTucked = false;
+function toggleFloatingButtons() {
+  floatsTucked = !floatsTucked;
+  document.getElementById('font-controls').classList.toggle('tucked', floatsTucked);
+  document.getElementById('back-top').classList.toggle('tucked', floatsTucked);
+  document.getElementById('float-toggle').textContent = floatsTucked ? '○' : '●';
+}
+
+// =============================================
+// KEYBOARD SHORTCUTS
+// =============================================
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (currentPage === 'reading') {
+    if (e.key === 'ArrowLeft') prevChapter();
+    else if (e.key === 'ArrowRight') nextChapter();
+    else if (e.key === 'Escape') goBack();
+  }
+});
+
+// =============================================
+// LANGUAGE (UI only — nội dung fic giữ nguyên)
+// =============================================
+const i18n = {
+  en: {
+    nav_home:'Home', nav_works:'Works', nav_about:'About',
+    intro_sub:"Don't ask. Just read:)", intro_cta:'Click anywhere to enter',
+    hero_sub:'I blend classical music with my thoughts',
+    hero_tag:"Take a $ip y'all and enjoy",
+    continue:'Continue reading:',
+    head_latest:'My Latest Works', head_fav:'My Favorite Children',
+    view_all:'View All Works →',
+    browse:'Browse', all:'All', filter:'Filter', fandom:'Fandom', ship:'Ship',
+    head_all:'All Works', no_results:'No works found for this filter.',
+    search_ph:'Search by title...',
+    back:'← Back', prev:'← Prev', next:'Next →',
+    read_ao3:'Read the work on AO3', cont_ao3:'Continue on AO3 →',
+    about_head:'About the Author', stat_works:'Works',
+    my_ao3:'My AO3 →', my_x:'My X →',
+    footer:'ShostaKid · Have a great day:)',
+    cmt_show:'Show Comments', cmt_hide:'Hide Comments',
+    cmt_name_ph:'Name (optional)', cmt_body_ph:'Leave a comment...',
+    cmt_post:'Post Comment →', cmt_posting:'Posting…',
+    cmt_loading:'Loading…', cmt_empty:'No comments yet. Be the first ♪',
+    cmt_err:'Could not load comments.', cmt_post_err:'Could not post comment. Please try again.',
+    anon:'Anonymous',
+    loading:'Loading', ch_err:'Could not load chapter. Please check back later.',
+    soon:'Coming soon.', pause:'Pause', play:'Play',
+    about_p1:"Welcome. I write under the name <strong>ShostaKid</strong>, so you can say that I'm a child of Dmitry Dmitrievich Shostakovich (kind of lol)",
+    about_p2:"My works, most of the time, are random thoughts that live inside my head. I write what I want here, so don't question me and enjoy as much as you can:).",
+    about_p3:'I write primarily for the <em>Reverse: 1999</em>, <em>Figure Skating RPF</em>, <em>Honkai: Star Rail</em> and sometimes <em>Genshin Impact</em> fandoms. There will be more, but right now those are my primary',
+    about_p4:'I hope you have a great time here. Thank you for stopping by.'
+  },
+  vi: {
+    nav_home:'Trang chủ', nav_works:'Các đầu truyện', nav_about:'Về Web',
+    intro_sub:'Viết là tự nhiên', intro_cta:'Bấm vào bất cứ đâu để vào',
+    hero_sub:'Tôi trộn nhạc cổ điển với những suy nghĩ của mình',
+    hero_tag:'Take a $ip y\'all',
+    continue:'Đang đọc dở:',
+    head_latest:'Truyện mới nhất trên Web', head_fav:'Những đứa con tôi thích nhất',
+    view_all:'Xem tất cả truyện →',
+    browse:'Duyệt', all:'Tất cả', filter:'Lọc', fandom:'Fandom', ship:'Ship',
+    head_all:'Tất cả truyện', no_results:'Không tìm thấy truyện nào với bộ lọc này.',
+    search_ph:'Tìm theo tên truyện...',
+    back:'← Quay lại', prev:'← Trước', next:'Tiếp →',
+    read_ao3:'Đọc bản đầy đủ trên AO3', cont_ao3:'Đọc trên AO3 →',
+    about_head:'Giới thiệu', stat_works:'Truyện',
+    my_ao3:'Link AO3 →', my_x:'Link X →',
+    footer:'ShostaKid · Chúc bạn một ngày tốt lành:)',
+    cmt_show:'Hiện bình luận', cmt_hide:'Ẩn bình luận',
+    cmt_name_ph:'Tên (không bắt buộc)', cmt_body_ph:'Để lại bình luận...',
+    cmt_post:'Gửi bình luận →', cmt_posting:'Đang gửi…',
+    cmt_loading:'Đang tải…', cmt_empty:'Chưa có bình luận nào. Bạn là người đầu tiên ♪',
+    cmt_err:'Không thể tải bình luận.', cmt_post_err:'Không thể gửi bình luận. Vui lòng thử lại.',
+    anon:'Ẩn danh',
+    loading:'Đang tải', ch_err:'Không thể tải chương. Vui lòng thử lại sau.',
+    soon:'Sắp ra mắt.', pause:'Dừng', play:'Phát',
+    about_p1:'Xin chào, tôi viết dưới cái tên <strong>ShostaKid</strong>, nên có thể nói tôi là một đứa con của Dmitry Dmitrievich Shostakovich (kiểu vậy lol)',
+    about_p2:'Các tác phẩm của tôi, phần lớn thời gian, là những suy nghĩ vẩn vơ sống trong đầu tôi. Tôi viết những gì tôi thích ở đây, nên đừng hỏi tại sao, cứ đọc và tận hưởng thôi:).',
+    about_p3:'Tôi chủ yếu viết cho các fandom <em>Reverse: 1999</em>, <em>Figure Skating RPF</em>, <em>Honkai: Star Rail</em> và đôi khi cả <em>Genshin Impact</em>. Sau này sẽ có thêm, nhưng hiện tại đó là những fandom chính.',
+    about_p4:'Hy vọng bạn có khoảng thời gian vui vẻ ở đây. Cảm ơn vì đã ghé qua.'
+  }
+};
+
+let currentLang = localStorage.getItem('sk-lang') || 'en';
+function t(key) { return (i18n[currentLang] && i18n[currentLang][key]) || i18n.en[key] || ''; }
+
+function applyLang() {
+  document.documentElement.setAttribute('data-lang', currentLang);
+  document.documentElement.setAttribute('lang', currentLang);
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const v = t(el.dataset.i18n);
+    if (v) el.textContent = v;
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const v = t(el.dataset.i18nHtml);
+    if (v) el.innerHTML = v;
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const v = t(el.dataset.i18nPh);
+    if (v) el.placeholder = v;
+  });
+
+  // Nút chuyển: hiện ngôn ngữ sẽ đổi sang
+  const lb = document.getElementById('lang-btn');
+  if (lb) lb.textContent = currentLang === 'en' ? 'VI' : 'EN';
+
+  // Các phần render động
+  const cmtLabel = document.getElementById('comments-label');
+  if (cmtLabel) {
+    const body = document.getElementById('comments-body');
+    const open = body && body.style.display !== 'none';
+    cmtLabel.textContent = open ? t('cmt_hide') : t('cmt_show');
+  }
+  const cmtSubmit = document.getElementById('comment-submit');
+  if (cmtSubmit && !cmtSubmit.disabled) cmtSubmit.textContent = t('cmt_post');
+
+  const mt = document.querySelector('.music-toggle');
+  if (mt) mt.textContent = musicPlaying ? t('pause') : t('play');
+
+  if (currentPage === 'reading') updateChapterNav(currentFic, currentChapter);
+  renderActiveFilters();
+}
+
+function toggleLang() {
+  currentLang = currentLang === 'en' ? 'vi' : 'en';
+  localStorage.setItem('sk-lang', currentLang);
+  applyLang();
+}
+
+// =============================================
+// THEME
+// =============================================
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const next = isDark ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('sk-theme', next);
+  document.getElementById('theme-btn').textContent = next === 'dark' ? '☀' : '☾';
+}
+// Áp dụng theme đã lưu ngay khi load
+(function(){
+  const saved = localStorage.getItem('sk-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', saved);
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('theme-btn');
+    if (btn) btn.textContent = saved === 'dark' ? '☀' : '☾';
+  });
+})();
+
+// =============================================
+// MUSIC — hỗ trợ 3 nguồn: musopen / soundcloud / youtube
+// =============================================
+function playMusicDirect(source, url, id, start, end, name) {
+  stopMusic();
+  const m = { source, url, id, start, end };
+
+  if (source === 'musopen' || source === 'archive' || source === 'github') {
+    const audio = document.createElement('audio');
+    audio.id = 'audio-player';
+    audio.loop = true;
+    audio.style.display = 'none';
+    audio.src = url;
+    audio.volume = 1;
+    document.body.appendChild(audio);
+    audio.play().catch(()=>{});  // ← gọi NGAY, vẫn trong user gesture
+    audio.addEventListener('canplay', () => {
+  if (m.start) audio.currentTime = m.start;  // ← chỉ seek sau khi ready
+      }, { once: true });
+
+  } else if (source === 'soundcloud') {
+    const iframe = document.createElement('iframe');
+    iframe.id = 'sc-player';
+    iframe.style.cssText = 'position:fixed;width:1px;height:1px;bottom:-10px;left:-10px;opacity:0;pointer-events:none;';
+    iframe.src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&auto_play=true&hide_related=true&show_comments=false&show_user=false&start_time=${(start||0)*1000}`;
+    iframe.allow = 'autoplay';
+    document.body.appendChild(iframe);
+
+  } else {
+    const iframe = document.createElement('iframe');
+    iframe.id = 'yt-player';
+    iframe.style.cssText = 'position:fixed;width:1px;height:1px;bottom:-10px;left:-10px;opacity:0;pointer-events:none;';
+    iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&start=${start||0}${end?'&end='+end:''}&loop=1&playlist=${id}`;
+    iframe.allow = 'autoplay; encrypted-media';
+    iframe.frameBorder = '0';
+    document.body.appendChild(iframe);
+  }
+
   musicPlaying = true;
   document.getElementById('music-bar').classList.remove('hidden');
-  document.getElementById('music-title').textContent = f.musicName;
+  document.getElementById('music-title').textContent = name;
   document.getElementById('musicBars').classList.remove('paused');
-  document.querySelector('.music-toggle').textContent = 'Pause';
+  document.querySelector('.music-toggle').textContent = t('pause');
+}
+  
+  function playMusic(ficIdx, chapterIdx) {
+  const { m, name } = getMusicData(ficIdx, chapterIdx);
+  stopMusic();
+
+  const source = m.source || 'youtube';
+
+  if (source === 'musopen' || source === 'archive' || source === 'github') {
+    // HTML5 audio — direct MP3 link từ musopen.org hoặc archive.org
+    const audio = document.createElement('audio');
+    audio.id = 'audio-player';
+    audio.loop = true;
+    audio.style.display = 'none';
+    audio.src = m.url;
+    audio.volume = 1;
+    document.body.appendChild(audio);
+    audio.play().catch(()=>{});  // ← gọi NGAY, vẫn trong user gesture
+    audio.addEventListener('canplay', () => {
+      if (m.start) audio.currentTime = m.start;  // ← chỉ seek sau khi ready
+    }, { once: true });
+
+  } else if (source === 'soundcloud') {
+    // SoundCloud Widget iframe
+    const iframe = document.createElement('iframe');
+    iframe.id = 'sc-player';
+    iframe.style.cssText = 'position:fixed;width:1px;height:1px;bottom:-10px;left:-10px;opacity:0;pointer-events:none;';
+    const startMs = (m.start || 0) * 1000;
+    const encodedUrl = encodeURIComponent(m.url);
+    iframe.src = `https://w.soundcloud.com/player/?url=${encodedUrl}&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&start_time=${startMs}`;
+    iframe.allow = 'autoplay';
+    document.body.appendChild(iframe);
+
+  } else {
+    // YouTube (fallback)
+    const iframe = document.createElement('iframe');
+    iframe.id = 'yt-player';
+    iframe.style.cssText = 'position:fixed;width:1px;height:1px;bottom:-10px;left:-10px;opacity:0;pointer-events:none;';
+    const end = m.end ? `&end=${m.end}` : '';
+    iframe.src = `https://www.youtube.com/embed/${m.id}?autoplay=1&start=${m.start||0}${end}&loop=1&playlist=${m.id}&enablejsapi=1`;
+    iframe.allow = 'autoplay; encrypted-media';
+    iframe.frameBorder = '0';
+    document.body.appendChild(iframe);
+  }
+
+  musicPlaying = true;
+  document.getElementById('music-bar').classList.remove('hidden');
+  document.getElementById('music-title').textContent = name;
+  document.getElementById('musicBars').classList.remove('paused');
+  document.querySelector('.music-toggle').textContent = t('pause');
 }
 
 function stopMusic() {
-  const yt = document.getElementById('yt-player');
-  if (yt) yt.remove();
+  ['yt-player', 'sc-player', 'audio-player'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+  });
   musicPlaying = false;
   document.getElementById('music-bar').classList.add('hidden');
 }
 
 function toggleMusic() {
-  const yt = document.getElementById('yt-player');
-  if (!yt) return;
-  if (musicPlaying) {
-    // Pause bằng cách xóa autoplay khỏi src
-    yt.src = yt.src.replace('autoplay=1','autoplay=0');
-    musicPlaying = false;
-    document.getElementById('musicBars').classList.add('paused');
-    document.querySelector('.music-toggle').textContent = 'Play';
-  } else {
-    yt.src = yt.src.replace('autoplay=0','autoplay=1');
-    musicPlaying = true;
-    document.getElementById('musicBars').classList.remove('paused');
-    document.querySelector('.music-toggle').textContent = 'Pause';
+  const audio = document.getElementById('audio-player');
+  const yt    = document.getElementById('yt-player');
+  const sc    = document.getElementById('sc-player');
+
+  if (audio) {
+    if (musicPlaying) { audio.pause(); } else { audio.play().catch(()=>{}); }
+  } else if (yt) {
+    yt.src = yt.src.replace(musicPlaying ? 'autoplay=1' : 'autoplay=0',
+                            musicPlaying ? 'autoplay=0' : 'autoplay=1');
+  } else if (sc) {
+    // SoundCloud không pause được qua iframe thuần, reload với auto_play ngược lại
+    sc.src = sc.src.replace('auto_play=true','auto_play=false');
   }
+  musicPlaying = !musicPlaying;
+  document.getElementById('musicBars').classList.toggle('paused', !musicPlaying);
+  document.querySelector('.music-toggle').textContent = musicPlaying ? t('pause') : t('play');
 }
 
 function showPage(id, el) {
+  history.pushState({page: id}, '', '#' + id);
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
   if (el) el.classList.add('active');
   prevPage = currentPage; currentPage = id;
-  if (id !== 'reading') stopMusic();
+  if (id === 'about') {
+  playMusicDirect(
+    aboutMusic.source,
+    aboutMusic.url,
+    aboutMusic.id || null,
+    aboutMusic.start,
+    aboutMusic.end || null,
+    aboutMusic.name
+  );
+} else if (id !== 'reading') {
+  stopMusic();  // home, works → tắt nhạc
+}
   window.scrollTo(0,0);
 }
-
 function goBack() {
   stopMusic();
+  document.getElementById('progress-bar').classList.remove('visible');
+  document.getElementById('progress-bar').style.width = '0%';
+  document.getElementById('font-controls').classList.remove('visible');
+  document.getElementById('font-controls').classList.remove('tucked');
+  document.getElementById('back-top').classList.remove('visible');
+  document.getElementById('back-top').classList.remove('tucked');
+  document.getElementById('float-toggle').classList.remove('visible');
   showPage(prevPage, null);
   if (prevPage==='works') document.querySelector('.nav-links a:nth-child(2)').classList.add('active');
   else document.querySelector('.nav-links a:nth-child(1)').classList.add('active');
+}
+
+window.addEventListener('popstate', (e) => {
+  if (!e.state) { showPage('home', document.querySelector('.nav-links a:first-child')); return; }
+  if (e.state.page === 'reading') { openFic(e.state.fic); return; }
+  const el = document.querySelector(`.nav-links a[onclick*="${e.state.page}"]`);
+  showPage(e.state.page, el);
+});
+
+  function searchFics(query) {
+  const q = query.toLowerCase().trim();
+  document.querySelectorAll('#page-works .fic-card').forEach(card => {
+    const title = card.querySelector('.fic-title').textContent.toLowerCase();
+    card.style.display = (!q || title.includes(q)) ? 'block' : 'none';
+  });
+}
+
+// (Xử lý mở fic từ #fic-N đã gộp vào DOMContentLoaded ở trên,
+// vì cần đợi fics.json load xong trước khi có thể openFic)
+
+// =============================================
+// COMMENTS — Supabase
+// =============================================
+const SUPABASE_URL = 'https://ggbahdhmtgaemgblfdum.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdnYmFoZGhtdGdhZW1nYmxmZHVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwODQ1MTIsImV4cCI6MjA5NjY2MDUxMn0.AnSfFDdzzEaKB19cgODcoUm1Fkq2epU55ryNi_si64w';
+
+function loadComments(ficIdx) {
+  const wrap = document.getElementById('comments-wrap');
+  if (!wrap) return;
+  wrap.style.display = 'block';
+
+  // Reset toggle state when switching fics
+  document.getElementById('comments-body').style.display = 'none';
+  document.getElementById('comments-label').textContent = t('cmt_show');
+  document.getElementById('comments-arrow').textContent = '▼';
+  document.getElementById('comments-list').innerHTML = '';
+  document.getElementById('comment-name').value = '';
+  document.getElementById('comment-text').value = '';
+}
+
+function toggleComments() {
+  const body = document.getElementById('comments-body');
+  const label = document.getElementById('comments-label');
+  const arrow = document.getElementById('comments-arrow');
+  const isHidden = body.style.display === 'none';
+  body.style.display = isHidden ? 'block' : 'none';
+  label.textContent = isHidden ? t('cmt_hide') : t('cmt_show');
+  arrow.textContent = isHidden ? '▲' : '▼';
+  if (isHidden) fetchComments();
+}
+
+async function fetchComments() {
+  const list = document.getElementById('comments-list');
+  list.innerHTML = `<div class="comments-empty">${t('cmt_loading')}</div>`;
+
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/comments?fic_id=eq.fic-${currentFic}&order=created_at.desc&select=*`,
+      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+    );
+    if (!res.ok) throw new Error('fetch failed');
+    const comments = await res.json();
+
+    if (comments.length === 0) {
+      list.innerHTML = `<div class="comments-empty">${t('cmt_empty')}</div>`;
+      return;
+    }
+
+    list.innerHTML = comments.map(c => {
+      const name = escapeHtml(c.name || t('anon'));
+      const body = escapeHtml(c.body);
+      const date = new Date(c.created_at).toLocaleDateString('en-GB', {
+        day: 'numeric', month: 'short', year: 'numeric'
+      });
+      return `
+        <div class="comment-item">
+          <div class="comment-head">
+            <span class="comment-author">${name}</span>
+            <span class="comment-date">${date}</span>
+          </div>
+          <div class="comment-body-text">${body}</div>
+        </div>`;
+    }).join('');
+  } catch(e) {
+    list.innerHTML = `<div class="comments-empty">${t('cmt_err')}</div>`;
+  }
+}
+
+async function submitComment() {
+  const nameInput = document.getElementById('comment-name');
+  const textInput = document.getElementById('comment-text');
+  const submitBtn = document.getElementById('comment-submit');
+
+  const body = textInput.value.trim();
+  if (!body) { textInput.focus(); return; }
+
+  const name = nameInput.value.trim() || t('anon');
+  submitBtn.textContent = t('cmt_posting');
+  submitBtn.disabled = true;
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/comments`, {
+      method: 'POST',
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal'
+      },
+      body: JSON.stringify({ fic_id: 'fic-' + currentFic, name, body })
+    });
+    if (!res.ok) throw new Error('post failed');
+    textInput.value = '';
+    fetchComments();
+  } catch(e) {
+    alert(t('cmt_post_err'));
+  }
+  submitBtn.textContent = t('cmt_post');
+  submitBtn.disabled = false;
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
 }
 </script>
 </body>
