@@ -135,6 +135,7 @@ Migration đã chạy, theo thứ tự:
 13. `restrict_posting_to_admin`
 14. `restrict_tag_creation_to_admin`
 15. `auto_assign_legacy_id`
+16. `create_work_images_bucket`
 
 ### Ba cái bẫy đã gặp — đừng lặp lại
 
@@ -600,6 +601,42 @@ tuyến bằng `slug` — đụng `openFic`, URL `#fic-N` và `sk-continue` nên
 
 Bài học chung: sau mỗi lần sửa hàng loạt bằng awk/sed, **mở trang và xem console**
 — cả ba lỗi trên đều không lộ ra ở `grep`.
+
+## Trang đăng / sửa truyện (bước 7 phần 5)
+
+`#page-post`, link nav `#nav-post` **chỉ hiện khi `profiles.is_admin`** —
+`paintNav()` ẩn mặc định, `paintProfile()` mới bật lên khi biết chắc. Đây chỉ là
+lớp giao diện; chặn thật nằm ở policy INSERT của `works` (migration 13).
+
+Một form dùng cho cả đăng mới lẫn sửa: `loadPostForm()` không tham số là tạo mới,
+truyền `idx` là nạp truyện có sẵn. Fandom và ship **chỉ chọn từ danh sách có
+sẵn**, không tự thêm — tạo fandom/ship/tag mới là quyền admin ở tầng DB.
+
+Lưu: `works` trước (lấy `id`), rồi **xoá sạch và gắn lại** `work_fandoms`,
+`work_ships`, `chapters`. Thay toàn bộ chương đơn giản hơn nhiều so với so khớp
+từng dòng, và luôn khớp thứ tự đang thấy trên form. Đổi lại: **`chapters.id` đổi
+sau mỗi lần lưu**, nên đừng tham chiếu tới nó ở đâu khác (hiện `bookmarks.last_chapter_id`
+chưa dùng, nhưng nếu sau này dùng thì phải nghĩ lại chỗ này).
+
+`slug` sinh từ tiêu đề (bỏ dấu tiếng Việt) + 6 số cuối của timestamp cho khỏi trùng.
+`legacy_id` do trigger migration 15 cấp.
+
+### Bucket `work-images` (migration 16)
+
+Cùng khuôn với `avatars` nhưng thư mục theo `work_id`, và policy ghi kiểm
+`exists (select 1 from works where id = thư_mục and (author_id = auth.uid() or is_admin()))`.
+2 MB, jpg/png/webp, đọc công khai.
+
+Nút "Chèn ảnh" tải lên rồi chèn `<p align="center"><img src="..."></p>` **ngay tại
+vị trí con trỏ** trong ô nội dung. Phải lưu truyện một lần trước đã, vì đường dẫn
+ảnh cần `work_id`.
+
+### Bẫy: bộ nhớ đệm chương không tự hết hạn
+
+Sửa truyện xong mở ra đọc thì vẫn thấy **bản cũ** — vì `ensureChapters()` giữ
+promise theo `chapterFic`, mà truyện vẫn là truyện đó nên nó trả lại bản đã đệm.
+Đã thêm `window.invalidateChapters()` và gọi sau mỗi lần lưu. Triệu chứng lúc bắt
+được: chèn ảnh, lưu, mở đọc — ảnh không hiện, dễ tưởng lỗi upload.
 ## Bước 6 — trang đọc lấy nội dung từ database (cập nhật 2026-08-30)
 
 `loadChapter()` giờ đọc `chapters.content` thay vì `fetch` file `.txt` từ GitHub.

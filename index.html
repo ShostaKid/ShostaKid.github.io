@@ -249,6 +249,11 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .cmt-reply-to{font-family:Georgia,serif;font-style:italic;font-size:0.78rem;color:var(--ink3);margin-bottom:0.6rem;}
 .cmt-reply-to b{font-family:var(--font-ui);font-style:normal;font-size:0.68rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-dark);}
 @media (max-width:768px){ .comment-item.is-reply{margin-left:1.1rem;padding-left:0.7rem;} }
+.pw-ch{border:1px solid var(--border);padding:1rem 1.1rem;margin-bottom:1rem;background:var(--cream2);}
+.pw-ch input,.pw-ch textarea{width:100%;background:var(--cream);border:1px solid var(--border);padding:9px 12px;font-family:Georgia,serif;font-size:0.92rem;color:var(--ink);margin-bottom:0.6rem;box-sizing:border-box;resize:vertical;}
+.pw-ch input:focus,.pw-ch textarea:focus{outline:none;border-color:var(--gold);}
+.pw-ch-actions{display:flex;gap:1.2rem;justify-content:flex-end;}
+#page-post select{width:100%;background:var(--cream2);border:1px solid var(--border);padding:9px 12px;font-family:Georgia,serif;font-size:0.92rem;color:var(--ink);box-sizing:border-box;}
 .bm-foot{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1rem;padding-top:0.8rem;border-top:1px solid var(--border);font-family:Georgia,serif;font-style:italic;font-size:0.78rem;color:var(--ink3);}
 .cmt-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
 .cmt-as{display:flex;align-items:center;gap:0.55rem;font-family:Georgia,serif;font-style:italic;font-size:0.85rem;color:var(--ink3);margin-bottom:0.7rem;}
@@ -553,6 +558,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
       <a data-i18n="nav_works" onclick="showPage('works',this)">Works</a>
       <a data-i18n="nav_about" onclick="showPage('about',this)">About</a>
       <a id="nav-signin" data-i18n="nav_signin" onclick="showPage('auth',this)">Sign In</a>
+      <a id="nav-post" data-i18n="nav_post" onclick="showPage('post',this)" style="display:none;">Post</a>
       <a id="nav-bookmarks" data-i18n="nav_bookmarks" onclick="showPage('bookmarks',this)" style="display:none;">My Bookmarks</a>
       <a id="nav-profile" data-i18n="nav_profile" onclick="showPage('profile',this)" style="display:none;">My Profile</a>
     </div>
@@ -804,6 +810,62 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   </div>
 
   <!-- MY PROFILE -->
+  <!-- ĐĂNG / SỬA TRUYỆN (chỉ admin) -->
+  <div class="page" id="page-post" style="background:var(--cream);">
+    <div class="auth-wrap" style="max-width:760px;">
+      <div class="section-heading" id="post-head" data-i18n="post_head">Post a Work</div>
+      <div class="auth-msg" id="post-msg"></div>
+
+      <form id="form-post" onsubmit="return false;">
+        <div class="field">
+          <label data-i18n="post_title">Title</label>
+          <input type="text" id="pw-title" maxlength="200" required>
+        </div>
+        <div class="field">
+          <label data-i18n="post_subtitle">Subtitle</label>
+          <input type="text" id="pw-subtitle" maxlength="200">
+        </div>
+        <div class="field">
+          <label data-i18n="post_summary">Summary</label>
+          <textarea id="pw-summary" rows="3" maxlength="2000"></textarea>
+          <div class="field-hint" data-i18n="post_html_hint">Simple HTML is allowed: &lt;em&gt;, &lt;br&gt;</div>
+        </div>
+        <div class="field">
+          <label data-i18n="post_warning">Content warning</label>
+          <input type="text" id="pw-warning" maxlength="500">
+        </div>
+        <div class="field">
+          <label data-i18n="post_fandom">Fandom</label>
+          <select id="pw-fandom"></select>
+        </div>
+        <div class="field">
+          <label data-i18n="post_ships">Ships</label>
+          <select id="pw-ships" multiple size="6"></select>
+          <div class="field-hint" data-i18n="post_ships_hint">Hold Ctrl (or Cmd) to pick more than one.</div>
+        </div>
+        <div class="field">
+          <label data-i18n="post_status">Status</label>
+          <select id="pw-status">
+            <option value="published" data-i18n="post_published">Published</option>
+            <option value="draft" data-i18n="post_draft">Draft</option>
+          </select>
+        </div>
+        <div class="field">
+          <label><input type="checkbox" id="pw-featured" style="width:auto;margin-right:0.5rem;"><span data-i18n="post_featured">Show in My Favorite Children</span></label>
+        </div>
+
+        <div class="section-heading" style="font-size:1rem;margin-top:2.5rem;" data-i18n="post_chapters">Chapters</div>
+        <div id="pw-chapters"></div>
+        <button type="button" class="ao3-link" id="pw-add-ch" data-i18n="post_add_ch">+ Add chapter</button>
+
+        <input type="file" id="pw-img-file" accept="image/jpeg,image/png,image/webp" style="display:none;">
+
+        <button type="button" class="ao3-link btn-full" id="pw-save" data-i18n="post_save">Save Work →</button>
+      </form>
+    </div>
+    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+  </div>
+
   <!-- BOOKMARK CỦA TÔI -->
   <div class="page" id="page-bookmarks" style="background:var(--cream);">
     <div class="auth-wrap" style="max-width:760px;">
@@ -1312,6 +1374,9 @@ function renderWorks() {
 
 // Vẽ lại toàn bộ phần danh sách. buildSidebar() và applyFilters() vẫn đọc DOM
 // y như cũ, nên đổi nguồn dữ liệu không phải sửa gì trong bộ lọc/tìm kiếm.
+// Module Supabase gọi hàm này sau khi đăng/sửa truyện để danh sách cập nhật ngay.
+window.applyWorksData = function (rows) { worksData = rows; worksFromDB = true; renderAllWorks(); };
+
 function renderAllWorks() {
   renderWorks();
   renderHome();
@@ -1354,6 +1419,10 @@ function getMusicData(ficIdx, chapterIdx) {
 // chapterRows giữ bản ĐÃ giải quyết của chapterPromise, để chapterNames() và
 // getMusicData() đọc được đồng bộ (chúng bị gọi từ code không await được).
 let chapterFic = -1, chapterPromise = null, chapterRows = null;
+
+// Sau khi đăng/sửa truyện phải gọi hàm này, không thì trang đọc vẫn lấy
+// bản chương cũ trong bộ nhớ đệm.
+window.invalidateChapters = function () { chapterFic = -1; chapterPromise = null; chapterRows = null; };
 
 function ensureChapters(ficIdx) {
   if (chapterFic !== ficIdx || !chapterPromise) {
@@ -1692,7 +1761,17 @@ const i18n = {
     about_p2:"My works, most of the time, are random thoughts that live inside my head. I write what I want here, so don't question me and enjoy as much as you can:).",
     about_p3:'I write primarily for the <em>Reverse: 1999</em>, <em>Figure Skating RPF</em>, <em>Honkai: Star Rail</em> and sometimes <em>Genshin Impact</em> fandoms. There will be more, but right now those are my primary',
     about_p4:'I hope you have a great time here. Thank you for stopping by.',
-    nav_signin:'Sign In', nav_profile:'My Profile', nav_bookmarks:'My Bookmarks',
+    nav_signin:'Sign In', nav_profile:'My Profile', nav_bookmarks:'My Bookmarks', nav_post:'Post',
+    post_head:'Post a Work', post_edit_head:'Edit Work', post_title:'Title', post_subtitle:'Subtitle',
+    post_summary:'Summary', post_warning:'Content warning', post_fandom:'Fandom', post_ships:'Ships',
+    post_status:'Status', post_published:'Published', post_draft:'Draft', post_featured:'Show in My Favorite Children',
+    post_chapters:'Chapters', post_add_ch:'+ Add chapter', post_del_ch:'Remove chapter', post_ch_title:'Chapter title',
+    post_ch_body:'Chapter text', post_add_img:'Insert image', post_uploading:'Uploading…',
+    post_save:'Save Work →', post_saving:'Saving…', post_saved:'Saved ♪',
+    post_html_hint:'Simple HTML is allowed: <em>, <br>', post_ships_hint:'Hold Ctrl (or Cmd) to pick more than one.',
+    post_need_title:'Please enter a title.', post_need_ch:'Add at least one chapter with some text.',
+    post_err:'Could not save. Please try again.', post_img_err:'Could not upload that image.',
+    post_img_first:'Save the work once before adding images.',
     bm_head:'My Bookmarks', bm_empty:'You have not bookmarked anything yet.',
     bm_loading:'Loading…', bm_err:'Could not load your bookmarks.',
     bm_remove:'Remove', bm_removing:'Removing…', bm_removed:'Removed from your bookmarks.',
@@ -1773,7 +1852,17 @@ const i18n = {
     about_p2:'Các tác phẩm của tôi, phần lớn thời gian, là những suy nghĩ vẩn vơ sống trong đầu tôi. Tôi viết những gì tôi thích ở đây, nên đừng hỏi tại sao, cứ đọc và tận hưởng thôi:).',
     about_p3:'Tôi chủ yếu viết cho các fandom <em>Reverse: 1999</em>, <em>Figure Skating RPF</em>, <em>Honkai: Star Rail</em> và đôi khi cả <em>Genshin Impact</em>. Sau này sẽ có thêm, nhưng hiện tại đó là những fandom chính.',
     about_p4:'Hy vọng bạn có khoảng thời gian vui vẻ ở đây. Cảm ơn vì đã ghé qua.',
-    nav_signin:'Đăng nhập', nav_profile:'Hồ sơ của tôi', nav_bookmarks:'Truyện đã lưu',
+    nav_signin:'Đăng nhập', nav_profile:'Hồ sơ của tôi', nav_bookmarks:'Truyện đã lưu', nav_post:'Đăng truyện',
+    post_head:'Đăng truyện', post_edit_head:'Sửa truyện', post_title:'Tiêu đề', post_subtitle:'Phụ đề',
+    post_summary:'Tóm tắt', post_warning:'Cảnh báo nội dung', post_fandom:'Fandom', post_ships:'Ship',
+    post_status:'Trạng thái', post_published:'Đã đăng', post_draft:'Bản nháp', post_featured:'Hiện ở mục truyện tâm đắc',
+    post_chapters:'Các chương', post_add_ch:'+ Thêm chương', post_del_ch:'Xoá chương', post_ch_title:'Tên chương',
+    post_ch_body:'Nội dung chương', post_add_img:'Chèn ảnh', post_uploading:'Đang tải lên…',
+    post_save:'Lưu truyện →', post_saving:'Đang lưu…', post_saved:'Đã lưu ♪',
+    post_html_hint:'Dùng được HTML đơn giản: <em>, <br>', post_ships_hint:'Giữ Ctrl (hoặc Cmd) để chọn nhiều.',
+    post_need_title:'Bạn cần nhập tiêu đề.', post_need_ch:'Cần ít nhất một chương có nội dung.',
+    post_err:'Không lưu được. Bạn thử lại nhé.', post_img_err:'Không tải được ảnh lên.',
+    post_img_first:'Lưu truyện một lần trước khi chèn ảnh.',
     bm_head:'Truyện đã lưu', bm_empty:'Bạn chưa lưu truyện nào.',
     bm_loading:'Đang tải…', bm_err:'Không tải được danh sách đã lưu.',
     bm_remove:'Bỏ lưu', bm_removing:'Đang bỏ…', bm_removed:'Đã bỏ khỏi danh sách.',
@@ -2026,6 +2115,7 @@ function showPage(id, el) {
   // Trang "Truyện đã lưu" nạp lại mỗi lần mở, vì người dùng có thể vừa bỏ lưu
   // ở trang đọc xong quay lại đây.
   if (id === 'bookmarks' && window.loadBookmarks) window.loadBookmarks();
+  if (id === 'post' && window.loadPostForm) window.loadPostForm();
   if (id === 'about') {
   playMusicDirect(
     aboutMusic.source,
@@ -2115,6 +2205,8 @@ function paintNav(session) {
   $('nav-signin').style.display    = session ? 'none' : '';
   $('nav-profile').style.display   = session ? '' : 'none';
   $('nav-bookmarks').style.display = session ? '' : 'none';
+  // Nút đăng truyện chỉ hiện với admin; paintProfile() bật lên khi biết chắc.
+  if (!session) $('nav-post').style.display = 'none';
 }
 
 // Dựng bằng DOM thay vì chuỗi HTML: avatar_url là dữ liệu người dùng nhập,
@@ -2147,6 +2239,7 @@ function paintProfile(p) {
   paintAvatar($('prof-avatar-box'), p);
   $('prof-name').textContent   = p.display_name || p.username;
   $('prof-handle').textContent = '@' + p.username;
+  $('nav-post').style.display = p.is_admin ? '' : 'none';
   $('prof-admin').innerHTML    = p.is_admin
     ? `<span class="admin-badge">${tr('prof_admin')}</span>` : '';
   $('pf-username').value = p.username || '';
@@ -2273,6 +2366,219 @@ $('btn-avatar-clear').addEventListener('click', async () => {
 
   if (err) { msg($('prof-msg'), raw(err.message), 'err'); return; }
   msg($('prof-msg'), 'prof_avatar_removed', 'ok');
+});
+
+// ---------- trang đăng / sửa truyện (chỉ admin) ----------
+let pwWorkId = null;   // đang sửa truyện nào; null = đang tạo mới
+let pwOto    = null;   // ô nội dung chương đang được chèn ảnh
+
+function pwSay(key, isErr) {
+  const el = $('post-msg');
+  if (!key) { el.className = 'auth-msg'; delete el.dataset.i18n; el.textContent = ''; return; }
+  el.className = 'auth-msg show ' + (isErr ? 'err' : 'ok');
+  if (key.i18n === false) { delete el.dataset.i18n; el.textContent = key.text; }
+  else { el.dataset.i18n = key; el.textContent = tr(key); }
+}
+
+function pwAddChapter(data) {
+  const wrap = document.createElement('div');
+  wrap.className = 'pw-ch';
+
+  const t1 = document.createElement('input');
+  t1.type = 'text'; t1.className = 'pw-ch-title'; t1.maxLength = 200;
+  t1.placeholder = tr('post_ch_title');
+  t1.value = (data && data.title) || '';
+
+  const ta = document.createElement('textarea');
+  ta.className = 'pw-ch-body'; ta.rows = 8;
+  ta.placeholder = tr('post_ch_body');
+  ta.value = (data && data.content) || '';
+
+  const hang = document.createElement('div');
+  hang.className = 'pw-ch-actions';
+  const img = document.createElement('button');
+  img.type = 'button'; img.className = 'comment-reply';
+  img.dataset.i18n = 'post_add_img';
+  img.textContent = tr('post_add_img');
+  img.addEventListener('click', () => {
+    if (!pwWorkId) { pwSay('post_img_first', true); return; }
+    pwOto = ta; $('pw-img-file').click();
+  });
+  const xoa = document.createElement('button');
+  xoa.type = 'button'; xoa.className = 'comment-del';
+  xoa.dataset.i18n = 'post_del_ch';
+  xoa.textContent = tr('post_del_ch');
+  xoa.addEventListener('click', () => wrap.remove());
+  hang.append(img, xoa);
+
+  wrap.append(t1, ta, hang);
+  $('pw-chapters').appendChild(wrap);
+  return wrap;
+}
+
+$('pw-add-ch').addEventListener('click', () => pwAddChapter());
+
+// Chèn ảnh: tải lên bucket work-images rồi chèn thẻ <img> ngay tại con trỏ.
+$('pw-img-file').addEventListener('change', async (e) => {
+  const file = e.target.files && e.target.files[0];
+  e.target.value = '';
+  if (!file || !pwOto || !pwWorkId) return;
+  pwSay(null);
+
+  const ext = { 'image/jpeg':'jpg', 'image/png':'png', 'image/webp':'webp' }[file.type];
+  if (!ext) { pwSay('prof_avatar_bad_type', true); return; }
+  if (file.size > 2 * 1024 * 1024) { pwSay('prof_avatar_too_big', true); return; }
+
+  pwSay('post_uploading');
+  const path = pwWorkId + '/' + Date.now() + '.' + ext;
+  const { error } = await sb.storage.from('work-images')
+    .upload(path, file, { contentType: file.type, cacheControl: '3600' });
+  if (error) { pwSay(raw(error.message), true); return; }
+
+  const url = sb.storage.from('work-images').getPublicUrl(path).data.publicUrl;
+  const the = '\n<p align="center"><img src="' + url + '" alt=""></p>\n';
+  const ta = pwOto, i = ta.selectionStart || ta.value.length;
+  ta.value = ta.value.slice(0, i) + the + ta.value.slice(i);
+  ta.focus();
+  pwSay(null);
+});
+
+// Nạp danh sách fandom / ship có sẵn. Người đăng chỉ CHỌN, không tự thêm mới —
+// tạo fandom/ship mới là quyền admin ở tầng DB (policy `chỉ admin ghi`).
+async function pwLoadChoices() {
+  const [f, s] = await Promise.all([
+    sb.from('fandoms').select('id,name').order('name'),
+    sb.from('ships').select('id,name').order('name')
+  ]);
+  const fill = (el, rows) => {
+    el.textContent = '';
+    (rows || []).forEach(r => {
+      const o = document.createElement('option');
+      o.value = r.id; o.textContent = r.name;
+      el.appendChild(o);
+    });
+  };
+  fill($('pw-fandom'), f.data);
+  fill($('pw-ships'), s.data);
+}
+
+// Mở form. Truyền idx để sửa truyện có sẵn, bỏ trống để tạo mới.
+async function loadPostForm(idx) {
+  pwSay(null);
+  await pwLoadChoices();
+  $('pw-chapters').textContent = '';
+  pwWorkId = null;
+
+  const head = $('post-head');
+  if (idx === undefined || idx === null) {
+    head.dataset.i18n = 'post_head'; head.textContent = tr('post_head');
+    ['pw-title','pw-subtitle','pw-summary','pw-warning'].forEach(id => { $(id).value = ''; });
+    $('pw-status').value = 'published';
+    $('pw-featured').checked = false;
+    pwAddChapter();
+    return;
+  }
+
+  head.dataset.i18n = 'post_edit_head'; head.textContent = tr('post_edit_head');
+  const { data: w } = await sb.from('works')
+    .select('id,title,subtitle,summary,warning_note,status,featured,'
+          + 'work_fandoms(fandom_id), work_ships(ship_id),'
+          + 'chapters(position,title,content)')
+    .eq('legacy_id', 'fic-' + idx).maybeSingle();
+  if (!w) { pwSay('post_err', true); return; }
+
+  pwWorkId = w.id;
+  $('pw-title').value    = w.title || '';
+  $('pw-subtitle').value = w.subtitle || '';
+  $('pw-summary').value  = w.summary || '';
+  $('pw-warning').value  = w.warning_note || '';
+  $('pw-status').value   = w.status || 'published';
+  $('pw-featured').checked = !!w.featured;
+
+  const fid = (w.work_fandoms || []).map(x => x.fandom_id)[0];
+  if (fid) $('pw-fandom').value = fid;
+  const sid = new Set((w.work_ships || []).map(x => x.ship_id));
+  [...$('pw-ships').options].forEach(o => { o.selected = sid.has(o.value); });
+
+  (w.chapters || []).sort((a, b) => a.position - b.position)
+    .forEach(c => pwAddChapter(c));
+  if (!(w.chapters || []).length) pwAddChapter();
+}
+window.loadPostForm = loadPostForm;
+
+$('pw-save').addEventListener('click', async () => {
+  pwSay(null);
+  const btn = $('pw-save');
+  const title = $('pw-title').value.trim();
+  if (!title) { pwSay('post_need_title', true); return; }
+
+  const chuong = [...document.querySelectorAll('#pw-chapters .pw-ch')].map(w => ({
+    title: w.querySelector('.pw-ch-title').value.trim(),
+    content: w.querySelector('.pw-ch-body').value
+  })).filter(c => c.content.trim());
+  if (!chuong.length) { pwSay('post_need_ch', true); return; }
+
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { pwSay('prof_need_signin', true); return; }
+
+  busy(btn, true, 'post_saving');
+
+  const đếmTừ = (s) => (s.replace(/<[^>]+>/g, ' ').trim().split(/\s+/).filter(Boolean).length) || 1;
+  const patch = {
+    title,
+    subtitle: $('pw-subtitle').value.trim() || null,
+    summary:  $('pw-summary').value.trim() || null,
+    warning_note: $('pw-warning').value.trim() || null,
+    status:   $('pw-status').value,
+    featured: $('pw-featured').checked,
+    published_at: $('pw-status').value === 'published' ? new Date().toISOString() : null
+  };
+
+  let workId = pwWorkId, err = null;
+  if (workId) {
+    const r = await sb.from('works').update(patch).eq('id', workId);
+    err = r.error;
+  } else {
+    // slug tự sinh từ tiêu đề; legacy_id do trigger dưới DB cấp.
+    patch.author_id = session.user.id;
+    patch.slug = (title.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')
+                   .replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60) || 'work')
+                 + '-' + Date.now().toString().slice(-6);
+    const r = await sb.from('works').insert(patch).select('id').single();
+    err = r.error; workId = r.data && r.data.id;
+  }
+  if (err || !workId) { busy(btn, false, 'post_save'); pwSay(raw((err && err.message) || 'error'), true); return; }
+  pwWorkId = workId;
+
+  // Fandom + ship: xoá hết rồi gắn lại cho khớp lựa chọn hiện tại.
+  await sb.from('work_fandoms').delete().eq('work_id', workId);
+  if ($('pw-fandom').value) {
+    await sb.from('work_fandoms').insert({ work_id: workId, fandom_id: $('pw-fandom').value });
+  }
+  await sb.from('work_ships').delete().eq('work_id', workId);
+  const ships = [...$('pw-ships').selectedOptions].map(o => ({ work_id: workId, ship_id: o.value }));
+  if (ships.length) await sb.from('work_ships').insert(ships);
+
+  // Chương: thay toàn bộ. Đơn giản và luôn khớp thứ tự đang thấy trên form.
+  await sb.from('chapters').delete().eq('work_id', workId);
+  const rows = chuong.map((c, i) => ({
+    work_id: workId, position: i + 1,
+    title: c.title || null, content: c.content,
+    status: patch.status, published_at: patch.published_at,
+    word_count: đếmTừ(c.content)
+  }));
+  const rc = await sb.from('chapters').insert(rows);
+
+  busy(btn, false, 'post_save');
+  if (rc.error) { pwSay(raw(rc.error.message), true); return; }
+
+  pwSay('post_saved');
+  if (window.invalidateChapters) window.invalidateChapters();
+  // Danh sách truyện đổi rồi thì nạp lại Browse + trang chủ.
+  if (window.fetchWorksFromDB) {
+    const moi = await window.fetchWorksFromDB();
+    if (moi && moi.length && window.applyWorksData) window.applyWorksData(moi);
+  }
 });
 
 // ---------- trang "Truyện đã lưu" ----------
