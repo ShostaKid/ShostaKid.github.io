@@ -238,6 +238,17 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .avatar-fallback{display:flex;align-items:center;justify-content:center;font-family:var(--font-ui);font-size:1.9rem;color:var(--gold);}
 /* Honeypot: bẫy bot điền bừa mọi ô. Không dùng display:none vì bot có thể
    nhận ra; đẩy ra ngoài khung nhìn và khoá tab để người thật không chạm tới. */
+/* Trả lời bình luận — giới hạn đúng 2 tầng như AO3, trả lời của trả lời vẫn
+   gắn vào bình luận gốc, nên không bao giờ thụt lề sâu quá một bậc. */
+.comment-item.is-reply{margin-left:2.6rem;border-left:1px solid var(--border);padding-left:1rem;}
+.comment-reply{font-family:var(--font-ui);font-size:0.55rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);background:none;border:none;cursor:pointer;padding:0;text-decoration:underline;}
+.comment-reply:hover{color:var(--gold);}
+.comment-head .comment-reply{margin-left:auto;}
+.comment-head .comment-reply + .comment-del{margin-left:0.9rem;}
+.cmt-reply-box{margin:0.8rem 0 0.4rem;padding:0.9rem 1rem;border:1px solid var(--border);background:var(--cream2);}
+.cmt-reply-to{font-family:Georgia,serif;font-style:italic;font-size:0.78rem;color:var(--ink3);margin-bottom:0.6rem;}
+.cmt-reply-to b{font-family:var(--font-ui);font-style:normal;font-size:0.68rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-dark);}
+@media (max-width:768px){ .comment-item.is-reply{margin-left:1.1rem;padding-left:0.7rem;} }
 .bm-foot{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1rem;padding-top:0.8rem;border-top:1px solid var(--border);font-family:Georgia,serif;font-style:italic;font-size:0.78rem;color:var(--ink3);}
 .cmt-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
 .cmt-as{display:flex;align-items:center;gap:0.55rem;font-family:Georgia,serif;font-style:italic;font-size:0.85rem;color:var(--ink3);margin-bottom:0.7rem;}
@@ -1635,6 +1646,8 @@ const i18n = {
     cmt_deleted:'Comment deleted.', cmt_del_err:'Could not delete that comment.',
     cmt_posted:'Comment posted ♪', cmt_empty_body:'Please write something first.',
     cmt_too_fast:'You are posting too quickly. Please wait a few minutes.',
+    cmt_reply:'Reply', cmt_cancel:'Cancel', cmt_replying_to:'Replying to',
+    cmt_reply_ph:'Write a reply…', cmt_replied:'Reply posted ♪',
     anon:'Anonymous',
     loading:'Loading', ch_err:'Could not load chapter. Please check back later.',
     soon:'Coming soon.', pause:'Pause', play:'Play',
@@ -1714,6 +1727,8 @@ const i18n = {
     cmt_deleted:'Đã xoá bình luận.', cmt_del_err:'Không xoá được bình luận.',
     cmt_posted:'Đã gửi bình luận ♪', cmt_empty_body:'Bạn hãy viết gì đó đã.',
     cmt_too_fast:'Bạn đang gửi bình luận quá nhanh. Vui lòng đợi vài phút.',
+    cmt_reply:'Trả lời', cmt_cancel:'Huỷ', cmt_replying_to:'Đang trả lời',
+    cmt_reply_ph:'Viết trả lời…', cmt_replied:'Đã gửi trả lời ♪',
     anon:'Ẩn danh',
     loading:'Đang tải', ch_err:'Không thể tải chương. Vui lòng thử lại sau.',
     soon:'Sắp ra mắt.', pause:'Dừng', play:'Phát',
@@ -2577,6 +2592,7 @@ function smallAvatar(prof, letterSrc) {
 // Toàn bộ danh sách dựng bằng createElement/textContent — không có innerHTML nào
 // chạm vào nội dung người dùng, nên không có đường nào chèn được HTML.
 function renderComments() {
+  closeReply();   // vẽ lại thì bỏ ô trả lời đang mở, tránh nó mồ côi
   const list = $('comments-list');
   list.textContent = '';
 
@@ -2592,13 +2608,22 @@ function renderComments() {
   const myId = cmtSession ? cmtSession.user.id : null;
   const locale = (document.documentElement.getAttribute('data-lang') === 'vi') ? 'vi-VN' : 'en-GB';
 
-  cmtRows.forEach((c) => {
+  // Cây đúng hai tầng. Trả lời của trả lời được gắn thẳng vào bình luận gốc
+  // (xem openReply), nên ở đây không cần đệ quy.
+  const goc = cmtRows.filter(c => !c.parent_id);
+  const con = {};
+  cmtRows.filter(c => c.parent_id).forEach(c => { (con[c.parent_id] = con[c.parent_id] || []).push(c); });
+  // Bình luận gốc: mới nhất trước. Trả lời trong một mạch: cũ trước, để đọc xuôi.
+  Object.values(con).forEach(a => a.sort((x, y) => new Date(x.created_at) - new Date(y.created_at)));
+
+  const dung = (c, laTraLoi) => {
     const prof = c.profiles || null;
     const name = prof ? (prof.display_name || prof.username)
                       : (c.guest_name || tr('cmt_guest_default'));
 
     const item = document.createElement('div');
-    item.className = 'comment-item';
+    item.className = 'comment-item' + (laTraLoi ? ' is-reply' : '');
+    item.dataset.cid = c.id;
     item.appendChild(smallAvatar(prof, name));
 
     const main = document.createElement('div');
@@ -2626,6 +2651,14 @@ function renderComments() {
       .toLocaleDateString(locale, { day:'numeric', month:'short', year:'numeric' });
     head.appendChild(when);
 
+    const rep = document.createElement('button');
+    rep.type = 'button';
+    rep.className = 'comment-reply';
+    rep.dataset.i18n = 'cmt_reply';
+    rep.textContent = tr('cmt_reply');
+    rep.addEventListener('click', () => openReply(c, name, item));
+    head.appendChild(rep);
+
     // Chỉ hiện nút xoá cho bình luận của chính mình. Người khác có bấm được
     // hay không thì policy DELETE dưới DB mới là chỗ quyết định.
     if (myId && c.user_id === myId) {
@@ -2646,8 +2679,105 @@ function renderComments() {
     main.appendChild(body);
 
     item.appendChild(main);
-    list.appendChild(item);
+    return item;
+  };
+
+  goc.forEach(c => {
+    list.appendChild(dung(c, false));
+    (con[c.id] || []).forEach(k => list.appendChild(dung(k, true)));
   });
+}
+
+// Ô trả lời dựng ngay dưới bình luận được bấm. Mỗi lúc chỉ có một ô.
+function closeReply() {
+  const cu = document.querySelector('.cmt-reply-box');
+  if (cu) cu.remove();
+}
+
+function openReply(c, tenNguoiDuocTraLoi, item) {
+  closeReply();
+  // Trả lời một trả lời thì vẫn gắn vào bình luận GỐC — giữ đúng hai tầng.
+  const parentId = c.parent_id || c.id;
+
+  const box = document.createElement('div');
+  box.className = 'cmt-reply-box comment-form';
+
+  const to = document.createElement('div');
+  to.className = 'cmt-reply-to';
+  to.append(document.createTextNode(tr('cmt_replying_to') + ' '));
+  const b = document.createElement('b');
+  b.textContent = tenNguoiDuocTraLoi;
+  to.appendChild(b);
+  box.appendChild(to);
+
+  // Khách phải có tên; người đăng nhập thì lấy danh tính thật.
+  const nameInput = document.createElement('input');
+  nameInput.type = 'text';
+  nameInput.maxLength = 50;
+  nameInput.placeholder = tr('cmt_name_ph');
+  if (cmtSession) nameInput.style.display = 'none';
+  box.appendChild(nameInput);
+
+  // Bẫy bot y như form chính.
+  const hp = document.createElement('div');
+  hp.className = 'cmt-hp';
+  hp.setAttribute('aria-hidden', 'true');
+  const hpInput = document.createElement('input');
+  hpInput.type = 'text'; hpInput.tabIndex = -1; hpInput.autocomplete = 'off';
+  hp.appendChild(hpInput);
+  box.appendChild(hp);
+
+  const ta = document.createElement('textarea');
+  ta.rows = 3; ta.maxLength = 10000;
+  ta.placeholder = tr('cmt_reply_ph');
+  box.appendChild(ta);
+
+  const hang = document.createElement('div');
+  hang.className = 'cmt-actions';
+  const msg = document.createElement('span');
+  msg.className = 'cmt-msg';
+  const huy = document.createElement('button');
+  huy.type = 'button'; huy.className = 'comment-reply';
+  huy.textContent = tr('cmt_cancel');
+  huy.addEventListener('click', closeReply);
+  const gui = document.createElement('button');
+  gui.type = 'button'; gui.className = 'ao3-link';
+  gui.style.marginTop = '0';
+  gui.textContent = tr('cmt_post');
+  gui.addEventListener('click', () => sendReply(parentId, nameInput, hpInput, ta, gui, msg));
+  hang.append(msg, huy, gui);
+  box.appendChild(hang);
+
+  item.insertAdjacentElement('afterend', box);
+  ta.focus();
+}
+
+async function sendReply(parentId, nameInput, hpInput, ta, btn, msgEl) {
+  const body = ta.value.trim();
+  const say = (k, err) => { msgEl.className = 'cmt-msg' + (err ? ' err' : ''); msgEl.textContent = tr(k); };
+  if (!body) { say('cmt_empty_body', true); ta.focus(); return; }
+
+  // Bot điền vào ô ẩn thì im lặng nuốt, y như form chính.
+  if (hpInput.value.trim() !== '') { closeReply(); cmtSay('cmt_replied'); return; }
+
+  const { data: { session } } = await sb.auth.getSession();
+  btn.disabled = true;
+  btn.textContent = tr('cmt_posting');
+
+  const row = session
+    ? { work_id: waWork.id, body, user_id: session.user.id, parent_id: parentId }
+    : { work_id: waWork.id, body, parent_id: parentId,
+        guest_name: (nameInput.value.trim() || tr('cmt_guest_default')).slice(0, 50) };
+
+  const { error } = await sb.from('comments').insert(row);
+  btn.disabled = false;
+  btn.textContent = tr('cmt_post');
+
+  if (error) { say(error.code === 'PT429' ? 'cmt_too_fast' : 'cmt_post_err', true); return; }
+
+  closeReply();
+  cmtSay('cmt_replied');
+  fetchComments();
 }
 window.repaintComments = () => { if (cmtRows.length || $('comments-list').children.length) renderComments(); };
 
@@ -2669,7 +2799,7 @@ async function fetchComments() {
   // Policy SELECT không lọc bình luận đã xoá mềm, phải tự lọc.
   // Không dùng select('*') — cột nào cần thì lấy đúng cột đó.
   const { data, error } = await sb.from('comments')
-    .select('id, body, guest_name, user_id, created_at, profiles(username, display_name, avatar_url, is_admin)')
+    .select('id, body, guest_name, user_id, parent_id, created_at, profiles(username, display_name, avatar_url, is_admin)')
     .eq('work_id', waWork.id)
     .eq('is_deleted', false)
     .order('created_at', { ascending: false });

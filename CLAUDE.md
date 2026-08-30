@@ -133,6 +133,7 @@ Migration đã chạy, theo thứ tự:
 11. `kudos_allow_guests`
 12. `comments_rate_limit`
 13. `restrict_posting_to_admin`
+14. `restrict_tag_creation_to_admin`
 
 ### Ba cái bẫy đã gặp — đừng lặp lại
 
@@ -534,6 +535,36 @@ Phải nạp lại **trước**, báo **sau**.
 Vào thẳng `#bookmarks` khi chưa đăng nhập thì rơi về trang chủ (chặn đúng), nhưng
 không kịp hiện câu "đăng nhập trước" vì site tự đặt hash về `#home` trước khi
 `guardProfile()` chạy. Trang `#profile` cũng vậy — hành vi có sẵn, không phải mới.
+
+## Trả lời bình luận lồng nhau (bước 7 phần 3)
+
+Đúng **hai tầng**, cố ý. Trả lời một trả lời vẫn gắn `parent_id` vào bình luận
+**gốc** (`c.parent_id || c.id` trong `openReply`), nên không bao giờ có tầng ba
+và không thụt lề vô tận trên điện thoại.
+
+Bình luận gốc xếp mới nhất trước; trả lời trong một mạch xếp cũ trước để đọc xuôi.
+
+Ô trả lời dựng ngay dưới bình luận được bấm, mỗi lúc chỉ có một ô
+(`closeReply()` gọi cả trong `renderComments()` để nó không thành mồ côi khi
+danh sách vẽ lại). Ô này có honeypot riêng và đi qua đúng trigger giới hạn tần
+suất như form chính — đã test cả hai.
+
+`comments_parent_id_fkey` là `ON DELETE CASCADE`: xoá bình luận gốc là **mất cả
+mạch trả lời**. Chấp nhận được, nhưng nếu sau này làm xoá mềm thì phải nghĩ lại.
+
+### Bẫy mất thời gian nhất: session cũ của tài khoản đã xoá
+
+Đang test thì gửi bình luận khách báo `permission denied for table comments`,
+trong khi chạy cùng câu lệnh đó bằng SQL với role `anon` lại chạy ngon.
+
+Nguyên nhân: trình duyệt còn **session của một tài khoản test đã bị xoá khỏi
+`auth.users`**. `createClient()` đọc lại session đó từ localStorage nên request
+đi với role `authenticated` — mà role đó **không có quyền ghi cột `guest_name`**
+(chỉ `anon` mới có). Dấu hiệu nhận ra: bỏ `guest_name` đi thì lỗi đổi thành
+"violates row-level security policy", tức là đã qua được tầng GRANT.
+
+Sau khi xoá tài khoản test, nhớ `signOut()` và xoá key `sb-*` trong localStorage,
+không thì lần test sau sẽ đuổi theo một lỗi không có thật.
 ## Bước 6 — trang đọc lấy nội dung từ database (cập nhật 2026-08-30)
 
 `loadChapter()` giờ đọc `chapters.content` thay vì `fetch` file `.txt` từ GitHub.
