@@ -136,6 +136,7 @@ Migration đã chạy, theo thứ tự:
 14. `restrict_tag_creation_to_admin`
 15. `auto_assign_legacy_id`
 16. `create_work_images_bucket`
+17. `fix_chapters_insert_allow_admin`
 
 ### Ba cái bẫy đã gặp — đừng lặp lại
 
@@ -637,6 +638,33 @@ Sửa truyện xong mở ra đọc thì vẫn thấy **bản cũ** — vì `ensu
 promise theo `chapterFic`, mà truyện vẫn là truyện đó nên nó trả lại bản đã đệm.
 Đã thêm `window.invalidateChapters()` và gọi sau mỗi lần lưu. Triệu chứng lúc bắt
 được: chèn ảnh, lưu, mở đọc — ảnh không hiện, dễ tưởng lỗi upload.
+
+### Nhạc trong form đăng bài, và một lần suýt mất bài của chủ repo
+
+Form có ô nhạc **chung cho cả truyện** và ô **ghi đè riêng từng chương**, khớp
+đúng hình dạng `chapters.music` = `{source, url, start, name}`. Schema chỉ lưu
+nhạc **theo chương**, nên "nhạc của truyện" là quy ước ở frontend: lúc nạp thì
+suy từ chương 1; ô của chương chỉ điền khi **khác** nhạc chung; lúc lưu, chương
+để trống sẽ nhận nhạc chung.
+
+**Lỗi nghiêm trọng đã xảy ra thật.** Policy INSERT của `chapters` chỉ có
+`owns_work(work_id)`, trong khi UPDATE và DELETE đều có thêm `is_admin()`. Hàm
+lưu của form **xoá hết chương rồi chèn lại**, và hai bước đó **không nằm trong
+một transaction** (đi qua PostgREST là hai request riêng). Khi một admin sửa
+truyện do người khác đứng tên: bước xoá chạy được, bước chèn bị RLS chặn →
+**truyện mất sạch chương**. Đã xảy ra với `fic-36` của chủ repo; may là nội dung
+còn trong form trên trình duyệt nên vá policy (migration 17) rồi bấm Lưu lại là
+khôi phục đủ.
+
+Hai điều rút ra, đừng quên:
+1. **Xoá-rồi-chèn qua PostgREST không có tính nguyên tử.** Nếu sau này còn dùng
+   kiểu này ở chỗ khác, phải tính tới trường hợp bước hai hỏng.
+2. Khi thêm policy cho một bảng, **kiểm cả ba lệnh INSERT/UPDATE/DELETE có cùng
+   điều kiện không** — lệch một cái là sinh ra đúng loại lỗi trên.
+
+`fetchChapters()` ban đầu quên `select` cột `music`, nên nhạc không bao giờ tới
+được trang đọc dù DB có đủ. Triệu chứng: thanh nhạc vẫn hiện tên bài của truyện
+mở trước đó.
 ## Bước 6 — trang đọc lấy nội dung từ database (cập nhật 2026-08-30)
 
 `loadChapter()` giờ đọc `chapters.content` thay vì `fetch` file `.txt` từ GitHub.
