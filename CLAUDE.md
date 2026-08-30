@@ -132,6 +132,7 @@ Migration đã chạy, theo thứ tự:
 10. `lock_down_rls_auto_enable`
 11. `kudos_allow_guests`
 12. `comments_rate_limit`
+13. `restrict_posting_to_admin`
 
 ### Ba cái bẫy đã gặp — đừng lặp lại
 
@@ -148,6 +149,31 @@ Migration đã chạy, theo thứ tự:
   `handle_new_user()` và `bump_work_counter()`; đã kiểm chứng trigger vẫn chạy sau đó
   (quyền EXECUTE của trigger function chỉ bị kiểm lúc CREATE TRIGGER).
 
+
+### Đăng bài chỉ dành cho admin (migration 13)
+
+Policy cũ `works: tac gia tu dang` chỉ đòi `author_id = auth.uid()`, nghĩa là
+**bất kỳ ai đăng ký tài khoản cũng đăng được truyện vào archive qua API** —
+không cần giao diện. Đã thử thật và lọt cả truyện lẫn chương; nó không hiện trên
+trang Works chỉ vì bộ lọc `legacy_id` ở frontend tình cờ loại ra, tức là may chứ
+không phải thiết kế. Đã đổi thành `is_admin() and author_id = auth.uid()`.
+
+**Còn một lỗ cùng loại chưa bịt:** policy `tags: user dang nhap duoc tao tag` có
+điều kiện `true`, nên người lạ vẫn tạo được hàng rác trong bảng `tags`. Họ không
+gắn được tag vào truyện của người khác (`work_tags` đòi `owns_work`), nên tác hại
+chỉ là rác. **Chưa sửa vì chủ repo chưa duyệt riêng mục này.**
+
+### Nhạc: KHÔNG chuyển sang Supabase Storage — đã chốt bỏ
+
+26 file, **385 MB, trung bình 14,8 MB/file**. Gói Free có 1 GB dung lượng (vừa)
+nhưng **băng thông chỉ 5 GB/tháng** → khoảng **340 lượt nghe là hết**, nhạc chết
+tới đầu tháng sau. GitHub Releases không giới hạn băng thông cho repo public.
+Giữ nguyên ở GitHub Releases. **Đừng đề xuất lại.**
+
+Nhân tiện: **không có tấm ảnh nào trong nội dung truyện** — 0 thẻ `<img>` trong
+cả 63 file `.txt` lẫn `chapters.content`, 0 `works.cover_url`. Chữ "ảnh" trong
+mục "chuyển nhạc/ảnh sang Storage" ở các bản CLAUDE.md trước là **viết sai, chưa
+bao giờ có căn cứ**. Ảnh duy nhất trên site là avatar.
 ### Cảnh báo advisor còn lại — cố ý để vậy
 
 `is_admin()`, `can_read_work()`, `owns_work()` vẫn bị lint
