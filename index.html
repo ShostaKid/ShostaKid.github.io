@@ -238,6 +238,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .avatar-fallback{display:flex;align-items:center;justify-content:center;font-family:var(--font-ui);font-size:1.9rem;color:var(--gold);}
 /* Honeypot: bẫy bot điền bừa mọi ô. Không dùng display:none vì bot có thể
    nhận ra; đẩy ra ngoài khung nhìn và khoá tab để người thật không chạm tới. */
+.bm-foot{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1rem;padding-top:0.8rem;border-top:1px solid var(--border);font-family:Georgia,serif;font-style:italic;font-size:0.78rem;color:var(--ink3);}
 .cmt-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
 .cmt-as{display:flex;align-items:center;gap:0.55rem;font-family:Georgia,serif;font-style:italic;font-size:0.85rem;color:var(--ink3);margin-bottom:0.7rem;}
 .cmt-as strong{font-family:var(--font-ui);font-style:normal;font-size:0.72rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-dark);}
@@ -541,6 +542,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
       <a data-i18n="nav_works" onclick="showPage('works',this)">Works</a>
       <a data-i18n="nav_about" onclick="showPage('about',this)">About</a>
       <a id="nav-signin" data-i18n="nav_signin" onclick="showPage('auth',this)">Sign In</a>
+      <a id="nav-bookmarks" data-i18n="nav_bookmarks" onclick="showPage('bookmarks',this)" style="display:none;">My Bookmarks</a>
       <a id="nav-profile" data-i18n="nav_profile" onclick="showPage('profile',this)" style="display:none;">My Profile</a>
     </div>
     <div class="nav-utils">
@@ -791,6 +793,16 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   </div>
 
   <!-- MY PROFILE -->
+  <!-- BOOKMARK CỦA TÔI -->
+  <div class="page" id="page-bookmarks" style="background:var(--cream);">
+    <div class="auth-wrap" style="max-width:760px;">
+      <div class="section-heading" data-i18n="bm_head">My Bookmarks</div>
+      <div class="auth-msg" id="bm-msg"></div>
+      <div id="bm-list"></div>
+    </div>
+    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+  </div>
+
   <div class="page" id="page-profile" style="background:var(--cream);">
     <div class="auth-wrap" style="max-width:560px;">
       <div class="section-heading" data-i18n="prof_head">My Profile</div>
@@ -1630,7 +1642,11 @@ const i18n = {
     about_p2:"My works, most of the time, are random thoughts that live inside my head. I write what I want here, so don't question me and enjoy as much as you can:).",
     about_p3:'I write primarily for the <em>Reverse: 1999</em>, <em>Figure Skating RPF</em>, <em>Honkai: Star Rail</em> and sometimes <em>Genshin Impact</em> fandoms. There will be more, but right now those are my primary',
     about_p4:'I hope you have a great time here. Thank you for stopping by.',
-    nav_signin:'Sign In', nav_profile:'My Profile',
+    nav_signin:'Sign In', nav_profile:'My Profile', nav_bookmarks:'My Bookmarks',
+    bm_head:'My Bookmarks', bm_empty:'You have not bookmarked anything yet.',
+    bm_loading:'Loading…', bm_err:'Could not load your bookmarks.',
+    bm_remove:'Remove', bm_removing:'Removing…', bm_removed:'Removed from your bookmarks.',
+    bm_remove_err:'Could not remove that bookmark.', bm_saved_on:'Saved',
     auth_head:'Account', auth_signin:'Sign In', auth_signup:'Sign Up',
     auth_email:'Email', auth_password:'Password', auth_username:'Username',
     auth_username_hint:'3–30 characters. Letters, numbers and underscore only.',
@@ -1705,7 +1721,11 @@ const i18n = {
     about_p2:'Các tác phẩm của tôi, phần lớn thời gian, là những suy nghĩ vẩn vơ sống trong đầu tôi. Tôi viết những gì tôi thích ở đây, nên đừng hỏi tại sao, cứ đọc và tận hưởng thôi:).',
     about_p3:'Tôi chủ yếu viết cho các fandom <em>Reverse: 1999</em>, <em>Figure Skating RPF</em>, <em>Honkai: Star Rail</em> và đôi khi cả <em>Genshin Impact</em>. Sau này sẽ có thêm, nhưng hiện tại đó là những fandom chính.',
     about_p4:'Hy vọng bạn có khoảng thời gian vui vẻ ở đây. Cảm ơn vì đã ghé qua.',
-    nav_signin:'Đăng nhập', nav_profile:'Hồ sơ của tôi',
+    nav_signin:'Đăng nhập', nav_profile:'Hồ sơ của tôi', nav_bookmarks:'Truyện đã lưu',
+    bm_head:'Truyện đã lưu', bm_empty:'Bạn chưa lưu truyện nào.',
+    bm_loading:'Đang tải…', bm_err:'Không tải được danh sách đã lưu.',
+    bm_remove:'Bỏ lưu', bm_removing:'Đang bỏ…', bm_removed:'Đã bỏ khỏi danh sách.',
+    bm_remove_err:'Không bỏ lưu được.', bm_saved_on:'Đã lưu',
     auth_head:'Tài khoản', auth_signin:'Đăng nhập', auth_signup:'Đăng ký',
     auth_email:'Email', auth_password:'Mật khẩu', auth_username:'Tên đăng nhập',
     auth_username_hint:'3–30 ký tự. Chỉ chữ cái, chữ số và dấu gạch dưới.',
@@ -1948,6 +1968,9 @@ function showPage(id, el) {
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
   if (el) el.classList.add('active');
   prevPage = currentPage; currentPage = id;
+  // Trang "Truyện đã lưu" nạp lại mỗi lần mở, vì người dùng có thể vừa bỏ lưu
+  // ở trang đọc xong quay lại đây.
+  if (id === 'bookmarks' && window.loadBookmarks) window.loadBookmarks();
   if (id === 'about') {
   playMusicDirect(
     aboutMusic.source,
@@ -2034,8 +2057,9 @@ function busy(btn, on, labelKey) {
 
 // ---------- điều hướng theo trạng thái đăng nhập ----------
 function paintNav(session) {
-  $('nav-signin').style.display  = session ? 'none' : '';
-  $('nav-profile').style.display = session ? '' : 'none';
+  $('nav-signin').style.display    = session ? 'none' : '';
+  $('nav-profile').style.display   = session ? '' : 'none';
+  $('nav-bookmarks').style.display = session ? '' : 'none';
 }
 
 // Dựng bằng DOM thay vì chuỗi HTML: avatar_url là dữ liệu người dùng nhập,
@@ -2195,6 +2219,94 @@ $('btn-avatar-clear').addEventListener('click', async () => {
   if (err) { msg($('prof-msg'), raw(err.message), 'err'); return; }
   msg($('prof-msg'), 'prof_avatar_removed', 'ok');
 });
+
+// ---------- trang "Truyện đã lưu" ----------
+// Dựng lại đúng khung .fic-card của Browse để không phải thêm kiểu dáng mới,
+// chỉ gắn thêm nút Bỏ lưu. Bấm vào thẻ vẫn mở truyện như ở Browse.
+function bmSay(key, isErr) {
+  const el = $('bm-msg');
+  if (!key) { el.className = 'auth-msg'; delete el.dataset.i18n; el.textContent = ''; return; }
+  el.className = 'auth-msg show ' + (isErr ? 'err' : 'ok');
+  el.dataset.i18n = key;
+  el.textContent = tr(key);
+}
+
+function bmNote(list, text) {
+  list.textContent = '';
+  const d = document.createElement('div');
+  d.className = 'comments-empty';
+  d.textContent = text;
+  list.appendChild(d);
+}
+
+async function loadBookmarks() {
+  const list = $('bm-list');
+  bmSay(null);
+  bmNote(list, tr('bm_loading'));
+
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { bmNote(list, tr('prof_need_signin')); return; }
+
+  // Chỉ lấy đúng cột cần. work_id nối sang works để dựng thẻ.
+  const { data, error } = await sb.from('bookmarks')
+    .select('id, created_at, work_id, works!inner(legacy_id, title, subtitle, summary, warning_note,'
+          + ' kudos_count, comment_count, work_fandoms(fandoms(name)), work_ships(ships(name)))')
+    .eq('user_id', session.user.id)
+    .order('created_at', { ascending: false });
+
+  if (error) { bmNote(list, tr('bm_err')); return; }
+  if (!data || !data.length) { bmNote(list, tr('bm_empty')); return; }
+
+  list.textContent = '';
+  const locale = (document.documentElement.getAttribute('data-lang') === 'vi') ? 'vi-VN' : 'en-GB';
+
+  data.forEach(row => {
+    const w = row.works;
+    const idx = parseInt(String(w.legacy_id || '').replace(/\D/g, ''), 10);
+    const card = window.makeCardEl({
+      idx: isNaN(idx) ? -1 : idx,
+      title: w.title || '', subtitle: w.subtitle || '',
+      fandom: (w.work_fandoms || []).map(x => x.fandoms.name)[0] || 'Others',
+      warning: w.warning_note || '', summary: w.summary || '',
+      ships: (w.work_ships || []).map(x => x.ships.name),
+      featured: false, date: row.created_at,
+      kudos: w.kudos_count || 0, comments: w.comment_count || 0
+    });
+
+    // Hàng dưới thẻ: ngày lưu + nút bỏ lưu. Bấm nút không được mở truyện.
+    const foot = document.createElement('div');
+    foot.className = 'bm-foot';
+    const when = document.createElement('span');
+    when.textContent = tr('bm_saved_on') + ' · ' + new Date(row.created_at)
+      .toLocaleDateString(locale, { day:'numeric', month:'short', year:'numeric' });
+    const del = document.createElement('button');
+    del.type = 'button';
+    del.className = 'comment-del';
+    del.dataset.i18n = 'bm_remove';
+    del.textContent = tr('bm_remove');
+    del.addEventListener('click', (e) => { e.stopPropagation(); removeBookmark(row.id, del); });
+    foot.append(when, del);
+    card.appendChild(foot);
+
+    list.appendChild(card);
+  });
+}
+window.loadBookmarks = loadBookmarks;
+
+async function removeBookmark(id, btn) {
+  btn.disabled = true;
+  btn.textContent = tr('bm_removing');
+  const { error } = await sb.from('bookmarks').delete().eq('id', id);
+  if (error) {
+    btn.disabled = false; btn.textContent = tr('bm_remove');
+    bmSay('bm_remove_err', true);
+    return;
+  }
+  // Nạp lại TRƯỚC rồi mới báo: loadBookmarks() xoá trắng ô thông báo,
+  // gọi ngược thứ tự là câu báo vừa hiện đã bị xoá ngay.
+  await loadBookmarks();
+  bmSay('bm_removed');
+}
 
 // ---------- nội dung chương cho trang đọc ----------
 // Ba kết quả khác nhau, và trang đọc xử lý khác nhau ở từng cái:
@@ -2852,7 +2964,7 @@ sb.auth.onAuthStateChange((event, session) => {
     // Đang đứng ở trang hồ sơ mà mất session thì đẩy về trang đăng nhập.
     // (currentPage của site khai báo bằng `let` nên không nằm trên window —
     //  đọc trạng thái từ DOM thay vì đoán.)
-    if ($('page-profile').classList.contains('active')) {
+    if ($('page-profile').classList.contains('active') || $('page-bookmarks').classList.contains('active')) {
       window.showPage('auth', $('nav-signin'));
     }
   }
@@ -2863,7 +2975,8 @@ async function guardProfile() {
   const { data: { session } } = await sb.auth.getSession();
   paintNav(session);
   if (session) loadProfile(session);
-  if (!session && window.location.hash === '#profile') {
+  const trangRieng = ["#profile", "#bookmarks"];
+  if (!session && trangRieng.includes(window.location.hash)) {
     window.showPage('auth', $('nav-signin'));
     msg($('auth-msg'), 'prof_need_signin', 'err');
   }

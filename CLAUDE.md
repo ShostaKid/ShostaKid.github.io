@@ -513,6 +513,27 @@ trên điện thoại**. Giờ `buildSidebar()` dựng theo fandom có thật, �
 - **Đo `getBoundingClientRect()` trên trang đang ẩn luôn ra 0×0.** Trang nào không
   có class `active` thì mọi phép đo đều vô nghĩa — phải `showPage()` trước khi đo.
 
+
+## Trang "Truyện đã lưu" (bước 7 phần 2)
+
+`#page-bookmarks`, link nav `#nav-bookmarks` đặt **trước** `#nav-profile` nhưng
+vẫn ở cuối danh sách — nhắc lại: `goBack()` và nút "View All Works" bám vào
+`.nav-links a:nth-child(1)` và `(2)`, nên mục mới luôn phải nằm sau Home/Works.
+
+Dựng lại đúng khung `.fic-card` của Browse bằng `window.makeCardEl()` nên không
+thêm kiểu dáng nào ngoài `.bm-foot` (dòng ngày lưu + nút Bỏ lưu). Bấm thẻ vẫn mở
+truyện; nút Bỏ lưu có `stopPropagation()` để không mở truyện theo.
+
+`showPage('bookmarks')` nạp lại danh sách mỗi lần mở, vì người dùng có thể vừa
+bỏ lưu ở trang đọc rồi quay lại.
+
+**Bẫy đã vấp:** `removeBookmark()` gọi `bmSay('bm_removed')` rồi `loadBookmarks()`
+— mà `loadBookmarks()` xoá trắng ô thông báo, nên câu báo vừa hiện đã bị xoá ngay.
+Phải nạp lại **trước**, báo **sau**.
+
+Vào thẳng `#bookmarks` khi chưa đăng nhập thì rơi về trang chủ (chặn đúng), nhưng
+không kịp hiện câu "đăng nhập trước" vì site tự đặt hash về `#home` trước khi
+`guardProfile()` chạy. Trang `#profile` cũng vậy — hành vi có sẵn, không phải mới.
 ## Bước 6 — trang đọc lấy nội dung từ database (cập nhật 2026-08-30)
 
 `loadChapter()` giờ đọc `chapters.content` thay vì `fetch` file `.txt` từ GitHub.
