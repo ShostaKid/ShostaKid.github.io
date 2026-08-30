@@ -693,6 +693,11 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
             <span class="wa-icon" id="bookmark-icon">☆</span>
             <span id="bookmark-label" data-i18n="wa_bookmark">Bookmark</span>
           </button>
+          <!-- Chỉ admin thấy. Đây là lối vào duy nhất của chế độ sửa truyện. -->
+          <button type="button" class="wa-btn" id="btn-edit-work" style="display:none;">
+            <span class="wa-icon">✎</span>
+            <span data-i18n="wa_edit">Edit work</span>
+          </button>
         </div>
         <div class="wa-msg" id="wa-msg"></div>
       </div>
@@ -1847,6 +1852,7 @@ const i18n = {
     wa_kudos_removed:'Kudos withdrawn.',
     wa_bm_added:'Saved to your bookmarks ♪', wa_bm_removed:'Removed from your bookmarks.',
     wa_bm_signin:'Please sign in to bookmark this work.',
+    wa_edit:'Edit work',
     wa_err:'Something went wrong. Please try again.'
   },
   vi: {
@@ -1942,6 +1948,7 @@ const i18n = {
     wa_kudos_removed:'Đã rút lại tim.',
     wa_bm_added:'Đã lưu vào danh sách của bạn ♪', wa_bm_removed:'Đã bỏ khỏi danh sách đã lưu.',
     wa_bm_signin:'Vui lòng đăng nhập để lưu truyện này.',
+    wa_edit:'Sửa truyện',
     wa_err:'Có lỗi xảy ra. Bạn thử lại nhé.'
   }
 };
@@ -2151,7 +2158,12 @@ function showPage(id, el) {
   // Trang "Truyện đã lưu" nạp lại mỗi lần mở, vì người dùng có thể vừa bỏ lưu
   // ở trang đọc xong quay lại đây.
   if (id === 'bookmarks' && window.loadBookmarks) window.loadBookmarks();
-  if (id === 'post' && window.loadPostForm) window.loadPostForm();
+  if (id === 'post' && window.loadPostForm) {
+    // __pwEditIdx do nút Sửa truyện đặt; không có thì mở form trống để đăng mới.
+    const idx = window.__pwEditIdx;
+    window.__pwEditIdx = undefined;
+    window.loadPostForm(idx);
+  }
   if (id === 'about') {
   playMusicDirect(
     aboutMusic.source,
@@ -2868,6 +2880,10 @@ function paintActions(session) {
   k.disabled = given && !session;
   k.classList.toggle('done', given && !session);
 
+  // Nút sửa chỉ hiện với admin. Đây chỉ là lớp giao diện — chặn thật nằm ở
+  // policy UPDATE của works và chapters.
+  $('btn-edit-work').style.display = (currentProfile && currentProfile.is_admin) ? '' : 'none';
+
   $('bookmark-icon').textContent = waMine.bookmark ? '★' : '☆';
   $('btn-bookmark').classList.toggle('on', waMine.bookmark);
   const bKey = waMine.bookmark ? 'wa_bookmarked' : 'wa_bookmark';
@@ -2908,6 +2924,12 @@ async function loadWorkActions(ficIdx) {
   $('work-actions-wrap').style.display = 'block';
 }
 window.loadWorkActions = loadWorkActions;
+
+$('btn-edit-work').addEventListener('click', () => {
+  if (waFic === null) return;
+  window.__pwEditIdx = waFic;          // showPage đọc số này rồi nạp đúng truyện
+  window.showPage('post', $('nav-post'));
+});
 
 $('btn-kudos').addEventListener('click', async () => {
   if (!waWork) return;

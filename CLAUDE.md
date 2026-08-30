@@ -665,6 +665,21 @@ Hai điều rút ra, đừng quên:
 `fetchChapters()` ban đầu quên `select` cột `music`, nên nhạc không bao giờ tới
 được trang đọc dù DB có đủ. Triệu chứng: thanh nhạc vẫn hiện tên bài của truyện
 mở trước đó.
+
+### Lối vào chế độ sửa truyện
+
+`loadPostForm(idx)` hỗ trợ sửa từ đầu, nhưng ban đầu **không có nút nào gọi nó
+với tham số** — `showPage('post')` luôn gọi `loadPostForm()` rỗng, tức luôn mở
+form trống. Chức năng sửa chỉ chạy được khi gọi tay từ console, nên trên web coi
+như không tồn tại. Chủ repo phát hiện ra.
+
+Giờ nút **✎ Sửa truyện** nằm cạnh Kudos/Bookmark ở cuối trang đọc, chỉ hiện với
+admin. Nó đặt `window.__pwEditIdx` rồi mới `showPage('post')`; hook trong
+`showPage` đọc số đó, xoá đi, và truyền vào `loadPostForm`. Nhờ vậy nút nav
+"Đăng truyện" vẫn mở form trống như cũ.
+
+**Bài học:** viết xong một hàm và test nó bằng console **không có nghĩa là tính
+năng đã có trên web**. Phải đi đúng đường người dùng đi.
 ## Bước 6 — trang đọc lấy nội dung từ database (cập nhật 2026-08-30)
 
 `loadChapter()` giờ đọc `chapters.content` thay vì `fetch` file `.txt` từ GitHub.
