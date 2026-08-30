@@ -1298,16 +1298,20 @@ function getMusicData(ficIdx, chapterIdx) {
 }
 
 // Chương của truyện đang mở, tải một lần rồi giữ lại — lật chương không gọi mạng nữa.
-let chapterRows = null, chapterFic = -1, chapterSeq = 0;
+// Giữ nguyên cái PROMISE chứ không phải kết quả: resumeReading() gọi openFic()
+// rồi gọi loadChapter() ngay sau đó, tức hai lượt cùng lúc cho cùng một truyện.
+// Nếu lượt sau huỷ lượt trước thì lượt trước tưởng "không gọi được DB" và đi lấy
+// file .txt — vừa thừa, vừa lách mất is_restricted.
+let chapterFic = -1, chapterPromise = null;
 
-async function ensureChapters(ficIdx) {
-  if (chapterFic === ficIdx) return chapterRows;
-  const seq = ++chapterSeq;
-  const rows = window.fetchChapters ? await window.fetchChapters(ficIdx) : null;
-  if (seq !== chapterSeq) return null;          // đã lật sang truyện khác giữa chừng
-  chapterRows = rows;
-  chapterFic  = ficIdx;
-  return rows;
+function ensureChapters(ficIdx) {
+  if (chapterFic !== ficIdx || !chapterPromise) {
+    chapterFic = ficIdx;
+    chapterPromise = window.fetchChapters
+      ? window.fetchChapters(ficIdx)
+      : Promise.resolve(null);
+  }
+  return chapterPromise;   // cùng truyện -> dùng chung một lượt gọi
 }
 
 async function loadChapter(ficIdx, chapterIdx) {
@@ -1320,6 +1324,9 @@ async function loadChapter(ficIdx, chapterIdx) {
   footer.style.display = 'none';
 
   const rows = await ensureChapters(ficIdx);
+
+  // Đợi xong mà người đọc đã lật sang truyện khác thì bỏ, đừng vẽ đè nội dung cũ.
+  if (chapterFic !== ficIdx) return;
 
   if (rows === null) {
     // Không gọi được database -> lùi về file .txt như site cũ.

@@ -533,6 +533,21 @@ sang Supabase Storage. Ba nguồn đang khớp nhau nên không có mâu thuẫn
 `loadChapter` cũ dùng biến `previews` mà **không chỗ nào khai báo** — nhánh đó
 chưa từng chạy nên chưa lộ, nhưng chạm vào là `ReferenceError`. Đã bỏ.
 
+
+### Bẫy chạy đua ở "Đọc tiếp" — đã vá, đừng làm hỏng lại
+
+`resumeReading()` gọi `openFic()` (bên trong đã chạy `loadChapter(i,0)`) rồi gọi
+tiếp `loadChapter(i, n)` ngay — **hai lượt cùng lúc cho cùng một truyện**.
+
+Bản đầu dùng bộ đếm `chapterSeq` để chống chạy đua, và nó làm lượt sau huỷ lượt
+trước. Lượt trước nhận `null`, hiểu nhầm thành "không gọi được DB", rồi đi lấy
+file `.txt` — nghĩa là **đường "Đọc tiếp" âm thầm bỏ qua DB và bỏ qua luôn
+`is_restricted`**. Đã bắt được vì thấy có request tới `raw.githubusercontent.com`
+trong lúc nội dung rõ ràng đã lấy từ DB.
+
+Cách sửa: `ensureChapters()` giữ nguyên **promise** theo từng truyện, hai lượt
+cùng truyện dùng chung một lượt gọi. Chống vẽ đè khi lật truyện thì kiểm
+`chapterFic !== ficIdx` **sau** khi await, ngay trước lúc render.
 ### Bẫy đã gặp
 
 - **`updateChapterNav()` thay hẳn thanh chương trên bằng `<select id="ch-select">`**,
