@@ -94,7 +94,7 @@ Rebuild sang backend thật trên **Supabase**, **giữ nguyên giao diện hi�
 - Frontend dự kiến vẫn dùng `supabase-js` từ CDN trong `index.html`, chưa đổi sang framework.
 
 Project Supabase đích: **`oseddxgmwbeduazbomuf`** ("ShostaKid update web",
-ap-northeast-1, ACTIVE) — schema `public` hiện đang **rỗng**.
+ap-northeast-1, ACTIVE) — schema `public` đã có đủ 12 bảng và toàn bộ dữ liệu truyện.
 
 ### Quy tắc bắt buộc
 
@@ -112,7 +112,7 @@ ap-northeast-1, ACTIVE) — schema `public` hiện đang **rỗng**.
 ## Trạng thái backend (cập nhật 2026-08-30)
 
 Schema đã được **tạo thật** trên project `oseddxgmwbeduazbomuf`. 12 bảng, 36 policy,
-8 function, RLS bật đủ 12/12. Toàn bộ bảng đang rỗng — chưa import fic nào.
+8 function, RLS bật đủ 12/12. Dữ liệu đã import xong (36 fic, 62 chương).
 
 Migration đã chạy, theo thứ tự:
 
@@ -124,6 +124,8 @@ Migration đã chạy, theo thứ tự:
 6. `harden_function_search_path_and_execute`
 7. `grant_dml_to_api_roles`
 8. `revoke_trigger_function_execute_from_public`
+9. `create_avatars_bucket`
+10. `lock_down_rls_auto_enable`
 
 ### Ba cái bẫy đã gặp — đừng lặp lại
 
@@ -147,7 +149,40 @@ Migration đã chạy, theo thứ tự:
 gọi bên trong biểu thức policy, mà biểu thức policy chạy với quyền của chính người
 truy vấn → revoke là mọi query của anon/authenticated đều `permission denied`.
 Chúng chỉ trả boolean về chính người gọi, không lộ thêm gì ngoài những gì RLS đã cho.
-`rls_auto_enable()` là hàm của nền tảng Supabase, không phải của dự án.
+`rls_auto_enable()` thì **đã revoke** (migration 10) — nó là hàm của event trigger
+`ensure_rls`, không hề được policy gọi, nên khoá lại không ảnh hưởng gì; đã kiểm
+chứng bảng mới tạo vẫn tự bật RLS sau khi revoke.
+
+Lưu ý về báo cáo cũ: migration 8 chỉ revoke được `handle_new_user()` và
+`bump_work_counter()`, **không** đụng tới 4 hàm còn lại — có lúc đã nói nhầm là
+"đã revoke hết". Bốn hàm kia vẫn ở mặc định PUBLIC cho tới migration 10.
+
+### Supabase Storage — bucket `avatars`
+
+Bucket duy nhất hiện có. Cấu hình ở migration 9:
+
+| Thuộc tính | Giá trị |
+|---|---|
+| `public` | `true` — ảnh xem được qua `/storage/v1/object/public/avatars/...`, không cần đăng nhập |
+| `file_size_limit` | `2097152` (2 MB) |
+| `allowed_mime_types` | `image/jpeg`, `image/png`, `image/webp` |
+
+Quy ước đường dẫn: **`avatars/{user_id}/{timestamp}.{ext}`**. Cả 4 policy ghi đều
+buộc `(storage.foldername(name))[1] = auth.uid()::text`, nên không ai ghi/xoá được
+trong thư mục người khác. Policy INSERT/UPDATE còn chặn thêm đuôi file lạ và đường
+dẫn lồng sâu hơn một cấp.
+
+Tên file mang mốc thời gian là **cố ý**: mỗi lần đổi ảnh sinh URL mới nên trình
+duyệt không hiện lại ảnh cũ trong cache. Đổi lại, frontend phải tự dọn file cũ —
+`dropStaleAvatar()` trong `index.html` xoá file cũ **sau khi** `profiles.avatar_url`
+đã trỏ sang ảnh mới, và chỉ xoá khi URL cũ đúng là file trong thư mục của chính
+người đó (link dán từ nơi khác thì bỏ qua).
+
+**Không xoá được `storage.objects` bằng SQL trực tiếp.** Trigger `protect_objects_delete`
+của Supabase chặn, bắt đi qua Storage API để tránh bỏ lại file mồ côi trong S3.
+Khi test bằng SQL thì phải `set local storage.allow_delete_query = 'true'` — nhưng
+làm vậy chỉ xoá hàng trong DB, file thật vẫn nằm lại. Muốn xoá sạch thì dùng
+`sb.storage.from('avatars').remove([...])`.
 
 ### Bất biến phải giữ
 
@@ -160,13 +195,9 @@ lỗi này đã từng xảy ra một lần và bị bắt lúc review.
 
 ### Việc tiếp theo (chưa làm)
 
-- Import 36 fic từ `fics/*.yaml` + 62 file `.txt` vào `works` / `chapters`,
-  dùng `works.legacy_id = 'fic-<index>'` để map.
-- Chuẩn hoá fandom / ship (gộp `Nevuillette/Furina`, `Khaslana/Cyrne` qua `canonical_id`).
-- Tách warning hiện tại thành tag `type='warning'` + `works.warning_note`.
-- Đấu frontend vào project mới; đổi `SUPABASE_URL`/`SUPABASE_KEY` ở
-  `index.html:1773` sang `oseddxgmwbeduazbomuf`.
-- Comment cũ ở project `ggbahdhmtgaemgblfdum`: **đã chốt bỏ, không import.**
+Bốn gạch đầu dòng import/chuẩn hoá ở đây **đã xong** — xem mục "Trạng thái import"
+ngay bên dưới. Việc còn lại xem "Việc tiếp theo" ở cuối file.
+
 
 ## Trạng thái import (cập nhật 2026-08-30) — ĐÃ XONG
 
@@ -242,12 +273,46 @@ where w.id = c.work_id and w.legacy_id = 'fic-34' and c.position = 3;
 rồi cập nhật lại `word_count`. Việc thả file `.txt` vào repo giờ chỉ còn tác dụng
 với site cũ, **không tự chảy vào database**.
 
+## Bước 2 — hệ thống tài khoản (cập nhật 2026-08-30)
+
+Đã thêm vào `index.html`, **không đụng Browse/danh sách truyện** (vẫn dùng
+`fics.json` + thẻ hard-code như cũ):
+
+- Trang `#page-auth` — hai tab Đăng nhập / Đăng ký, dùng Supabase Auth email+password.
+- Trang `#page-profile` — sửa `username`, `display_name`, `bio`, `avatar_url`,
+  `ao3_url`. **Không có ô nhập `is_admin`** và cũng không cần: cột đó không nằm
+  trong GRANT UPDATE của `authenticated`, sửa DOM để lách vẫn bị chặn ở tầng DB.
+- Một `<script type="module">` ở cuối `<body>`, import `supabase-js` từ jsdelivr,
+  trỏ project `oseddxgmwbeduazbomuf` bằng publishable key.
+
+Vài điểm dễ vấp nếu sửa tiếp:
+
+- **Xác nhận email đang BẬT.** `signUp()` trả về `session: null`; người dùng phải
+  bấm link trong mail rồi mới đăng nhập được. Code xử lý cả hai trường hợp.
+- **Đăng ký phải tự kiểm trùng `username` trước khi gọi `signUp()`.** Trigger
+  `handle_new_user()` sẽ ném lỗi khó hiểu ("Database error saving new user") nếu
+  trùng, nên frontend hỏi trước cho ra thông báo tử tế.
+- **Không dựng avatar bằng `innerHTML`.** `avatar_url` là dữ liệu người dùng nhập;
+  `paintAvatar()` dựng bằng `document.createElement` và bắt sự kiện `error`.
+- **`currentPage` của site khai báo bằng `let`, không nằm trên `window`.** Muốn biết
+  đang ở trang nào thì đọc `.classList.contains('active')` chứ đừng đọc
+  `window.currentPage` (undefined).
+- Hai mục nav mới (`#nav-signin`, `#nav-profile`) phải nằm **cuối** `.nav-links`:
+  `goBack()` và nút "View All Works" tham chiếu `.nav-links a:nth-child(1)` và `(2)`,
+  chèn vào đầu là gãy cả hai. Thêm mục nav cũng làm nav tràn ngang trên điện thoại
+  → đã vá bằng `min-width:0` + `overflow-x:auto` trong media query `max-width:768px`.
+
 ### Việc tiếp theo
 
-- Đấu frontend vào project mới: đổi `SUPABASE_URL`/`SUPABASE_KEY` ở
-  `index.html:1773` sang `oseddxgmwbeduazbomuf`, rồi thay dần
-  `fetch('fics.json')` + thẻ `.fic-card` hard-code bằng truy vấn `works`/`chapters`.
-- Bật **Leaked Password Protection** trong Dashboard → Authentication → Policies
-  (advisor đang cảnh báo; giờ đã có tài khoản thật nên nó có ý nghĩa).
+- **Bước 3 (chưa bắt đầu, chờ chủ repo duyệt)**: kudos / bookmark / comment.
+- Đấu phần Browse vào DB: thay `fetch('fics.json')` + thẻ `.fic-card` hard-code
+  bằng truy vấn `works` / `chapters`. Đây là phần đã cố ý để nguyên ở bước 2.
+- Khối comment cũ ở `index.html` (`SUPABASE_URL`/`SUPABASE_KEY` của project
+  `ggbahdhmtgaemgblfdum` đã paused) vẫn còn nguyên và vẫn hỏng. **Đừng chỉ đổi URL
+  sang project mới** — bảng `comments` mới có schema khác hẳn (không có `fic_id`),
+  đổi mỗi key là hỏng theo kiểu khác. Phải viết lại cả khối ở bước 3.
+- Bật **Leaked Password Protection** trong Dashboard → Authentication
+  (advisor vẫn cảnh báo; chủ repo tự làm, Claude không đụng).
 - Chuyển nhạc/ảnh từ GitHub Releases sang Supabase Storage (`chapters.music` hiện
   vẫn trỏ URL GitHub, giữ nguyên cấu trúc `{source,url,start,name}` của site cũ).
+  Bucket `avatars` đã có, làm mẫu được cho bucket nhạc/ảnh sau này.

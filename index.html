@@ -213,11 +213,50 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .active-filter-tag button{background:none;border:none;color:var(--gold);cursor:pointer;font-size:0.7rem;padding:0;line-height:1;}
 .no-results{text-align:center;padding:3rem 1rem;font-family:var(--font-ui);font-style:italic;font-size:0.9rem;color:var(--ink3);display:none;}
 
+/* ===== ACCOUNT: đăng nhập / đăng ký / hồ sơ ===== */
+.auth-wrap{max-width:420px;margin:0 auto;padding:4rem 2rem;}
+.auth-tabs{display:flex;margin-bottom:2rem;border-bottom:1px solid var(--border);}
+.auth-tab{flex:1;background:none;border:none;border-bottom:2px solid transparent;padding:10px 0;font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink3);cursor:pointer;transition:all 0.2s;}
+.auth-tab:hover{color:var(--gold);}
+.auth-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.field{margin-bottom:1.1rem;}
+.field label{display:block;font-family:var(--font-ui);font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:0.45rem;}
+.field input,.field textarea{width:100%;background:var(--cream2);border:1px solid var(--border);padding:10px 14px;font-family:Georgia,serif;font-size:0.95rem;color:var(--ink);resize:vertical;box-sizing:border-box;}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--gold);}
+.field input::placeholder,.field textarea::placeholder{color:var(--ink3);font-style:italic;}
+.field input:disabled,.field textarea:disabled{opacity:0.5;cursor:not-allowed;}
+.field-hint{font-family:Georgia,serif;font-style:italic;font-size:0.75rem;color:var(--ink3);margin-top:0.35rem;line-height:1.5;}
+.auth-msg{font-family:'Lora',Georgia,serif;font-size:0.9rem;font-style:italic;line-height:1.6;padding:0.8rem 1rem;margin-bottom:1.2rem;border-left:2px solid var(--border);display:none;}
+.auth-msg.show{display:block;}
+.auth-msg.err{color:#993C1D;border-left-color:#D85A30;}
+.auth-msg.ok{color:var(--gold-dark);border-left-color:var(--gold);}
+.btn-full{width:100%;justify-content:center;margin-top:0.5rem;}
+.ao3-link:disabled{opacity:0.45;cursor:default;}
+.avatar,.avatar-fallback{width:84px;height:84px;border-radius:50%;border:1px solid var(--border);background:var(--cream2);flex-shrink:0;}
+.avatar{object-fit:cover;display:block;}
+.avatar-fallback{display:flex;align-items:center;justify-content:center;font-family:var(--font-ui);font-size:1.9rem;color:var(--gold);}
+.avatar-actions{display:flex;gap:0.7rem;flex-wrap:wrap;align-items:center;}
+.avatar-actions .ao3-link{margin-top:0;font-size:0.6rem;padding:8px 16px;}
+.avatar-or{font-family:Georgia,serif;font-style:italic;font-size:0.75rem;color:var(--ink3);margin:1.4rem 0 0.5rem;padding-top:1.2rem;border-top:1px solid var(--border);}
+.profile-head{display:flex;align-items:center;gap:1.4rem;margin:1.5rem 0 2.5rem;}
+.profile-name{font-family:var(--font-ui);font-size:1.55rem;color:var(--ink);line-height:1.2;word-break:break-word;}
+.profile-handle{font-family:var(--font-ui);font-size:0.66rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-top:0.35rem;}
+.admin-badge{font-family:var(--font-ui);font-size:0.55rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:2px 8px;background:rgba(184,151,42,0.06);margin-left:0.6rem;}
+.auth-alt{text-align:center;margin-top:1.6rem;font-family:Georgia,serif;font-style:italic;font-size:0.85rem;color:var(--ink3);}
+.auth-alt button{background:none;border:none;color:var(--gold);cursor:pointer;font-family:inherit;font-style:inherit;font-size:inherit;text-decoration:underline;padding:0;}
+[data-theme="dark"] .field input,[data-theme="dark"] .field textarea{background:rgba(30,24,16,0.7);}
+[data-theme="dark"] #page-auth,[data-theme="dark"] #page-profile{background:var(--cream)!important;}
+
 @media (max-width: 768px) {
   nav { padding: 0 1rem; }
   .nav-logo { font-size: 0.85rem; letter-spacing: 2px; }
-  .nav-links { gap: 1rem; }
-  .nav-links a { font-size: 0.6rem; letter-spacing: 1.5px; }
+  /* Thêm mục Đăng nhập / Hồ sơ làm thanh nav dài hơn chiều ngang máy điện thoại.
+     min-width:0 cho phép khối link co lại, phần thừa cuộn ngang bên trong nó
+     thay vì đẩy nút đổi giao diện ra ngoài màn hình. */
+  .nav-links { gap: 0.9rem; min-width: 0; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { font-size: 0.6rem; letter-spacing: 1.5px; white-space: nowrap; }
+  .nav-utils { flex-shrink: 0; }
 
   #theme-btn {
     font-size: 1.1rem;
@@ -229,6 +268,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   }
 
   .about-wrap,
+  .auth-wrap,
   .reading-wrap { padding: 2rem 1.2rem; }
 
   /* Works layout mobile — stack vertical */
@@ -468,6 +508,8 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
       <a class="active" data-i18n="nav_home" onclick="showPage('home',this)">Home</a>
       <a data-i18n="nav_works" onclick="showPage('works',this)">Works</a>
       <a data-i18n="nav_about" onclick="showPage('about',this)">About</a>
+      <a id="nav-signin" data-i18n="nav_signin" onclick="showPage('auth',this)">Sign In</a>
+      <a id="nav-profile" data-i18n="nav_profile" onclick="showPage('profile',this)" style="display:none;">My Profile</a>
     </div>
     <div class="nav-utils">
       <button id="lang-btn" onclick="toggleLang()" title="Đổi ngôn ngữ / Switch language">VI</button>
@@ -867,6 +909,113 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
       <div class="about-sig">— ShostaKid</div>
       <div style="margin-top:2rem;"><a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid" target="_blank" data-i18n="my_ao3">My AO3 →</a></div>
       <div style="margin-top:2rem;"><a class="ao3-link" href="https://x.com/Texas1k6" target="_blank" data-i18n="my_x">My X →</a></div>
+    </div>
+    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+  </div>
+
+  <!-- SIGN IN / SIGN UP -->
+  <div class="page" id="page-auth" style="background:var(--cream);">
+    <div class="auth-wrap">
+      <div class="about-ornament" style="font-size:2.8rem;">𝄞</div>
+      <div class="section-heading" style="margin-top:1rem;" data-i18n="auth_head">Account</div>
+
+      <div class="auth-tabs">
+        <button type="button" class="auth-tab active" id="tab-signin" data-i18n="auth_signin">Sign In</button>
+        <button type="button" class="auth-tab" id="tab-signup" data-i18n="auth_signup">Sign Up</button>
+      </div>
+
+      <div class="auth-msg" id="auth-msg"></div>
+
+      <form id="form-signin">
+        <div class="field">
+          <label data-i18n="auth_email">Email</label>
+          <input type="email" id="si-email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label data-i18n="auth_password">Password</label>
+          <input type="password" id="si-password" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="ao3-link btn-full" id="si-submit" data-i18n="auth_signin_btn">Sign In →</button>
+        <div class="auth-alt">
+          <span data-i18n="auth_forgot_q">Forgot your password?</span>
+          <button type="button" id="btn-reset" data-i18n="auth_forgot_btn">Send reset link</button>
+        </div>
+      </form>
+
+      <form id="form-signup" style="display:none;">
+        <div class="field">
+          <label data-i18n="auth_username">Username</label>
+          <input type="text" id="su-username" autocomplete="username" required
+                 minlength="3" maxlength="30" pattern="[A-Za-z0-9_]{3,30}">
+          <div class="field-hint" data-i18n="auth_username_hint">3–30 characters. Letters, numbers and underscore only.</div>
+        </div>
+        <div class="field">
+          <label data-i18n="auth_email">Email</label>
+          <input type="email" id="su-email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label data-i18n="auth_password">Password</label>
+          <input type="password" id="su-password" autocomplete="new-password" required minlength="6">
+          <div class="field-hint" data-i18n="auth_password_hint">At least 6 characters.</div>
+        </div>
+        <button type="submit" class="ao3-link btn-full" id="su-submit" data-i18n="auth_signup_btn">Create Account →</button>
+      </form>
+    </div>
+    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+  </div>
+
+  <!-- MY PROFILE -->
+  <div class="page" id="page-profile" style="background:var(--cream);">
+    <div class="auth-wrap" style="max-width:560px;">
+      <div class="section-heading" data-i18n="prof_head">My Profile</div>
+
+      <div class="profile-head">
+        <div id="prof-avatar-box"><div class="avatar-fallback">♩</div></div>
+        <div>
+          <div class="profile-name" id="prof-name">—</div>
+          <div class="profile-handle"><span id="prof-handle"></span><span id="prof-admin"></span></div>
+        </div>
+      </div>
+
+      <div class="auth-msg" id="prof-msg"></div>
+
+      <form id="form-profile">
+        <div class="field">
+          <label data-i18n="prof_username">Username</label>
+          <input type="text" id="pf-username" required minlength="3" maxlength="30" pattern="[A-Za-z0-9_]{3,30}">
+          <div class="field-hint" data-i18n="auth_username_hint">3–30 characters. Letters, numbers and underscore only.</div>
+        </div>
+        <div class="field">
+          <label data-i18n="prof_display">Display name</label>
+          <input type="text" id="pf-display" maxlength="60">
+        </div>
+        <div class="field">
+          <label data-i18n="prof_bio">Bio</label>
+          <textarea id="pf-bio" rows="4" maxlength="2000"></textarea>
+        </div>
+        <div class="field">
+          <label data-i18n="prof_avatar">Avatar</label>
+          <div class="avatar-actions">
+            <button type="button" class="ao3-link" id="btn-avatar-pick" data-i18n="prof_avatar_pick">Choose image →</button>
+            <button type="button" class="ao3-link" id="btn-avatar-clear" data-i18n="prof_avatar_clear">Remove</button>
+          </div>
+          <!-- Ô file thật bị ẩn; nút phía trên gọi hộ để giữ đúng kiểu nút của site. -->
+          <input type="file" id="pf-avatar-file" accept="image/jpeg,image/png,image/webp" style="display:none;">
+          <div class="field-hint" data-i18n="prof_avatar_upload_hint">JPG, PNG or WebP · up to 2 MB. Saved as soon as it finishes uploading.</div>
+          <div class="avatar-or" data-i18n="prof_avatar_or">…or use an image hosted somewhere else</div>
+          <input type="url" id="pf-avatar" data-i18n-ph="prof_avatar_ph" placeholder="https://...">
+          <div class="field-hint" data-i18n="prof_avatar_hint">Paste a link, then press Save Changes below.</div>
+        </div>
+        <div class="field">
+          <label data-i18n="prof_ao3">AO3 profile</label>
+          <input type="url" id="pf-ao3" placeholder="https://archiveofourown.org/users/...">
+        </div>
+        <button type="submit" class="ao3-link btn-full" id="pf-submit" data-i18n="prof_save">Save Changes →</button>
+      </form>
+
+      <div style="margin-top:2.5rem;text-align:center;">
+        <button type="button" class="ao3-link" id="btn-signout" data-i18n="prof_signout">Sign Out</button>
+      </div>
     </div>
     <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
@@ -1491,7 +1640,39 @@ const i18n = {
     about_p1:"Welcome. I write under the name <strong>ShostaKid</strong>, so you can say that I'm a child of Dmitry Dmitrievich Shostakovich (kind of lol)",
     about_p2:"My works, most of the time, are random thoughts that live inside my head. I write what I want here, so don't question me and enjoy as much as you can:).",
     about_p3:'I write primarily for the <em>Reverse: 1999</em>, <em>Figure Skating RPF</em>, <em>Honkai: Star Rail</em> and sometimes <em>Genshin Impact</em> fandoms. There will be more, but right now those are my primary',
-    about_p4:'I hope you have a great time here. Thank you for stopping by.'
+    about_p4:'I hope you have a great time here. Thank you for stopping by.',
+    nav_signin:'Sign In', nav_profile:'My Profile',
+    auth_head:'Account', auth_signin:'Sign In', auth_signup:'Sign Up',
+    auth_email:'Email', auth_password:'Password', auth_username:'Username',
+    auth_username_hint:'3–30 characters. Letters, numbers and underscore only.',
+    auth_password_hint:'At least 6 characters.',
+    auth_signin_btn:'Sign In →', auth_signup_btn:'Create Account →',
+    auth_signing_in:'Signing in…', auth_signing_up:'Creating…',
+    auth_forgot_q:'Forgot your password?', auth_forgot_btn:'Send reset link',
+    auth_reset_need_email:'Enter your email above first, then press this again.',
+    auth_reset_sent:'If that email has an account, a reset link is on its way.',
+    auth_confirm_email:'Almost there — check your inbox and confirm your email, then sign in.',
+    auth_welcome:'Welcome back ♪',
+    auth_user_taken:'That username is already taken.',
+    auth_user_bad:'Username must be 3–30 characters: letters, numbers and underscore only.',
+    auth_err:'Something went wrong. Please try again.',
+    prof_head:'My Profile', prof_username:'Username', prof_display:'Display name',
+    prof_bio:'Bio', prof_avatar:'Avatar', prof_ao3:'AO3 profile',
+    prof_avatar_ph:'https://...',
+    prof_avatar_hint:'Paste a link, then press Save Changes below.',
+    prof_avatar_pick:'Choose image →', prof_avatar_clear:'Remove',
+    prof_avatar_upload_hint:'JPG, PNG or WebP · up to 2 MB. Saved as soon as it finishes uploading.',
+    prof_avatar_or:'…or use an image hosted somewhere else',
+    prof_avatar_uploading:'Uploading…',
+    prof_avatar_done:'Avatar updated ♪',
+    prof_avatar_removed:'Avatar removed.',
+    prof_avatar_too_big:'That image is over 2 MB. Please pick a smaller one.',
+    prof_avatar_bad_type:'Only JPG, PNG and WebP images are accepted.',
+    prof_avatar_up_err:'Could not upload that image.',
+    prof_save:'Save Changes →', prof_saving:'Saving…', prof_saved:'Saved ♪',
+    prof_signout:'Sign Out', prof_admin:'Admin',
+    prof_load_err:'Could not load your profile.',
+    prof_need_signin:'Please sign in first.'
   },
   vi: {
     nav_home:'Trang chủ', nav_works:'Các đầu truyện', nav_about:'Về Web',
@@ -1520,7 +1701,39 @@ const i18n = {
     about_p1:'Xin chào, tôi viết dưới cái tên <strong>ShostaKid</strong>, nên có thể nói tôi là một đứa con của Dmitry Dmitrievich Shostakovich (kiểu vậy lol)',
     about_p2:'Các tác phẩm của tôi, phần lớn thời gian, là những suy nghĩ vẩn vơ sống trong đầu tôi. Tôi viết những gì tôi thích ở đây, nên đừng hỏi tại sao, cứ đọc và tận hưởng thôi:).',
     about_p3:'Tôi chủ yếu viết cho các fandom <em>Reverse: 1999</em>, <em>Figure Skating RPF</em>, <em>Honkai: Star Rail</em> và đôi khi cả <em>Genshin Impact</em>. Sau này sẽ có thêm, nhưng hiện tại đó là những fandom chính.',
-    about_p4:'Hy vọng bạn có khoảng thời gian vui vẻ ở đây. Cảm ơn vì đã ghé qua.'
+    about_p4:'Hy vọng bạn có khoảng thời gian vui vẻ ở đây. Cảm ơn vì đã ghé qua.',
+    nav_signin:'Đăng nhập', nav_profile:'Hồ sơ của tôi',
+    auth_head:'Tài khoản', auth_signin:'Đăng nhập', auth_signup:'Đăng ký',
+    auth_email:'Email', auth_password:'Mật khẩu', auth_username:'Tên đăng nhập',
+    auth_username_hint:'3–30 ký tự. Chỉ chữ cái, chữ số và dấu gạch dưới.',
+    auth_password_hint:'Ít nhất 6 ký tự.',
+    auth_signin_btn:'Đăng nhập →', auth_signup_btn:'Tạo tài khoản →',
+    auth_signing_in:'Đang đăng nhập…', auth_signing_up:'Đang tạo…',
+    auth_forgot_q:'Quên mật khẩu?', auth_forgot_btn:'Gửi link đặt lại',
+    auth_reset_need_email:'Nhập email ở trên trước đã, rồi bấm lại nút này.',
+    auth_reset_sent:'Nếu email đó có tài khoản, link đặt lại đang trên đường tới.',
+    auth_confirm_email:'Gần xong rồi — kiểm tra hộp thư và xác nhận email, sau đó đăng nhập.',
+    auth_welcome:'Chào mừng quay lại ♪',
+    auth_user_taken:'Tên đăng nhập này đã có người dùng.',
+    auth_user_bad:'Tên đăng nhập phải 3–30 ký tự: chỉ chữ cái, chữ số và dấu gạch dưới.',
+    auth_err:'Có lỗi xảy ra. Vui lòng thử lại.',
+    prof_head:'Hồ sơ của tôi', prof_username:'Tên đăng nhập', prof_display:'Tên hiển thị',
+    prof_bio:'Giới thiệu', prof_avatar:'Ảnh đại diện', prof_ao3:'Trang AO3',
+    prof_avatar_ph:'https://...',
+    prof_avatar_hint:'Dán link rồi bấm Lưu thay đổi bên dưới.',
+    prof_avatar_pick:'Chọn ảnh từ máy →', prof_avatar_clear:'Gỡ ảnh',
+    prof_avatar_upload_hint:'JPG, PNG hoặc WebP · tối đa 2 MB. Tải lên xong là tự lưu.',
+    prof_avatar_or:'…hoặc dùng ảnh ở nơi khác',
+    prof_avatar_uploading:'Đang tải lên…',
+    prof_avatar_done:'Đã cập nhật ảnh đại diện ♪',
+    prof_avatar_removed:'Đã gỡ ảnh đại diện.',
+    prof_avatar_too_big:'Ảnh vượt quá 2 MB. Chọn ảnh nhỏ hơn nhé.',
+    prof_avatar_bad_type:'Chỉ nhận ảnh JPG, PNG và WebP.',
+    prof_avatar_up_err:'Không tải được ảnh lên.',
+    prof_save:'Lưu thay đổi →', prof_saving:'Đang lưu…', prof_saved:'Đã lưu ♪',
+    prof_signout:'Đăng xuất', prof_admin:'Quản trị',
+    prof_load_err:'Không tải được hồ sơ của bạn.',
+    prof_need_signin:'Vui lòng đăng nhập trước.'
   }
 };
 
@@ -1873,6 +2086,380 @@ function escapeHtml(str) {
   div.textContent = str;
   return div.innerHTML;
 }
+</script>
+
+<!-- =============================================
+     TÀI KHOẢN — Supabase Auth
+     Chỉ phụ trách đăng nhập / đăng ký / hồ sơ.
+     KHÔNG đụng gì tới phần Browse / danh sách truyện:
+     phần đó vẫn chạy bằng fics.json + thẻ .fic-card cứng như cũ.
+     ============================================= -->
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+// Project 'ShostaKid update web'. Đây là publishable key — chỉ đọc/ghi được
+// những gì RLS cho phép, an toàn để nằm trong mã nguồn công khai.
+const SB_URL = 'https://oseddxgmwbeduazbomuf.supabase.co';
+const SB_KEY = 'sb_publishable_aOYL383Vt2fI561c0VJqbg_VDcuKqUe';
+
+const sb = createClient(SB_URL, SB_KEY);
+
+const $ = (id) => document.getElementById(id);
+// dùng lại t() của site cho song ngữ
+const tr = (k) => (window.t ? window.t(k) : k);
+
+let currentProfile = null;
+
+// ---------- thông báo ----------
+// Gắn data-i18n để applyLang() của site tự dịch lại khi đổi ngôn ngữ.
+function msg(el, key, kind) {
+  el.className = 'auth-msg show ' + (kind || '');
+  if (key.i18n === false) { delete el.dataset.i18n; el.textContent = key.text; }
+  else { el.dataset.i18n = key; el.textContent = tr(key); }
+}
+function clearMsg(el) { el.className = 'auth-msg'; delete el.dataset.i18n; el.textContent = ''; }
+const raw = (text) => ({ i18n: false, text });
+
+function busy(btn, on, labelKey) {
+  btn.disabled = on;
+  btn.textContent = tr(labelKey);
+}
+
+// ---------- điều hướng theo trạng thái đăng nhập ----------
+function paintNav(session) {
+  $('nav-signin').style.display  = session ? 'none' : '';
+  $('nav-profile').style.display = session ? '' : 'none';
+}
+
+// Dựng bằng DOM thay vì chuỗi HTML: avatar_url là dữ liệu người dùng nhập,
+// không nhét thẳng vào innerHTML.
+function paintAvatar(box, profile) {
+  const url = ((profile && profile.avatar_url) || '').trim();
+  const letter = (((profile && (profile.display_name || profile.username)) || '♩')
+                   .trim().charAt(0) || '♩').toUpperCase();
+
+  const fallback = () => {
+    const d = document.createElement('div');
+    d.className = 'avatar-fallback';
+    d.textContent = letter;
+    return d;
+  };
+
+  box.textContent = '';
+  if (!url) { box.appendChild(fallback()); return; }
+
+  const img = document.createElement('img');
+  img.className = 'avatar';
+  img.alt = '';
+  img.addEventListener('error', () => { box.textContent = ''; box.appendChild(fallback()); });
+  img.src = url;
+  box.appendChild(img);
+}
+
+function paintProfile(p) {
+  currentProfile = p;
+  paintAvatar($('prof-avatar-box'), p);
+  $('prof-name').textContent   = p.display_name || p.username;
+  $('prof-handle').textContent = '@' + p.username;
+  $('prof-admin').innerHTML    = p.is_admin
+    ? `<span class="admin-badge">${tr('prof_admin')}</span>` : '';
+  $('pf-username').value = p.username || '';
+  $('pf-display').value  = p.display_name || '';
+  $('pf-bio').value      = p.bio || '';
+  $('pf-avatar').value   = p.avatar_url || '';
+  $('pf-ao3').value      = p.ao3_url || '';
+  // is_admin cố tình KHÔNG có ô nhập: quyền admin không tự phong được.
+  // Ngay cả khi sửa DOM cũng vô ích — cột is_admin không nằm trong
+  // GRANT UPDATE của role authenticated, và còn một trigger chặn nữa.
+}
+
+async function loadProfile(session) {
+  if (!session) return;
+  const { data, error } = await sb
+    .from('profiles')
+    .select('username, display_name, bio, avatar_url, ao3_url, is_admin')
+    .eq('id', session.user.id)
+    .single();
+  if (error) { msg($('prof-msg'), 'prof_load_err', 'err'); return; }
+  paintProfile(data);
+}
+
+// ---------- ảnh đại diện: tải từ máy lên ----------
+const AV_BUCKET = 'avatars';
+const AV_MAX    = 2 * 1024 * 1024;
+// Đuôi file suy ra từ MIME, không lấy từ tên file người dùng đặt.
+const AV_EXT    = { 'image/jpeg':'jpg', 'image/png':'png', 'image/webp':'webp' };
+const AV_PREFIX = SB_URL + '/storage/v1/object/public/' + AV_BUCKET + '/';
+
+// Chỉ trả về đường dẫn khi URL đúng là file nằm trong thư mục của chính mình.
+// Nhờ vậy thao tác dọn file cũ không bao giờ đụng tới link dán từ nơi khác.
+function ownAvatarPath(url, uid) {
+  if (!url || url.indexOf(AV_PREFIX) !== 0) return null;
+  let path;
+  try { path = decodeURIComponent(url.slice(AV_PREFIX.length).split('?')[0]); }
+  catch (_) { return null; }
+  return path.indexOf(uid + '/') === 0 ? path : null;
+}
+
+// Ảnh cũ chỉ xoá SAU khi hồ sơ đã trỏ sang ảnh mới, và lỗi ở đây bỏ qua:
+// dọn rác thất bại thì cũng không được làm hỏng thao tác vừa thành công.
+function dropStaleAvatar(oldUrl, newUrl, uid) {
+  const stale = ownAvatarPath(oldUrl, uid);
+  if (stale && stale !== ownAvatarPath(newUrl, uid)) {
+    sb.storage.from(AV_BUCKET).remove([stale]).then(null, () => {});
+  }
+}
+
+function avatarBusy(on) {
+  $('btn-avatar-pick').disabled  = on;
+  $('btn-avatar-clear').disabled = on;
+  $('btn-avatar-pick').textContent = tr(on ? 'prof_avatar_uploading' : 'prof_avatar_pick');
+}
+
+// Chỉ cập nhật riêng avatar_url và vẽ lại mỗi cái avatar — KHÔNG gọi paintProfile,
+// vì người dùng có thể đang gõ dở ở ô bio/username mà chưa bấm Lưu.
+async function saveAvatarUrl(url, session) {
+  const { data, error } = await sb.from('profiles')
+    .update({ avatar_url: url })
+    .eq('id', session.user.id)
+    .select('username, display_name, bio, avatar_url, ao3_url, is_admin')
+    .single();
+  if (error) return error;
+
+  const old = currentProfile ? currentProfile.avatar_url : null;
+  currentProfile = data;
+  $('pf-avatar').value = data.avatar_url || '';
+  paintAvatar($('prof-avatar-box'), data);
+  dropStaleAvatar(old, data.avatar_url, session.user.id);
+  return null;
+}
+
+$('btn-avatar-pick').addEventListener('click', () => $('pf-avatar-file').click());
+
+$('pf-avatar-file').addEventListener('change', async (e) => {
+  const file = e.target.files && e.target.files[0];
+  e.target.value = '';   // reset để chọn lại đúng file đó vẫn kích hoạt change
+  if (!file) return;
+  clearMsg($('prof-msg'));
+
+  // Kiểm ở client cho phản hồi nhanh. Bucket vẫn tự chặn lần nữa
+  // (2MB + đúng MIME), nên sửa DOM để lách cũng không qua được.
+  const ext = AV_EXT[file.type];
+  if (!ext)               { msg($('prof-msg'), 'prof_avatar_bad_type', 'err'); return; }
+  if (file.size > AV_MAX) { msg($('prof-msg'), 'prof_avatar_too_big', 'err');  return; }
+
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { msg($('prof-msg'), 'prof_need_signin', 'err'); return; }
+
+  avatarBusy(true);
+  // Tên file mang mốc thời gian nên URL luôn mới — trình duyệt không hiện ảnh cũ trong cache.
+  const path = session.user.id + '/' + Date.now() + '.' + ext;
+  const { error: upErr } = await sb.storage.from(AV_BUCKET)
+    .upload(path, file, { contentType: file.type, cacheControl: '3600' });
+
+  if (upErr) {
+    avatarBusy(false);
+    msg($('prof-msg'), raw(upErr.message || tr('prof_avatar_up_err')), 'err');
+    return;
+  }
+
+  const { data: pub } = sb.storage.from(AV_BUCKET).getPublicUrl(path);
+  const err = await saveAvatarUrl(pub.publicUrl, session);
+  avatarBusy(false);
+
+  if (err) {
+    // Lưu hồ sơ hỏng thì file vừa lên thành rác — dọn ngay.
+    sb.storage.from(AV_BUCKET).remove([path]).then(null, () => {});
+    msg($('prof-msg'), raw(err.message), 'err');
+    return;
+  }
+  msg($('prof-msg'), 'prof_avatar_done', 'ok');
+});
+
+$('btn-avatar-clear').addEventListener('click', async () => {
+  clearMsg($('prof-msg'));
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { msg($('prof-msg'), 'prof_need_signin', 'err'); return; }
+
+  avatarBusy(true);
+  const err = await saveAvatarUrl(null, session);
+  avatarBusy(false);
+
+  if (err) { msg($('prof-msg'), raw(err.message), 'err'); return; }
+  msg($('prof-msg'), 'prof_avatar_removed', 'ok');
+});
+
+// ---------- chuyển tab ----------
+function showTab(which) {
+  const isIn = which === 'signin';
+  $('tab-signin').classList.toggle('active', isIn);
+  $('tab-signup').classList.toggle('active', !isIn);
+  $('form-signin').style.display = isIn ? '' : 'none';
+  $('form-signup').style.display = isIn ? 'none' : '';
+  clearMsg($('auth-msg'));
+}
+$('tab-signin').addEventListener('click', () => showTab('signin'));
+$('tab-signup').addEventListener('click', () => showTab('signup'));
+
+// ---------- đăng nhập ----------
+$('form-signin').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = $('si-submit');
+  clearMsg($('auth-msg'));
+  busy(btn, true, 'auth_signing_in');
+
+  const { error } = await sb.auth.signInWithPassword({
+    email: $('si-email').value.trim(),
+    password: $('si-password').value
+  });
+
+  busy(btn, false, 'auth_signin_btn');
+  if (error) { msg($('auth-msg'), raw(error.message), 'err'); return; }
+
+  $('si-password').value = '';
+  window.showPage('profile', $('nav-profile'));
+});
+
+// ---------- đăng ký ----------
+$('form-signup').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = $('su-submit');
+  const username = $('su-username').value.trim();
+  clearMsg($('auth-msg'));
+
+  if (!/^[A-Za-z0-9_]{3,30}$/.test(username)) {
+    msg($('auth-msg'), 'auth_user_bad', 'err'); return;
+  }
+
+  busy(btn, true, 'auth_signing_up');
+
+  // Kiểm tra trùng tên trước, để không rơi vào lỗi khó hiểu
+  // 'Database error saving new user' do trigger tạo profile ném ra.
+  const { data: taken } = await sb
+    .from('profiles').select('username').eq('username', username).maybeSingle();
+  if (taken) {
+    busy(btn, false, 'auth_signup_btn');
+    msg($('auth-msg'), 'auth_user_taken', 'err'); return;
+  }
+
+  const { data, error } = await sb.auth.signUp({
+    email: $('su-email').value.trim(),
+    password: $('su-password').value,
+    // handle_new_user() đọc đúng khoá này để đặt username cho profile
+    options: { data: { username } }
+  });
+
+  busy(btn, false, 'auth_signup_btn');
+
+  if (error) {
+    const dup = /duplicate|already|unique/i.test(error.message)
+             || /Database error saving new user/i.test(error.message);
+    msg($('auth-msg'), dup ? 'auth_user_taken' : raw(error.message), 'err');
+    return;
+  }
+
+  $('su-password').value = '';
+
+  // Nếu project bật xác nhận email thì chưa có session ngay.
+  if (!data.session) {
+    showTab('signin');
+    msg($('auth-msg'), 'auth_confirm_email', 'ok');
+    return;
+  }
+  window.showPage('profile', $('nav-profile'));
+});
+
+// ---------- quên mật khẩu ----------
+$('btn-reset').addEventListener('click', async () => {
+  const email = $('si-email').value.trim();
+  clearMsg($('auth-msg'));
+  if (!email) { msg($('auth-msg'), 'auth_reset_need_email', 'err'); return; }
+  await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + window.location.pathname
+  });
+  // Cố tình luôn báo cùng một câu, dù email có tồn tại hay không,
+  // để không lộ ra địa chỉ nào đã đăng ký.
+  msg($('auth-msg'), 'auth_reset_sent', 'ok');
+});
+
+// ---------- lưu hồ sơ ----------
+$('form-profile').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = $('pf-submit');
+  clearMsg($('prof-msg'));
+
+  const username = $('pf-username').value.trim();
+  if (!/^[A-Za-z0-9_]{3,30}$/.test(username)) {
+    msg($('prof-msg'), 'auth_user_bad', 'err'); return;
+  }
+
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { msg($('prof-msg'), 'prof_need_signin', 'err'); return; }
+
+  busy(btn, true, 'prof_saving');
+
+  const patch = {
+    username,
+    display_name: $('pf-display').value.trim() || null,
+    bio:          $('pf-bio').value.trim() || null,
+    avatar_url:   $('pf-avatar').value.trim() || null,
+    ao3_url:      $('pf-ao3').value.trim() || null
+  };
+
+  const oldAvatar = currentProfile ? currentProfile.avatar_url : null;
+
+  const { data, error } = await sb.from('profiles')
+    .update(patch).eq('id', session.user.id)
+    .select('username, display_name, bio, avatar_url, ao3_url, is_admin')
+    .single();
+
+  busy(btn, false, 'prof_save');
+
+  if (error) {
+    const dup = /duplicate|unique/i.test(error.message);
+    msg($('prof-msg'), dup ? 'auth_user_taken' : raw(error.message), 'err');
+    return;
+  }
+  // Sửa/xoá tay ô link cũng phải dọn file đã tải lên, không thì nó nằm lại mãi.
+  dropStaleAvatar(oldAvatar, data.avatar_url, session.user.id);
+  paintProfile(data);
+  msg($('prof-msg'), 'prof_saved', 'ok');
+});
+
+// ---------- đăng xuất ----------
+$('btn-signout').addEventListener('click', async () => {
+  await sb.auth.signOut();
+  window.showPage('home', document.querySelector('.nav-links a:nth-child(1)'));
+});
+
+// ---------- đồng bộ trạng thái ----------
+sb.auth.onAuthStateChange((event, session) => {
+  paintNav(session);
+  if (session) {
+    clearMsg($('auth-msg'));
+    loadProfile(session);
+  } else {
+    currentProfile = null;
+    // Đang đứng ở trang hồ sơ mà mất session thì đẩy về trang đăng nhập.
+    // (currentPage của site khai báo bằng `let` nên không nằm trên window —
+    //  đọc trạng thái từ DOM thay vì đoán.)
+    if ($('page-profile').classList.contains('active')) {
+      window.showPage('auth', $('nav-signin'));
+    }
+  }
+});
+
+// Chưa đăng nhập mà mở thẳng #profile (bookmark, refresh) thì chuyển sang đăng nhập.
+async function guardProfile() {
+  const { data: { session } } = await sb.auth.getSession();
+  paintNav(session);
+  if (session) loadProfile(session);
+  if (!session && window.location.hash === '#profile') {
+    window.showPage('auth', $('nav-signin'));
+    msg($('auth-msg'), 'prof_need_signin', 'err');
+  }
+}
+guardProfile();
 </script>
 </body>
 </html>
