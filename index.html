@@ -97,6 +97,7 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .fic-title{font-family:var(--font-ui);font-size:1.1rem;font-weight:500;color:var(--ink);margin-bottom:0.3rem;}
 .fic-title em{font-style:italic;color:var(--gold-dark);}
 .fic-meta{font-family:var(--font-ui);font-size:0.65rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;margin-bottom:0.8rem;display:flex;gap:1.5rem;flex-wrap:wrap;}
+.fic-stats{font-variant-numeric:tabular-nums;color:var(--gold-dark);letter-spacing:1px;}
 .fic-warning{font-size:0.85rem;color:#993C1D;font-family:'Lora',Georgia,serif;font-style:italic;margin-bottom:0.6rem;}
 .fic-summary{font-family:'Lora',Georgia,serif;font-size:0.97rem;color:var(--ink2);line-height:1.7;font-style:italic;}
 .fic-tags{margin-top:0.9rem;display:flex;flex-wrap:wrap;gap:6px;}
@@ -614,11 +615,10 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <div id="mobile-filter-panel">
           <div class="mobile-filter-section">
             <span class="mobile-filter-label" data-i18n="fandom">Fandom</span>
-            <div class="mobile-filter-pills">
+            <!-- Trước đây ba pill này viết cứng nên mobile chỉ lọc được 3/6 fandom.
+                 Giờ buildSidebar() dựng theo đúng fandom có thật trong dữ liệu. -->
+            <div class="mobile-filter-pills" id="mobile-fandom-list">
               <button class="mobile-pill active" data-i18n="all" onclick="setFandom('all',this,true)">All</button>
-              <button class="mobile-pill" onclick="setFandom('Reverse: 1999',this,true)">Reverse: 1999</button>
-              <button class="mobile-pill" onclick="setFandom('Figure Skating',this,true)">Figure Skating RPF</button>
-              <button class="mobile-pill" onclick="setFandom('Honkai',this,true)">Honkai: Star Rail</button>
             </div>
           </div>
           <div class="mobile-filter-section">
@@ -637,247 +637,9 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <div class="section-heading" data-i18n="head_all">All Works</div>
         <div id="no-results" class="no-results" data-i18n="no_results">No works found for this filter.</div>
 
-        <div class="fic-card" onclick="openFic(0)" data-fandom="Reverse: 1999">
-          <div class="fic-title">Toccata in D sharp Minor: <em>"Totentanz"</em></div>
-          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-          <div class="fic-warning">⚠ Rape/Non-Con — please proceed at your own risk</div>
-          <div class="fic-summary"><em>“I want you to know… I’d do anything for you, Aleph.”</em></div>
-          <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
-        </div>
-
-        <div class="fic-card" onclick="openFic(1)" data-fandom="Reverse: 1999">
-          <div class="fic-title">Cello Concerto no.1 in C sharp Minor: <em>"None but the Lonely Heart"</em></div>
-          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-          <div class="fic-summary">In the small office, under the flickering oil lamp, the red-haired man let a heavy blot of black ink fall onto the parchment—dark and stagnant, much like his own mind in that very moment</div>
-          <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
-        </div>
-
-        <div class="fic-card" onclick="openFic(2)" data-fandom="Honkai">
-          <div class="fic-title">Pas de Deux</div>
-          <div class="fic-meta"><span>Honkai: Star Rail</span></div>
-          <div class="fic-summary">Their Last Dance</div>
-          <div class="fic-tags"><span class="tag">Phainon/Cyrene</span></div>
-        </div>
-
-        <div class="fic-card" onclick="openFic(3)" data-fandom="Reverse: 1999">
-          <div class="fic-title">String Quartet no.8: <em>"Lie"</em></div>
-          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-          <div class="fic-summary">Read the tag and read the title to decide the fic's content urself:)</div>
-          <div class="fic-tags"><span class="tag">Aleph/Recoleta</span><span class="tag">Merlin/Recoleta</span></div>
-        </div>
-
-        <div class="fic-card" onclick="openFic(4)" data-fandom="Reverse: 1999">
-          <div class="fic-title">Dirge in F sharp Minor: <em>"Le Suicide"</em></div>
-          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-          <div class="fic-summary"><em><p>"Trois grands lys, trois grands lys sur ma tombe sans croix,</p><p>Trois grands lys que le vent et la pluie ont glacés</p><p>S’endorment comme trois amours que j'ai brisés"</p></em></div>
-          <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
-        </div>
-
-        <div class="fic-card" onclick="openFic(5)" data-fandom="Reverse: 1999">
-          <div class="fic-title">Fantasia no.1 in C minor: <em>"Desires"</em></div>
-          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-          <div class="fic-warning">⚠ Rape/Non-Con</div>
-          <div class="fic-summary">“Pyrrhos…” Iglika whispered, her voice hoarse. His name slipped out far too easily in that moan</div>
-          <div class="fic-tags"><span class="tag">Corvus/Pyrrhos</span></div>
-        </div>
-
-        <div class="fic-card" onclick="openFic(6)" data-fandom="Figure Skating">
-          <div class="fic-title">Piano Concerto no.2 in G Minor: <em>"Нет, только тот, кто знал"</em></div>
-          <div class="fic-meta"><span>Figure Skating RPF</span></div>
-          <div class="fic-summary">"Now, their entire universe had shrunk down to the reflection in each other's eyes"</div>
-          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
-        </div>
-
-        <div class="fic-card" onclick="openFic(7)" data-fandom="Figure Skating">
-          <div class="fic-title">Nocturne in C Sharp Minor: <em>"Love"</em></div>
-          <div class="fic-meta"><span>Figure Skating RPF</span></div>
-          <div class="fic-summary">"Sasha opened her eyes and realized her "rival’s" fingers were woven through hers, holding on with just enough strength to radiate warmth"</div>
-          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
-        </div>
-
-        <div class="fic-card" onclick="openFic(8)" data-fandom="Honkai">
-          <div class="fic-title">Nocturne in B Flat Minor: <em>Tenderness</em></div>
-          <div class="fic-meta"><span>Honkai: Star Rail</span></div>
-          <div class="fic-summary">“You can’t even imagine…” Cyrene whispered, “…how real you are. To me… you’re so real.”</div>
-          <div class="fic-tags"><span class="tag">Phainon/Cyrene</span></div>
-        </div>
-
-        <div class="fic-card" onclick="openFic(9)" data-fandom="Honkai">
-          <div class="fic-title">Romance de Amour</div>
-          <div class="fic-meta"><span>Honkai: Star Rail</span></div>
-          <div class="fic-summary">"Yeah, everything will be okay, won't it?"</div>
-          <div class="fic-tags"><span class="tag">Phainon/Cyrene</span><span class="tag">Flame Reaver/Cyrene</span></div>
-        </div>
-
-        <div class="fic-card" onclick="openFic(10)" data-fandom="Reverse: 1999">
-          <div class="fic-title">Elegy in G Minor <em>"By the Banks of the Danube"</em></div>
-          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-          <div class="fic-summary">“Я люблю тебя… и прости меня, Иглика.”</div>
-          <div class="fic-tags"><span class="tag">Corvus/Pyrrhos</span></div>
-        </div>
-
-        <div class="fic-card" onclick="openFic(11)" data-fandom="Reverse: 1999">
-          <div class="fic-title">Libertango</div>
-          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-          <div class="fic-summary">Merlin cuck Aleph with Recoleta</div>
-          <div class="fic-tags"><span class="tag">Merlin/Recoleta</span><span class="tag">Aleph/Recoleta</span></div>
-        </div>
-
-        <div class="fic-card" onclick="openFic(12)" data-fandom="Reverse: 1999">
-          <div class="fic-title">Fantasia no.3 in B Flat Major: <em>"Thirst for Lust"</em></div>
-          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-          <div class="fic-summary"><em>“Still cold?” Aleph whispered, a single fingertip traced the faint silver scars on Recoleta’s shoulder—old training wounds—then dipped lower, circling a nipple until it peaked, aching.</em></div>
-          <div class="fic-tags"><span class="tag">Aleph/Recoleta</span></div>
-        </div>
-
-        <div class="fic-card" onclick="openFic(13)" data-fandom="Honkai">
-          <div class="fic-title">Impromptu no.1 in C Minor: <em>"Dangerous Affairs"</em></div>
-          <div class="fic-meta"><span>Honkai: Star Rail</span></div>
-          <div class="fic-summary">The title said the content</div>
-          <div class="fic-tags"><span class="tag">Phainon/Cyrene</span></div>
-        </div>
-
-        <div class="fic-card" onclick="openFic(14)" data-fandom="Honkai">
-          <div class="fic-title">Impromptu no.2 in A Minor: <em>"Friends"</em></div>
-          <div class="fic-meta"><span>Honkai: Star Rail</span></div>
-          <div class="fic-warning">Cuckold</div>
-          <div class="fic-summary">Cyrene had a trip with her "friend", Khaslana. Or, at least that what Phainon thought about those two relationship</div>
-          <div class="fic-tags"><span class="tag">Phainon/Cyrene</span><span class="tag">Khaslana/Cyrene</span></div>
-        </div>
-
-        <div class="fic-card" onclick="openFic(15)" data-fandom="Honkai">
-          <div class="fic-title">Impromptu no.2 in D Flat Major: <em>"Kindness"</em></div>
-          <div class="fic-meta"><span>Honkai: Star Rail</span></div>
-          <div class="fic-summary">This is an alternative universe. Kind of:)</div>
-          <div class="fic-tags"><span class="tag">Phainon/Cyrene</span></div>
-        </div>
-
-        <div class="fic-card" onclick="openFic(16)" data-fandom="Figure Skating">
-          <div class="fic-title">Rhapsody no.1 in G Minor: <em>"Blood"</em></div>
-          <div class="fic-meta"><span>Figure Skating RPF</span></div>
-          <div class="fic-summary">Sasha is a vampire, and Anna is her Master. Alternative Universe:)</div>
-          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
-        </div>
-
-        <div class="fic-card" onclick="openFic(17)" data-fandom="Figure Skating">
-          <div class="fic-title">Aria in C Minor: <em>"Unspoken Love"</em></div>
-          <div class="fic-meta"><span>Figure Skating RPF</span></div>
-          <div class="fic-summary">Adaption of "The Little Mermaid" for Scherbalieva:)</div>
-          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Kamila Valieva</span></div>
-        </div>
-
-        <div class="fic-card" onclick="openFic(18)" data-fandom="Figure Skating">
-          <div class="fic-title">Rhapsody no.2 in D Major: <em>"I love the way you hug me"</em></div>
-          <div class="fic-meta"><span>Figure Skating RPF</span></div>
-          <div class="fic-summary">NSFW:)</div>
-          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
-        </div>
-        
-        <div class="fic-card" onclick="openFic(19)" data-fandom="Figure Skating">
-          <div class="fic-title">Trio Sonata in G Minor: <em>"What's in my name to you?"</em></div>
-          <div class="fic-meta"><span>Figure Skating RPF</span></div>
-          <div class="fic-summary">"Memories…<p>Between Kamila Valieva and Anna Shcherbakova.</p><p>That Sasha would never know.</p><p>Fragments of memories that perhaps Anya herself didn't even remember.</p><p>But that blonde girl could never forget."</p></div>
-          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span><span class="tag">Anna Shcherbakova/Kamila Valieva</span></div>
-        </div>
-
-        <div class="fic-card" onclick="openFic(20)" data-fandom="Reverse: 1999">
-          <div class="fic-title">Sonata for Violin and Accordion in F sharp Minor: <em>"What is an Author?"</em></div>
-          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-          <div class="fic-summary"><p>"...Whether the author lives or dies, creates something new or doesn't, in the end, the purpose of literature, or if you prefer, the purpose of everything I put into a book of mine, is to bring a part of life to the very people within those pages, and to try to find a point of convergence between the reader's soul and the soul of the book. And that is my literature, Merlin"</p></div>
-          <div class="fic-tags"><span class="tag">Merlin/Recoleta</span><span class="tag">Aleph/Recoleta</span></div>
-        </div>
-
-        <div class="fic-card" onclick="openFic(21)" data-fandom="Figure Skating">
-          <div class="fic-title">Prelude and Fugue in A flat major: <em>"Lips' taste"</em></div>
-          <div class="fic-meta"><span>Figure Skating RPF</span></div>
-          <div class="fic-summary">Anna's small, soft lips had already been claimed at some point, so gently that it took her a full breath to understand what was happening, and by then Sasha's hand had found the curve of her jaw, tilting her face upward, and the pen lay forgotten on the open notebook, and the winter outside had gone very, very quiet.</p></div>
-          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
-        </div>
-        
-        <div class="fic-card" onclick="openFic(22)" data-fandom="Figure Skating">
-          <div class="fic-title">Piano concerto no.2 in F major: <em>"For You"</em></div>
-          <div class="fic-meta"><span>Figure Skating RPF</span></div>
-          <div class="fic-summary">Because Anna Shcherbakova was a girl who had spent her entire life learning to be strong enough to stand alone, and calling Sasha now, broken and humiliated and tasteless in every sense of the word, felt like admitting that the strength she had built her identity around was not strength at all but merely the absence of anyone close enough to see her fall.</p></div>
-          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
-        </div>
-        <div class="fic-card" onclick="openFic(23)" data-fandom="Genshin">
-          <div class="fic-title">Nocturne in C sharp minor: <em>"Love"</em></div>
-          <div class="fic-meta"><span>Genshin Impact</span></div>
-          <div class="fic-summary">"Cheater," she whispered.</p></div>
-          <div class="fic-tags"><span class="tag">Neuvillette/Furina</span></div>
-        </div>
-        <div class="fic-card" onclick="openFic(24)" data-fandom="Figure Skating">
-          <div class="fic-title">Rhapsody no.3 in D major:: <em>""Who are you acting for?""</em></div>
-          <div class="fic-meta"><span>重返未来：1999 · Reverse: 1999</span></div>
-          <div class="fic-summary">"Honestly, who knows if you were just acting or if it was real. But even if it was acting… who exactly were you acting for, Anna?<p>It wasn’t for me to watch, was it?”</p></div>
-          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
-        </div>
-        <div class="fic-card" onclick="openFic(25)" data-fandom="Spider-Verse">
-          <div class="fic-title">Nocturne in C sharp minor: <em>""Pavane""</em></div>
-          <div class="fic-meta"><span>Honkai: Star Rail</span></div>
-          <div class="fic-summary">"Don't worry about steps. Just, like, listen. You count everything anyway, right? So count this one. It'll tell you what to do way better than I could." He said it easily, as if he had not noticed the tension coming off her like static, and turned the record up one notch. "Let it lead. That's the whole trick."</div>
-          <div class="fic-tags"><span class="tag">Miles Morales/Gwen Stacy</span></div>
-        </div>
-        <div class="fic-card" onclick="openFic(26)" data-fandom="Figure Skating">
-          <div class="fic-title">Prelude and Fugue:: <em>""Harmony""</em></div>
-          <div class="fic-meta"><span>Figure Skating RPF</span></div>
-          <div class="fic-summary">"A few times," she said. "You're the worst liar in this building."</div>
-          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Kamila Valieva</span></div>
-        </div>
-        <div class="fic-card" onclick="openFic(27)" data-fandom="Figure Skating">
-          <div class="fic-title">Piano Trio in C minor: <em>""For Anna""</em></div>
-          <div class="fic-meta"><span>Figure Skating RPF</span></div>
-          <div class="fic-summary">For my Anna</div>
-          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Kamila Valieva</span><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
-        </div>
-        <div class="fic-card" onclick="openFic(28)" data-fandom="Genshin">
-          <div class="fic-title">Prelude and Fugue no.5 in D major: <em>"Two cups"</em></div>
-          <div class="fic-meta"><span>Genshin Impact</span></div>
-          <div class="fic-summary">"I saw you," he said. "In the court, and in the streets, and at every ceremony where you laughed on cue. I saw the seam in it. Every day, for five hundred years, I saw exactly what it cost you, and I said nothing, because I believed my silence was the shape my duty took." A pause; the rain waited in it. "I was mistaken. It was the shape my cowardice took, and it wore my duty's coat, and I have been unable to look at the sea since without knowing the difference."</div>
-          <div class="fic-tags"><span class="tag">Nevuillette/Furina</span></div>
-        </div>
-        <div class="fic-card" onclick="openFic(29)" data-fandom="Figure Skating">
-          <div class="fic-title">Violin concerto no.1 in A minor: <em>""Unnamed Friend""</em></div>
-          <div class="fic-meta"><span>Figure Skating RPF</span></div>
-          <div class="fic-summary">The federation helped. Separate interview rooms, separate call times, separate photograph angles. When they were placed together for a two-shot they were placed at the correct distance for a headline, which was a distance Sasha noticed and did not correct, because correcting it would have meant explaining why she wanted to stand closer, and explaining why was not a service she offered even to herself</div>
-          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
-        </div>
-        <div class="fic-card" onclick="openFic(30)" data-fandom="Figure Skating">
-          <div class="fic-title">Symphony no.1 in F minor: <em>""The Master and Margarita""</em></div>
-          <div class="fic-meta"><span>Figure Skating RPF</span></div>
-          <div class="fic-summary">And when Sasha found them, across the arena, across the tunnel, across the winter and last night and the hair tie and the almost-hug, Anna smiled.</div>
-          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
-        </div>
-          <div class="fic-card" onclick="openFic(31)" data-fandom="Honkai">
-          <div class="fic-title">Prelude and Fugue no.7 in F sharp minor: <em>""Stalemate""</em></div>
-          <div class="fic-meta"><span>Others</span></div>
-          <div class="fic-summary">Ánh mắt anh, lần đầu tiên trong tối nay, rời khỏi bàn cờ và dừng lại trên gương mặt cô. Và trong quầng sáng vàng nhạt của cây đèn bàn, một con bướm đêm đang bay vòng quanh chao qua lại giữa hai người, chạm vào lớp thủy tinh nóng, bật ra, rồi quay lại, kiên trì với một thứ ánh sáng sẽ không bao giờ cho nó cái nó tìm.</div>
-          <div class="fic-tags"></div>
-        </div>
-        <div class="fic-card" onclick="openFic(32)" data-fandom="Figure Skating">
-          <div class="fic-title">Viola concerto no.1 in C major: <em>""Hummingbird""</em></div>
-          <div class="fic-meta"><span>Figure Skating RPF</span></div>
-          <div class="fic-summary">"I hope you're all right, Kamilochka. Anna worries about you. She doesn't say so, obviously. She just goes quiet, and then I have to guess which of the fourteen things she's being quiet about it is, and lately it's always been you, so."</div>
-          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Kamila Valieva</span></div>
-        </div>
-        <div class="fic-card" onclick="openFic(33)" data-fandom="Others">
-          <div class="fic-title">Somnambule giọng Fa thăng thứ: <em>""Giấc mơ""</em></div>
-          <div class="fic-meta"><span>Others</span></div>
-          <div class="fic-summary">Cả hai đều nói, cùng lúc, và trong một khoảnh khắc giọng của họ trùng khít, Nyara không còn phân biệt được đâu là sự dịu dàng và đâu là sự trống rỗng, bởi vì cả hai nghe giống nhau đến mức hoàn hảo.</div>
-          <div class="fic-tags"><span class="tag">Others</span></div>
-        </div>
-        <div class="fic-card" onclick="openFic(34)" data-fandom="Figure Skating">
-          <div class="fic-title">Violin concerto no.2 in A minor: <em>""A day with you""</em></div>
-          <div class="fic-meta"><span>Figure Skating RPF</span></div>
-          <div class="fic-summary">"Everything's cheating with you." Sasha's forehead came down against hers for a moment. "You said it about the corners as well."</div>
-          <div class="fic-tags"><span class="tag">Anna Shcherbakova/Alexandra Trusova</span></div>
-        </div>
-        <div class="fic-card" onclick="openFic(35)" data-fandom="Others">
-          <div class="fic-title">Sonata cho Violin và Sáo giọng Sol trưởng: <em>""Mưa sao băng""</em></div>
-          <div class="fic-meta"><span>Others</span></div>
-          <div class="fic-summary">Bàn tay Meraki, trong lúc cô ngửa đầu lên để nhìn theo những cái đuôi dài vụt qua màn đêm ấy, đã đan vào với bàn tay của Kazuha tự lúc nào.</div>
-          <div class="fic-tags"></div>
-        </div>
+        <!-- 36 thẻ .fic-card trước đây viết cứng ở đây. Giờ dựng từ Supabase
+             (lùi về fics.json nếu không gọi được DB) — xem renderWorks(). -->
+        <div id="works-grid"></div>
       </div><!-- /.works-main -->
     </div><!-- /.works-layout -->
     <footer><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
@@ -1140,15 +902,9 @@ let activeShips = new Set();
 let activeFandom = 'all';
 
 function buildSidebar() {
-  // Display names cho từng data-fandom key
-  const fandomLabels = {
-    'Reverse: 1999': 'Reverse: 1999',
-    'Figure Skating': 'Figure Skating RPF',
-    'Honkai': 'Honkai: Star Rail',
-    'Genshin Impact': 'Genshin Impact',
-    'Spider-Verse': 'Spider-Verse',
-    'Others': 'Others',
-  };
+  // data-fandom giờ chính là tên fandom trong DB, nên không cần bảng ánh xạ
+  // nhãn nữa (bảng cũ khai 'Genshin Impact' trong khi thẻ ghi 'Genshin',
+  // làm mục Genshin trên sidebar hiện cụt).
 
   // Scan fic cards → build fandom → ships map (giữ thứ tự xuất hiện)
   const fandomShips = {};
@@ -1164,14 +920,18 @@ function buildSidebar() {
   if (accordion) {
     accordion.innerHTML = '';
     Object.entries(fandomShips).forEach(([fandom, ships]) => {
-      const label = fandomLabels[fandom] || fandom;
       const item = document.createElement('div');
       item.className = 'accordion-item';
       item.dataset.fandom = fandom;
 
       const header = document.createElement('button');
       header.className = 'filter-btn accordion-header';
-      header.innerHTML = `<span>${label}</span><span class="acc-arrow">▾</span>`;
+      const hLabel = document.createElement('span');
+      hLabel.textContent = fandom;
+      const hArrow = document.createElement('span');
+      hArrow.className = 'acc-arrow';
+      hArrow.textContent = '▾';
+      header.append(hLabel, hArrow);
       header.onclick = () => toggleAccordion(item, fandom);
 
       const shipsDiv = document.createElement('div');
@@ -1187,6 +947,21 @@ function buildSidebar() {
       item.appendChild(header);
       item.appendChild(shipsDiv);
       accordion.appendChild(item);
+    });
+  }
+
+  // --- Mobile fandom pills ---
+  // Trước đây ba pill này viết cứng nên Genshin / Spider-Verse / Others
+  // không lọc được trên điện thoại. Giờ dựng theo fandom có thật.
+  const mobileFandoms = document.getElementById('mobile-fandom-list');
+  if (mobileFandoms) {
+    [...mobileFandoms.querySelectorAll('.mobile-pill')].slice(1).forEach(b => b.remove());
+    Object.keys(fandomShips).forEach(fandom => {
+      const btn = document.createElement('button');
+      btn.className = 'mobile-pill';
+      btn.textContent = fandom;
+      btn.onclick = () => setFandom(fandom, btn, true);
+      mobileFandoms.appendChild(btn);
     });
   }
 
@@ -1372,33 +1147,135 @@ function removeShip(ship) {
 function searchFics(query) { applyFilters(); }
 
 // --- Home page: auto-render từ fics[] ---
-function makeCard(f) {
-  const titleHtml = f.subtitle
-    ? `${f.title}: <em>${f.subtitle}</em>`
-    : f.title;
-  const tagsHtml = (f.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
-  return `
-    <div class="fic-card" onclick="openFic(${f.idx})">
-      <div class="fic-title">${f.title}${f.subtitle ? ': <em>'+f.subtitle+'</em>' : ''}</div>
-      <div class="fic-meta"><span>${f.fandom}</span></div>
-      ${f.warning ? `<div class="fic-warning">⚠ ${f.warning}</div>` : ''}
-      <div class="fic-summary">${f.summary || ''}</div>
-      ${tagsHtml ? `<div class="fic-tags">${tagsHtml}</div>` : ''}
-    </div>`;
+// =============================================
+// DỮ LIỆU THẺ TRUYỆN
+// Nguồn chuẩn là Supabase. fics.json chỉ còn là phương án dự phòng khi
+// không gọi được DB (gói Free có thể cho project ngủ) — khi đó trang vẫn
+// hiện đủ danh sách thay vì trắng trơn.
+// =============================================
+
+// Khoá kỹ thuật của fandom = đúng tên trong bảng `fandoms`.
+// Riêng Reverse hiển thị kèm chữ Hán như site vẫn hiện từ trước.
+const FANDOM_DISPLAY = { 'Reverse: 1999': '重返未来：1999 · Reverse: 1999' };
+const fandomLabel = (name) => FANDOM_DISPLAY[name] || name;
+
+// fics.json ghi fandom theo kiểu '重返未来：1999 · Reverse: 1999';
+// cắt phần trước dấu '·' để ra đúng khoá của DB.
+function fandomKeyFromYaml(raw) {
+  const s = (raw || 'Others').trim();
+  const dot = s.indexOf('·');
+  return dot >= 0 ? s.slice(dot + 1).trim() : s;
+}
+
+let worksData = [];      // mảng thẻ đang hiển thị
+let worksFromDB = false; // đang dùng dữ liệu DB hay bản dự phòng
+
+function worksFromFics() {
+  return fics.map((f, i) => ({
+    idx: i,
+    title: f.title || '',
+    subtitle: f.subtitle || '',
+    fandom: fandomKeyFromYaml(f.fandom),
+    warning: f.warning || '',
+    summary: f.summary || '',
+    ships: f.tags || [],
+    featured: !!f.featured,
+    date: f.date || '',
+    kudos: null, comments: null      // bản dự phòng không có số đếm
+  }));
+}
+
+// Dựng bằng DOM. Riêng tiêu đề phụ và tóm tắt cho phép HTML vì đó là nội dung
+// do chính chủ repo viết trong YAML (<em>, <br>) — chỉ admin ghi được bảng works.
+// Tên ship và fandom thì luôn dùng textContent.
+function makeCardEl(d) {
+  const card = document.createElement('div');
+  card.className = 'fic-card';
+  card.dataset.fandom = d.fandom;
+  card.addEventListener('click', () => openFic(d.idx));
+
+  const title = document.createElement('div');
+  title.className = 'fic-title';
+  title.append(document.createTextNode(d.title));
+  if (d.subtitle) {
+    title.append(document.createTextNode(': '));
+    const em = document.createElement('em');
+    em.innerHTML = d.subtitle;
+    title.append(em);
+  }
+  card.append(title);
+
+  const meta = document.createElement('div');
+  meta.className = 'fic-meta';
+  const fd = document.createElement('span');
+  fd.textContent = fandomLabel(d.fandom);
+  meta.append(fd);
+  if (d.kudos !== null || d.comments !== null) {
+    const st = document.createElement('span');
+    st.className = 'fic-stats';
+    st.textContent = `♥ ${d.kudos || 0} · ✎ ${d.comments || 0}`;
+    meta.append(st);
+  }
+  card.append(meta);
+
+  if (d.warning) {
+    const w = document.createElement('div');
+    w.className = 'fic-warning';
+    w.textContent = '⚠ ' + d.warning;
+    card.append(w);
+  }
+
+  const sum = document.createElement('div');
+  sum.className = 'fic-summary';
+  sum.innerHTML = d.summary || '';
+  card.append(sum);
+
+  const tags = document.createElement('div');
+  tags.className = 'fic-tags';
+  (d.ships || []).forEach(s => {
+    const t = document.createElement('span');
+    t.className = 'tag';
+    t.textContent = s;
+    tags.append(t);
+  });
+  card.append(tags);
+
+  return card;
+}
+
+function fill(el, list) {
+  el.textContent = '';
+  const frag = document.createDocumentFragment();
+  list.forEach(d => frag.append(makeCardEl(d)));
+  el.append(frag);
 }
 
 function renderHome() {
-  // Latest: 4 fic mới nhất sort theo date
-  const withIdx = fics.map((f, i) => ({ ...f, idx: i }));
-  const latest = [...withIdx]
+  // Latest: 4 fic mới nhất theo ngày đăng
+  const latest = [...worksData]
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(0, 4);
+  // Favorites: fic có featured, giữ nguyên thứ tự danh sách
+  const favorites = worksData.filter(d => d.featured);
 
-  // Favorites: fic có featured: true, giữ nguyên thứ tự trong fics[]
-  const favorites = withIdx.filter(f => f.featured);
+  fill(document.getElementById('home-latest'), latest);
+  fill(document.getElementById('home-favorites'), favorites);
+}
 
-  document.getElementById('home-latest').innerHTML   = latest.map(makeCard).join('');
-  document.getElementById('home-favorites').innerHTML = favorites.map(makeCard).join('');
+function renderWorks() {
+  fill(document.getElementById('works-grid'), worksData);
+  const statEl = document.getElementById('stat-works');
+  if (statEl) statEl.textContent = worksData.length;
+}
+
+// Vẽ lại toàn bộ phần danh sách. buildSidebar() và applyFilters() vẫn đọc DOM
+// y như cũ, nên đổi nguồn dữ liệu không phải sửa gì trong bộ lọc/tìm kiếm.
+function renderAllWorks() {
+  renderWorks();
+  renderHome();
+  buildSidebar();
+  applyFilters();
+  applyLang();
 }
 
 function txtToHtml(text) {
@@ -1550,16 +1427,29 @@ document.addEventListener('DOMContentLoaded', async () => {
   intro.addEventListener('click', enterSite);
   document.addEventListener('keydown', () => { if(intro.style.display !== 'none') enterSite(); }, {once: true});
 
+  // fics.json vẫn phải tải: trình đọc cần files/chapters/music từ đây.
   await loadFicsData();
 
+  // Vẽ ngay bằng dữ liệu tĩnh để trang không trống trong lúc đợi DB.
+  worksData = worksFromFics();
+  renderWorks();
   renderHome();
   buildSidebar();
   showContinueBanner();
   initFontSize();
   applyLang();
-  // Auto-count works
-  const statEl = document.getElementById('stat-works');
-  if (statEl) statEl.textContent = fics.length;
+
+  // Rồi thay bằng dữ liệu thật từ Supabase (có số kudos/bình luận, và
+  // truyện is_restricted tự biến mất với khách chưa đăng nhập).
+  // Gọi hỏng thì giữ nguyên bản tĩnh ở trên, không để trắng trang.
+  if (window.fetchWorksFromDB) {
+    window.fetchWorksFromDB().then(rows => {
+      if (!rows || !rows.length) return;
+      worksData = rows;
+      worksFromDB = true;
+      renderAllWorks();
+    }).catch(() => {});
+  }
 
   // Xử lý mở thẳng 1 fic nếu URL có #fic-N (share link)
   const hash = window.location.hash;
@@ -2276,6 +2166,44 @@ $('btn-avatar-clear').addEventListener('click', async () => {
   if (err) { msg($('prof-msg'), raw(err.message), 'err'); return; }
   msg($('prof-msg'), 'prof_avatar_removed', 'ok');
 });
+
+// ---------- danh sách truyện cho Browse + trang chủ ----------
+// Trả về mảng thẻ đã chuẩn hoá, hoặc null nếu không gọi được DB
+// (script cổ điển sẽ giữ nguyên bản dựng từ fics.json).
+//
+// Không cần lọc is_restricted ở đây: policy SELECT của bảng works đã bỏ hẳn
+// những hàng đó với khách chưa đăng nhập, nên truyện bị hạn chế biến mất khỏi
+// danh sách — không lộ cả tên lẫn tóm tắt.
+window.fetchWorksFromDB = async function () {
+  try {
+    const { data, error } = await sb.from('works')
+      .select('legacy_id, title, subtitle, summary, warning_note, featured, published_at,'
+            + ' kudos_count, comment_count,'
+            + ' work_fandoms(fandoms(name)), work_ships(ships(name))')
+      .eq('status', 'published');
+    if (error || !data) return null;
+
+    return data
+      .map(w => ({
+        idx: parseInt(String(w.legacy_id).replace(/\D/g, ''), 10),
+        title: w.title || '',
+        subtitle: w.subtitle || '',
+        fandom: (w.work_fandoms || []).map(x => x.fandoms.name)[0] || 'Others',
+        warning: w.warning_note || '',
+        summary: w.summary || '',
+        ships: (w.work_ships || []).map(x => x.ships.name),
+        featured: !!w.featured,
+        date: w.published_at || '',
+        kudos: w.kudos_count || 0,
+        comments: w.comment_count || 0
+      }))
+      // Giữ đúng thứ tự cũ của trang Works: theo số thứ tự fic.
+      .filter(d => !isNaN(d.idx))
+      .sort((a, b) => a.idx - b.idx);
+  } catch (_) {
+    return null;
+  }
+};
 
 // ---------- kudos & bookmark ----------
 // Nối truyện đang đọc với hàng thật trong DB qua works.legacy_id = 'fic-<index>'.

@@ -54,13 +54,15 @@ Có **hai nguồn song song, phải sửa cả hai khi thêm/sửa fic**:
    chapters: [Movement I, Movement II]  # tên chapter, cùng độ dài với files
    ```
 
-2. **Thẻ `.fic-card` hard-code trong `index.html`** (trang Works, dòng ~566–810).
-   Đây mới là thứ hiển thị ở trang Works, và `buildSidebar()` **quét DOM của
-   các thẻ này** (`data-fandom` + `.tag`) để dựng bộ lọc fandom/ship. Trang Home
-   thì ngược lại, render từ `fics.json` qua `makeCard()`.
-   → Fandom và ship hiện **không có danh sách chuẩn ở đâu cả**, chúng được suy ra
-   từ HTML. Thuộc tính `data-fandom` dùng key rút gọn (`Figure Skating`, `Honkai`)
-   khác với nhãn hiển thị (`Figure Skating RPF`, `Honkai: Star Rail`).
+2. ~~Thẻ `.fic-card` hard-code trong `index.html`~~ — **đã xoá hết ở bước 5.**
+   36 thẻ viết tay không còn nữa; trang Works và trang Home đều dựng từ Supabase.
+   `fics.json` giờ có hai việc: cấp `files` / `chapters` / `music` cho trình đọc,
+   và làm **bản dự phòng** cho danh sách khi không gọi được DB.
+
+Ba nguồn này **phải luôn khớp nhau**. Sửa fic là sửa cả YAML lẫn DB, rồi để
+Action dựng lại `fics.json`. Cách kiểm nhanh xem có lệch không: băm
+`title|subtitle|summary` và `warning|ships` và `fandom` ở hai phía rồi so
+(xem lịch sử hội thoại bước 5 — lần đó bắt được 30 chỗ lệch).
 
 ### Những chỗ đã biết là lệch / nợ kỹ thuật
 
@@ -423,18 +425,76 @@ bị chặn thì bộ đếm rollback theo.
 - Chưa làm: trả lời lồng nhau (`parent_id` có sẵn), sửa bình luận,
   bình luận theo từng chương (`chapter_id` đang để null).
 
+## Bước 5 — Browse & trang chủ đọc từ database (cập nhật 2026-08-30)
+
+36 thẻ `.fic-card` viết cứng đã bị xoá, thay bằng `<div id="works-grid"></div>`.
+Cả trang Works lẫn trang Home giờ dựng từ cùng một mảng `worksData`.
+
+### Bộ lọc không phải sửa một dòng nào
+
+`buildSidebar()` và `applyFilters()` vốn **chỉ đọc DOM** (`data-fandom`, chữ trong
+`.fic-title`, chữ trong `.tag`). Nên chỉ cần dựng thẻ ra đúng cấu trúc DOM cũ là
+lọc/tìm kiếm/accordion/pill mobile chạy y nguyên. Đây là lý do bước này rẻ hơn vẻ ngoài.
+
+### Khoá fandom
+
+`data-fandom` giờ = **đúng tên trong bảng `fandoms`** (`Figure Skating RPF`,
+`Honkai: Star Rail`...), không còn khoá rút gọn (`Figure Skating`, `Honkai`).
+Bảng `fandomLabels` cũ đã xoá — nó khai `Genshin Impact` trong khi thẻ ghi
+`Genshin`, làm mục Genshin trên sidebar hiện cụt.
+
+Hiển thị thì giữ nguyên như cũ qua `FANDOM_DISPLAY`: riêng Reverse vẫn hiện
+`重返未来：1999 · Reverse: 1999` ở dòng `.fic-meta`. Người xem không thấy khác biệt.
+
+Nhánh dự phòng dùng `fandomKeyFromYaml()` để cắt phần trước dấu `·` trong chuỗi
+fandom của `fics.json` ra đúng khoá DB.
+
+### Dự phòng khi Supabase ngủ
+
+Luồng khởi tạo: tải `fics.json` → dựng thẻ ngay từ đó → rồi mới gọi DB và vẽ đè.
+`window.fetchWorksFromDB()` trả `null` khi lỗi, script cổ điển giữ nguyên bản tĩnh.
+**Trang không bao giờ trắng** kể cả khi project bị pause.
+
+**Đánh đổi phải biết:** ở nhánh dự phòng, truyện `is_restricted` **hiện trở lại**,
+vì `fics.json` không biết gì về cờ đó. Chỉ hết khi Browse bỏ hẳn `fics.json`.
+
+### `is_restricted`
+
+Không cần lọc ở frontend: policy SELECT của `works` đã bỏ hẳn hàng đó với khách
+chưa đăng nhập, nên **tên và tóm tắt cũng không lộ**. Đã thử: đánh dấu 2 fic →
+khách thấy 34, người đăng nhập thấy 36, chữ "Toccata" không xuất hiện ở đâu.
+
+**Nhưng nội dung vẫn đọc được** qua `#fic-N` và qua file `.txt` công khai trên
+GitHub, vì trình đọc chưa lấy nội dung từ `chapters.content`. Muốn chặn thật thì
+phải làm nốt phần trình đọc **và** xoá `.txt` khỏi repo.
+
+### Pill lọc fandom trên mobile
+
+Trước đây ba pill viết cứng nên **Genshin / Spider-Verse / Others không lọc được
+trên điện thoại**. Giờ `buildSidebar()` dựng theo fandom có thật, đủ cả sáu.
+
+### Bẫy đã gặp
+
+- **Trigger `kudos_identity_trg` chặn cả `INSERT` bằng SQL trực tiếp.** Chạy
+  `insert into kudos` từ SQL editor sẽ lỗi `Khong xac dinh duoc nguon gui` vì
+  `auth.uid()` null và không có `request.headers`. Muốn chèn tay để test thì phải
+  `set_config('request.jwt.claims', ...)` trong cùng transaction.
+- **Đo `getBoundingClientRect()` trên trang đang ẩn luôn ra 0×0.** Trang nào không
+  có class `active` thì mọi phép đo đều vô nghĩa — phải `showPage()` trước khi đo.
+
 ### Việc tiếp theo
 
-- **Đấu phần Browse vào DB** — việc lớn còn lại. Thay `fetch('fics.json')` + 36 thẻ
-  `.fic-card` hard-code bằng truy vấn `works` / `chapters`. Làm xong mới hiện được
-  số kudos/comment trên thẻ, và mới bỏ được khoá theo vị trí `legacy_id`.
+- **Trình đọc lấy nội dung từ `chapters.content`** thay vì fetch `.txt` từ GitHub.
+  Đây là việc còn lại để `is_restricted` chặn được nội dung thật, không chỉ ẩn khỏi
+  danh sách. Làm xong **phải xoá `.txt` khỏi repo**, không thì file vẫn công khai.
+  Xong bước đó thì `fics.json` chỉ còn là bản dự phòng thuần tuý.
 - Trang "Bookmark của tôi": `bookmarks` có sẵn `note`, `is_private`, `is_rec`,
-  `last_chapter_id` nhưng giao diện chưa dùng — bookmark tạo ra đang để mặc định
-  (riêng tư, không ghi chú).
-- Bình luận: trả lời lồng nhau (`parent_id`), sửa bình luận, và bình luận theo
-  từng chương (`chapter_id`) đều đã có chỗ trong schema nhưng chưa làm giao diện.
-- Kiểm duyệt: cột `comments.is_deleted` chưa ai dùng. Nếu sau này làm xoá mềm thì
-  **phải sửa `comment_count_trg`**, vì trigger hiện chỉ đếm INSERT/DELETE.
-- Chuyển nhạc/ảnh từ GitHub Releases sang Supabase Storage (`chapters.music` hiện
-  vẫn trỏ URL GitHub, giữ nguyên cấu trúc `{source,url,start,name}` của site cũ).
-  Bucket `avatars` đã có, làm mẫu được cho bucket nhạc/ảnh sau này.
+  `last_chapter_id` nhưng giao diện chưa dùng.
+- Bình luận: trả lời lồng nhau (`parent_id`), sửa bình luận, bình luận theo chương
+  (`chapter_id`) — schema có chỗ rồi, chưa làm giao diện.
+- Kiểm duyệt: `comments.is_deleted` chưa ai dùng. Nếu làm xoá mềm thì **phải sửa
+  `comment_count_trg`**, vì trigger hiện chỉ đếm INSERT/DELETE.
+- Chuyển nhạc/ảnh từ GitHub Releases sang Supabase Storage (`chapters.music` vẫn
+  trỏ URL GitHub). Bucket `avatars` làm mẫu được.
+- `const REPO` vẫn trỏ raw content sang `lavaknight2017-rgb/...` — sẽ hết ý nghĩa
+  khi trình đọc chuyển sang DB.
