@@ -134,6 +134,7 @@ Migration đã chạy, theo thứ tự:
 12. `comments_rate_limit`
 13. `restrict_posting_to_admin`
 14. `restrict_tag_creation_to_admin`
+15. `auto_assign_legacy_id`
 
 ### Ba cái bẫy đã gặp — đừng lặp lại
 
@@ -565,6 +566,40 @@ Nguyên nhân: trình duyệt còn **session của một tài khoản test đã 
 
 Sau khi xoá tài khoản test, nhớ `signOut()` và xoá key `sb-*` trong localStorage,
 không thì lần test sau sẽ đuổi theo một lỗi không có thật.
+
+## Dọn nền cho trang đăng bài (bước 7 phần 4)
+
+Truyện đăng qua form chỉ nằm trong DB, **không có trong `fics.json`**. Trước đó
+frontend lấy tiêu đề, fandom, danh sách chương và nhạc từ `fics.json` nên truyện
+mới sẽ vỡ. Đã đổi:
+
+- `ficInfo(i)` — tiêu đề/phụ đề/fandom/cảnh báo, ưu tiên `worksData` (DB).
+- `chapterNames(i)` — tên chương từ `chapterRows` (DB), lùi về `fics.json`.
+- `getMusicData()` — ưu tiên `chapters.music`, lùi về `fics.json`.
+- Định tuyến `#fic-N` và banner "đọc tiếp" hỏi thêm `worksData`, không chỉ `fics`.
+
+Migration 15 `auto_assign_legacy_id`: trigger cấp `fic-<max+1>` khi `legacy_id`
+để trống. Cột đã có unique index nên hai lượt chèn cùng lúc sẽ đụng nhau chứ
+không lặng lẽ trùng số. Khai sẵn `legacy_id` thì trigger giữ nguyên.
+
+**Đây là giải pháp tối thiểu.** Cách đúng về lâu dài là bỏ `legacy_id`, định
+tuyến bằng `slug` — đụng `openFic`, URL `#fic-N` và `sk-continue` nên để riêng.
+
+### Ba lỗi tự gây ra khi sửa bằng awk — đọc trước khi dùng lại chiêu này
+
+1. **`&` trong phần thay thế của `gsub()` nghĩa là "toàn bộ chuỗi khớp"**, không
+   phải ký tự `&`. Ba dòng bị nhân bản thành rác kiểu
+   `if (x if (cond) doIt();if (cond) doIt(); y)`. Muốn `&` thật thì phải `\&`,
+   mà trong shell còn phải nhân đôi lần nữa. **Đừng dùng gsub cho code có `&&`.**
+2. `chapterRows` đã bị đổi thành promise ở bước 6, nhưng hai hàm mới vẫn gọi tên
+   cũ → `ReferenceError`. Đã thêm lại một biến giữ **bản đã giải quyết** của
+   promise, vì `chapterNames()`/`getMusicData()` bị gọi từ chỗ không await được.
+3. `playMusic()` nổ vì `openFic()` gọi nó **trước khi** chương tải xong, mà truyện
+   mới thì `fics.json` không có nhạc. Đã cho nó im lặng thoát khi chưa có dữ liệu;
+   `loadChapter()` gọi lại sau khi chương về.
+
+Bài học chung: sau mỗi lần sửa hàng loạt bằng awk/sed, **mở trang và xem console**
+— cả ba lỗi trên đều không lộ ra ở `grep`.
 ## Bước 6 — trang đọc lấy nội dung từ database (cập nhật 2026-08-30)
 
 `loadChapter()` giờ đọc `chapters.content` thay vì `fetch` file `.txt` từ GitHub.

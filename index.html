@@ -1208,6 +1208,25 @@ function worksFromFics() {
   }));
 }
 
+// Thông tin truyện cho trang đọc. Ưu tiên worksData (từ DB) vì truyện đăng qua
+// form KHÔNG có trong fics.json — chỉ lùi về fics.json khi DB không gọi được.
+function ficInfo(i) {
+  const d = worksData.find(x => x.idx === i);
+  const f = fics[i];
+  if (d) return { title:d.title, subtitle:d.subtitle, fandom:fandomLabel(d.fandom), warning:d.warning };
+  if (f) return { title:f.title||'', subtitle:f.subtitle||'', fandom:f.fandom||'', warning:f.warning||'' };
+  return { title:'', subtitle:'', fandom:'', warning:'' };
+}
+
+// Tên các chương. Dùng dữ liệu DB của truyện đang mở nếu đã tải xong,
+// vì fics.json không biết gì về truyện mới.
+function chapterNames(i) {
+  if (chapterFic === i && Array.isArray(chapterRows) && chapterRows.length) {
+    return chapterRows.map((r, n) => r.title || ('Chapter ' + (n + 1)));
+  }
+  return (fics[i] && fics[i].chapters) || [];
+}
+
 // Dựng bằng DOM. Riêng tiêu đề phụ và tóm tắt cho phép HTML vì đó là nội dung
 // do chính chủ repo viết trong YAML (<em>, <br>) — chỉ admin ghi được bảng works.
 // Tên ship và fandom thì luôn dùng textContent.
@@ -1314,7 +1333,14 @@ function txtToHtml(text) {
 
 // --- Per-chapter music helper ---
 function getMusicData(ficIdx, chapterIdx) {
-  const f = fics[ficIdx];
+  // Truyện đăng qua form chỉ có nhạc trong chapters.music, không có trong
+  // fics.json — nên ưu tiên DB, chỉ lùi về fics.json khi DB không có.
+  if (chapterFic === ficIdx && Array.isArray(chapterRows) && chapterRows[chapterIdx]
+      && chapterRows[chapterIdx].music) {
+    const mm = chapterRows[chapterIdx].music;
+    return { m: mm, name: mm.name || '' };
+  }
+  const f = fics[ficIdx] || {};
   const m = Array.isArray(f.music) ? (f.music[chapterIdx] || f.music[0]) : f.music;
   const name = Array.isArray(f.musicName) ? (f.musicName[chapterIdx] || f.musicName[0]) : f.musicName;
   return { m, name };
@@ -1325,14 +1351,18 @@ function getMusicData(ficIdx, chapterIdx) {
 // rồi gọi loadChapter() ngay sau đó, tức hai lượt cùng lúc cho cùng một truyện.
 // Nếu lượt sau huỷ lượt trước thì lượt trước tưởng "không gọi được DB" và đi lấy
 // file .txt — vừa thừa, vừa lách mất is_restricted.
-let chapterFic = -1, chapterPromise = null;
+// chapterRows giữ bản ĐÃ giải quyết của chapterPromise, để chapterNames() và
+// getMusicData() đọc được đồng bộ (chúng bị gọi từ code không await được).
+let chapterFic = -1, chapterPromise = null, chapterRows = null;
 
 function ensureChapters(ficIdx) {
   if (chapterFic !== ficIdx || !chapterPromise) {
     chapterFic = ficIdx;
-    chapterPromise = window.fetchChapters
+    chapterRows = null;
+    chapterPromise = (window.fetchChapters
       ? window.fetchChapters(ficIdx)
-      : Promise.resolve(null);
+      : Promise.resolve(null)
+    ).then(rows => { if (chapterFic === ficIdx) chapterRows = rows; return rows; });
   }
   return chapterPromise;   // cùng truyện -> dùng chung một lượt gọi
 }
@@ -1376,29 +1406,31 @@ async function loadChapter(ficIdx, chapterIdx) {
   updateChapterNav(ficIdx, chapterIdx);
   // Nhạc vẫn lấy từ fics.json: cột chapters.music chưa dùng tới, để dành cho
   // bước chuyển nhạc sang Supabase Storage.
-  if (Array.isArray(fics[ficIdx].music)) playMusic(ficIdx, chapterIdx);
+  // Truyện mới không có trong fics.json; nhạc theo chương thì getMusicData()
+  // đã tự ưu tiên chapters.music rồi, ở đây chỉ cần đừng lỗi khi thiếu fics[i].
+  if (!fics[ficIdx] || Array.isArray(fics[ficIdx].music)) playMusic(ficIdx, chapterIdx);
   window.scrollTo(0,0);
 }
 
 function updateChapterNav(ficIdx, chapterIdx) {
-  const fic = fics[ficIdx];
+  const ten = chapterNames(ficIdx);
   const navTop = document.getElementById('chapter-nav-top');
   const navBot = document.getElementById('chapter-nav-bot');
 
-  if (fic.chapters.length <= 1) {
+  if (ten.length <= 1) {
     if (navTop) navTop.style.display = 'none';
     if (navBot) navBot.style.display = 'none';
     return;
   }
 
-  const label = fic.chapters[chapterIdx] || `Chapter ${chapterIdx+1}`;
+  const label = ten[chapterIdx] || `Chapter ${chapterIdx+1}`;
   const isFirst = chapterIdx === 0;
-  const isLast  = chapterIdx >= fic.chapters.length - 1;
+  const isLast  = chapterIdx >= ten.length - 1;
 
   // Top nav — with dropdown select
   if (navTop) {
     navTop.style.display = 'flex';
-    const options = fic.chapters.map((ch, i) =>
+    const options = ten.map((ch, i) =>
       `<option value="${i}" ${i === chapterIdx ? 'selected' : ''}>${ch}</option>`
     ).join('');
     navTop.innerHTML = `
@@ -1422,7 +1454,7 @@ function prevChapter() {
   if (currentChapter > 0) { currentChapter--; loadChapter(currentFic, currentChapter); }
 }
 function nextChapter() {
-  if (currentChapter < fics[currentFic].chapters.length - 1) { currentChapter++; loadChapter(currentFic, currentChapter); }
+  if (currentChapter < chapterNames(currentFic).length - 1) { currentChapter++; loadChapter(currentFic, currentChapter); }
 }
 
 function jumpChapter(idx) {
@@ -1436,12 +1468,15 @@ function openFic(i) {
   prevPage = currentPage;
   currentFic = i;
   currentChapter = 0;
-  const f = fics[i];
+  const f = ficInfo(i);
+  // Lúc này chương chưa tải xong nên tên chương còn lấy tạm từ fics.json;
+  // updateChapterNav() sẽ dựng lại bằng dữ liệu DB ngay sau khi loadChapter xong.
+  const ten = chapterNames(i);
 
-  const chapterNavHtml = f.chapters.length > 1 ? `
+  const chapterNavHtml = ten.length > 1 ? `
     <div class="chapter-nav" id="chapter-nav-top">
       <button id="ch-prev-top" onclick="prevChapter()">${t('prev')}</button>
-      <span class="chapter-label" id="ch-label-top">${f.chapters[0]}</span>
+      <span class="chapter-label" id="ch-label-top">${ten[0]}</span>
       <button id="ch-next-top" onclick="nextChapter()">${t('next')}</button>
     </div>` : '<div id="chapter-nav-top" style="display:none"></div>';
 
@@ -1507,7 +1542,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const hash = window.location.hash;
   if (hash.startsWith('#fic-')) {
     const idx = parseInt(hash.replace('#fic-', ''));
-    if (!isNaN(idx) && fics[idx]) openFic(idx);
+    // Truyện đăng qua form không có trong fics.json nên phải hỏi thêm worksData.
+    if (!isNaN(idx) && (fics[idx] || worksData.some(w => w.idx === idx))) openFic(idx);
   }
 });
 
@@ -1515,8 +1551,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 // CONTINUE READING (localStorage)
 // =============================================
 function saveReadingProgress() {
-  const fic = fics[currentFic];
-  if (!fic) return;
+  // ficInfo() ưu tiên DB nên nhớ được cả truyện đăng qua form.
+  const fic = ficInfo(currentFic);
+  if (!fic.title) return;
   const data = {
     ficIdx: currentFic,
     chapter: currentChapter,
@@ -1534,7 +1571,7 @@ function showContinueBanner() {
     const data = JSON.parse(raw);
     // Only show if less than 30 days old
     if (Date.now() - data.timestamp > 30 * 24 * 60 * 60 * 1000) return;
-    if (!fics[data.ficIdx]) return;
+    if (!fics[data.ficIdx] && !worksData.some(w => w.idx === data.ficIdx)) return;
     document.getElementById('continue-title').textContent = data.title;
     document.getElementById('continue-banner').style.display = 'block';
   } catch(e) {}
@@ -1901,6 +1938,9 @@ function playMusicDirect(source, url, id, start, end, name) {
   function playMusic(ficIdx, chapterIdx) {
   const { m, name } = getMusicData(ficIdx, chapterIdx);
   stopMusic();
+  // Truyện mới chưa có trong fics.json, và lúc openFic() gọi hàm này thì chương
+  // (kèm chapters.music) còn chưa tải xong — cứ im lặng, loadChapter() sẽ gọi lại.
+  if (!m) return;
 
   const source = m.source || 'youtube';
 
