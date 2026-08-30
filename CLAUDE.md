@@ -126,6 +126,7 @@ Migration đã chạy, theo thứ tự:
 8. `revoke_trigger_function_execute_from_public`
 9. `create_avatars_bucket`
 10. `lock_down_rls_auto_enable`
+11. `kudos_allow_guests`
 
 ### Ba cái bẫy đã gặp — đừng lặp lại
 
@@ -152,6 +153,10 @@ Chúng chỉ trả boolean về chính người gọi, không lộ thêm gì ngo
 `rls_auto_enable()` thì **đã revoke** (migration 10) — nó là hàm của event trigger
 `ensure_rls`, không hề được policy gọi, nên khoá lại không ảnh hưởng gì; đã kiểm
 chứng bảng mới tạo vẫn tự bật RLS sau khi revoke.
+
+`app_private.secrets` bị lint `rls_enabled_no_policy` (mức INFO) — **cố ý**: bật RLS
+mà không có policy nào chính là cách chặn hết. Bảng đó chỉ chứa muối băm IP, không
+ai ngoài trigger `SECURITY DEFINER` được đụng vào.
 
 Lưu ý về báo cáo cũ: migration 8 chỉ revoke được `handle_new_user()` và
 `bump_work_counter()`, **không** đụng tới 4 hàm còn lại — có lúc đã nói nhầm là
@@ -302,17 +307,83 @@ Vài điểm dễ vấp nếu sửa tiếp:
   chèn vào đầu là gãy cả hai. Thêm mục nav cũng làm nav tràn ngang trên điện thoại
   → đã vá bằng `min-width:0` + `overflow-x:auto` trong media query `max-width:768px`.
 
+## Bước 3 — kudos & bookmark (cập nhật 2026-08-30)
+
+Khối `#work-actions-wrap` nằm giữa `#chapter-nav-bot` và `#reading-footer` trên
+trang đọc. `openFic()` gọi `window.loadWorkActions(i)` — hàm này do module
+Supabase ở cuối file gắn lên `window`.
+
+### Nối truyện với hàng trong DB
+
+`openFic(i)` dùng **chỉ số mảng** của `fics.json`, nối sang `works.legacy_id = 'fic-<i>'`.
+Đã kiểm chứng: `fics/*.yaml` đánh số 000–035 liên tục, `build_fics.py` sắp theo số đó,
+`legacy_id` trong DB cũng là `fic-0..fic-35`, đối chiếu tiêu đề index 0/22/34/35 đều khớp.
+
+**Đây là khoá theo VỊ TRÍ.** Đánh số lại file trong `fics/` hoặc chèn fic vào giữa
+sẽ làm kudos/bookmark gắn nhầm truyện — đúng lỗi mà comment cũ đã dính.
+**Quy tắc: thêm fic mới thì đánh số tiếp theo, không chèn vào giữa.**
+Lỗi này chỉ hết hẳn khi Browse đọc từ DB và mang UUID thật.
+
+Nếu không tìm thấy hàng tương ứng thì khối nút **ẩn hoàn toàn**, không báo lỗi.
+
+### Kudos khách vãng lai
+
+`kudos.user_id` giờ nullable, thêm `guest_ip_hash bytea`. Danh tính do trigger
+`kudos_identity_trg` → `kudos_set_identity()` tự điền, **client chỉ được gửi `work_id`**
+(GRANT INSERT theo đúng một cột). Hash = `sha256(muối || ip || ':' || work_id)`,
+muối 32 byte nằm ở `app_private.secrets` — schema ngoài `public` nên PostgREST
+không phơi ra, lại bật RLS không policy nên chặn hết.
+
+Trộn `work_id` vào hash là cố ý: cùng một người ở hai truyện cho ra hai hash khác
+nhau, nên không ai đối chiếu được một IP đã thả tim cho những truyện nào.
+
+Hai unique index riêng phần thay cho unique cũ:
+`kudos_uniq_user (work_id,user_id) where user_id is not null` và
+`kudos_uniq_guest (work_id,guest_ip_hash) where guest_ip_hash is not null`.
+Nên **khách và thành viên đếm riêng** — cùng một IP vừa thả tim ẩn danh vừa đăng
+nhập thả tim thì thành 2 kudos. Đó là hành vi đúng, không phải lỗi.
+
+Ràng buộc `kudos_one_identity check (num_nonnulls(user_id, guest_ip_hash) = 1)`
+an toàn vì FK `user_id` là `ON DELETE CASCADE` (xoá tài khoản thì xoá luôn kudos),
+không phải `SET NULL` như bảng `comments`.
+
+### Rút lại kudos
+
+Thành viên đăng nhập rút được (policy DELETE `user_id = auth.uid()`).
+Khách **không** rút được vì `user_id` null → policy không khớp. Đây là chủ đích:
+danh tính khách chỉ dựa vào IP, không xác minh được. Giao diện phản ánh đúng vậy:
+nút của khách sau khi bấm thành trạng thái tĩnh (`disabled` + class `done`).
+
+### Vài chỗ dễ vấp
+
+- **Không được `select('*')` trên bảng `kudos`.** Cột `guest_ip_hash` nằm ngoài
+  quyền đọc của `anon`/`authenticated`, gọi `*` là `permission denied`.
+  Chỉ đọc `id, work_id, user_id, created_at`.
+- Số đếm lấy từ `works.kudos_count` (trigger `bump_work_counter` giữ), không đếm tay.
+- Khách không tra được hash của chính mình nên trạng thái "đã thả tim" nhớ tạm ở
+  `localStorage` khoá `sk-kudos-<work_uuid>`. Xoá đi bấm lại thì DB trả `23505`,
+  frontend hiểu đó là "đã thả rồi" chứ không hiện lỗi.
+- `bookmarks` **không** có trigger tự điền như `kudos`, phải gửi `user_id` tường minh.
+- Chưa đăng nhập mà bấm Bookmark thì nhớ truyện vào `sessionStorage['sk-return-fic']`
+  rồi chuyển sang trang đăng nhập; handler đăng nhập đọc lại và quay về đúng truyện.
+- `waSeq` chống chạy đua: lật truyện nhanh thì kết quả truy vấn của truyện cũ bị bỏ.
+
 ### Việc tiếp theo
 
-- **Bước 3 (chưa bắt đầu, chờ chủ repo duyệt)**: kudos / bookmark / comment.
+- **Comment** — phần còn lại của kudos/bookmark/comment. Khối comment cũ ở
+  `index.html` (`SUPABASE_URL`/`SUPABASE_KEY` của project `ggbahdhmtgaemgblfdum`
+  đã paused) vẫn còn nguyên và vẫn hỏng. **Đừng chỉ đổi URL sang project mới** —
+  bảng `comments` mới có schema khác hẳn (không có `fic_id`), đổi mỗi key là hỏng
+  theo kiểu khác. Phải viết lại cả khối.
+- Trang "Bookmark của tôi": hiện `bookmarks` có sẵn `note`, `is_private`, `is_rec`,
+  `last_chapter_id` nhưng giao diện chưa dùng tới — bookmark tạo ra đang để mặc định
+  (riêng tư, không ghi chú).
 - Đấu phần Browse vào DB: thay `fetch('fics.json')` + thẻ `.fic-card` hard-code
-  bằng truy vấn `works` / `chapters`. Đây là phần đã cố ý để nguyên ở bước 2.
-- Khối comment cũ ở `index.html` (`SUPABASE_URL`/`SUPABASE_KEY` của project
-  `ggbahdhmtgaemgblfdum` đã paused) vẫn còn nguyên và vẫn hỏng. **Đừng chỉ đổi URL
-  sang project mới** — bảng `comments` mới có schema khác hẳn (không có `fic_id`),
-  đổi mỗi key là hỏng theo kiểu khác. Phải viết lại cả khối ở bước 3.
-- Bật **Leaked Password Protection** trong Dashboard → Authentication
-  (advisor vẫn cảnh báo; chủ repo tự làm, Claude không đụng).
+  bằng truy vấn `works` / `chapters`. Làm xong mới hiện được số kudos trên thẻ,
+  và mới bỏ được khoá theo vị trí `legacy_id`.
+- Bật **Leaked Password Protection** trong Dashboard → Authentication.
+  Chủ repo báo đã bật ngày 2026-08-30 nhưng advisor quét lại vẫn báo tắt — cần
+  kiểm tra lại xem thiết lập có thật sự lưu không.
 - Chuyển nhạc/ảnh từ GitHub Releases sang Supabase Storage (`chapters.music` hiện
   vẫn trỏ URL GitHub, giữ nguyên cấu trúc `{source,url,start,name}` của site cũ).
   Bucket `avatars` đã có, làm mẫu được cho bucket nhạc/ảnh sau này.

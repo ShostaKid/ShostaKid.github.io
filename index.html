@@ -235,6 +235,17 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .avatar,.avatar-fallback{width:84px;height:84px;border-radius:50%;border:1px solid var(--border);background:var(--cream2);flex-shrink:0;}
 .avatar{object-fit:cover;display:block;}
 .avatar-fallback{display:flex;align-items:center;justify-content:center;font-family:var(--font-ui);font-size:1.9rem;color:var(--gold);}
+/* Kudos / Bookmark ở cuối trang đọc. Dùng lại đúng ngôn ngữ của .ao3-link
+   (viền mảnh, chữ in hoa giãn cách, hover chuyển vàng) — không màu mới, không font mới. */
+.work-actions{display:flex;gap:0.9rem;flex-wrap:wrap;align-items:center;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);}
+.wa-btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--font-ui);font-size:0.66rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);border:1px solid var(--border);padding:10px 20px;background:none;cursor:pointer;transition:all 0.2s;}
+.wa-btn:hover:not(:disabled){border-color:var(--gold);color:var(--gold);}
+.wa-btn.on{border-color:var(--gold);color:var(--gold);background:rgba(184,151,42,0.06);}
+.wa-btn:disabled{cursor:default;}
+.wa-btn.done{border-color:var(--gold);color:var(--gold);background:rgba(184,151,42,0.06);opacity:1;}
+.wa-icon{font-size:0.95rem;line-height:1;}
+.wa-count{font-variant-numeric:tabular-nums;}
+.wa-msg{font-family:Georgia,serif;font-style:italic;font-size:0.82rem;color:var(--ink3);margin-top:0.9rem;line-height:1.6;}
 .avatar-actions{display:flex;gap:0.7rem;flex-wrap:wrap;align-items:center;}
 .avatar-actions .ao3-link{margin-top:0;font-size:0.6rem;padding:8px 16px;}
 .avatar-or{font-family:Georgia,serif;font-style:italic;font-size:0.75rem;color:var(--ink3);margin:1.4rem 0 0.5rem;padding-top:1.2rem;border-top:1px solid var(--border);}
@@ -863,6 +874,22 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <span class="chapter-label" id="ch-label-bot"></span>
         <button id="ch-next-bot" data-i18n="next" onclick="nextChapter()">Next →</button>
       </div>
+      <!-- KUDOS / BOOKMARK — ẩn cho tới khi nối được truyện này với hàng trong DB -->
+      <div id="work-actions-wrap" style="display:none;">
+        <div class="work-actions">
+          <button type="button" class="wa-btn" id="btn-kudos">
+            <span class="wa-icon" id="kudos-icon">♡</span>
+            <span id="kudos-label" data-i18n="wa_kudos">Kudos</span>
+            <span class="wa-count" id="kudos-count"></span>
+          </button>
+          <button type="button" class="wa-btn" id="btn-bookmark">
+            <span class="wa-icon" id="bookmark-icon">☆</span>
+            <span id="bookmark-label" data-i18n="wa_bookmark">Bookmark</span>
+          </button>
+        </div>
+        <div class="wa-msg" id="wa-msg"></div>
+      </div>
+
       <div id="reading-footer" style="margin-top:3rem;border-top:1px solid var(--border);padding-top:2rem;display:none;">
         <p style="font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:1rem;" data-i18n="read_ao3">Read the work on AO3</p>
         <a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid/works" target="_blank" data-i18n="cont_ao3">Continue on AO3 →</a>
@@ -1471,6 +1498,8 @@ function openFic(i) {
   playMusic(i, 0);
   // Load comment section
   loadComments(i);
+  // Kudos / bookmark — module Supabase ở cuối file gắn hàm này lên window.
+  if (window.loadWorkActions) window.loadWorkActions(i);
 }
 
 function enterSite() {
@@ -1672,7 +1701,16 @@ const i18n = {
     prof_save:'Save Changes →', prof_saving:'Saving…', prof_saved:'Saved ♪',
     prof_signout:'Sign Out', prof_admin:'Admin',
     prof_load_err:'Could not load your profile.',
-    prof_need_signin:'Please sign in first.'
+    prof_need_signin:'Please sign in first.',
+    wa_kudos:'Kudos', wa_kudos_guest:'Leave kudos as guest', wa_kudos_done:'Kudos left',
+    wa_bookmark:'Bookmark', wa_bookmarked:'Bookmarked',
+    wa_kudos_thanks:'Thank you for the kudos ♪',
+    wa_kudos_guest_thanks:'Thank you — kudos left as a guest ♪',
+    wa_kudos_already:'You have already left kudos for this work.',
+    wa_kudos_removed:'Kudos withdrawn.',
+    wa_bm_added:'Saved to your bookmarks ♪', wa_bm_removed:'Removed from your bookmarks.',
+    wa_bm_signin:'Please sign in to bookmark this work.',
+    wa_err:'Something went wrong. Please try again.'
   },
   vi: {
     nav_home:'Trang chủ', nav_works:'Các đầu truyện', nav_about:'Về Web',
@@ -1733,7 +1771,16 @@ const i18n = {
     prof_save:'Lưu thay đổi →', prof_saving:'Đang lưu…', prof_saved:'Đã lưu ♪',
     prof_signout:'Đăng xuất', prof_admin:'Quản trị',
     prof_load_err:'Không tải được hồ sơ của bạn.',
-    prof_need_signin:'Vui lòng đăng nhập trước.'
+    prof_need_signin:'Vui lòng đăng nhập trước.',
+    wa_kudos:'Thả tim', wa_kudos_guest:'Thả tim với tư cách khách', wa_kudos_done:'Đã thả tim',
+    wa_bookmark:'Lưu truyện', wa_bookmarked:'Đã lưu',
+    wa_kudos_thanks:'Cảm ơn bạn đã thả tim ♪',
+    wa_kudos_guest_thanks:'Cảm ơn bạn — đã thả tim với tư cách khách ♪',
+    wa_kudos_already:'Bạn đã thả tim cho truyện này rồi.',
+    wa_kudos_removed:'Đã rút lại tim.',
+    wa_bm_added:'Đã lưu vào danh sách của bạn ♪', wa_bm_removed:'Đã bỏ khỏi danh sách đã lưu.',
+    wa_bm_signin:'Vui lòng đăng nhập để lưu truyện này.',
+    wa_err:'Có lỗi xảy ra. Bạn thử lại nhé.'
   }
 };
 
@@ -2289,6 +2336,174 @@ $('btn-avatar-clear').addEventListener('click', async () => {
   msg($('prof-msg'), 'prof_avatar_removed', 'ok');
 });
 
+// ---------- kudos & bookmark ----------
+// Nối truyện đang đọc với hàng thật trong DB qua works.legacy_id = 'fic-<index>'.
+// Đây là khoá THEO VỊ TRÍ: đánh số lại file trong fics/ sẽ làm kudos gắn nhầm
+// truyện. Thêm fic mới thì luôn đánh số tiếp, đừng chèn vào giữa.
+let waWork  = null;                            // { id, kudos_count }
+let waFic   = null;                            // index đang đọc
+let waMine  = { kudos:false, bookmark:false };
+let waGuest = false;                           // khách này đã thả tim chưa
+let waSeq   = 0;                               // chống chạy đua khi lật truyện nhanh
+
+const guestKey = (id) => 'sk-kudos-' + id;
+function guestGave(id) {
+  try { return localStorage.getItem(guestKey(id)) === '1'; } catch (_) { return false; }
+}
+function markGuestGave(id) {
+  try { localStorage.setItem(guestKey(id), '1'); } catch (_) {}
+}
+
+// Gắn data-i18n để applyLang() dịch lại khi đổi ngôn ngữ giữa chừng.
+function waSay(key) {
+  const el = $('wa-msg');
+  if (!key) { delete el.dataset.i18n; el.textContent = ''; return; }
+  el.dataset.i18n = key;
+  el.textContent = tr(key);
+}
+
+function paintActions(session) {
+  if (!waWork) return;
+  const k = $('btn-kudos');
+  const given = waMine.kudos || waGuest;
+
+  $('kudos-count').textContent = waWork.kudos_count > 0 ? String(waWork.kudos_count) : '';
+  $('kudos-icon').textContent  = given ? '♥' : '♡';
+  k.classList.toggle('on', given);
+
+  const kKey = given ? 'wa_kudos_done' : (session ? 'wa_kudos' : 'wa_kudos_guest');
+  $('kudos-label').dataset.i18n = kKey;
+  $('kudos-label').textContent  = tr(kKey);
+
+  // Khách đã thả tim thì không rút lại được — danh tính khách chỉ dựa vào IP,
+  // không xác minh được, nên nút thành trạng thái tĩnh. Thành viên đăng nhập
+  // thì bấm lại để rút, đúng như policy DELETE dưới DB cho phép.
+  k.disabled = given && !session;
+  k.classList.toggle('done', given && !session);
+
+  $('bookmark-icon').textContent = waMine.bookmark ? '★' : '☆';
+  $('btn-bookmark').classList.toggle('on', waMine.bookmark);
+  const bKey = waMine.bookmark ? 'wa_bookmarked' : 'wa_bookmark';
+  $('bookmark-label').dataset.i18n = bKey;
+  $('bookmark-label').textContent  = tr(bKey);
+}
+
+async function loadWorkActions(ficIdx) {
+  const seq = ++waSeq;
+  $('work-actions-wrap').style.display = 'none';
+  waSay(null);
+  waWork = null; waFic = ficIdx; waMine = { kudos:false, bookmark:false }; waGuest = false;
+
+  const { data: work, error } = await sb.from('works')
+    .select('id, kudos_count').eq('legacy_id', 'fic-' + ficIdx).maybeSingle();
+  if (seq !== waSeq) return;                   // đã lật sang truyện khác
+  if (error || !work) return;                  // chưa có trong DB thì không hiện gì
+  waWork = work;
+
+  const { data: { session } } = await sb.auth.getSession();
+  if (seq !== waSeq) return;
+
+  if (session) {
+    const uid = session.user.id;
+    const [k, b] = await Promise.all([
+      sb.from('kudos').select('id').eq('work_id', work.id).eq('user_id', uid).maybeSingle(),
+      sb.from('bookmarks').select('id').eq('work_id', work.id).eq('user_id', uid).maybeSingle()
+    ]);
+    if (seq !== waSeq) return;
+    waMine.kudos    = !!k.data;
+    waMine.bookmark = !!b.data;
+  } else {
+    // Khách không tra được hash IP của mình, nên nhớ tạm ở máy.
+    waGuest = guestGave(work.id);
+  }
+
+  paintActions(session);
+  $('work-actions-wrap').style.display = 'block';
+}
+window.loadWorkActions = loadWorkActions;
+
+$('btn-kudos').addEventListener('click', async () => {
+  if (!waWork) return;
+  waSay(null);
+  const { data: { session } } = await sb.auth.getSession();
+  const given = waMine.kudos || waGuest;
+  if (given && !session) return;
+
+  const btn = $('btn-kudos');
+  btn.disabled = true;
+
+  if (given && session) {
+    const { error } = await sb.from('kudos').delete()
+      .eq('work_id', waWork.id).eq('user_id', session.user.id);
+    btn.disabled = false;
+    if (error) { waSay('wa_err'); return; }
+    waMine.kudos = false;
+    waWork.kudos_count = Math.max(0, waWork.kudos_count - 1);
+    paintActions(session);
+    waSay('wa_kudos_removed');
+    return;
+  }
+
+  // Chỉ gửi work_id. user_id và guest_ip_hash do trigger dưới DB tự điền —
+  // client không có quyền ghi hai cột đó nên không giả mạo được.
+  const { error } = await sb.from('kudos').insert({ work_id: waWork.id });
+  btn.disabled = false;
+
+  if (error) {
+    // 23505 = trùng unique → đã thả tim rồi (khách xoá localStorage rồi bấm lại,
+    // hoặc cùng IP với một lượt trước đó). Không phải lỗi, chỉ báo lại cho đúng.
+    if (error.code === '23505') {
+      if (session) waMine.kudos = true;
+      else { waGuest = true; markGuestGave(waWork.id); }
+      paintActions(session);
+      waSay('wa_kudos_already');
+      return;
+    }
+    waSay('wa_err');
+    return;
+  }
+
+  waWork.kudos_count += 1;
+  if (session) { waMine.kudos = true; waSay('wa_kudos_thanks'); }
+  else { waGuest = true; markGuestGave(waWork.id); waSay('wa_kudos_guest_thanks'); }
+  paintActions(session);
+});
+
+$('btn-bookmark').addEventListener('click', async () => {
+  if (!waWork) return;
+  waSay(null);
+  const { data: { session } } = await sb.auth.getSession();
+
+  if (!session) {
+    // Nhớ truyện đang đọc để đăng nhập xong quay lại đúng chỗ,
+    // thay vì ném ra lỗi API khó hiểu.
+    try { sessionStorage.setItem('sk-return-fic', String(waFic)); } catch (_) {}
+    window.showPage('auth', $('nav-signin'));
+    msg($('auth-msg'), 'wa_bm_signin', 'err');
+    return;
+  }
+
+  const btn = $('btn-bookmark');
+  btn.disabled = true;
+
+  if (waMine.bookmark) {
+    const { error } = await sb.from('bookmarks').delete()
+      .eq('work_id', waWork.id).eq('user_id', session.user.id);
+    btn.disabled = false;
+    if (error) { waSay('wa_err'); return; }
+    waMine.bookmark = false; paintActions(session); waSay('wa_bm_removed');
+    return;
+  }
+
+  // bookmarks không có trigger tự điền như kudos, phải gửi user_id;
+  // policy INSERT vẫn buộc user_id = auth.uid() nên không ghi hộ người khác được.
+  const { error } = await sb.from('bookmarks')
+    .insert({ work_id: waWork.id, user_id: session.user.id });
+  btn.disabled = false;
+  if (error) { waSay('wa_err'); return; }
+  waMine.bookmark = true; paintActions(session); waSay('wa_bm_added');
+});
+
 // ---------- chuyển tab ----------
 function showTab(which) {
   const isIn = which === 'signin';
@@ -2317,6 +2532,14 @@ $('form-signin').addEventListener('submit', async (e) => {
   if (error) { msg($('auth-msg'), raw(error.message), 'err'); return; }
 
   $('si-password').value = '';
+
+  // Bấm Bookmark lúc chưa đăng nhập thì đưa về đúng truyện đang đọc dở,
+  // chứ không quăng người ta sang trang hồ sơ rồi bỏ đó.
+  let back = null;
+  try { back = sessionStorage.getItem('sk-return-fic'); sessionStorage.removeItem('sk-return-fic'); }
+  catch (_) {}
+  if (back !== null && window.openFic) { window.openFic(Number(back)); return; }
+
   window.showPage('profile', $('nav-profile'));
 });
 
@@ -2435,6 +2658,11 @@ $('btn-signout').addEventListener('click', async () => {
 // ---------- đồng bộ trạng thái ----------
 sb.auth.onAuthStateChange((event, session) => {
   paintNav(session);
+  // Đang đứng ở trang đọc mà đăng nhập/đăng xuất thì vẽ lại kudos/bookmark
+  // theo danh tính mới, không để nút kẹt ở trạng thái cũ.
+  if (waFic !== null && $('page-reading').classList.contains('active')) {
+    loadWorkActions(waFic);
+  }
   if (session) {
     clearMsg($('auth-msg'));
     loadProfile(session);
