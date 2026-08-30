@@ -952,11 +952,13 @@
     "musicName": "Debussy - Clair de Lune",
     "files": [
       "Viola concerto 1.1.txt",
-      "Viola concerto 1.2.txt"
+      "Viola concerto 1.2.txt",
+      "Viola concerto 1.3.txt"
     ],
     "chapters": [
       "Movement I",
-      "Movement II"
+      "Movement II",
+      "Movement III"
     ]
   },
   {
