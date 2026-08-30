@@ -1297,33 +1297,55 @@ function getMusicData(ficIdx, chapterIdx) {
   return { m, name };
 }
 
+// Chương của truyện đang mở, tải một lần rồi giữ lại — lật chương không gọi mạng nữa.
+let chapterRows = null, chapterFic = -1, chapterSeq = 0;
+
+async function ensureChapters(ficIdx) {
+  if (chapterFic === ficIdx) return chapterRows;
+  const seq = ++chapterSeq;
+  const rows = window.fetchChapters ? await window.fetchChapters(ficIdx) : null;
+  if (seq !== chapterSeq) return null;          // đã lật sang truyện khác giữa chừng
+  chapterRows = rows;
+  chapterFic  = ficIdx;
+  return rows;
+}
+
 async function loadChapter(ficIdx, chapterIdx) {
   const fic = fics[ficIdx];
   const body = document.getElementById('reading-body');
-
-  if (!fic.files || !fic.files[chapterIdx]) {
-    body.innerHTML = `<div class="fic-body">${previews[ficIdx] || `<p><em>${t('soon')}</em></p>`}</div>`;
-    document.getElementById('reading-footer').style.display = 'block';
-    updateChapterNav(ficIdx, chapterIdx);
-    return;
-  }
+  const footer = document.getElementById('reading-footer');
+  const show = (html) => { body.innerHTML = `<div class="fic-body">${html}</div>`; applyFontSize(); };
 
   body.innerHTML = `<div class="loading">${t('loading')}</div>`;
-  document.getElementById('reading-footer').style.display = 'none';
+  footer.style.display = 'none';
 
-  try {
-    const url = REPO + encodeURIComponent(fic.files[chapterIdx]);
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('Not found');
-    const text = await res.text();
-    body.innerHTML = `<div class="fic-body">${txtToHtml(text)}</div>`;
-    applyFontSize();
-    document.getElementById('reading-footer').style.display = 'block';
-  } catch(e) {
-    body.innerHTML = `<div class="fic-body"><p><em>${t('ch_err')}</em></p></div>`;
+  const rows = await ensureChapters(ficIdx);
+
+  if (rows === null) {
+    // Không gọi được database -> lùi về file .txt như site cũ.
+    if (!fic.files || !fic.files[chapterIdx]) {
+      show(`<p><em>${t('soon')}</em></p>`);
+    } else {
+      try {
+        const res = await fetch(REPO + encodeURIComponent(fic.files[chapterIdx]));
+        if (!res.ok) throw new Error('Not found');
+        show(txtToHtml(await res.text()));
+      } catch (e) {
+        show(`<p><em>${t('ch_err')}</em></p>`);
+      }
+    }
+  } else {
+    // Database trả lời được. Không có chương ở vị trí này nghĩa là chưa đăng
+    // hoặc không được phép đọc — KHÔNG lùi về .txt, vì làm vậy là mở lại đúng
+    // cái cửa mà is_restricted vừa đóng.
+    const row = rows[chapterIdx];
+    show(row ? txtToHtml(row.content) : `<p><em>${t('soon')}</em></p>`);
   }
+
+  footer.style.display = 'block';
   updateChapterNav(ficIdx, chapterIdx);
-  // If fic has per-chapter music, swap track when chapter changes
+  // Nhạc vẫn lấy từ fics.json: cột chapters.music chưa dùng tới, để dành cho
+  // bước chuyển nhạc sang Supabase Storage.
   if (Array.isArray(fics[ficIdx].music)) playMusic(ficIdx, chapterIdx);
   window.scrollTo(0,0);
 }
@@ -2166,6 +2188,31 @@ $('btn-avatar-clear').addEventListener('click', async () => {
   if (err) { msg($('prof-msg'), raw(err.message), 'err'); return; }
   msg($('prof-msg'), 'prof_avatar_removed', 'ok');
 });
+
+// ---------- nội dung chương cho trang đọc ----------
+// Ba kết quả khác nhau, và trang đọc xử lý khác nhau ở từng cái:
+//   mảng có phần tử -> nội dung thật
+//   mảng rỗng       -> DB gọi được nhưng KHÔNG cho đọc (truyện bị hạn chế,
+//                      hoặc chương còn draft). Không được lùi về file .txt,
+//                      vì như vậy là vô hiệu hoá chính cái hạn chế đó.
+//   null            -> không gọi được DB (project ngủ, mất mạng) -> mới lùi .txt
+window.fetchChapters = async function (ficIdx) {
+  const truyVan = sb.from('chapters')
+    .select('position, title, content, works!inner(legacy_id)')
+    .eq('works.legacy_id', 'fic-' + ficIdx)
+    .eq('status', 'published')
+    .order('position', { ascending: true })
+    .then(res => res.error ? null : (res.data || []).map(r => ({
+      position: r.position, title: r.title || '', content: r.content || ''
+    })))
+    .catch(() => null);
+
+  // supabase-js tự thử lại vài lần trước khi chịu thua, mất tới ~7 giây.
+  // Người đọc không nên phải nhìn chữ "Loading" lâu như vậy khi project ngủ,
+  // nên tự đặt hạn 4 giây rồi lùi về file .txt.
+  const hetGio = new Promise(resolve => setTimeout(() => resolve(null), 4000));
+  return Promise.race([truyVan, hetGio]);
+};
 
 // ---------- danh sách truyện cho Browse + trang chủ ----------
 // Trả về mảng thẻ đã chuẩn hoá, hoặc null nếu không gọi được DB

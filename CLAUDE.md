@@ -21,8 +21,9 @@ phải tính đến việc nó cũng sẽ dùng chung backend.
 - `index.html` (~1.900 dòng) là **toàn bộ website**: CSS inline (dòng 8–445),
   HTML của cả 4 "page" (home / works / reading / about) trong cùng một file,
   JS inline (dòng 884–1876). Điều hướng là SPA thủ công bằng `showPage(id)`.
-- Nội dung truyện: **file `.txt` phẳng ở gốc repo** (64 file), fetch runtime rồi
-  chuyển sang HTML bằng `txtToHtml()` (tách đoạn theo dòng trống, `---` → scene break).
+- Nội dung truyện: đọc từ **`chapters.content` trong Supabase** (bước 6), vẫn qua
+  `txtToHtml()` để dựng HTML. File `.txt` ở gốc repo (63 file) **giữ lại làm dự
+  phòng** khi không gọi được DB — chủ repo đã chốt không xoá.
 - Nhạc nền per-chapter: file audio host trên **GitHub Releases** (tag `music-v1`),
   phát bằng `<audio>` với `start`/`end` offset.
 - State phía client: `localStorage` (`sk-continue` = vị trí đọc dở, `sk-fontsize`).
@@ -66,8 +67,12 @@ Action dựng lại `fics.json`. Cách kiểm nhanh xem có lệch không: băm
 
 ### Những chỗ đã biết là lệch / nợ kỹ thuật
 
-- `Violin concerto 2.3.txt` được `fics/034` tham chiếu nhưng **không tồn tại** trong repo.
-- 62 file `.txt` được tham chiếu / 64 file `.txt` có thật → 2 file mồ côi.
+- ~~`Violin concerto 2.3.txt` không tồn tại; 2 file mồ côi~~ — **đã xử xong ở bước 6.**
+  Thực tế là **3** file mồ côi chứ không phải 2, và hai trong số đó là truyện thật
+  chưa có ở đâu khác: chương 3 của fic-34 (nằm dưới cái tên
+  `Violin_concerto_no.2_movement_III_trusokova (1).txt`) và chương 3 của fic-32.
+  Cả hai đã vào DB + YAML, `published`. File thứ ba (`Sonata for cello.txt`) không
+  thuộc fic nào nên đã xoá. Giờ 63 file `.txt` = 63 chương, khớp một-một.
 - Ship bị gõ sai chính tả tạo thành tag trùng lặp: `Neuvillette/Furina` vs
   `Nevuillette/Furina` — cùng một ship, đã gộp.
 - **`Khaslana/Cyrne` KHÔNG phải lỗi gõ của `Phainon/Cyrene`.** Hai nhãn này cùng
@@ -111,7 +116,7 @@ ap-northeast-1, ACTIVE) — schema `public` đã có đủ 12 bảng và toàn b
 ## Trạng thái backend (cập nhật 2026-08-30)
 
 Schema đã được **tạo thật** trên project `oseddxgmwbeduazbomuf`. 12 bảng, 36 policy,
-8 function, RLS bật đủ 12/12. Dữ liệu đã import xong (36 fic, 62 chương).
+8 function, RLS bật đủ 12/12. Dữ liệu: 36 fic, 63 chương (tất cả published).
 
 Migration đã chạy, theo thứ tự:
 
@@ -482,19 +487,77 @@ trên điện thoại**. Giờ `buildSidebar()` dựng theo fandom có thật, �
 - **Đo `getBoundingClientRect()` trên trang đang ẩn luôn ra 0×0.** Trang nào không
   có class `active` thì mọi phép đo đều vô nghĩa — phải `showPage()` trước khi đo.
 
+## Bước 6 — trang đọc lấy nội dung từ database (cập nhật 2026-08-30)
+
+`loadChapter()` giờ đọc `chapters.content` thay vì `fetch` file `.txt` từ GitHub.
+`txtToHtml()`, thanh điều hướng chương, dropdown chọn chương, nhạc, cỡ chữ,
+thanh tiến độ và `sk-continue` đều **giữ nguyên không sửa**.
+
+`ensureChapters()` tải **toàn bộ chương của truyện trong một truy vấn** lúc mở
+truyện, rồi giữ lại. Mở truyện 5 chương ~370ms; lật chương sau đó **~1ms** vì
+không gọi mạng nữa (trước đây mỗi lần lật là một lượt fetch tới GitHub).
+
+### Ba kết quả, ba cách xử lý — đây là chỗ dễ làm sai nhất
+
+`window.fetchChapters()` cố ý phân biệt:
+
+| Trả về | Nghĩa | Trang đọc làm gì |
+|---|---|---|
+| mảng có phần tử | đọc được | hiện nội dung |
+| **mảng rỗng** | DB **gọi được** nhưng không cho đọc (bị hạn chế / còn draft) | hiện "Coming soon", **KHÔNG lùi `.txt`** |
+| `null` | không gọi được DB (project ngủ) | lùi về `.txt` như site cũ |
+
+**Đừng gộp hai trường hợp "rỗng" và "null" làm một.** Gộp lại là mỗi lần
+`is_restricted` chặn thì frontend lại đi lấy đúng nội dung đó từ GitHub — tự tay
+mở lại cái cửa vừa đóng. Đã test: mở thẳng truyện bị hạn chế ra "Coming soon",
+không có request nào tới `raw.githubusercontent.com`.
+
+### Hạn giờ 4 giây
+
+supabase-js tự thử lại vài lần trước khi chịu thua, mất tới **~7 giây** — người
+đọc phải nhìn chữ "Loading" suốt thời gian đó khi project ngủ. Nên `fetchChapters`
+tự đặt hạn 4 giây rồi trả `null`. Đo thật: DB chết → lùi `.txt` sau ~4,7 giây.
+
+Đánh đổi: mạng chỉ chậm (không chết) mà quá 4 giây thì cũng lùi `.txt`. Nội dung
+giống hệt nhau nên vô hại — trừ đúng một trường hợp: truyện bị hạn chế **và** mạng
+chậm thì có thể lộ qua `.txt`. Chấp nhận được vì chủ repo đã chốt giữ file `.txt`.
+
+### Vẫn lấy từ fics.json
+
+Danh sách chương, tên chương và **nhạc** vẫn đọc từ `fics.json`, không phải DB.
+Cột `chapters.music` có dữ liệu nhưng chưa dùng — để dành cho bước chuyển nhạc
+sang Supabase Storage. Ba nguồn đang khớp nhau nên không có mâu thuẫn.
+
+### Đã vá luôn
+
+`loadChapter` cũ dùng biến `previews` mà **không chỗ nào khai báo** — nhánh đó
+chưa từng chạy nên chưa lộ, nhưng chạm vào là `ReferenceError`. Đã bỏ.
+
+### Bẫy đã gặp
+
+- **`updateChapterNav()` thay hẳn thanh chương trên bằng `<select id="ch-select">`**,
+  nên `ch-label-top` trong template của `openFic()` biến mất ngay sau đó. Muốn đọc
+  nhãn chương thì dùng `ch-label-bot`, đừng tìm `ch-label-top`.
+- **Pane trình duyệt bị ẩn thì `setTimeout` bị bóp xuống tối thiểu 1 giây.** Đo
+  hiệu năng bằng vòng lặp polling sẽ ra toàn số ~1000ms giả. Đo bằng cách `await`
+  thẳng hàm cần đo.
+
 ### Việc tiếp theo
 
-- **Trình đọc lấy nội dung từ `chapters.content`** thay vì fetch `.txt` từ GitHub.
-  Đây là việc còn lại để `is_restricted` chặn được nội dung thật, không chỉ ẩn khỏi
-  danh sách. Làm xong **phải xoá `.txt` khỏi repo**, không thì file vẫn công khai.
-  Xong bước đó thì `fics.json` chỉ còn là bản dự phòng thuần tuý.
 - Trang "Bookmark của tôi": `bookmarks` có sẵn `note`, `is_private`, `is_rec`,
   `last_chapter_id` nhưng giao diện chưa dùng.
 - Bình luận: trả lời lồng nhau (`parent_id`), sửa bình luận, bình luận theo chương
   (`chapter_id`) — schema có chỗ rồi, chưa làm giao diện.
 - Kiểm duyệt: `comments.is_deleted` chưa ai dùng. Nếu làm xoá mềm thì **phải sửa
   `comment_count_trg`**, vì trigger hiện chỉ đếm INSERT/DELETE.
-- Chuyển nhạc/ảnh từ GitHub Releases sang Supabase Storage (`chapters.music` vẫn
-  trỏ URL GitHub). Bucket `avatars` làm mẫu được.
-- `const REPO` vẫn trỏ raw content sang `lavaknight2017-rgb/...` — sẽ hết ý nghĩa
-  khi trình đọc chuyển sang DB.
+- Chuyển nhạc/ảnh từ GitHub Releases sang Supabase Storage. Cột `chapters.music`
+  đã có dữ liệu nhưng frontend chưa dùng — vẫn lấy nhạc từ `fics.json`.
+  Bucket `avatars` làm mẫu được.
+- `const REPO` trỏ raw content sang `lavaknight2017-rgb/...` — chủ repo xác nhận
+  đó là tài khoản cá nhân của mình, không phải người lạ, **không cần xử lý**.
+  Đường dẫn này giờ chỉ dùng ở nhánh dự phòng khi DB không gọi được.
+- **`is_restricted` vẫn hở một đường:** file `.txt` nằm công khai trên GitHub
+  (ở cả hai repo), nên ai gõ thẳng raw URL vẫn đọc được. Chủ repo **đã chốt giữ
+  file `.txt` làm dự phòng**, chấp nhận đánh đổi này. Muốn bịt thì phải xoá file —
+  và lưu ý `git rm` chưa đủ, commit cũ vẫn phục vụ được nội dung, phải viết lại
+  lịch sử ở cả hai repo.
