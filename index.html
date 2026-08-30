@@ -235,6 +235,26 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .avatar,.avatar-fallback{width:84px;height:84px;border-radius:50%;border:1px solid var(--border);background:var(--cream2);flex-shrink:0;}
 .avatar{object-fit:cover;display:block;}
 .avatar-fallback{display:flex;align-items:center;justify-content:center;font-family:var(--font-ui);font-size:1.9rem;color:var(--gold);}
+/* Honeypot: bẫy bot điền bừa mọi ô. Không dùng display:none vì bot có thể
+   nhận ra; đẩy ra ngoài khung nhìn và khoá tab để người thật không chạm tới. */
+.cmt-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
+.cmt-as{display:flex;align-items:center;gap:0.55rem;font-family:Georgia,serif;font-style:italic;font-size:0.85rem;color:var(--ink3);margin-bottom:0.7rem;}
+.cmt-as strong{font-family:var(--font-ui);font-style:normal;font-size:0.72rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-dark);}
+.cmt-actions{display:flex;align-items:center;gap:1rem;justify-content:flex-end;margin-top:0.6rem;flex-wrap:wrap;}
+.cmt-actions .ao3-link{margin-top:0;}
+.cmt-msg{flex:1;font-family:Georgia,serif;font-style:italic;font-size:0.82rem;color:var(--ink3);line-height:1.5;}
+.cmt-msg.err{color:#993C1D;}
+.comment-avatar,.comment-avatar-fb{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:var(--cream2);flex-shrink:0;}
+.comment-avatar{object-fit:cover;display:block;}
+.comment-avatar-fb{display:flex;align-items:center;justify-content:center;font-family:var(--font-ui);font-size:0.85rem;color:var(--gold);}
+.cmt-as-av,.cmt-as-av img,.cmt-as-av div{width:26px;height:26px;font-size:0.7rem;}
+.comment-item{display:flex;gap:0.9rem;}
+.comment-item > .comment-main{flex:1;min-width:0;}
+.comment-badge{font-family:var(--font-ui);font-size:0.5rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:1px 6px;background:rgba(184,151,42,0.06);}
+.comment-del{font-family:var(--font-ui);font-size:0.55rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);background:none;border:none;cursor:pointer;padding:0;margin-left:auto;text-decoration:underline;}
+.comment-del:hover{color:#993C1D;}
+.comment-del:disabled{opacity:0.45;cursor:default;}
+
 /* Kudos / Bookmark ở cuối trang đọc. Dùng lại đúng ngôn ngữ của .ao3-link
    (viền mảnh, chữ in hoa giãn cách, hover chuyển vàng) — không màu mới, không font mới. */
 .work-actions{display:flex;gap:0.9rem;flex-wrap:wrap;align-items:center;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);}
@@ -905,10 +925,27 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <div id="comments-body" style="display:none;margin-top:1.5rem;">
           <!-- Form -->
           <div class="comment-form">
+            <!-- Đã đăng nhập: hiện danh tính thật, ẩn ô tên khách -->
+            <div class="cmt-as" id="cmt-as" style="display:none;">
+              <span id="cmt-as-avatar"></span>
+              <span data-i18n="cmt_as">Commenting as</span>
+              <strong id="cmt-as-name"></strong>
+            </div>
             <input type="text" id="comment-name" data-i18n-ph="cmt_name_ph" placeholder="Name (optional)" maxlength="50">
-            <textarea id="comment-text" data-i18n-ph="cmt_body_ph" placeholder="Leave a comment..." rows="3" maxlength="2000"></textarea>
-            <div style="display:flex;justify-content:flex-end;margin-top:0.6rem;">
-              <button class="ao3-link" id="comment-submit" onclick="submitComment()">Post Comment →</button>
+
+            <!-- Bẫy bot: người thật không bao giờ thấy và không tab tới được.
+                 Ẩn bằng CSS chứ không dùng type=hidden, vì bot thường bỏ qua hidden. -->
+            <div class="cmt-hp" aria-hidden="true">
+              <label for="comment-website">Website</label>
+              <input type="text" id="comment-website" name="website" tabindex="-1" autocomplete="off">
+            </div>
+
+            <textarea id="comment-text" data-i18n-ph="cmt_body_ph" placeholder="Leave a comment..." rows="3" maxlength="10000"></textarea>
+            <div class="cmt-actions">
+              <span class="cmt-msg" id="cmt-msg"></span>
+              <!-- không gắn data-i18n: applyLang() đã xử lý riêng nút này,
+                   gắn cả hai thì nhãn "Đang gửi…" bị ghi đè lúc đổi ngôn ngữ -->
+              <button class="ao3-link" id="comment-submit">Post Comment →</button>
             </div>
           </div>
           <!-- List -->
@@ -1496,10 +1533,9 @@ function openFic(i) {
   window.scrollTo(0,0);
   loadChapter(i, 0);
   playMusic(i, 0);
-  // Load comment section
-  loadComments(i);
-  // Kudos / bookmark — module Supabase ở cuối file gắn hàm này lên window.
+  // Kudos / bookmark / comment — module Supabase ở cuối file gắn các hàm này lên window.
   if (window.loadWorkActions) window.loadWorkActions(i);
+  if (window.loadComments)    window.loadComments(i);
 }
 
 function enterSite() {
@@ -1663,6 +1699,11 @@ const i18n = {
     cmt_post:'Post Comment →', cmt_posting:'Posting…',
     cmt_loading:'Loading…', cmt_empty:'No comments yet. Be the first ♪',
     cmt_err:'Could not load comments.', cmt_post_err:'Could not post comment. Please try again.',
+    cmt_as:'Commenting as', cmt_author:'Author', cmt_guest_default:'Guest',
+    cmt_delete:'Delete', cmt_deleting:'Deleting…', cmt_confirm_del:'Delete this comment?',
+    cmt_deleted:'Comment deleted.', cmt_del_err:'Could not delete that comment.',
+    cmt_posted:'Comment posted ♪', cmt_empty_body:'Please write something first.',
+    cmt_too_fast:'You are posting too quickly. Please wait a few minutes.',
     anon:'Anonymous',
     loading:'Loading', ch_err:'Could not load chapter. Please check back later.',
     soon:'Coming soon.', pause:'Pause', play:'Play',
@@ -1733,6 +1774,11 @@ const i18n = {
     cmt_post:'Gửi bình luận →', cmt_posting:'Đang gửi…',
     cmt_loading:'Đang tải…', cmt_empty:'Chưa có bình luận nào. Bạn là người đầu tiên ♪',
     cmt_err:'Không thể tải bình luận.', cmt_post_err:'Không thể gửi bình luận. Vui lòng thử lại.',
+    cmt_as:'Bình luận với tên', cmt_author:'Tác giả', cmt_guest_default:'Khách',
+    cmt_delete:'Xoá', cmt_deleting:'Đang xoá…', cmt_confirm_del:'Xoá bình luận này?',
+    cmt_deleted:'Đã xoá bình luận.', cmt_del_err:'Không xoá được bình luận.',
+    cmt_posted:'Đã gửi bình luận ♪', cmt_empty_body:'Bạn hãy viết gì đó đã.',
+    cmt_too_fast:'Bạn đang gửi bình luận quá nhanh. Vui lòng đợi vài phút.',
     anon:'Ẩn danh',
     loading:'Đang tải', ch_err:'Không thể tải chương. Vui lòng thử lại sau.',
     soon:'Sắp ra mắt.', pause:'Dừng', play:'Phát',
@@ -1817,6 +1863,8 @@ function applyLang() {
   }
   const cmtSubmit = document.getElementById('comment-submit');
   if (cmtSubmit && !cmtSubmit.disabled) cmtSubmit.textContent = t('cmt_post');
+  // Danh sách bình luận dựng động nên phải vẽ lại (ngày tháng, badge, nút xoá).
+  if (window.repaintComments) window.repaintComments();
 
   const mt = document.querySelector('.music-toggle');
   if (mt) mt.textContent = musicPlaying ? t('pause') : t('play');
@@ -2026,113 +2074,6 @@ window.addEventListener('popstate', (e) => {
 
 // (Xử lý mở fic từ #fic-N đã gộp vào DOMContentLoaded ở trên,
 // vì cần đợi fics.json load xong trước khi có thể openFic)
-
-// =============================================
-// COMMENTS — Supabase
-// =============================================
-const SUPABASE_URL = 'https://ggbahdhmtgaemgblfdum.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdnYmFoZGhtdGdhZW1nYmxmZHVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwODQ1MTIsImV4cCI6MjA5NjY2MDUxMn0.AnSfFDdzzEaKB19cgODcoUm1Fkq2epU55ryNi_si64w';
-
-function loadComments(ficIdx) {
-  const wrap = document.getElementById('comments-wrap');
-  if (!wrap) return;
-  wrap.style.display = 'block';
-
-  // Reset toggle state when switching fics
-  document.getElementById('comments-body').style.display = 'none';
-  document.getElementById('comments-label').textContent = t('cmt_show');
-  document.getElementById('comments-arrow').textContent = '▼';
-  document.getElementById('comments-list').innerHTML = '';
-  document.getElementById('comment-name').value = '';
-  document.getElementById('comment-text').value = '';
-}
-
-function toggleComments() {
-  const body = document.getElementById('comments-body');
-  const label = document.getElementById('comments-label');
-  const arrow = document.getElementById('comments-arrow');
-  const isHidden = body.style.display === 'none';
-  body.style.display = isHidden ? 'block' : 'none';
-  label.textContent = isHidden ? t('cmt_hide') : t('cmt_show');
-  arrow.textContent = isHidden ? '▲' : '▼';
-  if (isHidden) fetchComments();
-}
-
-async function fetchComments() {
-  const list = document.getElementById('comments-list');
-  list.innerHTML = `<div class="comments-empty">${t('cmt_loading')}</div>`;
-
-  try {
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/comments?fic_id=eq.fic-${currentFic}&order=created_at.desc&select=*`,
-      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
-    );
-    if (!res.ok) throw new Error('fetch failed');
-    const comments = await res.json();
-
-    if (comments.length === 0) {
-      list.innerHTML = `<div class="comments-empty">${t('cmt_empty')}</div>`;
-      return;
-    }
-
-    list.innerHTML = comments.map(c => {
-      const name = escapeHtml(c.name || t('anon'));
-      const body = escapeHtml(c.body);
-      const date = new Date(c.created_at).toLocaleDateString('en-GB', {
-        day: 'numeric', month: 'short', year: 'numeric'
-      });
-      return `
-        <div class="comment-item">
-          <div class="comment-head">
-            <span class="comment-author">${name}</span>
-            <span class="comment-date">${date}</span>
-          </div>
-          <div class="comment-body-text">${body}</div>
-        </div>`;
-    }).join('');
-  } catch(e) {
-    list.innerHTML = `<div class="comments-empty">${t('cmt_err')}</div>`;
-  }
-}
-
-async function submitComment() {
-  const nameInput = document.getElementById('comment-name');
-  const textInput = document.getElementById('comment-text');
-  const submitBtn = document.getElementById('comment-submit');
-
-  const body = textInput.value.trim();
-  if (!body) { textInput.focus(); return; }
-
-  const name = nameInput.value.trim() || t('anon');
-  submitBtn.textContent = t('cmt_posting');
-  submitBtn.disabled = true;
-
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/comments`, {
-      method: 'POST',
-      headers: {
-        apikey: SUPABASE_KEY,
-        Authorization: `Bearer ${SUPABASE_KEY}`,
-        'Content-Type': 'application/json',
-        Prefer: 'return=minimal'
-      },
-      body: JSON.stringify({ fic_id: 'fic-' + currentFic, name, body })
-    });
-    if (!res.ok) throw new Error('post failed');
-    textInput.value = '';
-    fetchComments();
-  } catch(e) {
-    alert(t('cmt_post_err'));
-  }
-  submitBtn.textContent = t('cmt_post');
-  submitBtn.disabled = false;
-}
-
-function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
-}
 </script>
 
 <!-- =============================================
@@ -2502,6 +2443,264 @@ $('btn-bookmark').addEventListener('click', async () => {
   btn.disabled = false;
   if (error) { waSay('wa_err'); return; }
   waMine.bookmark = true; paintActions(session); waSay('wa_bm_added');
+});
+
+// ---------- bình luận ----------
+// Dùng lại work_id mà loadWorkActions() đã tra: cùng một truyện, khỏi hỏi DB hai lần.
+let cmtRows    = [];      // dữ liệu thô của lần tải gần nhất, để vẽ lại khi đổi ngôn ngữ
+let cmtSession = null;
+let cmtSeq     = 0;
+
+function cmtSay(key, isErr) {
+  const el = $('cmt-msg');
+  if (!key) { delete el.dataset.i18n; el.textContent = ''; el.className = 'cmt-msg'; return; }
+  el.className = 'cmt-msg' + (isErr ? ' err' : '');
+  el.dataset.i18n = key;
+  el.textContent = tr(key);
+}
+
+// Avatar nhỏ trong danh sách. Dựng bằng DOM vì avatar_url là dữ liệu người lạ nhập.
+function smallAvatar(prof, letterSrc) {
+  const url = ((prof && prof.avatar_url) || '').trim();
+  const letter = ((letterSrc || '♩').trim().charAt(0) || '♩').toUpperCase();
+  const box = document.createElement('span');
+  const fb = () => {
+    const d = document.createElement('div');
+    d.className = 'comment-avatar-fb';
+    d.textContent = letter;
+    return d;
+  };
+  if (!url) { box.appendChild(fb()); return box; }
+  const img = document.createElement('img');
+  img.className = 'comment-avatar';
+  img.alt = '';
+  img.addEventListener('error', () => { box.textContent = ''; box.appendChild(fb()); });
+  img.src = url;
+  box.appendChild(img);
+  return box;
+}
+
+// Toàn bộ danh sách dựng bằng createElement/textContent — không có innerHTML nào
+// chạm vào nội dung người dùng, nên không có đường nào chèn được HTML.
+function renderComments() {
+  const list = $('comments-list');
+  list.textContent = '';
+
+  if (!cmtRows.length) {
+    const d = document.createElement('div');
+    d.className = 'comments-empty';
+    d.dataset.i18n = 'cmt_empty';
+    d.textContent = tr('cmt_empty');
+    list.appendChild(d);
+    return;
+  }
+
+  const myId = cmtSession ? cmtSession.user.id : null;
+  const locale = (document.documentElement.getAttribute('data-lang') === 'vi') ? 'vi-VN' : 'en-GB';
+
+  cmtRows.forEach((c) => {
+    const prof = c.profiles || null;
+    const name = prof ? (prof.display_name || prof.username)
+                      : (c.guest_name || tr('cmt_guest_default'));
+
+    const item = document.createElement('div');
+    item.className = 'comment-item';
+    item.appendChild(smallAvatar(prof, name));
+
+    const main = document.createElement('div');
+    main.className = 'comment-main';
+
+    const head = document.createElement('div');
+    head.className = 'comment-head';
+
+    const who = document.createElement('span');
+    who.className = 'comment-author';
+    who.textContent = name;
+    head.appendChild(who);
+
+    if (prof && prof.is_admin) {
+      const b = document.createElement('span');
+      b.className = 'comment-badge';
+      b.dataset.i18n = 'cmt_author';
+      b.textContent = tr('cmt_author');
+      head.appendChild(b);
+    }
+
+    const when = document.createElement('span');
+    when.className = 'comment-date';
+    when.textContent = new Date(c.created_at)
+      .toLocaleDateString(locale, { day:'numeric', month:'short', year:'numeric' });
+    head.appendChild(when);
+
+    // Chỉ hiện nút xoá cho bình luận của chính mình. Người khác có bấm được
+    // hay không thì policy DELETE dưới DB mới là chỗ quyết định.
+    if (myId && c.user_id === myId) {
+      const del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'comment-del';
+      del.dataset.i18n = 'cmt_delete';
+      del.textContent = tr('cmt_delete');
+      del.addEventListener('click', () => deleteComment(c.id, del));
+      head.appendChild(del);
+    }
+
+    main.appendChild(head);
+
+    const body = document.createElement('div');
+    body.className = 'comment-body-text';
+    body.textContent = c.body;
+    main.appendChild(body);
+
+    item.appendChild(main);
+    list.appendChild(item);
+  });
+}
+window.repaintComments = () => { if (cmtRows.length || $('comments-list').children.length) renderComments(); };
+
+async function fetchComments() {
+  const seq = ++cmtSeq;
+  const list = $('comments-list');
+  list.textContent = '';
+  const loading = document.createElement('div');
+  loading.className = 'comments-empty';
+  loading.textContent = tr('cmt_loading');
+  list.appendChild(loading);
+
+  if (!waWork) { list.textContent = ''; return; }
+
+  const { data: { session } } = await sb.auth.getSession();
+  if (seq !== cmtSeq) return;
+  cmtSession = session;
+
+  // Policy SELECT không lọc bình luận đã xoá mềm, phải tự lọc.
+  // Không dùng select('*') — cột nào cần thì lấy đúng cột đó.
+  const { data, error } = await sb.from('comments')
+    .select('id, body, guest_name, user_id, created_at, profiles(username, display_name, avatar_url, is_admin)')
+    .eq('work_id', waWork.id)
+    .eq('is_deleted', false)
+    .order('created_at', { ascending: false });
+
+  if (seq !== cmtSeq) return;
+  if (error) {
+    list.textContent = '';
+    const d = document.createElement('div');
+    d.className = 'comments-empty';
+    d.textContent = tr('cmt_err');
+    list.appendChild(d);
+    return;
+  }
+  cmtRows = data || [];
+  renderComments();
+  paintCommentForm(session);
+}
+
+function paintCommentForm(session) {
+  const asBox = $('cmt-as');
+  // Ô tên khách ẩn/hiện theo SESSION chứ không theo currentProfile: đã đăng nhập
+  // thì bình luận luôn gắn user_id, kể cả khi hồ sơ chưa kịp tải xong.
+  if (!session) {
+    asBox.style.display = 'none';
+    $('comment-name').style.display = '';
+    return;
+  }
+  asBox.style.display = '';
+  $('comment-name').style.display = 'none';
+
+  const p = currentProfile;
+  const name = p ? (p.display_name || p.username) : (session.user.email || '').split('@')[0];
+  const av = $('cmt-as-avatar');
+  av.textContent = '';
+  av.className = 'cmt-as-av';
+  av.appendChild(smallAvatar(p, name));
+  $('cmt-as-name').textContent = name;
+}
+
+function loadComments() {
+  const wrap = $('comments-wrap');
+  if (!wrap) return;
+  wrap.style.display = 'block';
+  // Đổi truyện thì gập lại và xoá trắng, tránh hiện nhầm bình luận của truyện trước.
+  $('comments-body').style.display = 'none';
+  $('comments-label').textContent = tr('cmt_show');
+  $('comments-arrow').textContent = '▼';
+  $('comments-list').textContent = '';
+  $('comment-name').value = '';
+  $('comment-text').value = '';
+  $('comment-website').value = '';
+  cmtRows = [];
+  cmtSay(null);
+}
+window.loadComments = loadComments;
+
+window.toggleComments = function () {
+  const body = $('comments-body');
+  const open = body.style.display === 'none';
+  body.style.display = open ? 'block' : 'none';
+  $('comments-label').textContent = open ? tr('cmt_hide') : tr('cmt_show');
+  $('comments-arrow').textContent = open ? '▲' : '▼';
+  if (open) fetchComments();
+};
+
+async function deleteComment(id, btn) {
+  if (!window.confirm(tr('cmt_confirm_del'))) return;
+  btn.disabled = true;
+  btn.textContent = tr('cmt_deleting');
+
+  // Xoá thật chứ không đặt is_deleted: trigger comment_count_trg chỉ chạy khi
+  // INSERT/DELETE, xoá mềm sẽ để lại số đếm sai vĩnh viễn.
+  const { error } = await sb.from('comments').delete().eq('id', id);
+  if (error) {
+    btn.disabled = false;
+    btn.textContent = tr('cmt_delete');
+    cmtSay('cmt_del_err', true);
+    return;
+  }
+  cmtRows = cmtRows.filter((c) => c.id !== id);
+  renderComments();
+  cmtSay('cmt_deleted');
+}
+
+$('comment-submit').addEventListener('click', async () => {
+  if (!waWork) return;
+  const btn  = $('comment-submit');
+  const body = $('comment-text').value.trim();
+  cmtSay(null);
+
+  if (!body) { cmtSay('cmt_empty_body', true); $('comment-text').focus(); return; }
+
+  // Honeypot: người thật không thấy ô này nên luôn để trống. Bot điền bừa thì
+  // dừng ở đây. Lưu ý: chỉ chặn bot đọc HTML — kẻ gọi thẳng API không đi qua
+  // đường này, phần đó do trigger giới hạn tần suất dưới DB lo.
+  if ($('comment-website').value.trim() !== '') {
+    $('comment-text').value = '';
+    cmtSay('cmt_posted');           // im lặng nuốt, không cho bot biết đã bị phát hiện
+    return;
+  }
+
+  const { data: { session } } = await sb.auth.getSession();
+
+  btn.disabled = true;
+  btn.textContent = tr('cmt_posting');
+
+  const row = session
+    ? { work_id: waWork.id, body, user_id: session.user.id }
+    : { work_id: waWork.id, body,
+        guest_name: ($('comment-name').value.trim() || tr('cmt_guest_default')).slice(0, 50) };
+
+  const { error } = await sb.from('comments').insert(row);
+
+  btn.disabled = false;
+  btn.textContent = tr('cmt_post');
+
+  if (error) {
+    // PT429 do trigger comments_rate_limit() ném ra khi gửi quá nhanh.
+    cmtSay(error.code === 'PT429' ? 'cmt_too_fast' : 'cmt_post_err', true);
+    return;
+  }
+
+  $('comment-text').value = '';
+  cmtSay('cmt_posted');
+  fetchComments();
 });
 
 // ---------- chuyển tab ----------

@@ -74,12 +74,9 @@ Có **hai nguồn song song, phải sửa cả hai khi thêm/sửa fic**:
   của truyện. Chỉ sửa lỗi gõ `Cyrne` → `Cyrene`.
 - `const REPO` (dòng ~911) trỏ raw content sang tài khoản khác:
   `lavaknight2017-rgb/ShostaKid.github.io`. Nội dung truyện đang được tải từ đó.
-- **Đã có Supabase rồi**: dòng 1773–1774 hard-code `SUPABASE_URL` +
-  `SUPABASE_KEY` (anon) của project `ggbahdhmtgaemgblfdum` ("ShostaKid's Project",
-  ap-south-1) cho tính năng comment (`fetchComments` / `submitComment`, bảng
-  `comments`, khoá theo `fic_id = 'fic-<index>'`). **Project này hiện đang
-  INACTIVE/paused** → comment trên site thật đang hỏng. Ngoài ra khoá comment theo
-  index của mảng nên đổi thứ tự fic sẽ làm comment gắn nhầm truyện.
+- ~~Khoá anon của project cũ `ggbahdhmtgaemgblfdum` nằm trong `index.html`~~ —
+  **đã xoá ở bước 4** cùng toàn bộ khối comment cũ. Project đó (ap-south-1) đang
+  paused và không còn được tham chiếu ở đâu trong repo.
 
 ## Kế hoạch đang làm
 
@@ -127,6 +124,7 @@ Migration đã chạy, theo thứ tự:
 9. `create_avatars_bucket`
 10. `lock_down_rls_auto_enable`
 11. `kudos_allow_guests`
+12. `comments_rate_limit`
 
 ### Ba cái bẫy đã gặp — đừng lặp lại
 
@@ -153,6 +151,9 @@ Chúng chỉ trả boolean về chính người gọi, không lộ thêm gì ngo
 `rls_auto_enable()` thì **đã revoke** (migration 10) — nó là hàm của event trigger
 `ensure_rls`, không hề được policy gọi, nên khoá lại không ảnh hưởng gì; đã kiểm
 chứng bảng mới tạo vẫn tự bật RLS sau khi revoke.
+
+`auth_leaked_password_protection` cũng sẽ cảnh báo vĩnh viễn: tính năng đó bị khoá
+ở gói Free, không bật được. Bỏ qua, đừng báo lại.
 
 `app_private.secrets` bị lint `rls_enabled_no_policy` (mức INFO) — **cố ý**: bật RLS
 mà không có policy nào chính là cách chặn hết. Bảng đó chỉ chứa muối băm IP, không
@@ -368,22 +369,72 @@ nút của khách sau khi bấm thành trạng thái tĩnh (`disabled` + class `
   rồi chuyển sang trang đăng nhập; handler đăng nhập đọc lại và quay về đúng truyện.
 - `waSeq` chống chạy đua: lật truyện nhanh thì kết quả truy vấn của truyện cũ bị bỏ.
 
+## Bước 4 — bình luận gắn tài khoản (cập nhật 2026-08-30)
+
+Khối comment cũ **đã viết lại hoàn toàn** và chuyển vào module Supabase. Ba hàm
+`loadComments` / `toggleComments` / `repaintComments` gắn lên `window` vì HTML
+gọi bằng `onclick=` và `openFic()` nằm ở script cổ điển.
+
+**Đã xoá `SUPABASE_URL` + `SUPABASE_KEY` của project chết `ggbahdhmtgaemgblfdum`**
+cùng `escapeHtml()` không còn ai dùng. Trong repo không còn khoá của project đó.
+
+Không cần migration cho phần cơ bản: bảng `comments` từ bước 1 đã có sẵn
+`guest_name`, policy INSERT cho cả `anon` lẫn `authenticated`, và GRANT theo cột.
+
+### Chống spam — hai lớp, đừng nhầm vai trò
+
+1. **Honeypot `#comment-website`** — ô ẩn bằng `position:absolute;left:-9999px`
+   (không dùng `display:none` vì bot nhận ra), `tabindex="-1"`, `autocomplete="off"`.
+   Bot điền vào thì frontend **im lặng báo thành công** rồi vứt đi, không cho bot
+   biết đã bị lộ. **Chỉ chặn được bot đọc HTML** — kẻ gọi thẳng PostgREST bằng
+   publishable key không bao giờ chạy qua đoạn này.
+2. **Trigger `comments_rate_limit_trg`** — đây mới là lớp chặn thật.
+   Khách 3 bình luận / 5 phút / IP, thành viên 10 / 5 phút / tài khoản,
+   **admin được miễn**. Vượt thì ném `PT429` (quy ước PostgREST → HTTP 429),
+   frontend bắt `error.code === 'PT429'` để hiện thông báo tử tế.
+
+Bộ đếm nằm ở `app_private.rate_limit(bucket_key, window_start, hits)`, khoá là
+`sha256(muối || 'ip:'||ip)` hoặc `sha256(muối || 'u:'||uid)`. **Bảng `comments`
+không lưu bất kỳ dấu vết IP nào** — đó là lý do tách bảng riêng. Muối
+`rate_limit_salt` khác muối `kudos_ip_salt` để hai bên không đối chiếu chéo được.
+Dọn rác bằng `random() < 0.01` mỗi lần insert, không cần cron.
+
+Lượt bị RLS từ chối **không tốn hạn mức**: trigger và policy cùng một transaction,
+bị chặn thì bộ đếm rollback theo.
+
+### Vài chỗ dễ vấp
+
+- **Xoá bình luận là xoá thật (`DELETE`), không đặt `is_deleted`.** Trigger
+  `comment_count_trg` chỉ chạy khi INSERT/DELETE, xoá mềm sẽ để `comment_count`
+  sai vĩnh viễn. Cột `is_deleted` để dành cho kiểm duyệt sau.
+- **Truy vấn phải `.eq('is_deleted', false)`** — policy SELECT không lọc giúp.
+- **Không `select('*')`** — lấy đúng cột, kèm `profiles(...)` để nhúng tên/avatar
+  qua FK `comments_user_id_fkey`.
+- **`comments.user_id` là `ON DELETE SET NULL`** (cố ý, giữ lại bình luận khi user
+  tự xoá tài khoản). Nên khi dọn dữ liệu test phải **xoá comment TRƯỚC rồi mới xoá
+  user**, không thì còn lại bình luận mồ côi hiện dưới tên "Khách".
+- Danh sách dựng 100% bằng `createElement`/`textContent`. Đã thử chèn
+  `<img onerror>`, `<script>` vào cả nội dung lẫn `display_name` — hiện ra nguyên
+  văn dạng chữ, không tạo thẻ nào.
+- `applyLang()` gọi `window.repaintComments()` để vẽ lại danh sách khi đổi ngôn ngữ
+  (ngày tháng đổi locale, nút Xoá và badge Tác giả đổi chữ).
+- Nút `#comment-submit` **cố ý không gắn `data-i18n`**: `applyLang()` đã xử lý riêng,
+  gắn cả hai thì nhãn "Đang gửi…" bị ghi đè giữa chừng.
+- Chưa làm: trả lời lồng nhau (`parent_id` có sẵn), sửa bình luận,
+  bình luận theo từng chương (`chapter_id` đang để null).
+
 ### Việc tiếp theo
 
-- **Comment** — phần còn lại của kudos/bookmark/comment. Khối comment cũ ở
-  `index.html` (`SUPABASE_URL`/`SUPABASE_KEY` của project `ggbahdhmtgaemgblfdum`
-  đã paused) vẫn còn nguyên và vẫn hỏng. **Đừng chỉ đổi URL sang project mới** —
-  bảng `comments` mới có schema khác hẳn (không có `fic_id`), đổi mỗi key là hỏng
-  theo kiểu khác. Phải viết lại cả khối.
-- Trang "Bookmark của tôi": hiện `bookmarks` có sẵn `note`, `is_private`, `is_rec`,
-  `last_chapter_id` nhưng giao diện chưa dùng tới — bookmark tạo ra đang để mặc định
+- **Đấu phần Browse vào DB** — việc lớn còn lại. Thay `fetch('fics.json')` + 36 thẻ
+  `.fic-card` hard-code bằng truy vấn `works` / `chapters`. Làm xong mới hiện được
+  số kudos/comment trên thẻ, và mới bỏ được khoá theo vị trí `legacy_id`.
+- Trang "Bookmark của tôi": `bookmarks` có sẵn `note`, `is_private`, `is_rec`,
+  `last_chapter_id` nhưng giao diện chưa dùng — bookmark tạo ra đang để mặc định
   (riêng tư, không ghi chú).
-- Đấu phần Browse vào DB: thay `fetch('fics.json')` + thẻ `.fic-card` hard-code
-  bằng truy vấn `works` / `chapters`. Làm xong mới hiện được số kudos trên thẻ,
-  và mới bỏ được khoá theo vị trí `legacy_id`.
-- Bật **Leaked Password Protection** trong Dashboard → Authentication.
-  Chủ repo báo đã bật ngày 2026-08-30 nhưng advisor quét lại vẫn báo tắt — cần
-  kiểm tra lại xem thiết lập có thật sự lưu không.
+- Bình luận: trả lời lồng nhau (`parent_id`), sửa bình luận, và bình luận theo
+  từng chương (`chapter_id`) đều đã có chỗ trong schema nhưng chưa làm giao diện.
+- Kiểm duyệt: cột `comments.is_deleted` chưa ai dùng. Nếu sau này làm xoá mềm thì
+  **phải sửa `comment_count_trg`**, vì trigger hiện chỉ đếm INSERT/DELETE.
 - Chuyển nhạc/ảnh từ GitHub Releases sang Supabase Storage (`chapters.music` hiện
   vẫn trỏ URL GitHub, giữ nguyên cấu trúc `{source,url,start,name}` của site cũ).
   Bucket `avatars` đã có, làm mẫu được cho bucket nhạc/ảnh sau này.
