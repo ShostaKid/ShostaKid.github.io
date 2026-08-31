@@ -2460,6 +2460,8 @@ function pwMusicBox() {
 function pwAddChapter(data) {
   const wrap = document.createElement('div');
   wrap.className = 'pw-ch';
+  if (data && data.id) wrap.dataset.chId = data.id;   // để lúc lưu biết chương nào đã có sẵn
+  if (data && data.position) wrap.dataset.chPos = data.position;  // vị trí cũ, để biết có đổi chỗ không
 
   const t1 = document.createElement('input');
   t1.type = 'text'; t1.className = 'pw-ch-title'; t1.maxLength = 200;
@@ -2575,7 +2577,7 @@ async function loadPostForm(idx) {
   const { data: w } = await sb.from('works')
     .select('id,title,subtitle,summary,warning_note,status,featured,'
           + 'work_fandoms(fandom_id), work_ships(ship_id),'
-          + 'chapters(position,title,content,music)')
+          + 'chapters(id,position,title,content,music)')
     .eq('legacy_id', 'fic-' + idx).maybeSingle();
   if (!w) { pwSay('post_err', true); return; }
 
@@ -2600,7 +2602,7 @@ async function loadPostForm(idx) {
   // Ô nhạc của chương chỉ điền khi chương đó KHÁC nhạc chung, để trống nghĩa là
   // "theo nhạc chung" — đúng như dòng gợi ý ghi dưới ô.
   dsChuong.forEach(c => pwAddChapter(
-    nhuNhau(c.music, nhacChung) ? { title: c.title, content: c.content } : c
+    nhuNhau(c.music, nhacChung) ? { id: c.id, position: c.position, title: c.title, content: c.content } : c
   ));
   if (!(w.chapters || []).length) pwAddChapter();
 }
@@ -2615,6 +2617,8 @@ $('pw-save').addEventListener('click', async () => {
   const nhacChung = pwMusicRead($('pw-music-work'));
   const chuong = [...document.querySelectorAll('#pw-chapters .pw-ch')].map(w => ({
     // Ô nhạc của chương để trống thì dùng nhạc chung của truyện.
+    id: w.dataset.chId || null,
+    viTriCu: w.dataset.chPos ? parseInt(w.dataset.chPos, 10) : null,
     music: pwMusicRead(w.querySelector('.pw-music')) || nhacChung,
     title: w.querySelector('.pw-ch-title').value.trim(),
     content: w.querySelector('.pw-ch-body').value
@@ -2662,15 +2666,51 @@ $('pw-save').addEventListener('click', async () => {
   const ships = [...$('pw-ships').selectedOptions].map(o => ({ work_id: workId, ship_id: o.value }));
   if (ships.length) await sb.from('work_ships').insert(ships);
 
-  // Chương: thay toàn bộ. Đơn giản và luôn khớp thứ tự đang thấy trên form.
-  await sb.from('chapters').delete().eq('work_id', workId);
-  const rows = chuong.map((c, i) => ({
-    work_id: workId, position: i + 1,
-    title: c.title || null, content: c.content,
-    status: patch.status, published_at: patch.published_at,
-    word_count: đếmTừ(c.content), music: c.music
-  }));
-  const rc = await sb.from('chapters').insert(rows);
+  // Chương: chỉ đụng vào cái nào thật sự đổi.
+  //
+  // Bản cũ xoá sạch rồi chèn lại. Hai bước đó là hai request riêng qua PostgREST,
+  // KHÔNG nằm trong một transaction — bước hai hỏng là truyện mất trắng chương
+  // (đã xảy ra thật một lần). Cách dưới đây không có cửa nào làm mất nội dung:
+  // hỏng giữa chừng thì chỉ là vài chương chưa kịp cập nhật, lưu lại là xong.
+  const truoc = new Set([...document.querySelectorAll('#pw-chapters .pw-ch')]
+                        .map(w => w.dataset.chId).filter(Boolean));
+  let rc = { error: null };
+
+  // 1. Xoá những chương đã bị gỡ khỏi form. Làm trước để giải phóng `position`,
+  //    vì có unique (work_id, position).
+  if (pwWorkId) {
+    const conLai = new Set(chuong.map(c => c.id).filter(Boolean));
+    const canXoa = [...truoc].filter(id => !conLai.has(id));
+    if (canXoa.length) {
+      const r = await sb.from('chapters').delete().in('id', canXoa);
+      if (r.error) rc = r;
+    }
+  }
+
+  // 2. Nếu có chương phải đổi vị trí thì dời tạm ra vùng 1000+ trước, không thì
+  //    hai chương đổi chỗ cho nhau sẽ đụng unique ngay giữa chừng.
+  const coDoiChoNhau = chuong.some((c, i) => c.id && c.viTriCu && c.viTriCu !== i + 1);
+  if (!rc.error && coDoiChoNhau) {
+    for (let i = 0; i < chuong.length; i++) {
+      if (!chuong[i].id) continue;
+      const r = await sb.from('chapters').update({ position: 1000 + i }).eq('id', chuong[i].id);
+      if (r.error) { rc = r; break; }
+    }
+  }
+
+  // 3. Cập nhật chương cũ, chèn chương mới.
+  for (let i = 0; i < chuong.length && !rc.error; i++) {
+    const c = chuong[i];
+    const hang = {
+      position: i + 1, title: c.title || null, content: c.content,
+      status: patch.status, published_at: patch.published_at,
+      word_count: đếmTừ(c.content), music: c.music
+    };
+    const r = c.id
+      ? await sb.from('chapters').update(hang).eq('id', c.id)
+      : await sb.from('chapters').insert({ ...hang, work_id: workId });
+    if (r.error) rc = r;
+  }
 
   busy(btn, false, 'post_save');
   if (rc.error) { pwSay(raw(rc.error.message), true); return; }

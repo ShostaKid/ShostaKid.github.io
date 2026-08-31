@@ -680,6 +680,35 @@ admin. Nó đặt `window.__pwEditIdx` rồi mới `showPage('post')`; hook tron
 
 **Bài học:** viết xong một hàm và test nó bằng console **không có nghĩa là tính
 năng đã có trên web**. Phải đi đúng đường người dùng đi.
+
+### Lưu chương: cập nhật đúng chỗ đổi, không còn xoá-rồi-chèn
+
+Bản cũ xoá sạch chương rồi chèn lại — hai request riêng qua PostgREST, không
+nguyên tử, và đã làm mất trắng chương một lần. Giờ:
+
+1. Xoá những chương bị gỡ khỏi form (làm trước để giải phóng `position`).
+2. Nếu có chương đổi chỗ thì dời tạm cả loạt sang vùng `1000+` — bảng có unique
+   `(work_id, position)` nên hai chương hoán vị sẽ đụng nhau ngay giữa chừng.
+3. `update` chương đã có, `insert` chương mới.
+
+Form nhớ `chId` và `chPos` trên từng khối chương để biết cái nào cũ, cái nào đổi chỗ.
+**`chapters.id` giờ được giữ nguyên qua mỗi lần lưu** — ghi chú cũ nói ngược lại
+đã hết hiệu lực, `bookmarks.last_chapter_id` sau này dùng được.
+
+Hỏng giữa chừng thì chỉ là vài chương chưa kịp cập nhật, **không mất nội dung**.
+
+### GitHub Action giữ Supabase không ngủ
+
+`.github/workflows/keep-supabase-awake.yml`, chạy 3 ngày một lần, gọi một request
+đếm nhẹ (`Range: 0-0`) tới `/rest/v1/works`. Gói Free tạm dừng project sau ~7 ngày
+không ai gọi. Chấp nhận cả `200` lẫn `206` (206 vì có header `Range`).
+
+Key trong workflow là publishable key, vốn đã công khai trong `index.html` — không
+phải bí mật, không cần đưa vào GitHub Secrets.
+
+**Lưu ý:** GitHub tự tắt workflow theo lịch nếu repo **60 ngày không có hoạt động
+nào**. Repo này có Action build `fics.json` chạy mỗi lần sửa fic nên hiếm khi chạm
+mốc đó, nhưng nếu bỏ bẵng vài tháng thì phải vào bật lại bằng tay.
 ## Bước 6 — trang đọc lấy nội dung từ database (cập nhật 2026-08-30)
 
 `loadChapter()` giờ đọc `chapters.content` thay vì `fetch` file `.txt` từ GitHub.
