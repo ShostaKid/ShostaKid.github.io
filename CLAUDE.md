@@ -862,3 +862,84 @@ cùng truyện dùng chung một lượt gọi. Chống vẽ đè khi lật truy
   file `.txt` làm dự phòng**, chấp nhận đánh đổi này. Muốn bịt thì phải xoá file —
   và lưu ý `git rm` chưa đủ, commit cũ vẫn phục vụ được nội dung, phải viết lại
   lịch sử ở cả hai repo.
+
+---
+
+## Đợt chỉnh giao diện (cập nhật 2026-08-31)
+
+Năm phần A–E, **chỉ đổi thẩm mỹ, không đổi logic**. Ràng buộc chủ repo đặt ra:
+"Giữ nguyên toàn bộ chức năng đã có (filter, search, kudos, bookmark, comment,
+music player...)". Ba commit: `8d786df` (C), `cb688bc` (D), `644ec30` (E),
+phần A+B nằm ở `cd1f733`.
+
+### A — sắp xếp truyện
+
+`worksSort` ('new' | 'old'), mặc định mới trước, nhớ trong `localStorage['sk-sort']`.
+`sortedWorks()` xếp theo `date`, thiếu `date` thì lùi về thứ tự gốc (`idx`).
+Đổi thứ tự phải gọi lại cả `renderWorks()`, `buildSidebar()` **và** `applyFilters()` —
+bỏ sót `applyFilters()` là các thẻ vừa dựng lại mất trạng thái lọc đang bật.
+
+### B — bố cục Works
+
+`.works-layout` căng 1360px và căn giữa; `#works-grid` hai cột từ 1100px trở lên.
+
+### C, E — hai token màu cho chữ chức năng
+
+`--ui` và `--ui-head` tách riêng khỏi `--ink2`/`--ink3`. Chủ trương: chữ **chức
+năng** (nav, nút, nhãn, tiêu đề mục, chữ gợi ý) dùng hai token này cho đậm và dễ
+đọc; chữ **nội dung** (tóm tắt truyện, tagline) giữ `--ink2`/`--ink3` nét mảnh.
+
+| token | nền sáng | nền tối |
+|---|---|---|
+| `--ui` | `#6B5B42` | `#A89878` |
+| `--ui-head` | `#836717` | `#C9A84C` |
+
+**Bẫy khi đo tương phản — đọc trước khi sửa màu:**
+
+- **Nền phải tính theo xếp chồng alpha, không lấy màu nền đầu tiên gặp.** Nút
+  filter đang chọn có `background:rgba(184,151,42,0.06)`. Hàm dò nền nào thấy
+  "không trong suốt" là dừng sẽ coi lớp gold 6% đó là nền đặc và cho ra 1.73 —
+  sai hoàn toàn (thật ra 4.31). Phải trộn từng lớp có alpha xuống tới nền trang.
+- **Cùng một token cho kết quả khác nhau trên các nền khác nhau.** `#8A6E1A`
+  đạt 4.54 trên `--cream` nhưng chỉ 4.31 dưới lớp gold 6% và 4.15 trên `--cream2`
+  (hộp chương, avatar). Vì thế `--ui-head` phải là `#836717`.
+- **Đổi `data-theme` bằng JS không kích hoạt tính lại style ngay.** `getComputedStyle`
+  trả màu cũ trong khi biến CSS đã là màu mới. Phải tải lại trang cho mỗi theme.
+- **Quét theo danh sách selector là bỏ lọt.** Lần đầu quét ~13 selector thì báo
+  sạch; quét mọi phần tử có chữ thì lòi ra cảnh báo nội dung ở nền tối chỉ 2.55.
+  Cách quét đúng: duyệt `.page.active *`, bỏ phần tử có con, bỏ hoa văn trang trí,
+  và nới ngưỡng xuống 3.0 cho chữ ≥24px (hoặc ≥18.66px + đậm ≥700).
+
+Hai chỗ cố ý để dưới ngưỡng: chữ "Kid" vàng trong logo, và `.hero-tagline`.
+
+### D — thanh nav ba cụm
+
+Logo trái / Home-Works-About giữa / khu cá nhân phải. Chưa đăng nhập: nút
+`.nav-signin`. Đã đăng nhập: `#nav-me` chứa avatar `#nav-avatar` mở `#nav-menu`
+(My Profile / My Bookmarks / Post chỉ admin / Log Out).
+
+- **Đừng bao giờ trỏ mục nav bằng `nth-child`.** Trước đây sáu chỗ trong code
+  trỏ `.nav-links a:nth-child(2)` để lấy Works — dời mục cá nhân ra chỗ khác là
+  gãy hết. Nay mỗi mục có `data-page` và code trỏ `[data-page="works"]`.
+- `.nav-signin` nằm **ngoài** `.nav-links` nhưng vẫn nhận `.active`, nên
+  `showPage()` phải xoá active trên cả `.nav-links a, .nav-signin`.
+- `showPage()` gọi `window.closeNavMenu()` để menu không nằm lại khi chuyển trang.
+- Các mục trong menu gọi `showPage(p)` **không truyền `this`** — chúng không phải
+  mục nav nên không có gì để làm sáng.
+- **Bẫy `goBack()` (đã sửa):** nó đọc `prevPage` *sau* khi `showPage()` đã gán
+  `prevPage = currentPage` (lúc đó là `'reading'`), nên điều kiện `prevPage==='works'`
+  không bao giờ đúng và nav luôn sáng Home. Phải chốt đích **trước** khi gọi `showPage`.
+
+### E — form đăng/sửa truyện
+
+`.form-wrap` (760px) thay `.auth-wrap` bị đè inline; `.sub-heading` cho tiêu đề
+trong form; `.mini-btn` / `.mini-btn.danger` cho nút phụ, thay việc mượn
+`.comment-reply` / `.comment-del`; `.form-actions` tách nút Lưu.
+
+- **Số chương đếm bằng CSS counter, không bằng JS.** `#pw-chapters{counter-reset:ch}`
+  + `.pw-ch{counter-increment:ch}` + `.pw-ch::before{content:"Chapter " counter(ch)}`.
+  Xoá chương giữa là tự đánh lại số. Bản tiếng Việt qua `[data-lang="vi"]`.
+  Nếu sau này thêm chức năng kéo thả đổi thứ tự chương thì số vẫn tự đúng.
+- **Không đo được số chương đã vẽ bằng `getComputedStyle(el,'::before').content`** —
+  Chrome trả về nguyên chuỗi `"Chapter " counter(ch)` chưa tính. Muốn xác nhận thì
+  kiểm `counter-reset`/`counter-increment` và hộp `::before` có kích thước.
