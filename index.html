@@ -157,6 +157,54 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .reading-bia{width:100%;display:block;margin:1.6rem 0 0;border:1px solid var(--border);}
 .reading-bia.cat-219{aspect-ratio:21/9;object-fit:cover;}
 
+/* ----- Truyện chỉ dành cho thành viên ----- */
+/* Dải chéo góc trên-trái thẻ. overflow:hidden trên thẻ để phần thừa của dải bị
+   cắt gọn theo viền. */
+.fic-card-khoa{overflow:hidden;}
+/* Toạ độ tính chứ không ướm: dải rộng 150px nên tâm nó nằm ở (left+75, top+8).
+   Chữ dài ~78px, xoay -45° nên hai đầu chữ lệch khỏi tâm ±27px theo cả hai trục.
+   Tâm phải cách mỗi cạnh thẻ ít nhất 27px, không thì một đầu chữ lọt ra ngoài
+   và bị overflow:hidden cắt cụt. Đặt tâm ở (39, 39). */
+.fic-dai-khoa{position:absolute;top:31px;left:-36px;width:150px;transform:rotate(-45deg);
+  background:var(--ui-head);color:var(--cream);text-align:center;padding:4px 0;
+  font-family:var(--font-ui);font-size:0.5rem;letter-spacing:1.6px;text-transform:uppercase;
+  box-shadow:0 1px 4px rgba(44,35,24,0.25);pointer-events:none;z-index:2;}
+[data-lang="vi"] .fic-dai-khoa{letter-spacing:0.8px;}
+
+/* Bảng thay cho nội dung chương khi chưa đăng nhập. */
+.khoa-hop{border:1px solid var(--border);border-left:2px solid var(--gold);
+  background:var(--cream2);padding:2.2rem 1.8rem;text-align:center;margin:1rem 0 2rem;}
+.khoa-hop .khoa-bieu{font-size:1.8rem;color:var(--ui-head);line-height:1;margin-bottom:1rem;}
+.khoa-hop h3{font-family:var(--font-ui);font-size:0.8rem;letter-spacing:3px;text-transform:uppercase;
+  color:var(--ui-head);margin:0 0 0.9rem;font-weight:400;}
+.khoa-hop p{font-family:'Lora',Georgia,serif;font-style:italic;font-size:0.95rem;color:var(--ink2);
+  line-height:1.7;margin:0 auto 1.6rem;max-width:420px;}
+
+/* ----- Gửi yêu cầu ----- */
+.rq-moi{margin-top:2.5rem;padding-top:1.8rem;border-top:1px solid var(--border);text-align:center;}
+.rq-moi-chu{font-family:'Lora',Georgia,serif;font-style:italic;font-size:0.95rem;color:var(--ink2);
+  margin-bottom:0.9rem;line-height:1.6;}
+.rq-moi .ao3-link{margin-top:0;}
+.rq-x-nhac{font-family:'Lora',Georgia,serif;font-style:italic;font-size:0.88rem;color:var(--ui);
+  line-height:1.6;margin-top:1.2rem;}
+.rq-x-nhac a{color:var(--ui-head);}
+
+.rq-the{border:1px solid var(--border);border-left:2px solid var(--gold);background:var(--cream2);
+  padding:1.1rem 1.2rem;margin-bottom:1rem;}
+.rq-the-dau{display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;margin-bottom:0.7rem;}
+.rq-ngay{font-family:var(--font-ui);font-size:0.58rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ui);}
+.rq-ai{font-family:var(--font-ui);font-size:0.6rem;letter-spacing:1.5px;color:var(--ui-head);}
+.rq-trang{margin-left:auto;font-family:var(--font-ui);font-size:0.55rem;letter-spacing:1.5px;
+  text-transform:uppercase;padding:3px 9px;border:1px solid var(--border);border-radius:2px;color:var(--ui);}
+.rq-trang.s-new{border-color:var(--gold);color:var(--ui-head);background:rgba(184,151,42,0.08);}
+.rq-trang.s-writing{border-color:var(--gold);color:var(--ui-head);}
+.rq-trang.s-done{border-color:#4F7A3A;color:#3D6B28;}
+.rq-trang.s-declined{border-color:var(--border);color:var(--ink3);}
+.rq-noi{font-family:'Lora',Georgia,serif;font-size:0.95rem;line-height:1.7;color:var(--ink);white-space:pre-wrap;}
+.rq-gop{margin-top:0.8rem;padding-top:0.7rem;border-top:1px solid var(--border);
+  font-family:'Lora',Georgia,serif;font-style:italic;font-size:0.85rem;color:var(--ink2);white-space:pre-wrap;}
+.rq-dieu{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.9rem;padding-top:0.8rem;border-top:1px solid var(--border);}
+
 /* ----- Ảnh minh hoạ trong thân truyện ----- */
 /* Trước đây không có luật nào cho img ở đây, nên ảnh giữ nguyên cỡ gốc và đẩy
    rộng cả cột chữ — ảnh chụp điện thoại rộng 3000–4000px thì vỡ hẳn bố cục. */
@@ -731,6 +779,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <div class="nav-menu" id="nav-menu">
           <a id="nav-profile"   data-i18n="nav_profile">My Profile</a>
           <a id="nav-bookmarks" data-i18n="nav_bookmarks">My Bookmarks</a>
+          <a id="nav-requests" data-i18n="nav_requests">Request a Fic</a>
           <a id="nav-post" data-i18n="nav_post" style="display:none;">Post</a>
           <a id="nav-logout" class="nav-menu-out" data-i18n="nav_logout">Log out</a>
         </div>
@@ -878,6 +927,14 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
       <div id="reading-footer" style="margin-top:3rem;border-top:1px solid var(--border);padding-top:2rem;display:none;">
         <p style="font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ui);margin-bottom:1rem;" data-i18n="read_ao3">Read the work on AO3</p>
         <a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid/works" target="_blank" data-i18n="cont_ao3">Continue on AO3 →</a>
+
+        <!-- Mời gửi yêu cầu, đặt ngay lúc người đọc vừa đọc xong và còn đang thích.
+             Chưa đăng nhập thì nút dẫn sang trang đăng nhập, đăng nhập rồi thì
+             vào thẳng form — goRequest() lo việc chọn đích. -->
+        <div class="rq-moi">
+          <div class="rq-moi-chu" data-i18n="rq_moi">Like this fic? Request your own here!</div>
+          <button type="button" class="ao3-link" onclick="goRequest()" data-i18n="rq_moi_nut">Request a fic →</button>
+        </div>
       </div>
       <!-- COMMENT SECTION (Supabase) -->
       <div id="comments-wrap" style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);display:none;">
@@ -978,6 +1035,13 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
       <div class="about-sig">— ShostaKid</div>
       <div style="margin-top:2rem;"><a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid" target="_blank" data-i18n="my_ao3">My AO3 →</a></div>
       <div style="margin-top:2rem;"><a class="ao3-link" href="https://x.com/Texas1k6" target="_blank" data-i18n="my_x">My X →</a></div>
+
+      <!-- About là chỗ "về tôi / nói chuyện với tôi", nên lời mời gửi yêu cầu
+           nằm ở đây là hợp mạch nhất. -->
+      <div class="rq-moi">
+        <div class="rq-moi-chu" data-i18n="rq_moi_about">Want to read something I haven’t written yet? Tell me.</div>
+        <button type="button" class="ao3-link" onclick="goRequest()" data-i18n="rq_moi_nut">Request a fic →</button>
+      </div>
     </div>
     <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
@@ -1131,6 +1195,49 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
           <button type="button" class="ao3-link btn-full" id="pw-save" data-i18n="post_save">Save Work →</button>
         </div>
       </form>
+    </div>
+    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+  </div>
+
+  <!-- GỬI YÊU CẦU -->
+  <div class="page" id="page-requests" style="background:var(--cream);">
+    <div class="form-wrap">
+      <div class="section-heading" data-i18n="rq_head">Request a Fic</div>
+      <div class="auth-msg" id="rq-msg"></div>
+
+      <!-- Chưa đăng nhập: không dựng form, chỉ mời đăng nhập. -->
+      <div id="rq-canhbao" class="khoa-hop" style="display:none;">
+        <div class="khoa-bieu">✦</div>
+        <h3 data-i18n="rq_need_signin_head">Members only</h3>
+        <p data-i18n="rq_need_signin">Requests come with a name attached, so you’ll need an account. It takes a moment.</p>
+        <button type="button" class="ao3-link" id="rq-dangnhap" style="margin-top:0;" data-i18n="khoa_nut">Sign in →</button>
+      </div>
+
+      <form id="rq-form" style="display:none;" onsubmit="return false;">
+        <div class="field">
+          <label data-i18n="rq_body_label">What would you like to read?</label>
+          <textarea id="rq-body" rows="6" maxlength="2000" data-i18n-ph="rq_body_ph"
+                    placeholder="The ship, the mood, an idea — whatever you have."></textarea>
+          <div class="field-hint"><span id="rq-dem">0</span> <span data-i18n="rq_dem_hint">/ 200 words</span></div>
+        </div>
+        <div class="field">
+          <label data-i18n="rq_feedback_label">Anything you'd like to say about the site?</label>
+          <textarea id="rq-feedback" rows="3" maxlength="2000" data-i18n-ph="rq_feedback_ph"
+                    placeholder="Optional."></textarea>
+        </div>
+        <div class="rq-x-nhac">
+          <span data-i18n="rq_x_truoc">If you'd rather talk it through, come find me on</span>
+          <a href="https://x.com/Texas1k6" target="_blank" rel="noopener">X</a><span>.</span>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="ao3-link btn-full" id="rq-gui" data-i18n="rq_send">Send request →</button>
+        </div>
+      </form>
+
+      <div id="rq-cua-toi" style="display:none;">
+        <div class="sub-heading" id="rq-ds-head" data-i18n="rq_mine">My requests</div>
+        <div id="rq-ds"></div>
+      </div>
     </div>
     <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
@@ -1547,10 +1654,10 @@ function ficInfo(i) {
   const d = worksData.find(x => x.idx === i);
   const f = fics[i];
   if (d) return { title:d.title, subtitle:d.subtitle, fandom:fandomLabel(d.fandom), warning:d.warning,
-                  cover:d.cover||'', coverCrop:!!d.coverCrop };
+                  cover:d.cover||'', coverCrop:!!d.coverCrop, restricted:!!d.restricted };
   if (f) return { title:f.title||'', subtitle:f.subtitle||'', fandom:f.fandom||'', warning:f.warning||'',
-                  cover:'', coverCrop:false };
-  return { title:'', subtitle:'', fandom:'', warning:'', cover:'', coverCrop:false };
+                  cover:'', coverCrop:false, restricted:false };
+  return { title:'', subtitle:'', fandom:'', warning:'', cover:'', coverCrop:false, restricted:false };
 }
 
 // Tên các chương. Dùng dữ liệu DB của truyện đang mở nếu đã tải xong,
@@ -1593,6 +1700,20 @@ function makeCardEl(d) {
   // Bìa dọc bên trái, dạng gáy sách. Truyện chưa có bìa thì để ô viền đứt —
   // 36 truyện cũ đều chưa có, nên trạng thái trống phải trông cố ý, không như lỗi.
   card.append(oBia(d.cover, 'fic-bia'));
+
+  // Truyện chỉ dành cho thành viên: thẻ vẫn hiện đủ tên, tóm tắt, tag — chỉ nội
+  // dung là khoá. Dải này để người chưa đăng nhập biết trước, khỏi bấm vào rồi
+  // mới hụt hẫng.
+  if (d.restricted) {
+    card.classList.add('fic-card-khoa');
+    const dai = document.createElement('div');
+    dai.className = 'fic-dai-khoa';
+    // data-i18n để applyLang() đổi được chữ khi bấm EN/VI; thiếu nó thì dải
+    // đứng nguyên tiếng Anh dù cả trang đã sang tiếng Việt.
+    dai.dataset.i18n = 'only_member';
+    dai.textContent = t('only_member');
+    card.append(dai);
+  }
 
   // Mọi thứ còn lại nằm trong cột chữ bên phải.
   const than = document.createElement('div');
@@ -1768,6 +1889,48 @@ function ensureChapters(ficIdx) {
   return chapterPromise;   // cùng truyện -> dùng chung một lượt gọi
 }
 
+// Đăng nhập / đăng xuất ngay khi đang đứng ở trang đọc thì vẽ lại chương, không
+// để nội dung kẹt ở trạng thái cũ (đang khoá mà vừa đăng nhập xong, hoặc ngược lại).
+window.veLaiKhiDoiDangNhap = function () {
+  if (currentPage === 'reading' && currentFic !== null && currentFic !== undefined) {
+    loadChapter(currentFic, currentChapter);
+  }
+};
+
+// Bảng thay cho nội dung khi truyện khoá. Dựng bằng DOM, không ghép chuỗi.
+function veHopKhoa(body) {
+  body.textContent = '';
+  const hop = document.createElement('div');
+  hop.className = 'khoa-hop';
+
+  const bieu = document.createElement('div');
+  bieu.className = 'khoa-bieu';
+  bieu.textContent = '✦';
+
+  const h = document.createElement('h3');
+  h.dataset.i18n = 'only_member';
+  h.textContent = t('only_member');
+
+  const p = document.createElement('p');
+  p.dataset.i18n = 'khoa_loi';
+  p.textContent = t('khoa_loi');
+
+  const nut = document.createElement('button');
+  nut.type = 'button';
+  nut.className = 'ao3-link';
+  nut.style.marginTop = '0';
+  nut.dataset.i18n = 'khoa_nut';
+  nut.textContent = t('khoa_nut');
+  nut.addEventListener('click', () => {
+    // Nhớ truyện đang mở để đăng nhập xong quay lại đúng chỗ.
+    try { sessionStorage.setItem('sk-return-fic', String(currentFic)); } catch (_) {}
+    showPage('auth', document.querySelector('.nav-signin'));
+  });
+
+  hop.append(bieu, h, p, nut);
+  body.append(hop);
+}
+
 async function loadChapter(ficIdx, chapterIdx) {
   const fic = fics[ficIdx];
   const body = document.getElementById('reading-body');
@@ -1777,7 +1940,34 @@ async function loadChapter(ficIdx, chapterIdx) {
   body.innerHTML = `<div class="loading">${t('loading')}</div>`;
   footer.style.display = 'none';
 
+  // Truyện chỉ dành cho thành viên. Phải kiểm HAI LẦN, trước và sau khi đợi
+  // chương, vì cờ restricted chỉ có trong dữ liệu database — mở bằng link #fic-N
+  // thì lượt vẽ đầu còn đang dùng fics.json, mà fics.json không biết gì về cờ này.
+  // Kiểm mỗi lần đầu là truyện khoá hiện ra chữ "Coming soon" thay vì lời mời
+  // đăng nhập. (Nội dung không lọt trong cả hai trường hợp — database vẫn chặn —
+  // nhưng người đọc phải hiểu vì sao mình không đọc được.)
+  const khoaLai = () => ficInfo(ficIdx).restricted && !window.skDaDangNhap;
+  const veKhoa = () => {
+    window.skFicDangKhoa = true;
+    veHopKhoa(body);
+    footer.style.display = 'none';
+    const kbl = document.getElementById('comments-wrap');
+    if (kbl) kbl.style.display = 'none';
+    updateChapterNav(ficIdx, chapterIdx);
+    window.scrollTo(0, 0);
+  };
+
+  if (khoaLai()) { veKhoa(); return; }
+
   const rows = await ensureChapters(ficIdx);
+  if (khoaLai()) { veKhoa(); return; }
+
+  // Mở khoá lại: loadComments() chạy ngay sau openFic() trong khi hàm này còn
+  // đang đợi chương, nên nó có thể đã ẩn khu bình luận theo cờ của TRUYỆN TRƯỚC.
+  // Bật lại ở đây, không thì lật từ truyện khoá sang truyện thường là mất bình luận.
+  window.skFicDangKhoa = false;
+  const kbl2 = document.getElementById('comments-wrap');
+  if (kbl2) kbl2.style.display = 'block';
 
   // Đợi xong mà người đọc đã lật sang truyện khác thì bỏ, đừng vẽ đè nội dung cũ.
   if (chapterFic !== ficIdx) return;
@@ -1870,6 +2060,9 @@ function openFic(i) {
   currentFic = i;
   currentChapter = 0;
   const f = ficInfo(i);
+  // Chốt sớm để loadComments() bên dưới quyết đúng ngay từ đầu; loadChapter()
+  // sẽ sửa lại sau khi biết chắc (dữ liệu database có thể về muộn hơn).
+  window.skFicDangKhoa = !!f.restricted && !window.skDaDangNhap;
   // Lúc này chương chưa tải xong nên tên chương còn lấy tạm từ fics.json;
   // updateChapterNav() sẽ dựng lại bằng dữ liệu DB ngay sau khi loadChapter xong.
   const ten = chapterNames(i);
@@ -1976,6 +2169,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       worksData = rows;
       worksFromDB = true;
       renderAllWorks();
+      // Đang đứng ở trang đọc lúc dữ liệu thật về: vẽ lại chương, vì bây giờ
+      // mới biết truyện này có bị khoá hay không.
+      if (window.veLaiKhiDoiDangNhap) window.veLaiKhiDoiDangNhap();
 
       // Truyện đăng qua form chỉ có trong database, nên lúc kiểm hash ở trên nó
       // còn chưa tồn tại. Thử lại đúng một lần, và chỉ khi người đọc vẫn đang
@@ -2178,6 +2374,32 @@ const i18n = {
     nav_signin:'Sign In', nav_profile:'My Profile', nav_bookmarks:'My Bookmarks', nav_post:'Post',
     nav_logout:'Log Out',
     link_hong:'That link points to a work that no longer exists — or one you need to be signed in to read.',
+    nav_requests:'Request a Fic',
+    only_member:'Members only',
+    khoa_loi:'This one is for signed-in readers. An account is free and takes a moment — then this page will open right up.',
+    khoa_nut:'Sign in →',
+    rq_head:'Request a Fic',
+    rq_need_signin_head:'Members only',
+    rq_need_signin:'Requests come with a name attached, so you’ll need an account. It takes a moment.',
+    rq_body_label:'What would you like to read?',
+    rq_body_ph:'The ship, the mood, an idea — whatever you have.',
+    rq_dem_hint:'/ 200 words',
+    rq_feedback_label:'Anything you’d like to say about the site?',
+    rq_feedback_ph:'Optional.',
+    rq_x_truoc:'If you’d rather talk it through, come find me on',
+    rq_send:'Send request →', rq_dang_gui:'Sending…',
+    rq_mine:'My requests', rq_all:'All requests',
+    rq_trong:'Nothing here yet.',
+    rq_gop_nhan:'On the site:',
+    rq_moi:'Like this fic? Request your own here!',
+    rq_moi_about:'Want to read something I haven’t written yet? Tell me.',
+    rq_moi_nut:'Request a fic →',
+    rq_can_noi_dung:'Write something first.',
+    rq_qua_dai:'That’s over 200 words — trim it a little.',
+    rq_gop_qua_dai:'The site feedback is over 200 words — trim it a little.',
+    rq_da_gui:'Sent. Thank you — I read every one.',
+    rq_s_new:'New', rq_s_seen:'Seen', rq_s_writing:'Writing', rq_s_done:'Done', rq_s_declined:'Declined',
+    rq_xoa:'Delete', rq_xoa_hoi:'Delete this request?',
     post_head:'Post a Work', post_edit_head:'Edit Work', post_title:'Title', post_subtitle:'Subtitle',
     post_summary:'Summary', post_warning:'Content warning', post_fandom:'Fandom', post_ships:'Ships',
     post_status:'Status', post_published:'Published', post_draft:'Draft', post_featured:'Show in My Favorite Children',
@@ -2301,6 +2523,32 @@ const i18n = {
     nav_signin:'Đăng nhập', nav_profile:'Hồ sơ của tôi', nav_bookmarks:'Truyện đã lưu', nav_post:'Đăng truyện',
     nav_logout:'Đăng xuất',
     link_hong:'Link này trỏ tới một truyện không còn tồn tại — hoặc truyện phải đăng nhập mới đọc được.',
+    nav_requests:'Gửi yêu cầu',
+    only_member:'Chỉ thành viên',
+    khoa_loi:'Truyện này dành cho bạn đọc đã đăng nhập. Tạo tài khoản không mất gì và chỉ tốn một lát — xong là đọc được ngay.',
+    khoa_nut:'Đăng nhập →',
+    rq_head:'Gửi yêu cầu',
+    rq_need_signin_head:'Chỉ thành viên',
+    rq_need_signin:'Yêu cầu có gắn tên người gửi, nên bạn cần một tài khoản. Chỉ tốn một lát thôi.',
+    rq_body_label:'Bạn muốn đọc gì?',
+    rq_body_ph:'Ship nào, không khí ra sao, một ý tưởng — có gì cứ viết nấy.',
+    rq_dem_hint:'/ 200 từ',
+    rq_feedback_label:'Bạn có muốn góp ý gì cho web không?',
+    rq_feedback_ph:'Không bắt buộc.',
+    rq_x_truoc:'Nếu muốn, bạn có thể trao đổi thêm với tôi ở',
+    rq_send:'Gửi yêu cầu →', rq_dang_gui:'Đang gửi…',
+    rq_mine:'Yêu cầu của tôi', rq_all:'Tất cả yêu cầu',
+    rq_trong:'Chưa có gì ở đây.',
+    rq_gop_nhan:'Góp ý cho web:',
+    rq_moi:'Thích truyện này? Gửi yêu cầu của riêng bạn!',
+    rq_moi_about:'Muốn đọc thứ tôi chưa viết? Cứ nói với tôi.',
+    rq_moi_nut:'Gửi yêu cầu →',
+    rq_can_noi_dung:'Viết vài dòng đã nhé.',
+    rq_qua_dai:'Dài quá 200 từ rồi — bạn rút bớt giúp.',
+    rq_gop_qua_dai:'Phần góp ý dài quá 200 từ — bạn rút bớt giúp.',
+    rq_da_gui:'Đã gửi. Cảm ơn bạn — tôi đọc hết đấy.',
+    rq_s_new:'Mới', rq_s_seen:'Đã xem', rq_s_writing:'Đang viết', rq_s_done:'Xong', rq_s_declined:'Từ chối',
+    rq_xoa:'Xoá', rq_xoa_hoi:'Xoá yêu cầu này?',
     post_head:'Đăng truyện', post_edit_head:'Sửa truyện', post_title:'Tiêu đề', post_subtitle:'Phụ đề',
     post_summary:'Tóm tắt', post_warning:'Cảnh báo nội dung', post_fandom:'Fandom', post_ships:'Ship',
     post_status:'Trạng thái', post_published:'Đã đăng', post_draft:'Bản nháp', post_featured:'Hiện ở mục truyện tâm đắc',
@@ -2628,6 +2876,7 @@ function showPage(id, el) {
   // Trang "Truyện đã lưu" nạp lại mỗi lần mở, vì người dùng có thể vừa bỏ lưu
   // ở trang đọc xong quay lại đây.
   if (id === 'bookmarks' && window.loadBookmarks) window.loadBookmarks();
+  if (id === 'requests'  && window.loadRequests)  window.loadRequests();
   if (id === 'post' && window.loadPostForm) {
     // __pwEditIdx do nút Sửa truyện đặt; không có thì mở form trống để đăng mới.
     const idx = window.__pwEditIdx;
@@ -2643,6 +2892,13 @@ function showPage(id, el) {
 }
   window.scrollTo(0,0);
 }
+// Nút "Request a fic" ở cuối truyện và trên About. Chưa đăng nhập thì dẫn sang
+// trang đăng nhập; đăng nhập rồi thì vào thẳng form.
+function goRequest() {
+  if (window.skDaDangNhap) { showPage('requests'); return; }
+  showPage('auth', document.querySelector('.nav-signin'));
+}
+
 function goBack() {
   stopMusic();
   document.getElementById('progress-bar').classList.remove('visible');
@@ -2720,6 +2976,10 @@ function busy(btn, on, labelKey) {
 
 // ---------- điều hướng theo trạng thái đăng nhập ----------
 function paintNav(session) {
+  // Script chính (không phải module) cần biết đã đăng nhập chưa, để khoá nội
+  // dung truyện "chỉ thành viên" và để đổi đích của nút gửi yêu cầu.
+  window.skDaDangNhap = !!session;
+  if (window.veLaiKhiDoiDangNhap) window.veLaiKhiDoiDangNhap();
   // Đăng nhập rồi thì thay nút Sign In bằng cụm avatar; các mục cá nhân dời hết
   // vào menu đổ xuống nên chỉ cần bật/tắt một khối.
   $('nav-signin').style.display = session ? 'none' : '';
@@ -2767,6 +3027,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeNavMe
 
 $('nav-profile'  ).addEventListener('click', () => window.showPage('profile'));
 $('nav-bookmarks').addEventListener('click', () => window.showPage('bookmarks'));
+$('nav-requests' ).addEventListener('click', () => window.showPage('requests'));
 $('nav-post'     ).addEventListener('click', () => window.showPage('post'));
 $('nav-logout'   ).addEventListener('click', async () => {
   closeNavMenu();
@@ -3550,6 +3811,173 @@ async function pwDonAnhThua(workId, chuong) {
   } catch (_) { /* dọn rác hỏng thì thôi */ }
 }
 
+// ---------- Gửi yêu cầu ----------
+function rqSay(key, isErr, tho) {
+  const el = $('rq-msg');
+  if (!key) { el.className = 'auth-msg'; delete el.dataset.i18n; el.textContent = ''; return; }
+  el.className = 'auth-msg show ' + (isErr ? 'err' : 'ok');
+  if (tho) { delete el.dataset.i18n; el.textContent = key; }
+  else { el.dataset.i18n = key; el.textContent = tr(key); }
+}
+
+function demTu(s) {
+  const t = (s || '').trim();
+  return t ? t.split(/\s+/).length : 0;
+}
+
+$('rq-body').addEventListener('input', () => {
+  const n = demTu($('rq-body').value);
+  $('rq-dem').textContent = n;
+  // Đổi màu khi vượt, nhưng nút vẫn bấm được — database mới là chỗ chốt.
+  $('rq-dem').style.color = n > 200 ? '#993C1D' : '';
+});
+
+$('rq-dangnhap').addEventListener('click', () => window.showPage('auth', $('nav-signin')));
+
+const RQ_NHAN = { new:'rq_s_new', seen:'rq_s_seen', writing:'rq_s_writing',
+                  done:'rq_s_done', declined:'rq_s_declined' };
+
+async function loadRequests() {
+  rqSay(null);
+  const { data: { session } } = await sb.auth.getSession();
+
+  $('rq-canhbao').style.display = session ? 'none' : '';
+  $('rq-form').style.display    = session ? '' : 'none';
+  $('rq-cua-toi').style.display = session ? '' : 'none';
+  if (!session) return;
+
+  const laAdmin = !!(currentProfile && currentProfile.is_admin);
+  // Admin thấy hết kèm tên người gửi; bạn đọc chỉ thấy của mình — RLS đã lo,
+  // ở đây chỉ đổi tiêu đề và xin thêm cột tên cho đúng vai.
+  $('rq-ds-head').dataset.i18n = laAdmin ? 'rq_all' : 'rq_mine';
+  $('rq-ds-head').textContent  = tr(laAdmin ? 'rq_all' : 'rq_mine');
+
+  const { data, error } = await sb.from('requests')
+    .select('id, body, feedback, status, admin_note, created_at, profiles(username, display_name)')
+    .order('created_at', { ascending: false });
+
+  const ds = $('rq-ds');
+  ds.textContent = '';
+  if (error) { rqSay(raw(error.message), true, true); return; }
+  if (!data || !data.length) {
+    const tr0 = document.createElement('div');
+    tr0.className = 'comments-empty';
+    tr0.dataset.i18n = 'rq_trong';
+    tr0.textContent = tr('rq_trong');
+    ds.append(tr0);
+    return;
+  }
+
+  const locale = (document.documentElement.getAttribute('data-lang') === 'vi') ? 'vi-VN' : 'en-GB';
+  data.forEach(r => ds.append(veTheYeuCau(r, laAdmin, locale)));
+}
+window.loadRequests = loadRequests;
+
+// Dựng bằng DOM: nội dung yêu cầu là chữ người dùng nhập, không nhét vào innerHTML.
+function veTheYeuCau(r, laAdmin, locale) {
+  const the = document.createElement('div');
+  the.className = 'rq-the';
+
+  const dau = document.createElement('div');
+  dau.className = 'rq-the-dau';
+
+  const ngay = document.createElement('span');
+  ngay.className = 'rq-ngay';
+  ngay.textContent = new Date(r.created_at).toLocaleDateString(locale,
+    { year:'numeric', month:'short', day:'numeric' });
+  dau.append(ngay);
+
+  if (laAdmin && r.profiles) {
+    const ai = document.createElement('span');
+    ai.className = 'rq-ai';
+    ai.textContent = r.profiles.display_name || r.profiles.username || '—';
+    dau.append(ai);
+  }
+
+  const tt = document.createElement('span');
+  tt.className = 'rq-trang s-' + r.status;
+  tt.textContent = tr(RQ_NHAN[r.status] || 'rq_s_new');
+  dau.append(tt);
+  the.append(dau);
+
+  const noi = document.createElement('div');
+  noi.className = 'rq-noi';
+  noi.textContent = r.body || '';
+  the.append(noi);
+
+  if (r.feedback) {
+    const g = document.createElement('div');
+    g.className = 'rq-gop';
+    g.textContent = tr('rq_gop_nhan') + ' ' + r.feedback;
+    the.append(g);
+  }
+
+  if (laAdmin) {
+    const hang = document.createElement('div');
+    hang.className = 'rq-dieu';
+    Object.keys(RQ_NHAN).forEach(tt2 => {
+      if (tt2 === r.status) return;
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'mini-btn';
+      b.textContent = tr(RQ_NHAN[tt2]);
+      b.addEventListener('click', async () => {
+        b.disabled = true;
+        const { error } = await sb.from('requests').update({ status: tt2 }).eq('id', r.id);
+        if (error) { b.disabled = false; rqSay(raw(error.message), true, true); return; }
+        loadRequests();
+      });
+      hang.append(b);
+    });
+    const xoa = document.createElement('button');
+    xoa.type = 'button';
+    xoa.className = 'mini-btn danger';
+    xoa.textContent = tr('rq_xoa');
+    xoa.addEventListener('click', async () => {
+      if (!window.confirm(tr('rq_xoa_hoi'))) return;
+      xoa.disabled = true;
+      const { error } = await sb.from('requests').delete().eq('id', r.id);
+      if (error) { xoa.disabled = false; rqSay(raw(error.message), true, true); return; }
+      loadRequests();
+    });
+    hang.append(xoa);
+    the.append(hang);
+  }
+
+  return the;
+}
+
+$('rq-gui').addEventListener('click', async () => {
+  rqSay(null);
+  const btn  = $('rq-gui');
+  const body = $('rq-body').value.trim();
+  const gop  = $('rq-feedback').value.trim();
+
+  if (!body) { rqSay('rq_can_noi_dung', true); return; }
+  if (demTu(body) > 200) { rqSay('rq_qua_dai', true); return; }
+  if (gop && demTu(gop) > 200) { rqSay('rq_gop_qua_dai', true); return; }
+
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { rqSay('prof_need_signin', true); return; }
+
+  busy(btn, true, 'rq_dang_gui');
+  // Chỉ gửi hai cột này. user_id và status do trigger dưới database điền, và
+  // grant insert cũng không cấp hai cột đó — sửa DOM cũng không lách được.
+  const { error } = await sb.from('requests').insert({ body, feedback: gop || null });
+  busy(btn, false, 'rq_send');
+
+  if (error) {
+    // PT429 là quy ước PostgREST cho "quá nhanh" — trigger chặn tần suất dùng nó.
+    const qua = error.code === 'PT429' || /qua nhanh|chi gui duoc/i.test(error.message || '');
+    rqSay(qua ? raw(error.message) : raw(error.message), true, true);
+    return;
+  }
+
+  $('rq-body').value = ''; $('rq-feedback').value = ''; $('rq-dem').textContent = '0';
+  rqSay('rq_da_gui', false);
+  loadRequests();
+});
+
 // ---------- trang "Truyện đã lưu" ----------
 // Dựng lại đúng khung .fic-card của Browse để không phải thêm kiểu dáng mới,
 // chỉ gắn thêm nút Bỏ lưu. Bấm vào thẻ vẫn mở truyện như ở Browse.
@@ -3674,7 +4102,7 @@ window.fetchWorksFromDB = async function () {
   try {
     const { data, error } = await sb.from('works')
       .select('legacy_id, title, subtitle, summary, warning_note, featured, published_at,'
-            + ' kudos_count, comment_count, cover_url, cover_crop,'
+            + ' kudos_count, comment_count, cover_url, cover_crop, is_restricted,'
             + ' work_fandoms(fandoms(name)), work_ships(ships(name))')
       .eq('status', 'published');
     if (error || !data) return null;
@@ -3692,6 +4120,7 @@ window.fetchWorksFromDB = async function () {
         date: w.published_at || '',
         kudos: w.kudos_count || 0,
         comments: w.comment_count || 0,
+        restricted: !!w.is_restricted,
         cover: w.cover_url || '',
         coverCrop: !!w.cover_crop
       }))
@@ -4169,7 +4598,10 @@ function paintCommentForm(session) {
 function loadComments() {
   const wrap = $('comments-wrap');
   if (!wrap) return;
-  wrap.style.display = 'block';
+  // Truyện đang khoá thì giấu luôn khu bình luận: policy của bảng comments cũng
+  // gác bằng can_read_work(), nên có hiện ô nhập thì gửi cũng bị từ chối —
+  // thà đừng mời người ta gõ.
+  wrap.style.display = window.skFicDangKhoa ? 'none' : 'block';
   // Đổi truyện thì gập lại và xoá trắng, tránh hiện nhầm bình luận của truyện trước.
   $('comments-body').style.display = 'none';
   $('comments-label').textContent = tr('cmt_show');
