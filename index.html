@@ -10,14 +10,20 @@
 :root{
 --cream:#FAF7F0;--cream2:#F2EDE0;--gold:#B8972A;--gold-light:#D4AF5A;--gold-dark:#8A6E1A;
 --ink:#2C2318;--ink2:#5C4F3A;--ink3:#8C7D66;--border:#D4C49A;
+/* Chữ CHỨC NĂNG (nav, filter, nút, nhãn ô nhập) — tách khỏi chữ nội dung.
+   --ink3 chỉ đạt tương phản 3.75 trên nền sáng, dưới ngưỡng WCAG AA 4.5 cho
+   chữ nhỏ, mà chữ chức năng lại nhỏ 10-12px và giãn chữ rộng nên càng khó đọc.
+   --ui 6.13, --ui-head 4.54. Chữ nội dung (trích đoạn, tiêu đề nghiêng) vẫn
+   dùng ink2/ink3 để giữ nét mảnh. */
+--ui:#6B5B42;--ui-head:#8A6E1A;
 --font-ui:'Playfair Display',serif;
 }
 /* UI tiếng Việt dùng Nunito cho dấu hiển thị chuẩn */
 [data-lang="vi"]{--font-ui:'Nunito',sans-serif;}
 [data-lang="vi"] .nav-links a,[data-lang="vi"] .section-heading,[data-lang="vi"] .filter-btn{letter-spacing:1.8px;}
 [data-lang="vi"] .hero-title,[data-lang="vi"] .intro-title{letter-spacing:4px;}
-#lang-btn{background:none;border:1px solid var(--border);font-family:var(--font-ui);font-size:0.6rem;letter-spacing:1.5px;cursor:pointer;color:var(--ink3);padding:4px 9px;transition:all 0.2s;line-height:1;}
-#lang-btn:hover{border-color:var(--gold);color:var(--gold);}
+#lang-btn{background:none;border:1px solid var(--border);font-family:var(--font-ui);font-size:0.6rem;letter-spacing:1.5px;cursor:pointer;color:var(--ui);padding:4px 9px;transition:all 0.2s;line-height:1;}
+#lang-btn:hover{border-color:var(--ui-head);color:var(--ui-head);}
 .nav-utils{display:flex;align-items:center;gap:8px;}
 body{background:var(--cream);color:var(--ink);font-family:Georgia,'Times New Roman',serif;min-height:100vh;overflow-x:hidden;}
 
@@ -57,7 +63,7 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .nav-logo span{color:var(--gold);}
 .nav-links{display:flex;gap:2.5rem;}
 .nav-links a{font-family:var(--font-ui);font-size:0.72rem;letter-spacing:2.5px;color:var(--ink2);text-decoration:none;text-transform:uppercase;cursor:pointer;transition:color 0.2s;}
-.nav-links a:hover,.nav-links a.active{color:var(--gold);}
+.nav-links a:hover,.nav-links a.active{color:var(--ui-head);}
 
 #music-bar{background:rgba(242,237,224,0.95);border-bottom:1px solid var(--border);padding:8px 3rem;display:flex;align-items:center;gap:1rem;font-family:var(--font-ui);font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);min-height:36px;}
 #music-bar.hidden{display:none;}
@@ -72,7 +78,7 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .music-bars.paused span{animation:none;transform:scaleY(0.3);}
 #music-title{color:var(--ink2);font-style:italic;}
 .music-toggle{background:none;border:1px solid var(--border);padding:4px 12px;font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);cursor:pointer;transition:all 0.2s;}
-.music-toggle:hover{border-color:var(--gold);color:var(--gold);}
+.music-toggle:hover{border-color:var(--ui-head);color:var(--ui-head);}
 
 .page{display:none;animation:fadein 0.5s ease;}
 .page.active{display:block;}
@@ -88,7 +94,7 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .hero-tagline{font-family:Georgia,serif;font-size:1rem;color:var(--ink3);letter-spacing:3px;text-transform:uppercase;}
 
 .fics-section{max-width:860px;margin:0 auto;padding:3.5rem 2rem;}
-.section-heading{font-family:var(--font-ui);font-size:0.78rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:2.5rem;display:flex;align-items:center;gap:1rem;}
+.section-heading{font-family:var(--font-ui);font-size:0.78rem;letter-spacing:4px;text-transform:uppercase;color:var(--ui-head);margin-bottom:2.5rem;display:flex;align-items:center;gap:1rem;}
 .section-heading::after{content:'';flex:1;height:1px;background:var(--border);}
 .fic-card{border:1px solid var(--border);padding:1.8rem 2rem;margin-bottom:1.5rem;background:rgba(250,247,240,0.85);cursor:pointer;transition:all 0.25s;position:relative;backdrop-filter:blur(2px);}
 .fic-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);opacity:0;transition:opacity 0.2s;}
@@ -96,7 +102,7 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .fic-card:hover::before{opacity:1;}
 .fic-title{font-family:var(--font-ui);font-size:1.22rem;font-weight:600;color:var(--ink);margin-bottom:0.35rem;line-height:1.3;}
 .fic-title em{font-style:italic;color:var(--gold-dark);}
-.fic-meta{font-family:var(--font-ui);font-size:0.65rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;margin-bottom:0.8rem;display:flex;gap:1.5rem;flex-wrap:wrap;}
+.fic-meta{font-family:var(--font-ui);font-size:0.65rem;letter-spacing:2px;color:var(--ui);text-transform:uppercase;margin-bottom:0.8rem;display:flex;gap:1.5rem;flex-wrap:wrap;}
 .fic-stats{font-variant-numeric:tabular-nums;color:var(--gold-dark);letter-spacing:1px;}
 .fic-warning{font-size:0.85rem;color:#993C1D;font-family:'Lora',Georgia,serif;font-style:italic;margin-bottom:0.6rem;}
 .fic-summary{font-family:'Lora',Georgia,serif;font-size:0.88rem;color:var(--ink2);line-height:1.65;font-style:italic;}
@@ -106,7 +112,7 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 /* READING PAGE */
 .reading-wrap{max-width:720px;margin:0 auto;padding:4rem 2rem;}
 .back-btn{font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink3);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:3rem;transition:color 0.2s;}
-.back-btn:hover{color:var(--gold);}
+.back-btn:hover{color:var(--ui-head);}
 .reading-title{font-family:var(--font-ui);font-size:2.4rem;font-weight:400;line-height:1.2;color:var(--ink);margin-bottom:0.5rem;}
 .reading-title em{font-style:italic;color:var(--gold-dark);}
 .reading-fandom{font-family:var(--font-ui);font-size:0.65rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;margin-bottom:0.5rem;}
@@ -115,10 +121,10 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 
 /* Chapter nav */
 .chapter-nav{display:flex;align-items:center;justify-content:space-between;margin:2.5rem 0;padding:1rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
-.chapter-nav button{font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);background:none;border:1px solid var(--border);padding:8px 16px;cursor:pointer;transition:all 0.2s;}
-.chapter-nav button:hover{border-color:var(--gold);color:var(--gold);}
+.chapter-nav button{font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ui);background:none;border:1px solid var(--border);padding:8px 16px;cursor:pointer;transition:all 0.2s;}
+.chapter-nav button:hover{border-color:var(--ui-head);color:var(--ui-head);}
 .chapter-nav button:disabled{opacity:0.3;cursor:default;}
-.chapter-label{font-family:var(--font-ui);font-size:0.72rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;}
+.chapter-label{font-family:var(--font-ui);font-size:0.72rem;letter-spacing:2px;color:var(--ui-head);text-transform:uppercase;}
 
 /* Fic body */
 .fic-body{font-family:'Lora',Georgia,'Times New Roman',serif;font-size:1.12rem;line-height:2;color:var(--ink);}
@@ -131,8 +137,8 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .loading::after{content:'';display:block;width:30px;height:1px;background:var(--gold);margin:1rem auto 0;animation:loadbar 1.2s ease-in-out infinite;}
 @keyframes loadbar{0%,100%{width:20px;opacity:0.3}50%{width:60px;opacity:1}}
 
-.ao3-link{display:inline-flex;align-items:center;gap:8px;margin-top:2.5rem;font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);border:1px solid var(--border);padding:10px 20px;text-decoration:none;transition:all 0.2s;cursor:pointer;background:none;}
-.ao3-link:hover{border-color:var(--gold);color:var(--gold);}
+.ao3-link{display:inline-flex;align-items:center;gap:8px;margin-top:2.5rem;font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ui);border:1px solid var(--border);padding:10px 20px;text-decoration:none;transition:all 0.2s;cursor:pointer;background:none;}
+.ao3-link:hover{border-color:var(--ui-head);color:var(--ui-head);}
 
 /* ABOUT */
 .about-wrap{max-width:720px;margin:0 auto;padding:4rem 2rem;}
@@ -153,26 +159,26 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .continue-text strong{color:var(--gold-dark);}
 .continue-arrow{color:var(--gold);font-size:1rem;}
 .continue-dismiss{background:none;border:none;color:var(--ink3);cursor:pointer;font-size:0.9rem;padding:4px;transition:color 0.2s;}
-.continue-dismiss:hover{color:var(--gold);}
+.continue-dismiss:hover{color:var(--ui-head);}
 
 /* FONT SIZE TOGGLE */
 #font-controls{position:fixed;right:1.5rem;bottom:5rem;display:none;flex-direction:column;gap:4px;z-index:90;transition:opacity 0.2s;}
 #font-controls button{width:36px;height:36px;border-radius:50%;background:var(--cream);border:1px solid var(--border);font-family:var(--font-ui);font-size:0.85rem;color:var(--ink2);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;}
-#font-controls button:hover{border-color:var(--gold);color:var(--gold);}
+#font-controls button:hover{border-color:var(--ui-head);color:var(--ui-head);}
 #font-controls.visible{display:flex;}
 #font-controls.tucked{opacity:0;pointer-events:none;}
 [data-theme="dark"] #font-controls button{background:var(--cream);}
 
 /* BACK TO TOP */
 #back-top{position:fixed;right:1.5rem;bottom:2rem;width:36px;height:36px;border-radius:50%;background:var(--cream);border:1px solid var(--border);color:var(--ink3);cursor:pointer;font-size:1rem;display:none;align-items:center;justify-content:center;transition:all 0.2s;z-index:90;}
-#back-top:hover{border-color:var(--gold);color:var(--gold);}
+#back-top:hover{border-color:var(--ui-head);color:var(--ui-head);}
 #back-top.visible{display:flex;}
 #back-top.tucked{opacity:0;pointer-events:none;}
 [data-theme="dark"] #back-top{background:var(--cream);}
 
 /* FLOATING TOGGLE */
 #float-toggle{position:fixed;right:0.6rem;bottom:8.5rem;width:24px;height:24px;border-radius:50%;background:var(--cream);border:1px solid var(--border);color:var(--ink3);cursor:pointer;font-size:0.6rem;display:none;align-items:center;justify-content:center;transition:all 0.2s;z-index:91;opacity:0.5;}
-#float-toggle:hover{opacity:1;border-color:var(--gold);color:var(--gold);}
+#float-toggle:hover{opacity:1;border-color:var(--ui-head);color:var(--ui-head);}
 #float-toggle.visible{display:flex;}
 [data-theme="dark"] #float-toggle{background:var(--cream);}
 
@@ -185,6 +191,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   --cream:#16120D;--cream2:#1E1810;
   --gold:#C9A84C;--gold-light:#D4B86A;--gold-dark:#A07830;
   --ink:#E8DFC8;--ink2:#C4B090;--ink3:#7A6D58;--border:#332A1A;
+  --ui:#A89878;--ui-head:#C9A84C;   /* nền tối: 6.59 và 8.16 */
 }
 [data-theme="dark"] nav{background:rgba(22,18,13,0.97);}
 [data-theme="dark"] #music-bar{background:rgba(22,18,13,0.95);}
@@ -196,8 +203,8 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 [data-theme="dark"] .gothic-bg::before{background-image:repeating-linear-gradient(45deg,rgba(201,168,76,0.06) 0px,rgba(201,168,76,0.06) 1px,transparent 1px,transparent 56px),repeating-linear-gradient(-45deg,rgba(201,168,76,0.06) 0px,rgba(201,168,76,0.06) 1px,transparent 1px,transparent 56px);}
 [data-theme="dark"] #intro{background:#080604;}
 [data-theme="dark"] footer{border-color:var(--border);}
-#theme-btn{background:none;border:none;font-size:1rem;cursor:pointer;color:var(--ink3);padding:4px 8px;transition:color 0.2s;line-height:1;}
-#theme-btn:hover{color:var(--gold);}
+#theme-btn{background:none;border:none;font-size:1rem;cursor:pointer;color:var(--ui);padding:4px 8px;transition:color 0.2s;line-height:1;}
+#theme-btn:hover{color:var(--ui-head);}
 
 /* WORKS SIDEBAR LAYOUT */
 .works-head{display:flex;align-items:center;gap:1.2rem;margin-bottom:2.5rem;}
@@ -205,31 +212,31 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .sort-btn{width:auto!important;flex-shrink:0;white-space:nowrap;}
 .works-layout{display:flex;max-width:1360px;margin:0 auto;padding:3rem 2rem;gap:2.5rem;align-items:flex-start;min-height:calc(100vh - 60px);}
 .fandom-sidebar{width:170px;flex-shrink:0;position:sticky;top:90px;display:flex;flex-direction:column;gap:6px;}
-.sidebar-heading{font-family:var(--font-ui);font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:0.8rem;padding-bottom:0.6rem;border-bottom:1px solid var(--border);}
+.sidebar-heading{font-family:var(--font-ui);font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--ui-head);margin-bottom:0.8rem;padding-bottom:0.6rem;border-bottom:1px solid var(--border);}
 .works-main{flex:1;min-width:0;}
 /* Thẻ xếp lưới 2 cột trên màn rộng. Trước đây một cột 826px làm mỗi thẻ dàn
    ngang quá dài và thưa; khối vốn đã căn giữa nên đây là chuyện lấp chỗ trống. */
 #works-grid{display:grid;grid-template-columns:1fr;gap:1.5rem;}
 #works-grid .fic-card{margin-bottom:0;}
 @media (min-width:1100px){ #works-grid{grid-template-columns:1fr 1fr;} }
-.filter-btn{font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--border);padding:7px 12px;color:var(--ink3);cursor:pointer;transition:all 0.2s;text-align:left;width:100%;}
-.filter-btn:hover,.filter-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(184,151,42,0.06);}
+.filter-btn{font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--border);padding:7px 12px;color:var(--ui);cursor:pointer;transition:all 0.2s;text-align:left;width:100%;}
+.filter-btn:hover,.filter-btn.active{border-color:var(--ui-head);color:var(--ui-head);background:rgba(184,151,42,0.06);}
 .filter-btn.ship-btn{font-size:0.58rem;letter-spacing:1px;padding:5px 10px;border-color:transparent;color:var(--ink3);}
-.filter-btn.ship-btn:hover,.filter-btn.ship-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(184,151,42,0.06);}
+.filter-btn.ship-btn:hover,.filter-btn.ship-btn.active{border-color:var(--ui-head);color:var(--ui-head);background:rgba(184,151,42,0.06);}
 .sidebar-divider{height:1px;background:var(--border);margin:0.8rem 0;}
 .active-filters{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:1rem;}
-.active-filter-tag{font-family:var(--font-ui);font-size:0.58rem;letter-spacing:1px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:2px 8px;display:flex;align-items:center;gap:4px;background:rgba(184,151,42,0.06);}
-.active-filter-tag button{background:none;border:none;color:var(--gold);cursor:pointer;font-size:0.7rem;padding:0;line-height:1;}
+.active-filter-tag{font-family:var(--font-ui);font-size:0.58rem;letter-spacing:1px;text-transform:uppercase;color:var(--ui-head);border:1px solid var(--ui-head);padding:2px 8px;display:flex;align-items:center;gap:4px;background:rgba(184,151,42,0.06);}
+.active-filter-tag button{background:none;border:none;color:var(--ui-head);cursor:pointer;font-size:0.7rem;padding:0;line-height:1;}
 .no-results{text-align:center;padding:3rem 1rem;font-family:var(--font-ui);font-style:italic;font-size:0.9rem;color:var(--ink3);display:none;}
 
 /* ===== ACCOUNT: đăng nhập / đăng ký / hồ sơ ===== */
 .auth-wrap{max-width:420px;margin:0 auto;padding:4rem 2rem;}
 .auth-tabs{display:flex;margin-bottom:2rem;border-bottom:1px solid var(--border);}
 .auth-tab{flex:1;background:none;border:none;border-bottom:2px solid transparent;padding:10px 0;font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink3);cursor:pointer;transition:all 0.2s;}
-.auth-tab:hover{color:var(--gold);}
-.auth-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.auth-tab:hover{color:var(--ui-head);}
+.auth-tab.active{color:var(--ui-head);border-bottom-color:var(--gold);}
 .field{margin-bottom:1.1rem;}
-.field label{display:block;font-family:var(--font-ui);font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:0.45rem;}
+.field label{display:block;font-family:var(--font-ui);font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--ui);margin-bottom:0.45rem;}
 .field input,.field textarea{width:100%;background:var(--cream2);border:1px solid var(--border);padding:10px 14px;font-family:Georgia,serif;font-size:0.95rem;color:var(--ink);resize:vertical;box-sizing:border-box;}
 .field input:focus,.field textarea:focus{outline:none;border-color:var(--gold);}
 .field input::placeholder,.field textarea::placeholder{color:var(--ink3);font-style:italic;}
@@ -249,8 +256,8 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 /* Trả lời bình luận — giới hạn đúng 2 tầng như AO3, trả lời của trả lời vẫn
    gắn vào bình luận gốc, nên không bao giờ thụt lề sâu quá một bậc. */
 .comment-item.is-reply{margin-left:2.6rem;border-left:1px solid var(--border);padding-left:1rem;}
-.comment-reply{font-family:var(--font-ui);font-size:0.55rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);background:none;border:none;cursor:pointer;padding:0;text-decoration:underline;}
-.comment-reply:hover{color:var(--gold);}
+.comment-reply{font-family:var(--font-ui);font-size:0.55rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ui);background:none;border:none;cursor:pointer;padding:0;text-decoration:underline;}
+.comment-reply:hover{color:var(--ui-head);}
 .comment-head .comment-reply{margin-left:auto;}
 .comment-head .comment-reply + .comment-del{margin-left:0.9rem;}
 .cmt-reply-box{margin:0.8rem 0 0.4rem;padding:0.9rem 1rem;border:1px solid var(--border);background:var(--cream2);}
@@ -283,16 +290,16 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .comment-item{display:flex;gap:0.9rem;}
 .comment-item > .comment-main{flex:1;min-width:0;}
 .comment-badge{font-family:var(--font-ui);font-size:0.5rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:1px 6px;background:rgba(184,151,42,0.06);}
-.comment-del{font-family:var(--font-ui);font-size:0.55rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);background:none;border:none;cursor:pointer;padding:0;margin-left:auto;text-decoration:underline;}
+.comment-del{font-family:var(--font-ui);font-size:0.55rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ui);background:none;border:none;cursor:pointer;padding:0;margin-left:auto;text-decoration:underline;}
 .comment-del:hover{color:#993C1D;}
 .comment-del:disabled{opacity:0.45;cursor:default;}
 
 /* Kudos / Bookmark ở cuối trang đọc. Dùng lại đúng ngôn ngữ của .ao3-link
    (viền mảnh, chữ in hoa giãn cách, hover chuyển vàng) — không màu mới, không font mới. */
 .work-actions{display:flex;gap:0.9rem;flex-wrap:wrap;align-items:center;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);}
-.wa-btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--font-ui);font-size:0.66rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);border:1px solid var(--border);padding:10px 20px;background:none;cursor:pointer;transition:all 0.2s;}
-.wa-btn:hover:not(:disabled){border-color:var(--gold);color:var(--gold);}
-.wa-btn.on{border-color:var(--gold);color:var(--gold);background:rgba(184,151,42,0.06);}
+.wa-btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--font-ui);font-size:0.66rem;letter-spacing:2px;text-transform:uppercase;color:var(--ui);border:1px solid var(--border);padding:10px 20px;background:none;cursor:pointer;transition:all 0.2s;}
+.wa-btn:hover:not(:disabled){border-color:var(--ui-head);color:var(--ui-head);}
+.wa-btn.on{border-color:var(--ui-head);color:var(--ui-head);background:rgba(184,151,42,0.06);}
 .wa-btn:disabled{cursor:default;}
 .wa-btn.done{border-color:var(--gold);color:var(--gold);background:rgba(184,151,42,0.06);opacity:1;}
 .wa-icon{font-size:0.95rem;line-height:1;}
@@ -326,7 +333,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
     padding: 6px 10px;
     border: 1px solid var(--border) !important;
     border-radius: 50%;
-    color: var(--gold) !important;
+    color: var(--ui-head) !important;
     flex-shrink: 0;
   }
 
@@ -421,8 +428,8 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   white-space: nowrap;
 }
 .mobile-pill:hover, .mobile-pill.active {
-  border-color: var(--gold);
-  color: var(--gold);
+  border-color: var(--ui-head);
+  color: var(--ui-head);
   background: rgba(184,151,42,0.06);
 }
 
@@ -542,8 +549,8 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 }
 .accordion-ships .ship-btn:hover,
 .accordion-ships .ship-btn.active {
-  color: var(--gold);
-  border-color: var(--gold);
+  color: var(--ui-head);
+  border-color: var(--ui-head);
 }
 </style>
 </head>
