@@ -709,6 +709,28 @@ phải bí mật, không cần đưa vào GitHub Secrets.
 **Lưu ý:** GitHub tự tắt workflow theo lịch nếu repo **60 ngày không có hoạt động
 nào**. Repo này có Action build `fics.json` chạy mỗi lần sửa fic nên hiếm khi chạm
 mốc đó, nhưng nếu bỏ bẵng vài tháng thì phải vào bật lại bằng tay.
+
+### Nhạc liền mạch giữa các chương
+
+Hành vi "chạy tiếp khi cùng bài" trước đây **không phải do code cố ý** — không có
+đoạn nào so sánh URL (đã tìm cả lịch sử git). Nó chạy được là do `loadChapter()`
+chỉ gọi `playMusic()` khi `music` khai dạng **mảng**; fic khai một object đơn nên
+không bao giờ bị dựng lại player.
+
+Vì thế fic khai mảng vẫn restart dù mọi mục cùng một bài — **fic-21, 22, 26, 29** —
+và truyện đăng qua form thì luôn restart (không có trong `fics.json`).
+Riêng **fic-31** mà chủ repo nêu thì vốn không lỗi, đã đo: giây 38 → 40.
+
+Giờ `playMusic()` nhớ bài đang phát trong `nhacDangPhat = {source, url, start}`:
+
+| Tình huống | Xử lý |
+|---|---|
+| Cùng `source` + `url`, cùng `start` | Không đụng gì |
+| Cùng bài, **khác `start`** | Giữ player, `currentTime = start mới` |
+| Khác bài | `stopMusic()` rồi dựng lại |
+| Nguồn iframe (YouTube/SoundCloud) khác `start` | Đành dựng lại — không seek được từ ngoài |
+
+`stopMusic()` phải xoá `nhacDangPhat`, không thì lần sau tưởng vẫn đang phát.
 ## Bước 6 — trang đọc lấy nội dung từ database (cập nhật 2026-08-30)
 
 `loadChapter()` giờ đọc `chapters.content` thay vì `fetch` file `.txt` từ GitHub.

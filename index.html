@@ -996,6 +996,8 @@ async function loadFicsData() {
 // =============================================
 let currentPage='home', prevPage='home', musicPlaying=false;
 let currentFic=0, currentChapter=0;
+// Bài nhạc đang phát {source,url,start} — để biết khi nào KHÔNG cần dựng lại player.
+let nhacDangPhat = null;
 const REPO = 'https://raw.githubusercontent.com/lavaknight2017-rgb/ShostaKid.github.io/main/';
 
 // --- Scroll progress bar ---
@@ -2059,7 +2061,7 @@ function playMusicDirect(source, url, id, start, end, name) {
     iframe.frameBorder = '0';
     document.body.appendChild(iframe);
   }
-
+  nhacDangPhat = { source, url, start: start || 0 };
   musicPlaying = true;
   document.getElementById('music-bar').classList.remove('hidden');
   document.getElementById('music-title').textContent = name;
@@ -2069,10 +2071,34 @@ function playMusicDirect(source, url, id, start, end, name) {
   
   function playMusic(ficIdx, chapterIdx) {
   const { m, name } = getMusicData(ficIdx, chapterIdx);
-  stopMusic();
   // Truyện mới chưa có trong fics.json, và lúc openFic() gọi hàm này thì chương
   // (kèm chapters.music) còn chưa tải xong — cứ im lặng, loadChapter() sẽ gọi lại.
   if (!m) return;
+
+  // ---- Giữ nhạc liền mạch giữa các chương ----
+  // Trước đây việc này chạy được là do TÌNH CỜ: loadChapter() chỉ gọi playMusic()
+  // khi `music` khai dạng mảng, nên fic khai một object đơn không bao giờ bị dựng
+  // lại player. Fic khai mảng (21, 22, 26, 29) thì restart dù mọi mục cùng một
+  // bài, và truyện đăng qua form thì luôn restart. Giờ so thẳng bài đang phát.
+  const nguon = m.source || 'youtube';
+  const mocMoi = m.start || 0;
+  const audio  = document.getElementById('audio-player');
+  const cungBai = nhacDangPhat && nhacDangPhat.url === m.url && nhacDangPhat.source === nguon;
+
+  if (cungBai) {
+    if (audio) {
+      // Cùng bài: không dựng lại player. Khác mốc thì nhảy tới mốc mới.
+      if (mocMoi !== nhacDangPhat.start) { try { audio.currentTime = mocMoi; } catch (_) {} }
+      nhacDangPhat.start = mocMoi;
+      document.getElementById('music-title').textContent = name || '';
+      return;
+    }
+    // iframe (YouTube/SoundCloud) không seek được từ ngoài; cùng mốc thì để yên,
+    // khác mốc thì đành dựng lại.
+    if (mocMoi === nhacDangPhat.start) return;
+  }
+
+  stopMusic();
 
   const source = m.source || 'youtube';
 
@@ -2113,6 +2139,7 @@ function playMusicDirect(source, url, id, start, end, name) {
     document.body.appendChild(iframe);
   }
 
+  nhacDangPhat = { source: nguon, url: m.url, start: mocMoi };
   musicPlaying = true;
   document.getElementById('music-bar').classList.remove('hidden');
   document.getElementById('music-title').textContent = name;
@@ -2125,6 +2152,7 @@ function stopMusic() {
     const el = document.getElementById(id);
     if (el) el.remove();
   });
+  nhacDangPhat = null;   // dựng lại từ đầu cho lần sau
   musicPlaying = false;
   document.getElementById('music-bar').classList.add('hidden');
 }
