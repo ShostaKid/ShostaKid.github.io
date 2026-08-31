@@ -94,12 +94,12 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .fic-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);opacity:0;transition:opacity 0.2s;}
 .fic-card:hover{background:rgba(251,248,240,0.97);border-color:var(--gold-light);}
 .fic-card:hover::before{opacity:1;}
-.fic-title{font-family:var(--font-ui);font-size:1.1rem;font-weight:500;color:var(--ink);margin-bottom:0.3rem;}
+.fic-title{font-family:var(--font-ui);font-size:1.22rem;font-weight:600;color:var(--ink);margin-bottom:0.35rem;line-height:1.3;}
 .fic-title em{font-style:italic;color:var(--gold-dark);}
 .fic-meta{font-family:var(--font-ui);font-size:0.65rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;margin-bottom:0.8rem;display:flex;gap:1.5rem;flex-wrap:wrap;}
 .fic-stats{font-variant-numeric:tabular-nums;color:var(--gold-dark);letter-spacing:1px;}
 .fic-warning{font-size:0.85rem;color:#993C1D;font-family:'Lora',Georgia,serif;font-style:italic;margin-bottom:0.6rem;}
-.fic-summary{font-family:'Lora',Georgia,serif;font-size:0.97rem;color:var(--ink2);line-height:1.7;font-style:italic;}
+.fic-summary{font-family:'Lora',Georgia,serif;font-size:0.88rem;color:var(--ink2);line-height:1.65;font-style:italic;}
 .fic-tags{margin-top:0.9rem;display:flex;flex-wrap:wrap;gap:6px;}
 .tag{font-family:var(--font-ui);font-size:0.6rem;letter-spacing:1.5px;color:var(--ink2);border:1px solid var(--gold);padding:3px 10px;text-transform:uppercase;background:rgba(184,151,42,0.06);}
 
@@ -200,10 +200,18 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 #theme-btn:hover{color:var(--gold);}
 
 /* WORKS SIDEBAR LAYOUT */
-.works-layout{display:flex;max-width:1100px;margin:0 auto;padding:3rem 2rem;gap:2.5rem;align-items:flex-start;min-height:calc(100vh - 60px);}
+.works-head{display:flex;align-items:center;gap:1.2rem;margin-bottom:2.5rem;}
+.works-head .section-heading{flex:1;}
+.sort-btn{width:auto!important;flex-shrink:0;white-space:nowrap;}
+.works-layout{display:flex;max-width:1360px;margin:0 auto;padding:3rem 2rem;gap:2.5rem;align-items:flex-start;min-height:calc(100vh - 60px);}
 .fandom-sidebar{width:170px;flex-shrink:0;position:sticky;top:90px;display:flex;flex-direction:column;gap:6px;}
 .sidebar-heading{font-family:var(--font-ui);font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:0.8rem;padding-bottom:0.6rem;border-bottom:1px solid var(--border);}
 .works-main{flex:1;min-width:0;}
+/* Thẻ xếp lưới 2 cột trên màn rộng. Trước đây một cột 826px làm mỗi thẻ dàn
+   ngang quá dài và thưa; khối vốn đã căn giữa nên đây là chuyện lấp chỗ trống. */
+#works-grid{display:grid;grid-template-columns:1fr;gap:1.5rem;}
+#works-grid .fic-card{margin-bottom:0;}
+@media (min-width:1100px){ #works-grid{grid-template-columns:1fr 1fr;} }
 .filter-btn{font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--border);padding:7px 12px;color:var(--ink3);cursor:pointer;transition:all 0.2s;text-align:left;width:100%;}
 .filter-btn:hover,.filter-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(184,151,42,0.06);}
 .filter-btn.ship-btn{font-size:0.58rem;letter-spacing:1px;padding:5px 10px;border-color:transparent;color:var(--ink3);}
@@ -659,7 +667,10 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--ink3);font-size:0.9rem;">🔍</span>
 </div>
         <div id="active-filters" class="active-filters"></div>
-        <div class="section-heading" data-i18n="head_all">All Works</div>
+        <div class="works-head">
+          <div class="section-heading" style="margin-bottom:0;" data-i18n="head_all">All Works</div>
+          <button type="button" id="sort-btn" class="filter-btn sort-btn" data-i18n="sort_new">Newest first</button>
+        </div>
         <div id="no-results" class="no-results" data-i18n="no_results">No works found for this filter.</div>
 
         <!-- 36 thẻ .fic-card trước đây viết cứng ở đây. Giờ dựng từ Supabase
@@ -1438,8 +1449,39 @@ function renderHome() {
   fill(document.getElementById('home-favorites'), favorites);
 }
 
+// Thứ tự trang Works. Mặc định mới nhất trước — trước đây xếp theo số thứ tự fic
+// nên truyện từ tháng 4 nằm trên cùng, trông cũ. Lựa chọn nhớ ở localStorage.
+let worksSort = 'new';
+try { worksSort = localStorage.getItem('sk-sort') || 'new'; } catch (e) {}
+
+function sortedWorks() {
+  const ds = [...worksData];
+  // Không có ngày thì lùi về số thứ tự fic, để truyện thiếu published_at không trôi lung tung.
+  const key = d => d.date ? new Date(d.date).getTime() : d.idx;
+  ds.sort((a, b) => worksSort === 'new' ? key(b) - key(a) : key(a) - key(b));
+  return ds;
+}
+
+function paintSortBtn() {
+  const b = document.getElementById('sort-btn');
+  if (!b) return;
+  const k = worksSort === 'new' ? 'sort_new' : 'sort_old';
+  b.dataset.i18n = k;
+  b.textContent = t(k);
+}
+
+function toggleSort() {
+  worksSort = worksSort === 'new' ? 'old' : 'new';
+  try { localStorage.setItem('sk-sort', worksSort); } catch (e) {}
+  paintSortBtn();
+  renderWorks();
+  buildSidebar();     // sidebar quét DOM thẻ nên phải dựng lại sau khi đổi thứ tự
+  applyFilters();     // giữ nguyên bộ lọc đang bật
+}
+
 function renderWorks() {
-  fill(document.getElementById('works-grid'), worksData);
+  fill(document.getElementById('works-grid'), sortedWorks());
+  paintSortBtn();
   const statEl = document.getElementById('stat-works');
   if (statEl) statEl.textContent = worksData.length;
 }
@@ -1656,6 +1698,8 @@ function enterSite() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+  const sb2 = document.getElementById('sort-btn');
+  if (sb2) sb2.addEventListener('click', toggleSort);
   const intro = document.getElementById('intro');
   intro.addEventListener('click', enterSite);
   document.addEventListener('keydown', () => { if(intro.style.display !== 'none') enterSite(); }, {once: true});
@@ -1813,6 +1857,7 @@ const i18n = {
     view_all:'View All Works →',
     browse:'Browse', all:'All', filter:'Filter', fandom:'Fandom', ship:'Ship',
     head_all:'All Works', no_results:'No works found for this filter.',
+    sort_new:'Newest first', sort_old:'Oldest first',
     search_ph:'Search by title...',
     back:'← Back', prev:'← Prev', next:'Next →',
     read_ao3:'Read the work on AO3', cont_ao3:'Continue on AO3 →',
@@ -1917,6 +1962,7 @@ const i18n = {
     view_all:'Xem tất cả truyện →',
     browse:'Duyệt', all:'Tất cả', filter:'Lọc', fandom:'Fandom', ship:'Ship',
     head_all:'Tất cả truyện', no_results:'Không tìm thấy truyện nào với bộ lọc này.',
+    sort_new:'Mới nhất trước', sort_old:'Cũ nhất trước',
     search_ph:'Tìm theo tên truyện...',
     back:'← Quay lại', prev:'← Trước', next:'Tiếp →',
     read_ao3:'Đọc bản đầy đủ trên AO3', cont_ao3:'Đọc trên AO3 →',
