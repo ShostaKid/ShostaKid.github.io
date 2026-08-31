@@ -441,15 +441,23 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 [data-theme="dark"] #page-auth,[data-theme="dark"] #page-profile{background:var(--cream)!important;}
 
 @media (max-width: 768px) {
-  nav { padding: 0 1rem; }
-  .nav-logo { font-size: 0.85rem; letter-spacing: 2px; }
-  /* Thêm mục Đăng nhập / Hồ sơ làm thanh nav dài hơn chiều ngang máy điện thoại.
-     min-width:0 cho phép khối link co lại, phần thừa cuộn ngang bên trong nó
-     thay vì đẩy nút đổi giao diện ra ngoài màn hình. */
-  .nav-links { gap: 0.9rem; min-width: 0; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
-  .nav-links::-webkit-scrollbar { display: none; }
-  .nav-links a { font-size: 0.6rem; letter-spacing: 1.5px; white-space: nowrap; }
-  .nav-utils { flex-shrink: 0; gap: 6px; }
+  /* Nav trên điện thoại xuống HAI HÀNG.
+     Ba cụm (logo — link — cá nhân) cộng lại rộng hơn màn hình 360–390px, nên khi
+     ép chung một hàng thì space-between hết chỗ chia: các cụm dính sát nhau,
+     chữ SHOSTAKID chạm luôn vào HOME và avatar đè lên ABOUT. Cách cũ là cho dải
+     link cuộn ngang, nhưng cuộn ngang trong thanh nav thì không ai nhìn ra là
+     cuộn được — thành ra trông như vỡ bố cục.
+     Hàng trên: logo bên trái, cụm cá nhân bên phải. Hàng dưới: ba mục nội dung
+     căn giữa, đủ chỗ thở và đủ to để bấm. */
+  nav { padding: 0 1rem 0.55rem; flex-wrap: wrap; }
+  .nav-logo { font-size: 0.85rem; letter-spacing: 2px; padding: 0.85rem 0 0.5rem; order: 1; }
+  .nav-utils { order: 2; margin-left: auto; flex-shrink: 0; gap: 6px; }
+  .nav-links {
+    order: 3; flex-basis: 100%; width: 100%;
+    justify-content: center; gap: 2.2rem;
+    padding-top: 0.5rem; border-top: 1px solid var(--border);
+  }
+  .nav-links a { font-size: 0.62rem; letter-spacing: 1.6px; white-space: nowrap; padding: 2px 0; }
   .nav-signin { font-size: 0.56rem; letter-spacing: 1.2px; padding: 5px 8px; white-space: nowrap; }
   .nav-avatar { width: 26px; height: 26px; font-size: 0.64rem; }
   .nav-menu { min-width: 170px; }
@@ -1065,6 +1073,10 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         </div>
         <div class="field">
           <label><input type="checkbox" id="pw-featured" style="width:auto;margin-right:0.5rem;"><span data-i18n="post_featured">Show in My Favorite Children</span></label>
+        </div>
+        <div class="field">
+          <label><input type="checkbox" id="pw-restricted" style="width:auto;margin-right:0.5rem;"><span data-i18n="post_restricted">Members only — hide from readers who aren’t signed in</span></label>
+          <div class="field-hint" data-i18n="post_restricted_hint">The work disappears from the listing and its chapters cannot be fetched at all unless the reader is signed in. This is enforced by the database, not by hiding it on the page.</div>
         </div>
 
         <div class="sub-heading" data-i18n="post_cover">Cover image</div>
@@ -2169,6 +2181,8 @@ const i18n = {
     post_img_where:'Where should this image go?',
     post_img_top:'At the very top', post_img_after:'After paragraph {n}', post_img_end:'At the very end',
     post_img_cancel:'Cancel — don’t insert', post_img_done:'Image inserted.',
+    post_restricted:'Members only — hide from readers who aren’t signed in',
+    post_restricted_hint:'The work disappears from the listing and its chapters cannot be fetched at all unless the reader is signed in. This is enforced by the database, not by hiding it on the page.',
     post_cover:'Cover image',
     post_cover_hint:'One image for the whole work. Shown as a book spine on the Works page, and above the text when the work is opened.',
     post_cover_pick:'Choose cover', post_cover_del:'Remove',
@@ -2284,6 +2298,8 @@ const i18n = {
     post_img_where:'Đặt ảnh này vào đâu?',
     post_img_top:'Ngay đầu chương', post_img_after:'Sau đoạn {n}', post_img_end:'Cuối chương',
     post_img_cancel:'Huỷ — không chèn nữa', post_img_done:'Đã chèn ảnh.',
+    post_restricted:'Chỉ thành viên — ẩn với người chưa đăng nhập',
+    post_restricted_hint:'Truyện biến mất khỏi danh sách và không thể lấy nội dung chương nếu chưa đăng nhập. Đây là khoá ở tầng database, không phải chỉ ẩn trên giao diện.',
     post_cover:'Ảnh bìa',
     post_cover_hint:'Một ảnh cho cả truyện. Hiện như gáy sách ở trang Works, và ở đầu trang đọc.',
     post_cover_pick:'Chọn ảnh bìa', post_cover_del:'Xoá bìa',
@@ -3294,6 +3310,7 @@ async function loadPostForm(idx) {
     $('pw-status').value = 'published';
     pwMusicWrite($('pw-music-work'), null);
     $('pw-featured').checked = false;
+    $('pw-restricted').checked = false;
     pwBiaUrl = ''; $('pw-bia-cat-o').checked = false; veBia();
     pwAddChapter();
     return;
@@ -3301,7 +3318,7 @@ async function loadPostForm(idx) {
 
   head.dataset.i18n = 'post_edit_head'; head.textContent = tr('post_edit_head');
   const { data: w } = await sb.from('works')
-    .select('id,title,subtitle,summary,warning_note,status,featured,cover_url,cover_crop,'
+    .select('id,title,subtitle,summary,warning_note,status,featured,is_restricted,cover_url,cover_crop,'
           + 'work_fandoms(fandom_id), work_ships(ship_id),'
           + 'chapters(id,position,title,content,music)')
     .eq('legacy_id', 'fic-' + idx).maybeSingle();
@@ -3314,6 +3331,7 @@ async function loadPostForm(idx) {
   $('pw-warning').value  = w.warning_note || '';
   $('pw-status').value   = w.status || 'published';
   $('pw-featured').checked = !!w.featured;
+  $('pw-restricted').checked = !!w.is_restricted;
   pwBiaUrl = w.cover_url || '';
   $('pw-bia-cat-o').checked = !!w.cover_crop;
   veBia();
@@ -3367,6 +3385,9 @@ $('pw-save').addEventListener('click', async () => {
     warning_note: $('pw-warning').value.trim() || null,
     status:   $('pw-status').value,
     featured: $('pw-featured').checked,
+    // Khoá thật nằm ở policy SELECT của bảng works: truyện bật cờ này biến mất
+    // khỏi API với khách chưa đăng nhập, không phải chỉ ẩn trên giao diện.
+    is_restricted: $('pw-restricted').checked,
     cover_url:  pwBiaUrl || null,
     cover_crop: !!$('pw-bia-cat-o').checked,
     published_at: $('pw-status').value === 'published' ? new Date().toISOString() : null
