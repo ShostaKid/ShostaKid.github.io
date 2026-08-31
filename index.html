@@ -15,7 +15,11 @@
    chữ nhỏ, mà chữ chức năng lại nhỏ 10-12px và giãn chữ rộng nên càng khó đọc.
    --ui 6.13, --ui-head 4.54. Chữ nội dung (trích đoạn, tiêu đề nghiêng) vẫn
    dùng ink2/ink3 để giữ nét mảnh. */
---ui:#6B5B42;--ui-head:#8A6E1A;
+/* --ui-head phải đủ tối để còn đọc được cả khi nằm trên nền phụ, không chỉ trên
+   nền trang: nút filter đang chọn có lớp gold 6% phủ dưới, hộp chương và avatar
+   thì nền --cream2. #8A6E1A đạt 4.54 trên nền trang nhưng tụt còn 4.31 và 4.15 ở
+   hai chỗ kia. #836717 tối hơn gần như không nhận ra mà đạt 5.01 / 4.76 / 4.59. */
+--ui:#6B5B42;--ui-head:#836717;
 --font-ui:'Playfair Display',serif;
 }
 /* UI tiếng Việt dùng Nunito cho dấu hiển thị chuẩn */
@@ -77,9 +81,7 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
    vì avatar_url là dữ liệu người dùng nhập — cách này không dựng thẻ mới. */
 .nav-avatar{width:30px;height:30px;padding:0;border-radius:50%;cursor:pointer;
   border:1px solid var(--border);background:var(--cream2) center/cover no-repeat;
-  /* --ui chứ không phải --ui-head: nền ở đây là --cream2 tối hơn một chút,
-     --ui-head trên nền đó chỉ còn 4.15, dưới ngưỡng AA. */
-  font-family:var(--font-ui);font-size:0.72rem;letter-spacing:0;color:var(--ui);
+  font-family:var(--font-ui);font-size:0.72rem;letter-spacing:0;color:var(--ui-head);
   display:flex;align-items:center;justify-content:center;transition:border-color 0.2s;}
 .nav-avatar:hover,.nav-avatar[aria-expanded="true"]{border-color:var(--gold);}
 
@@ -96,7 +98,7 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .nav-menu a:hover{color:var(--ui-head);background:var(--cream2);}
 .nav-menu-out{border-top:1px solid var(--border);margin-top:6px;padding-top:11px !important;}
 
-#music-bar{background:rgba(242,237,224,0.95);border-bottom:1px solid var(--border);padding:8px 3rem;display:flex;align-items:center;gap:1rem;font-family:var(--font-ui);font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);min-height:36px;}
+#music-bar{background:rgba(242,237,224,0.95);border-bottom:1px solid var(--border);padding:8px 3rem;display:flex;align-items:center;gap:1rem;font-family:var(--font-ui);font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--ui);min-height:36px;}
 #music-bar.hidden{display:none;}
 .music-now{display:flex;align-items:center;gap:8px;flex:1;}
 .music-bars{display:flex;align-items:flex-end;gap:2px;height:14px;}
@@ -108,7 +110,7 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .music-bars span:nth-child(5){height:4px;animation-delay:0.4s;}
 .music-bars.paused span{animation:none;transform:scaleY(0.3);}
 #music-title{color:var(--ink2);font-style:italic;}
-.music-toggle{background:none;border:1px solid var(--border);padding:4px 12px;font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);cursor:pointer;transition:all 0.2s;}
+.music-toggle{background:none;border:1px solid var(--border);padding:4px 12px;font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ui);cursor:pointer;transition:all 0.2s;}
 .music-toggle:hover{border-color:var(--ui-head);color:var(--ui-head);}
 
 .page{display:none;animation:fadein 0.5s ease;}
@@ -132,9 +134,9 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .fic-card:hover{background:rgba(251,248,240,0.97);border-color:var(--gold-light);}
 .fic-card:hover::before{opacity:1;}
 .fic-title{font-family:var(--font-ui);font-size:1.22rem;font-weight:600;color:var(--ink);margin-bottom:0.35rem;line-height:1.3;}
-.fic-title em{font-style:italic;color:var(--gold-dark);}
+.fic-title em{font-style:italic;color:var(--ui-head);}
 .fic-meta{font-family:var(--font-ui);font-size:0.65rem;letter-spacing:2px;color:var(--ui);text-transform:uppercase;margin-bottom:0.8rem;display:flex;gap:1.5rem;flex-wrap:wrap;}
-.fic-stats{font-variant-numeric:tabular-nums;color:var(--gold-dark);letter-spacing:1px;}
+.fic-stats{font-variant-numeric:tabular-nums;color:var(--ui-head);letter-spacing:1px;}
 .fic-warning{font-size:0.85rem;color:#993C1D;font-family:'Lora',Georgia,serif;font-style:italic;margin-bottom:0.6rem;}
 .fic-summary{font-family:'Lora',Georgia,serif;font-size:0.88rem;color:var(--ink2);line-height:1.65;font-style:italic;}
 .fic-tags{margin-top:0.9rem;display:flex;flex-wrap:wrap;gap:6px;}
@@ -142,11 +144,11 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 
 /* READING PAGE */
 .reading-wrap{max-width:720px;margin:0 auto;padding:4rem 2rem;}
-.back-btn{font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink3);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:3rem;transition:color 0.2s;}
+.back-btn{font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--ui);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:3rem;transition:color 0.2s;}
 .back-btn:hover{color:var(--ui-head);}
 .reading-title{font-family:var(--font-ui);font-size:2.4rem;font-weight:400;line-height:1.2;color:var(--ink);margin-bottom:0.5rem;}
 .reading-title em{font-style:italic;color:var(--gold-dark);}
-.reading-fandom{font-family:var(--font-ui);font-size:0.65rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;margin-bottom:0.5rem;}
+.reading-fandom{font-family:var(--font-ui);font-size:0.65rem;letter-spacing:2px;color:var(--ui);text-transform:uppercase;margin-bottom:0.5rem;}
 .reading-warning{font-family:Georgia,serif;font-style:italic;color:#993C1D;font-size:0.9rem;border-left:2px solid #D85A30;padding-left:1rem;margin:1.2rem 0;}
 .reading-divider{text-align:center;margin:2rem 0;color:var(--gold);font-size:1.3rem;letter-spacing:8px;}
 
@@ -164,7 +166,7 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .fic-body .scene-break{text-align:center;color:var(--gold);letter-spacing:8px;margin:2rem 0;font-size:1.1rem;}
 
 /* Loading spinner */
-.loading{text-align:center;padding:4rem;font-family:var(--font-ui);font-size:0.78rem;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);}
+.loading{text-align:center;padding:4rem;font-family:var(--font-ui);font-size:0.78rem;letter-spacing:3px;text-transform:uppercase;color:var(--ui);}
 .loading::after{content:'';display:block;width:30px;height:1px;background:var(--gold);margin:1rem auto 0;animation:loadbar 1.2s ease-in-out infinite;}
 @keyframes loadbar{0%,100%{width:20px;opacity:0.3}50%{width:60px;opacity:1}}
 
@@ -179,9 +181,9 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .about-sig{font-family:var(--font-ui);font-style:italic;font-size:1.3rem;color:var(--gold-dark);margin-top:2.5rem;}
 .stat-row{display:flex;gap:2rem;margin:2.5rem 0;flex-wrap:wrap;}
 .stat-box{text-align:center;padding:1.2rem 1.8rem;border:1px solid var(--border);background:rgba(250,247,240,0.7);}
-.stat-num{font-family:var(--font-ui);font-size:2.2rem;color:var(--gold);display:block;}
-.stat-label{font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);}
-footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;}
+.stat-num{font-family:var(--font-ui);font-size:2.2rem;color:var(--ui-head);display:block;}
+.stat-label{font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ui);}
+footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2px;color:var(--ui);text-transform:uppercase;}
 /* CONTINUE READING BANNER */
 #continue-banner{display:none;max-width:860px;margin:0 auto 0;padding:1rem 2rem;}
 #continue-banner .continue-inner{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--border);padding:12px 20px;background:rgba(184,151,42,0.04);cursor:pointer;transition:all 0.2s;gap:1rem;}
@@ -189,7 +191,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .continue-text{font-family:var(--font-ui);font-size:0.72rem;letter-spacing:1.5px;color:var(--ink2);}
 .continue-text strong{color:var(--gold-dark);}
 .continue-arrow{color:var(--gold);font-size:1rem;}
-.continue-dismiss{background:none;border:none;color:var(--ink3);cursor:pointer;font-size:0.9rem;padding:4px;transition:color 0.2s;}
+.continue-dismiss{background:none;border:none;color:var(--ui);cursor:pointer;font-size:0.9rem;padding:4px;transition:color 0.2s;}
 .continue-dismiss:hover{color:var(--ui-head);}
 
 /* FONT SIZE TOGGLE */
@@ -201,14 +203,14 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 [data-theme="dark"] #font-controls button{background:var(--cream);}
 
 /* BACK TO TOP */
-#back-top{position:fixed;right:1.5rem;bottom:2rem;width:36px;height:36px;border-radius:50%;background:var(--cream);border:1px solid var(--border);color:var(--ink3);cursor:pointer;font-size:1rem;display:none;align-items:center;justify-content:center;transition:all 0.2s;z-index:90;}
+#back-top{position:fixed;right:1.5rem;bottom:2rem;width:36px;height:36px;border-radius:50%;background:var(--cream);border:1px solid var(--border);color:var(--ui);cursor:pointer;font-size:1rem;display:none;align-items:center;justify-content:center;transition:all 0.2s;z-index:90;}
 #back-top:hover{border-color:var(--ui-head);color:var(--ui-head);}
 #back-top.visible{display:flex;}
 #back-top.tucked{opacity:0;pointer-events:none;}
 [data-theme="dark"] #back-top{background:var(--cream);}
 
 /* FLOATING TOGGLE */
-#float-toggle{position:fixed;right:0.6rem;bottom:8.5rem;width:24px;height:24px;border-radius:50%;background:var(--cream);border:1px solid var(--border);color:var(--ink3);cursor:pointer;font-size:0.6rem;display:none;align-items:center;justify-content:center;transition:all 0.2s;z-index:91;opacity:0.5;}
+#float-toggle{position:fixed;right:0.6rem;bottom:8.5rem;width:24px;height:24px;border-radius:50%;background:var(--cream);border:1px solid var(--border);color:var(--ui);cursor:pointer;font-size:0.6rem;display:none;align-items:center;justify-content:center;transition:all 0.2s;z-index:91;opacity:0.5;}
 #float-toggle:hover{opacity:1;border-color:var(--ui-head);color:var(--ui-head);}
 #float-toggle.visible{display:flex;}
 [data-theme="dark"] #float-toggle{background:var(--cream);}
@@ -224,6 +226,10 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   --ink:#E8DFC8;--ink2:#C4B090;--ink3:#7A6D58;--border:#332A1A;
   --ui:#A89878;--ui-head:#C9A84C;   /* nền tối: 6.59 và 8.16 */
 }
+/* Cảnh báo nội dung dùng đỏ #993C1D viết cứng — hợp trên nền kem, nhưng đặt lên
+   thẻ truyện nền tối thì chỉ còn 2.55, tức là đúng dòng chữ cần đọc nhất lại mờ
+   nhất. Nền tối đổi sang đỏ nhạt hơn: 6.1. */
+[data-theme="dark"] .fic-warning{color:#DB8055;}
 [data-theme="dark"] nav{background:rgba(22,18,13,0.97);}
 [data-theme="dark"] #music-bar{background:rgba(22,18,13,0.95);}
 [data-theme="dark"] .fic-card{background:rgba(30,24,16,0.9);}
@@ -252,18 +258,18 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 @media (min-width:1100px){ #works-grid{grid-template-columns:1fr 1fr;} }
 .filter-btn{font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--border);padding:7px 12px;color:var(--ui);cursor:pointer;transition:all 0.2s;text-align:left;width:100%;}
 .filter-btn:hover,.filter-btn.active{border-color:var(--ui-head);color:var(--ui-head);background:rgba(184,151,42,0.06);}
-.filter-btn.ship-btn{font-size:0.58rem;letter-spacing:1px;padding:5px 10px;border-color:transparent;color:var(--ink3);}
+.filter-btn.ship-btn{font-size:0.58rem;letter-spacing:1px;padding:5px 10px;border-color:transparent;color:var(--ui);}
 .filter-btn.ship-btn:hover,.filter-btn.ship-btn.active{border-color:var(--ui-head);color:var(--ui-head);background:rgba(184,151,42,0.06);}
 .sidebar-divider{height:1px;background:var(--border);margin:0.8rem 0;}
 .active-filters{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:1rem;}
 .active-filter-tag{font-family:var(--font-ui);font-size:0.58rem;letter-spacing:1px;text-transform:uppercase;color:var(--ui-head);border:1px solid var(--ui-head);padding:2px 8px;display:flex;align-items:center;gap:4px;background:rgba(184,151,42,0.06);}
 .active-filter-tag button{background:none;border:none;color:var(--ui-head);cursor:pointer;font-size:0.7rem;padding:0;line-height:1;}
-.no-results{text-align:center;padding:3rem 1rem;font-family:var(--font-ui);font-style:italic;font-size:0.9rem;color:var(--ink3);display:none;}
+.no-results{text-align:center;padding:3rem 1rem;font-family:var(--font-ui);font-style:italic;font-size:0.9rem;color:var(--ui);display:none;}
 
 /* ===== ACCOUNT: đăng nhập / đăng ký / hồ sơ ===== */
 .auth-wrap{max-width:420px;margin:0 auto;padding:4rem 2rem;}
 .auth-tabs{display:flex;margin-bottom:2rem;border-bottom:1px solid var(--border);}
-.auth-tab{flex:1;background:none;border:none;border-bottom:2px solid transparent;padding:10px 0;font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink3);cursor:pointer;transition:all 0.2s;}
+.auth-tab{flex:1;background:none;border:none;border-bottom:2px solid transparent;padding:10px 0;font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--ui);cursor:pointer;transition:all 0.2s;}
 .auth-tab:hover{color:var(--ui-head);}
 .auth-tab.active{color:var(--ui-head);border-bottom-color:var(--gold);}
 .field{margin-bottom:1.1rem;}
@@ -272,7 +278,10 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .field input:focus,.field textarea:focus{outline:none;border-color:var(--gold);}
 .field input::placeholder,.field textarea::placeholder{color:var(--ink3);font-style:italic;}
 .field input:disabled,.field textarea:disabled{opacity:0.5;cursor:not-allowed;}
-.field-hint{font-family:Georgia,serif;font-style:italic;font-size:0.75rem;color:var(--ink3);margin-top:0.35rem;line-height:1.5;}
+/* Chữ gợi ý trong form là chữ CHỨC NĂNG chứ không phải nội dung truyện, nên dùng
+   --ui: ở 0.75rem lại in nghiêng, --ink3 chỉ đạt 3.75 trên nền sáng (3.43 khi nằm
+   trong hộp --cream2), quá mờ để đọc. */
+.field-hint{font-family:Georgia,serif;font-style:italic;font-size:0.75rem;color:var(--ui);margin-top:0.35rem;line-height:1.5;}
 .auth-msg{font-family:'Lora',Georgia,serif;font-size:0.9rem;font-style:italic;line-height:1.6;padding:0.8rem 1rem;margin-bottom:1.2rem;border-left:2px solid var(--border);display:none;}
 .auth-msg.show{display:block;}
 .auth-msg.err{color:#993C1D;border-left-color:#D85A30;}
@@ -281,7 +290,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .ao3-link:disabled{opacity:0.45;cursor:default;}
 .avatar,.avatar-fallback{width:84px;height:84px;border-radius:50%;border:1px solid var(--border);background:var(--cream2);flex-shrink:0;}
 .avatar{object-fit:cover;display:block;}
-.avatar-fallback{display:flex;align-items:center;justify-content:center;font-family:var(--font-ui);font-size:1.9rem;color:var(--gold);}
+.avatar-fallback{display:flex;align-items:center;justify-content:center;font-family:var(--font-ui);font-size:1.9rem;color:var(--ui-head);}
 /* Honeypot: bẫy bot điền bừa mọi ô. Không dùng display:none vì bot có thể
    nhận ra; đẩy ra ngoài khung nhìn và khoá tab để người thật không chạm tới. */
 /* Trả lời bình luận — giới hạn đúng 2 tầng như AO3, trả lời của trả lời vẫn
@@ -292,27 +301,62 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .comment-head .comment-reply{margin-left:auto;}
 .comment-head .comment-reply + .comment-del{margin-left:0.9rem;}
 .cmt-reply-box{margin:0.8rem 0 0.4rem;padding:0.9rem 1rem;border:1px solid var(--border);background:var(--cream2);}
-.cmt-reply-to{font-family:Georgia,serif;font-style:italic;font-size:0.78rem;color:var(--ink3);margin-bottom:0.6rem;}
+.cmt-reply-to{font-family:Georgia,serif;font-style:italic;font-size:0.78rem;color:var(--ui);margin-bottom:0.6rem;}
 .cmt-reply-to b{font-family:var(--font-ui);font-style:normal;font-size:0.68rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-dark);}
 @media (max-width:768px){ .comment-item.is-reply{margin-left:1.1rem;padding-left:0.7rem;} }
-.pw-music{border:1px solid var(--border);padding:0.9rem 1rem;background:var(--cream2);margin-bottom:1rem;}
+/* ===== FORM ĐĂNG / SỬA TRUYỆN ===== */
+/* Form này rộng hơn form đăng nhập nhiều nên có lớp riêng, thay vì mượn
+   .auth-wrap (420px) rồi đè max-width bằng style inline ở từng trang. */
+.form-wrap{max-width:760px;margin:0 auto;padding:4rem 2rem;}
+/* Tiêu đề phụ trong form (Nhạc, Chương) — nhỏ hơn tiêu đề trang, có gạch nối dài. */
+.sub-heading{font-family:var(--font-ui);font-size:0.66rem;letter-spacing:3px;text-transform:uppercase;
+  color:var(--ui-head);margin:3rem 0 0.4rem;display:flex;align-items:center;gap:0.9rem;}
+.sub-heading::before{content:'✦';font-size:0.6rem;color:var(--gold);letter-spacing:0;}
+.sub-heading::after{content:'';flex:1;height:1px;background:var(--border);}
+
+.pw-music{border:1px solid var(--border);border-left:2px solid var(--gold-light);
+  padding:0.9rem 1rem;background:var(--cream2);margin-bottom:1rem;}
 .pw-music input,.pw-music select{width:100%;background:var(--cream);border:1px solid var(--border);padding:8px 11px;font-family:Georgia,serif;font-size:0.88rem;color:var(--ink);margin-bottom:0.5rem;box-sizing:border-box;}
 .pw-music input:focus,.pw-music select:focus{outline:none;border-color:var(--gold);}
+.pw-music > *:last-child{margin-bottom:0;}
 .pw-m-row{display:flex;gap:0.6rem;}
 .pw-m-row > *{flex:1;}
 .pw-ch .pw-music{margin-top:0.4rem;}
-.pw-ch{border:1px solid var(--border);padding:1rem 1.1rem;margin-bottom:1rem;background:var(--cream2);}
+
+.pw-ch{border:1px solid var(--border);border-left:2px solid var(--gold);
+  padding:1.1rem 1.2rem 1.2rem;margin-bottom:1.2rem;background:var(--cream2);
+  counter-increment:ch;}
+#pw-chapters{counter-reset:ch;}
+/* Số chương do CSS đếm, không phải JS: xoá một chương ở giữa là các chương sau
+   tự đánh lại số, không cần thêm đoạn code renumber nào. */
+.pw-ch::before{content:"Chapter " counter(ch);display:block;margin-bottom:0.7rem;
+  font-family:var(--font-ui);font-size:0.6rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--ui-head);}
+[data-lang="vi"] .pw-ch::before{content:"Chương " counter(ch);letter-spacing:1.8px;}
 .pw-ch input,.pw-ch textarea{width:100%;background:var(--cream);border:1px solid var(--border);padding:9px 12px;font-family:Georgia,serif;font-size:0.92rem;color:var(--ink);margin-bottom:0.6rem;box-sizing:border-box;resize:vertical;}
 .pw-ch input:focus,.pw-ch textarea:focus{outline:none;border-color:var(--gold);}
-.pw-ch-actions{display:flex;gap:1.2rem;justify-content:flex-end;}
+.pw-ch-actions{display:flex;gap:0.6rem;justify-content:flex-end;}
+
+/* Nút phụ trong form. Trước đây các nút này mượn .comment-reply/.comment-del —
+   kiểu chữ gạch chân của khu bình luận — nên nhìn lạc hẳn khỏi form. */
+.mini-btn{font-family:var(--font-ui);font-size:0.58rem;letter-spacing:1.8px;text-transform:uppercase;
+  color:var(--ui);background:none;border:1px solid var(--border);border-radius:2px;
+  padding:6px 12px;cursor:pointer;transition:color 0.2s,border-color 0.2s,background 0.2s;}
+.mini-btn:hover{color:var(--ui-head);border-color:var(--gold);background:var(--cream);}
+.mini-btn.danger:hover{color:#993C1D;border-color:#D85A30;}
+.mini-btn:disabled{opacity:0.45;cursor:default;}
+.field .mini-btn{margin-top:0.5rem;}
+
+/* Nút Lưu tách hẳn khỏi phần chương bằng một vạch, để không trôi lẫn vào nhau. */
+.form-actions{margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);}
+.form-actions .ao3-link{margin-top:0;}
 #page-post select{width:100%;background:var(--cream2);border:1px solid var(--border);padding:9px 12px;font-family:Georgia,serif;font-size:0.92rem;color:var(--ink);box-sizing:border-box;}
-.bm-foot{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1rem;padding-top:0.8rem;border-top:1px solid var(--border);font-family:Georgia,serif;font-style:italic;font-size:0.78rem;color:var(--ink3);}
+.bm-foot{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1rem;padding-top:0.8rem;border-top:1px solid var(--border);font-family:Georgia,serif;font-style:italic;font-size:0.78rem;color:var(--ui);}
 .cmt-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
-.cmt-as{display:flex;align-items:center;gap:0.55rem;font-family:Georgia,serif;font-style:italic;font-size:0.85rem;color:var(--ink3);margin-bottom:0.7rem;}
+.cmt-as{display:flex;align-items:center;gap:0.55rem;font-family:Georgia,serif;font-style:italic;font-size:0.85rem;color:var(--ui);margin-bottom:0.7rem;}
 .cmt-as strong{font-family:var(--font-ui);font-style:normal;font-size:0.72rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-dark);}
 .cmt-actions{display:flex;align-items:center;gap:1rem;justify-content:flex-end;margin-top:0.6rem;flex-wrap:wrap;}
 .cmt-actions .ao3-link{margin-top:0;}
-.cmt-msg{flex:1;font-family:Georgia,serif;font-style:italic;font-size:0.82rem;color:var(--ink3);line-height:1.5;}
+.cmt-msg{flex:1;font-family:Georgia,serif;font-style:italic;font-size:0.82rem;color:var(--ui);line-height:1.5;}
 .cmt-msg.err{color:#993C1D;}
 .comment-avatar,.comment-avatar-fb{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:var(--cream2);flex-shrink:0;}
 .comment-avatar{object-fit:cover;display:block;}
@@ -335,16 +379,16 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .wa-btn.done{border-color:var(--gold);color:var(--gold);background:rgba(184,151,42,0.06);opacity:1;}
 .wa-icon{font-size:0.95rem;line-height:1;}
 .wa-count{font-variant-numeric:tabular-nums;}
-.wa-msg{font-family:Georgia,serif;font-style:italic;font-size:0.82rem;color:var(--ink3);margin-top:0.9rem;line-height:1.6;}
+.wa-msg{font-family:Georgia,serif;font-style:italic;font-size:0.82rem;color:var(--ui);margin-top:0.9rem;line-height:1.6;}
 .avatar-actions{display:flex;gap:0.7rem;flex-wrap:wrap;align-items:center;}
 .avatar-actions .ao3-link{margin-top:0;font-size:0.6rem;padding:8px 16px;}
-.avatar-or{font-family:Georgia,serif;font-style:italic;font-size:0.75rem;color:var(--ink3);margin:1.4rem 0 0.5rem;padding-top:1.2rem;border-top:1px solid var(--border);}
+.avatar-or{font-family:Georgia,serif;font-style:italic;font-size:0.75rem;color:var(--ui);margin:1.4rem 0 0.5rem;padding-top:1.2rem;border-top:1px solid var(--border);}
 .profile-head{display:flex;align-items:center;gap:1.4rem;margin:1.5rem 0 2.5rem;}
 .profile-name{font-family:var(--font-ui);font-size:1.55rem;color:var(--ink);line-height:1.2;word-break:break-word;}
-.profile-handle{font-family:var(--font-ui);font-size:0.66rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-top:0.35rem;}
+.profile-handle{font-family:var(--font-ui);font-size:0.66rem;letter-spacing:2px;text-transform:uppercase;color:var(--ui);margin-top:0.35rem;}
 .admin-badge{font-family:var(--font-ui);font-size:0.55rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:2px 8px;background:rgba(184,151,42,0.06);margin-left:0.6rem;}
-.auth-alt{text-align:center;margin-top:1.6rem;font-family:Georgia,serif;font-style:italic;font-size:0.85rem;color:var(--ink3);}
-.auth-alt button{background:none;border:none;color:var(--gold);cursor:pointer;font-family:inherit;font-style:inherit;font-size:inherit;text-decoration:underline;padding:0;}
+.auth-alt{text-align:center;margin-top:1.6rem;font-family:Georgia,serif;font-style:italic;font-size:0.85rem;color:var(--ui);}
+.auth-alt button{background:none;border:none;color:var(--ui-head);cursor:pointer;font-family:inherit;font-style:inherit;font-size:inherit;text-decoration:underline;padding:0;}
 [data-theme="dark"] .field input,[data-theme="dark"] .field textarea{background:rgba(30,24,16,0.7);}
 [data-theme="dark"] #page-auth,[data-theme="dark"] #page-profile{background:var(--cream)!important;}
 
@@ -521,7 +565,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .comments-empty {
   text-align: center;
   font-style: italic;
-  color: var(--ink3);
+  color: var(--ui);
   padding: 1.5rem 0;
   font-size: 0.9rem;
 }
@@ -718,7 +762,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   <input id="search-input" type="text" data-i18n-ph="search_ph" placeholder="Search by title..."
     oninput="applyFilters()"
     style="width:100%;font-family:var(--font-ui);font-size:0.85rem;letter-spacing:1px;color:var(--ink2);background:var(--cream);border:1px solid var(--border);padding:10px 16px 10px 40px;outline:none;transition:border-color 0.2s;">
-  <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--ink3);font-size:0.9rem;">🔍</span>
+  <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--ui);font-size:0.9rem;">🔍</span>
 </div>
         <div id="active-filters" class="active-filters"></div>
         <div class="works-head">
@@ -768,12 +812,12 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
       </div>
 
       <div id="reading-footer" style="margin-top:3rem;border-top:1px solid var(--border);padding-top:2rem;display:none;">
-        <p style="font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:1rem;" data-i18n="read_ao3">Read the work on AO3</p>
+        <p style="font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--ui);margin-bottom:1rem;" data-i18n="read_ao3">Read the work on AO3</p>
         <a class="ao3-link" href="https://archiveofourown.org/users/ShostaKid/works" target="_blank" data-i18n="cont_ao3">Continue on AO3 →</a>
       </div>
       <!-- COMMENT SECTION (Supabase) -->
       <div id="comments-wrap" style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);display:none;">
-        <button onclick="toggleComments()" style="font-family:var(--font-ui);font-size:0.78rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:1rem;width:100%;padding:0;">
+        <button onclick="toggleComments()" style="font-family:var(--font-ui);font-size:0.78rem;letter-spacing:4px;text-transform:uppercase;color:var(--ui-head);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:1rem;width:100%;padding:0;">
           <span id="comments-label">Show Comments</span>
           <span style="flex:1;height:1px;background:var(--border);display:block;"></span>
           <span id="comments-arrow">▼</span>
@@ -928,7 +972,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   <!-- MY PROFILE -->
   <!-- ĐĂNG / SỬA TRUYỆN (chỉ admin) -->
   <div class="page" id="page-post" style="background:var(--cream);">
-    <div class="auth-wrap" style="max-width:760px;">
+    <div class="form-wrap">
       <div class="section-heading" id="post-head" data-i18n="post_head">Post a Work</div>
       <div class="auth-msg" id="post-msg"></div>
 
@@ -953,12 +997,12 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <div class="field">
           <label data-i18n="post_fandom">Fandom</label>
           <select id="pw-fandom"></select>
-          <button type="button" class="comment-reply" id="pw-add-fandom" data-i18n="post_add_fandom" style="margin-top:0.4rem;">+ New fandom</button>
+          <button type="button" class="mini-btn" id="pw-add-fandom" data-i18n="post_add_fandom">+ New fandom</button>
         </div>
         <div class="field">
           <label data-i18n="post_ships">Ships</label>
           <select id="pw-ships" multiple size="6"></select>
-          <button type="button" class="comment-reply" id="pw-add-ship" data-i18n="post_add_ship" style="margin-top:0.4rem;">+ New ship</button>
+          <button type="button" class="mini-btn" id="pw-add-ship" data-i18n="post_add_ship">+ New ship</button>
           <div class="field-hint" data-i18n="post_ships_hint">Hold Ctrl (or Cmd) to pick more than one.</div>
         </div>
         <div class="field">
@@ -972,7 +1016,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
           <label><input type="checkbox" id="pw-featured" style="width:auto;margin-right:0.5rem;"><span data-i18n="post_featured">Show in My Favorite Children</span></label>
         </div>
 
-        <div class="section-heading" style="font-size:1rem;margin-top:2.5rem;" data-i18n="post_music">Music</div>
+        <div class="sub-heading" data-i18n="post_music">Music</div>
         <div class="field-hint" style="margin-bottom:0.8rem;" data-i18n="post_music_hint">Applies to every chapter. A chapter can override it below.</div>
         <div class="pw-music" id="pw-music-work">
           <input type="url" class="pw-m-url" data-i18n-ph="post_m_url" placeholder="Audio link (GitHub Releases, archive.org…)">
@@ -989,13 +1033,15 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
           </div>
         </div>
 
-        <div class="section-heading" style="font-size:1rem;margin-top:2.5rem;" data-i18n="post_chapters">Chapters</div>
+        <div class="sub-heading" data-i18n="post_chapters">Chapters</div>
         <div id="pw-chapters"></div>
-        <button type="button" class="ao3-link" id="pw-add-ch" data-i18n="post_add_ch">+ Add chapter</button>
+        <button type="button" class="ao3-link" id="pw-add-ch" data-i18n="post_add_ch" style="margin-top:0.4rem;">+ Add chapter</button>
 
         <input type="file" id="pw-img-file" accept="image/jpeg,image/png,image/webp" style="display:none;">
 
-        <button type="button" class="ao3-link btn-full" id="pw-save" data-i18n="post_save">Save Work →</button>
+        <div class="form-actions">
+          <button type="button" class="ao3-link btn-full" id="pw-save" data-i18n="post_save">Save Work →</button>
+        </div>
       </form>
     </div>
     <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
@@ -2790,7 +2836,7 @@ function pwAddChapter(data) {
   const hang = document.createElement('div');
   hang.className = 'pw-ch-actions';
   const img = document.createElement('button');
-  img.type = 'button'; img.className = 'comment-reply';
+  img.type = 'button'; img.className = 'mini-btn';
   img.dataset.i18n = 'post_add_img';
   img.textContent = tr('post_add_img');
   img.addEventListener('click', () => {
@@ -2798,7 +2844,7 @@ function pwAddChapter(data) {
     pwOto = ta; $('pw-img-file').click();
   });
   const xoa = document.createElement('button');
-  xoa.type = 'button'; xoa.className = 'comment-del';
+  xoa.type = 'button'; xoa.className = 'mini-btn danger';
   xoa.dataset.i18n = 'post_del_ch';
   xoa.textContent = tr('post_del_ch');
   xoa.addEventListener('click', () => wrap.remove());
