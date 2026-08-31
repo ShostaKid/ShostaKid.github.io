@@ -139,6 +139,28 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .fic-stats{font-variant-numeric:tabular-nums;color:var(--ui-head);letter-spacing:1px;}
 .fic-warning{font-size:0.85rem;color:#993C1D;font-family:'Lora',Georgia,serif;font-style:italic;margin-bottom:0.6rem;}
 .fic-summary{font-family:'Lora',Georgia,serif;font-size:0.88rem;color:var(--ink2);line-height:1.65;font-style:italic;}
+
+/* ----- Ảnh bìa truyện ----- */
+/* Kiểu gáy sách: bìa dọc nhỏ bên trái, tỉ lệ 2:3, cắt bằng object-fit để mọi
+   thẻ cao bằng nhau dù ảnh gốc dọc hay ngang. */
+.fic-card-bia{display:flex;gap:1.4rem;align-items:flex-start;}
+.fic-than{min-width:0;flex:1;}
+.fic-bia{width:104px;flex:0 0 104px;aspect-ratio:2/3;object-fit:cover;display:block;border:1px solid var(--border);}
+.bia-trong{border-style:dashed;background:var(--cream2);color:var(--ink3);
+  display:flex;align-items:center;justify-content:center;font-size:1.6rem;}
+@media (max-width:560px){
+  .fic-bia{width:74px;flex-basis:74px;}
+  .fic-card-bia{gap:1rem;}
+}
+/* Bìa ở đầu trang đọc. Mặc định giữ nguyên tỉ lệ ảnh; .cat-219 cắt thành dải
+   ngang cho những ảnh mà để nguyên sẽ chiếm hết màn hình trước dòng chữ đầu. */
+.reading-bia{width:100%;display:block;margin:1.6rem 0 0;border:1px solid var(--border);}
+.reading-bia.cat-219{aspect-ratio:21/9;object-fit:cover;}
+
+/* ----- Ảnh minh hoạ trong thân truyện ----- */
+/* Trước đây không có luật nào cho img ở đây, nên ảnh giữ nguyên cỡ gốc và đẩy
+   rộng cả cột chữ — ảnh chụp điện thoại rộng 3000–4000px thì vỡ hẳn bố cục. */
+.fic-body img{max-width:100%;height:auto;display:block;margin:2.5rem auto;}
 .fic-tags{margin-top:0.9rem;display:flex;flex-wrap:wrap;gap:6px;}
 .tag{font-family:var(--font-ui);font-size:0.6rem;letter-spacing:1.5px;color:var(--ink2);border:1px solid var(--gold);padding:3px 10px;text-transform:uppercase;background:rgba(184,151,42,0.06);}
 
@@ -282,6 +304,9 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
    --ui: ở 0.75rem lại in nghiêng, --ink3 chỉ đạt 3.75 trên nền sáng (3.43 khi nằm
    trong hộp --cream2), quá mờ để đọc. */
 .field-hint{font-family:Georgia,serif;font-style:italic;font-size:0.75rem;color:var(--ui);margin-top:0.35rem;line-height:1.5;}
+#link-hong{display:none;max-width:640px;margin:1.5rem auto 0;padding:0.8rem 1.2rem;
+  border-left:2px solid #D85A30;background:var(--cream2);color:#993C1D;
+  font-family:'Lora',Georgia,serif;font-style:italic;font-size:0.9rem;line-height:1.6;text-align:center;}
 .auth-msg{font-family:'Lora',Georgia,serif;font-size:0.9rem;font-style:italic;line-height:1.6;padding:0.8rem 1rem;margin-bottom:1.2rem;border-left:2px solid var(--border);display:none;}
 .auth-msg.show{display:block;}
 .auth-msg.err{color:#993C1D;border-left-color:#D85A30;}
@@ -345,6 +370,29 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .mini-btn.danger:hover{color:#993C1D;border-color:#D85A30;}
 .mini-btn:disabled{opacity:0.45;cursor:default;}
 .field .mini-btn{margin-top:0.5rem;}
+
+/* Khối chọn ảnh bìa trong form: ô xem trước bên trái, điều khiển bên phải. */
+.pw-bia-hang{display:flex;gap:1.2rem;align-items:flex-start;margin-bottom:0.5rem;}
+.pw-bia-hang #pw-bia-xem{flex:0 0 104px;}
+.pw-bia-hang .fic-bia{width:104px;flex:0 0 104px;}
+.pw-bia-dieu{flex:1;min-width:0;}
+.pw-bia-nut{display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:0.9rem;}
+.pw-bia-cat{display:flex;align-items:flex-start;gap:0.5rem;cursor:pointer;
+  font-family:var(--font-ui);font-size:0.6rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ui);line-height:1.6;}
+.pw-bia-cat input{width:auto;margin:2px 0 0;flex:0 0 auto;}
+
+/* Bảng chọn chỗ đặt ảnh minh hoạ, hiện ra sau khi tải ảnh lên xong. */
+.pw-cho-anh{border:1px solid var(--gold);background:var(--cream);padding:0.9rem 1rem;margin:0.6rem 0;}
+.pw-cho-anh .pw-cho-tieu{font-family:var(--font-ui);font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;
+  color:var(--ui-head);margin-bottom:0.7rem;}
+.pw-cho-ds{max-height:230px;overflow-y:auto;border:1px solid var(--border);background:var(--cream2);}
+.pw-cho-muc{display:block;width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--border);
+  padding:8px 11px;cursor:pointer;font-family:Georgia,serif;font-size:0.82rem;color:var(--ink2);line-height:1.5;}
+.pw-cho-muc:last-child{border-bottom:none;}
+.pw-cho-muc:hover{background:var(--cream);color:var(--ink);}
+.pw-cho-muc b{font-family:var(--font-ui);font-size:0.58rem;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--ui-head);display:block;margin-bottom:2px;font-weight:400;}
+.pw-cho-huy{margin-top:0.7rem;}
 
 /* Nút Lưu tách hẳn khỏi phần chương bằng một vạch, để không trôi lẫn vào nhau. */
 .form-actions{margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);}
@@ -690,6 +738,9 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 
   <!-- HOME -->
   <div class="page active gothic-bg" id="page-home">
+    <!-- Hiện khi link #fic-N trỏ tới truyện không tồn tại (hoặc bị is_restricted
+         mà người xem chưa đăng nhập). Tự ẩn sau vài giây. -->
+    <div id="link-hong"></div>
     <div class="hero">
       <div class="hero-ornament">♩</div>
       <h1 class="hero-title">ShostaKid</h1>
@@ -1015,6 +1066,21 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <div class="field">
           <label><input type="checkbox" id="pw-featured" style="width:auto;margin-right:0.5rem;"><span data-i18n="post_featured">Show in My Favorite Children</span></label>
         </div>
+
+        <div class="sub-heading" data-i18n="post_cover">Cover image</div>
+        <div class="field-hint" style="margin-bottom:0.9rem;" data-i18n="post_cover_hint">One image for the whole work. Shown as a book spine on the Works page, and above the text when the work is opened.</div>
+        <div class="pw-bia-hang">
+          <div id="pw-bia-xem"></div>
+          <div class="pw-bia-dieu">
+            <div class="pw-bia-nut">
+              <button type="button" class="mini-btn" id="pw-bia-chon" data-i18n="post_cover_pick">Choose cover</button>
+              <button type="button" class="mini-btn danger" id="pw-bia-xoa" data-i18n="post_cover_del">Remove</button>
+            </div>
+            <label class="pw-bia-cat"><input type="checkbox" id="pw-bia-cat-o"><span data-i18n="post_cover_crop">Crop to a 21:9 band at the top of the reading page</span></label>
+            <div class="field-hint" data-i18n="post_cover_crop_hint">Leave off to show the image whole. Turn on for tall images that would otherwise fill the screen before the first line of text.</div>
+          </div>
+        </div>
+        <input type="file" id="pw-bia-tep" accept="image/jpeg,image/png,image/webp" style="display:none;">
 
         <div class="sub-heading" data-i18n="post_music">Music</div>
         <div class="field-hint" style="margin-bottom:0.8rem;" data-i18n="post_music_hint">Applies to every chapter. A chapter can override it below.</div>
@@ -1458,9 +1524,11 @@ function worksFromFics() {
 function ficInfo(i) {
   const d = worksData.find(x => x.idx === i);
   const f = fics[i];
-  if (d) return { title:d.title, subtitle:d.subtitle, fandom:fandomLabel(d.fandom), warning:d.warning };
-  if (f) return { title:f.title||'', subtitle:f.subtitle||'', fandom:f.fandom||'', warning:f.warning||'' };
-  return { title:'', subtitle:'', fandom:'', warning:'' };
+  if (d) return { title:d.title, subtitle:d.subtitle, fandom:fandomLabel(d.fandom), warning:d.warning,
+                  cover:d.cover||'', coverCrop:!!d.coverCrop };
+  if (f) return { title:f.title||'', subtitle:f.subtitle||'', fandom:f.fandom||'', warning:f.warning||'',
+                  cover:'', coverCrop:false };
+  return { title:'', subtitle:'', fandom:'', warning:'', cover:'', coverCrop:false };
 }
 
 // Tên các chương. Dùng dữ liệu DB của truyện đang mở nếu đã tải xong,
@@ -1475,11 +1543,39 @@ function chapterNames(i) {
 // Dựng bằng DOM. Riêng tiêu đề phụ và tóm tắt cho phép HTML vì đó là nội dung
 // do chính chủ repo viết trong YAML (<em>, <br>) — chỉ admin ghi được bảng works.
 // Tên ship và fandom thì luôn dùng textContent.
+// Ô bìa dùng chung cho thẻ truyện và form đăng bài.
+// Dựng bằng DOM chứ không ghép chuỗi HTML: cover_url là dữ liệu nhập vào.
+// Chỉ nhận http(s) — chặn javascript:, data: và mọi thứ khác lọt vào src.
+function oBia(url, lop) {
+  const sach = String(url || '').trim();
+  if (/^https?:\/\//i.test(sach)) {
+    const img = document.createElement('img');
+    img.className = lop;
+    img.src = sach;
+    img.alt = '';
+    img.loading = 'lazy';
+    return img;
+  }
+  const trong = document.createElement('div');
+  trong.className = lop + ' bia-trong';
+  trong.textContent = '♩';
+  return trong;
+}
+
 function makeCardEl(d) {
   const card = document.createElement('div');
-  card.className = 'fic-card';
+  card.className = 'fic-card fic-card-bia';
   card.dataset.fandom = d.fandom;
   card.addEventListener('click', () => openFic(d.idx));
+
+  // Bìa dọc bên trái, dạng gáy sách. Truyện chưa có bìa thì để ô viền đứt —
+  // 36 truyện cũ đều chưa có, nên trạng thái trống phải trông cố ý, không như lỗi.
+  card.append(oBia(d.cover, 'fic-bia'));
+
+  // Mọi thứ còn lại nằm trong cột chữ bên phải.
+  const than = document.createElement('div');
+  than.className = 'fic-than';
+  card.append(than);
 
   const title = document.createElement('div');
   title.className = 'fic-title';
@@ -1490,7 +1586,7 @@ function makeCardEl(d) {
     em.innerHTML = d.subtitle;
     title.append(em);
   }
-  card.append(title);
+  than.append(title);
 
   const meta = document.createElement('div');
   meta.className = 'fic-meta';
@@ -1503,19 +1599,19 @@ function makeCardEl(d) {
     st.textContent = `♥ ${d.kudos || 0} · ✎ ${d.comments || 0}`;
     meta.append(st);
   }
-  card.append(meta);
+  than.append(meta);
 
   if (d.warning) {
     const w = document.createElement('div');
     w.className = 'fic-warning';
     w.textContent = '⚠ ' + d.warning;
-    card.append(w);
+    than.append(w);
   }
 
   const sum = document.createElement('div');
   sum.className = 'fic-summary';
   sum.innerHTML = d.summary || '';
-  card.append(sum);
+  than.append(sum);
 
   const tags = document.createElement('div');
   tags.className = 'fic-tags';
@@ -1525,7 +1621,7 @@ function makeCardEl(d) {
     t.textContent = s;
     tags.append(t);
   });
-  card.append(tags);
+  than.append(tags);
 
   return card;
 }
@@ -1775,6 +1871,18 @@ function openFic(i) {
     <div class="reading-divider">✦ ✦ ✦</div>
     ${chapterNavHtml}`;
 
+  // Bìa chèn bằng DOM sau khi dựng khung, KHÔNG ghép vào chuỗi innerHTML ở trên:
+  // cover_url là dữ liệu nhập vào, phải đi qua oBia() để lọc giao thức.
+  // Truyện chưa có bìa thì không chèn gì cả — trang đọc không cần ô trống.
+  if (f.cover) {
+    const bia = oBia(f.cover, 'reading-bia');
+    if (bia.tagName === 'IMG') {
+      if (f.coverCrop) bia.classList.add('cat-219');
+      const vach = document.querySelector('#reading-header .reading-divider');
+      if (vach) vach.parentNode.insertBefore(bia, vach);
+    }
+  }
+
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-reading').classList.add('active');
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
@@ -1790,10 +1898,31 @@ function openFic(i) {
   if (window.loadComments)    window.loadComments(i);
 }
 
+// ---- Nhạc chờ cú bấm đầu tiên ----
+// Trình duyệt chặn audio.play() khi trang chưa nhận thao tác nào của người dùng.
+// Duyệt bình thường thì không sao: mọi lần bật nhạc đều đi sau một cú bấm (bấm
+// thẻ truyện, bấm nút chương, bấm mục About). Nhưng mở bằng link #fic-N thì
+// openFic() chạy thẳng từ lúc tải trang, chưa có cú bấm nào — play() bị chặn,
+// lỗi bị .catch() nuốt, mà thanh nhạc vẫn hiện chữ "Pause" như đang phát.
+// Nên: chưa bấm intro thì cất yêu cầu lại, để enterSite() phát đúng lúc bấm.
+let daVaoSite = false;
+let nhacChoBam = null;
+
 function enterSite() {
   const intro = document.getElementById('intro');
   intro.style.pointerEvents = 'none';
   intro.classList.add('fade-out');
+
+  // Đặt cờ và phát nhạc NGAY trong hàm xử lý cú bấm — đây chính là thao tác
+  // người dùng mà trình duyệt đòi. Nhét vào setTimeout bên dưới là mất hiệu lực.
+  daVaoSite = true;
+  if (nhacChoBam) {
+    const cho = nhacChoBam;
+    nhacChoBam = null;
+    if (cho.loai === 'fic') playMusic(cho.ficIdx, cho.chapterIdx);
+    else playMusicDirect.apply(null, cho.thamSo);
+  }
+
   setTimeout(()=>{intro.style.display='none';document.getElementById('site').classList.add('visible');},800);
 }
 
@@ -1825,17 +1954,58 @@ document.addEventListener('DOMContentLoaded', async () => {
       worksData = rows;
       worksFromDB = true;
       renderAllWorks();
+
+      // Truyện đăng qua form chỉ có trong database, nên lúc kiểm hash ở trên nó
+      // còn chưa tồn tại. Thử lại đúng một lần, và chỉ khi người đọc vẫn đang
+      // đứng yên ở trang chủ với đúng cái link ban đầu — họ mà tự bấm đi đâu rồi
+      // thì đừng giật họ về.
+      if (!daMoTheoHash && currentPage === 'home' && window.location.hash === hashBanDau) {
+        daMoTheoHash = moTheoHash();
+        if (!daMoTheoHash && hashBanDau.startsWith('#fic-')) baoLinkHong();
+      }
     }).catch(() => {});
   }
 
-  // Xử lý mở thẳng 1 fic nếu URL có #fic-N (share link)
-  const hash = window.location.hash;
-  if (hash.startsWith('#fic-')) {
-    const idx = parseInt(hash.replace('#fic-', ''));
-    // Truyện đăng qua form không có trong fics.json nên phải hỏi thêm worksData.
-    if (!isNaN(idx) && (fics[idx] || worksData.some(w => w.idx === idx))) openFic(idx);
-  }
+  // Mở đúng trang mà URL trỏ tới (link chia sẻ, bookmark, F5).
+  hashBanDau = window.location.hash;
+  daMoTheoHash = moTheoHash();
 });
+
+// ---- Link sâu ----
+// Phạm vi cố ý gói gọn: #fic-N, #home, #works, #about. Các trang cá nhân
+// (#profile, #bookmarks, #post, #auth) KHÔNG mở theo hash — chúng cần đăng nhập
+// và quyền, để guardProfile() lo, không nhân đôi logic ở đây.
+let hashBanDau = '';
+let daMoTheoHash = false;
+
+function moTheoHash() {
+  const h = window.location.hash;
+
+  if (h.startsWith('#fic-')) {
+    const idx = parseInt(h.slice(5), 10);
+    if (isNaN(idx)) return false;
+    // Truyện đăng qua form chỉ nằm trong database, fics.json không có.
+    if (fics[idx] || worksData.some(w => w.idx === idx)) { openFic(idx); return true; }
+    return false;          // chưa thấy -> để lượt gọi sau khi DB trả lời thử lại
+  }
+
+  if (h === '#home' || h === '#works' || h === '#about') {
+    const ten = h.slice(1);
+    showPage(ten, document.querySelector('.nav-links a[data-page="' + ten + '"]'));
+    return true;
+  }
+
+  return false;
+}
+
+// Báo cho người mở link hỏng biết, thay vì lẳng lặng thả họ về trang chủ.
+function baoLinkHong() {
+  const o = document.getElementById('link-hong');
+  if (!o) return;
+  o.textContent = t('link_hong');
+  o.style.display = 'block';
+  setTimeout(() => { o.style.display = 'none'; }, 12000);
+}
 
 // =============================================
 // CONTINUE READING (localStorage)
@@ -1985,6 +2155,7 @@ const i18n = {
     about_p4:'I hope you have a great time here. Thank you for stopping by.',
     nav_signin:'Sign In', nav_profile:'My Profile', nav_bookmarks:'My Bookmarks', nav_post:'Post',
     nav_logout:'Log Out',
+    link_hong:'That link points to a work that no longer exists — or one you need to be signed in to read.',
     post_head:'Post a Work', post_edit_head:'Edit Work', post_title:'Title', post_subtitle:'Subtitle',
     post_summary:'Summary', post_warning:'Content warning', post_fandom:'Fandom', post_ships:'Ships',
     post_status:'Status', post_published:'Published', post_draft:'Draft', post_featured:'Show in My Favorite Children',
@@ -1995,6 +2166,14 @@ const i18n = {
     post_need_title:'Please enter a title.', post_need_ch:'Add at least one chapter with some text.',
     post_err:'Could not save. Please try again.', post_img_err:'Could not upload that image.',
     post_img_first:'Save the work once before adding images.',
+    post_img_where:'Where should this image go?',
+    post_img_top:'At the very top', post_img_after:'After paragraph {n}', post_img_end:'At the very end',
+    post_img_cancel:'Cancel — don’t insert', post_img_done:'Image inserted.',
+    post_cover:'Cover image',
+    post_cover_hint:'One image for the whole work. Shown as a book spine on the Works page, and above the text when the work is opened.',
+    post_cover_pick:'Choose cover', post_cover_del:'Remove',
+    post_cover_crop:'Crop to a 21:9 band at the top of the reading page',
+    post_cover_crop_hint:'Leave off to show the image whole. Turn on for tall images that would otherwise fill the screen before the first line of text.',
     post_add_fandom:'+ New fandom', post_add_ship:'+ New ship',
     ab_edit:'✎ Edit this page', ab_body_en:'Bio — English', ab_body_vi:'Bio — Vietnamese',
     ab_save:'Save →', ab_saving:'Saving…', ab_saved:'About page updated ♪',
@@ -2091,6 +2270,7 @@ const i18n = {
     about_p4:'Hy vọng bạn có khoảng thời gian vui vẻ ở đây. Cảm ơn vì đã ghé qua.',
     nav_signin:'Đăng nhập', nav_profile:'Hồ sơ của tôi', nav_bookmarks:'Truyện đã lưu', nav_post:'Đăng truyện',
     nav_logout:'Đăng xuất',
+    link_hong:'Link này trỏ tới một truyện không còn tồn tại — hoặc truyện phải đăng nhập mới đọc được.',
     post_head:'Đăng truyện', post_edit_head:'Sửa truyện', post_title:'Tiêu đề', post_subtitle:'Phụ đề',
     post_summary:'Tóm tắt', post_warning:'Cảnh báo nội dung', post_fandom:'Fandom', post_ships:'Ship',
     post_status:'Trạng thái', post_published:'Đã đăng', post_draft:'Bản nháp', post_featured:'Hiện ở mục truyện tâm đắc',
@@ -2101,6 +2281,14 @@ const i18n = {
     post_need_title:'Bạn cần nhập tiêu đề.', post_need_ch:'Cần ít nhất một chương có nội dung.',
     post_err:'Không lưu được. Bạn thử lại nhé.', post_img_err:'Không tải được ảnh lên.',
     post_img_first:'Lưu truyện một lần trước khi chèn ảnh.',
+    post_img_where:'Đặt ảnh này vào đâu?',
+    post_img_top:'Ngay đầu chương', post_img_after:'Sau đoạn {n}', post_img_end:'Cuối chương',
+    post_img_cancel:'Huỷ — không chèn nữa', post_img_done:'Đã chèn ảnh.',
+    post_cover:'Ảnh bìa',
+    post_cover_hint:'Một ảnh cho cả truyện. Hiện như gáy sách ở trang Works, và ở đầu trang đọc.',
+    post_cover_pick:'Chọn ảnh bìa', post_cover_del:'Xoá bìa',
+    post_cover_crop:'Cắt về dải ngang 21:9 ở đầu trang đọc',
+    post_cover_crop_hint:'Để tắt thì ảnh hiện nguyên vẹn. Bật cho những ảnh cao, không thì nó chiếm hết màn hình trước dòng chữ đầu tiên.',
     post_add_fandom:'+ Thêm fandom', post_add_ship:'+ Thêm ship',
     ab_edit:'✎ Sửa trang này', ab_body_en:'Giới thiệu — Tiếng Anh', ab_body_vi:'Giới thiệu — Tiếng Việt',
     ab_save:'Lưu →', ab_saving:'Đang lưu…', ab_saved:'Đã cập nhật trang giới thiệu ♪',
@@ -2235,6 +2423,8 @@ function toggleTheme() {
 // MUSIC — hỗ trợ 3 nguồn: musopen / soundcloud / youtube
 // =============================================
 function playMusicDirect(source, url, id, start, end, name) {
+  // Chưa bấm intro thì hoãn lại, đừng dựng player để rồi bị chặn im lặng.
+  if (!daVaoSite) { nhacChoBam = { loai: 'truc', thamSo: [source, url, id, start, end, name] }; return; }
   stopMusic();
   const m = { source, url, id, start, end };
 
@@ -2281,6 +2471,9 @@ function playMusicDirect(source, url, id, start, end, name) {
   // Truyện mới chưa có trong fics.json, và lúc openFic() gọi hàm này thì chương
   // (kèm chapters.music) còn chưa tải xong — cứ im lặng, loadChapter() sẽ gọi lại.
   if (!m) return;
+
+  // Vào bằng link #fic-N: hoãn tới lúc bấm intro (xem ghi chú ở enterSite).
+  if (!daVaoSite) { nhacChoBam = { loai: 'fic', ficIdx, chapterIdx }; return; }
 
   // ---- Giữ nhạc liền mạch giữa các chương ----
   // Trước đây việc này chạy được là do TÌNH CỜ: loadChapter() chỉ gọi playMusic()
@@ -2360,6 +2553,7 @@ function stopMusic() {
     if (el) el.remove();
   });
   nhacDangPhat = null;   // dựng lại từ đầu cho lần sau
+  nhacChoBam = null;     // bỏ luôn bài đang chờ, không để nó phát nhầm sau này
   musicPlaying = false;
   document.getElementById('music-bar').classList.add('hidden');
 }
@@ -2873,29 +3067,160 @@ $('pw-add-ch').addEventListener('click', () => pwAddChapter());
 $('pw-add-fandom').addEventListener('click', () => pwThemMuc('fandom'));
 $('pw-add-ship').addEventListener('click', () => pwThemMuc('ship'));
 
-// Chèn ảnh: tải lên bucket work-images rồi chèn thẻ <img> ngay tại con trỏ.
+// Tải một tệp ảnh lên bucket work-images. Trả về url, hoặc null nếu hỏng.
+async function pwTaiAnh(file, tenDau) {
+  const ext = { 'image/jpeg':'jpg', 'image/png':'png', 'image/webp':'webp' }[file.type];
+  if (!ext) { pwSay('prof_avatar_bad_type', true); return null; }
+  if (file.size > 2 * 1024 * 1024) { pwSay('prof_avatar_too_big', true); return null; }
+
+  pwSay('post_uploading');
+  // Thư mục PHẢI là id truyện — policy work_images_insert_own kiểm đúng chỗ này.
+  const path = pwWorkId + '/' + (tenDau || 'anh') + '-' + Date.now() + '.' + ext;
+  const { error } = await sb.storage.from('work-images')
+    .upload(path, file, { contentType: file.type, cacheControl: '3600' });
+  if (error) { pwSay(raw(error.message), true); return null; }
+
+  pwSay(null);
+  return sb.storage.from('work-images').getPublicUrl(path).data.publicUrl;
+}
+
+// ---------- Chèn ảnh minh hoạ ----------
+// Tải ảnh lên xong thì KHÔNG chèn ngay. Mở bảng liệt kê các đoạn văn của chương
+// để tự chọn đặt ảnh vào giữa hai đoạn nào — "giữa chương" chỉ là một lựa chọn
+// trong danh sách, không phải chỗ bị ép.
 $('pw-img-file').addEventListener('change', async (e) => {
   const file = e.target.files && e.target.files[0];
   e.target.value = '';
   if (!file || !pwOto || !pwWorkId) return;
   pwSay(null);
 
-  const ext = { 'image/jpeg':'jpg', 'image/png':'png', 'image/webp':'webp' }[file.type];
-  if (!ext) { pwSay('prof_avatar_bad_type', true); return; }
-  if (file.size > 2 * 1024 * 1024) { pwSay('prof_avatar_too_big', true); return; }
+  const url = await pwTaiAnh(file, 'minhhoa');
+  if (!url) return;
+  moBangChonCho(pwOto, url);
+});
 
-  pwSay('post_uploading');
-  const path = pwWorkId + '/' + Date.now() + '.' + ext;
-  const { error } = await sb.storage.from('work-images')
-    .upload(path, file, { contentType: file.type, cacheControl: '3600' });
-  if (error) { pwSay(raw(error.message), true); return; }
+// Cắt nội dung chương thành các khối theo dòng trống — đúng cách txtToHtml()
+// tách đoạn khi hiển thị, nên số đoạn ở đây khớp với cái người đọc nhìn thấy.
+function cacDoan(text) {
+  const ra = [];
+  const re = /\n\s*\n/g;
+  let dau = 0, m;
+  while ((m = re.exec(text)) !== null) {
+    ra.push({ dau, cuoi: m.index, chenTai: m.index + m[0].length });
+    dau = m.index + m[0].length;
+  }
+  ra.push({ dau, cuoi: text.length, chenTai: text.length });
+  return ra.filter(d => text.slice(d.dau, d.cuoi).trim());
+}
 
-  const url = sb.storage.from('work-images').getPublicUrl(path).data.publicUrl;
-  const the = '\n<p align="center"><img src="' + url + '" alt=""></p>\n';
-  const ta = pwOto, i = ta.selectionStart || ta.value.length;
-  ta.value = ta.value.slice(0, i) + the + ta.value.slice(i);
+// Bỏ thẻ HTML rồi rút gọn, để mỗi dòng trong bảng chọn đọc được như văn xuôi.
+function tomTat(s, n) {
+  const sach = s.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  return sach.length > n ? sach.slice(0, n) + '…' : (sach || '(đoạn trống)');
+}
+
+function moBangChonCho(ta, url) {
+  const khoiChuong = ta.closest('.pw-ch');
+  const cu = khoiChuong.querySelector('.pw-cho-anh');
+  if (cu) cu.remove();
+
+  const text = ta.value;
+  const doan = cacDoan(text);
+
+  const bang = document.createElement('div');
+  bang.className = 'pw-cho-anh';
+
+  const tieu = document.createElement('div');
+  tieu.className = 'pw-cho-tieu';
+  tieu.textContent = tr('post_img_where');
+  bang.append(tieu);
+
+  const ds = document.createElement('div');
+  ds.className = 'pw-cho-ds';
+
+  const themMuc = (nhan, mota, viTri) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'pw-cho-muc';
+    const n = document.createElement('b');
+    n.textContent = nhan;
+    b.append(n, document.createTextNode(mota));
+    b.addEventListener('click', () => { chenAnh(ta, url, viTri); bang.remove(); });
+    ds.append(b);
+  };
+
+  if (!doan.length) {
+    // Chương còn trống: chỉ có một chỗ để đặt.
+    themMuc(tr('post_img_top'), '', 0);
+  } else {
+    themMuc(tr('post_img_top'), tomTat(text.slice(doan[0].dau, doan[0].dau + 90), 70), doan[0].dau);
+    doan.forEach((d, i) => {
+      const nhan = (i === doan.length - 1)
+        ? tr('post_img_end')
+        : tr('post_img_after').replace('{n}', i + 1);
+      themMuc(nhan, tomTat(text.slice(d.dau, d.cuoi), 70), d.chenTai);
+    });
+  }
+
+  bang.append(ds);
+
+  const huy = document.createElement('button');
+  huy.type = 'button';
+  huy.className = 'mini-btn pw-cho-huy';
+  huy.textContent = tr('post_img_cancel');
+  // Ảnh đã nằm trên Storage rồi; huỷ ở đây chỉ là không chèn thẻ vào bài.
+  // Lần lưu tiếp theo pwDonAnhThua() sẽ xoá tệp không ai dùng.
+  huy.addEventListener('click', () => bang.remove());
+  bang.append(huy);
+
+  ta.insertAdjacentElement('afterend', bang);
+  bang.scrollIntoView({ block: 'nearest' });
+}
+
+function chenAnh(ta, url, viTri) {
+  // Dòng trống hai bên để txtToHtml() coi ảnh là một khối riêng, không dính
+  // vào đoạn văn liền trước.
+  const the = '\n\n<p align="center"><img src="' + url + '" alt=""></p>\n\n';
+  const truoc = ta.value.slice(0, viTri).replace(/\s+$/, '');
+  const sau   = ta.value.slice(viTri).replace(/^\s+/, '');
+  // Phải là DÒNG TRỐNG (\n\n) cả hai bên. Một dấu xuống dòng thôi thì txtToHtml()
+  // coi ảnh nằm cùng đoạn với văn bản liền trước và nối bằng <br>.
+  ta.value = (truoc ? truoc + '\n\n' : '') + the.trim() + (sau ? '\n\n' + sau : '');
   ta.focus();
-  pwSay(null);
+  pwSay('post_img_done');
+}
+
+// ---------- Ảnh bìa ----------
+let pwBiaUrl = '';
+
+function veBia() {
+  const o = $('pw-bia-xem');
+  o.textContent = '';
+  o.append(oBia(pwBiaUrl, 'fic-bia'));
+  $('pw-bia-xoa').disabled = !pwBiaUrl;
+  $('pw-bia-cat-o').disabled = !pwBiaUrl;
+}
+
+$('pw-bia-chon').addEventListener('click', () => {
+  if (!pwWorkId) { pwSay('post_img_first', true); return; }
+  $('pw-bia-tep').click();
+});
+
+$('pw-bia-tep').addEventListener('change', async (e) => {
+  const file = e.target.files && e.target.files[0];
+  e.target.value = '';
+  if (!file || !pwWorkId) return;
+  const url = await pwTaiAnh(file, 'bia');
+  if (!url) return;
+  pwBiaUrl = url;
+  veBia();
+});
+
+$('pw-bia-xoa').addEventListener('click', () => {
+  // Chỉ gỡ khỏi truyện; tệp trên Storage do pwDonAnhThua() dọn lúc lưu.
+  pwBiaUrl = '';
+  $('pw-bia-cat-o').checked = false;
+  veBia();
 });
 
 // Bỏ dấu tiếng Việt rồi rút gọn thành slug. Dùng chung cho fandom, ship và
@@ -2969,16 +3294,22 @@ async function loadPostForm(idx) {
     $('pw-status').value = 'published';
     pwMusicWrite($('pw-music-work'), null);
     $('pw-featured').checked = false;
+    pwBiaUrl = ''; $('pw-bia-cat-o').checked = false; veBia();
     pwAddChapter();
     return;
   }
 
   head.dataset.i18n = 'post_edit_head'; head.textContent = tr('post_edit_head');
-  const { data: w } = await sb.from('works')
-    .select('id,title,subtitle,summary,warning_note,status,featured,'
-          + 'work_fandoms(fandom_id), work_ships(ship_id),'
-          + 'chapters(id,position,title,content,music)')
+  const cotW = 'id,title,subtitle,summary,warning_note,status,featured,cover_url,'
+             + 'work_fandoms(fandom_id), work_ships(ship_id),'
+             + 'chapters(id,position,title,content,music)';
+  let { data: w } = await sb.from('works')
+    .select(coCotCat ? cotW + ',cover_crop' : cotW)
     .eq('legacy_id', 'fic-' + idx).maybeSingle();
+  if (!w && coCotCat) {   // có thể do cột cover_crop chưa tồn tại — thử lại không có nó
+    coCotCat = false;
+    ({ data: w } = await sb.from('works').select(cotW).eq('legacy_id', 'fic-' + idx).maybeSingle());
+  }
   if (!w) { pwSay('post_err', true); return; }
 
   pwWorkId = w.id;
@@ -2988,6 +3319,9 @@ async function loadPostForm(idx) {
   $('pw-warning').value  = w.warning_note || '';
   $('pw-status').value   = w.status || 'published';
   $('pw-featured').checked = !!w.featured;
+  pwBiaUrl = w.cover_url || '';
+  $('pw-bia-cat-o').checked = !!w.cover_crop;
+  veBia();
 
   const fid = (w.work_fandoms || []).map(x => x.fandom_id)[0];
   if (fid) $('pw-fandom').value = fid;
@@ -3038,8 +3372,11 @@ $('pw-save').addEventListener('click', async () => {
     warning_note: $('pw-warning').value.trim() || null,
     status:   $('pw-status').value,
     featured: $('pw-featured').checked,
+    cover_url:  pwBiaUrl || null,
     published_at: $('pw-status').value === 'published' ? new Date().toISOString() : null
   };
+  // Chỉ gửi cover_crop khi cột đã tồn tại; gửi bừa là hỏng cả lệnh lưu.
+  if (coCotCat) patch.cover_crop = !!$('pw-bia-cat-o').checked;
 
   let workId = pwWorkId, err = null;
   if (workId) {
@@ -3116,6 +3453,7 @@ $('pw-save').addEventListener('click', async () => {
   if (rc.error) { pwSay(raw(rc.error.message), true); return; }
 
   pwSay('post_saved');
+  await pwDonAnhThua(workId, chuong);
   if (window.invalidateChapters) window.invalidateChapters();
   // Danh sách truyện đổi rồi thì nạp lại Browse + trang chủ.
   if (window.fetchWorksFromDB) {
@@ -3123,6 +3461,33 @@ $('pw-save').addEventListener('click', async () => {
     if (moi && moi.length && window.applyWorksData) window.applyWorksData(moi);
   }
 });
+
+// Xoá những tệp ảnh không còn ai trỏ tới. Avatar đã có dropStaleAvatar() làm
+// việc này; ảnh truyện thì trước đây không có gì cả, nên gỡ thẻ ảnh khỏi bài
+// hay xoá cả chương là tệp nằm lại trong Storage vĩnh viễn.
+// Chạy sau khi lưu xong, và im lặng nếu hỏng — dọn rác không được thì cũng
+// đừng làm hỏng thông báo "đã lưu".
+async function pwDonAnhThua(workId, chuong) {
+  try {
+    const { data: tep, error } = await sb.storage.from('work-images').list(workId, { limit: 200 });
+    if (error || !tep || !tep.length) return;
+
+    // Gom mọi đường dẫn đang được dùng: bìa + mọi thẻ img trong mọi chương.
+    const dangDung = new Set();
+    const nhat = (s) => {
+      const re = /work-images\/([^\s"'<>)]+)/g;
+      let m;
+      while ((m = re.exec(s || '')) !== null) dangDung.add(decodeURIComponent(m[1]));
+    };
+    nhat(pwBiaUrl);
+    chuong.forEach(c => nhat(c.content));
+
+    const thua = tep
+      .map(f => workId + '/' + f.name)
+      .filter(p => !dangDung.has(p));
+    if (thua.length) await sb.storage.from('work-images').remove(thua);
+  } catch (_) { /* dọn rác hỏng thì thôi */ }
+}
 
 // ---------- trang "Truyện đã lưu" ----------
 // Dựng lại đúng khung .fic-card của Browse để không phải thêm kiểu dáng mới,
@@ -3244,13 +3609,25 @@ window.fetchChapters = async function (ficIdx) {
 // Không cần lọc is_restricted ở đây: policy SELECT của bảng works đã bỏ hẳn
 // những hàng đó với khách chưa đăng nhập, nên truyện bị hạn chế biến mất khỏi
 // danh sách — không lộ cả tên lẫn tóm tắt.
+// TẠM THỜI: cột cover_crop chỉ có sau khi chạy migration add_cover_crop.
+// PostgREST từ chối NGUYÊN truy vấn nếu select nhắc tới cột không tồn tại — nghĩa
+// là thiếu cột thì cả trang Works tụt về fics.json, mất 1 truyện và mất số kudos.
+// Nên hỏi cột đó một lần; hỏng thì bỏ ra và nhớ luôn.
+// Xoá cờ này sau khi migration đã chạy xong.
+let coCotCat = true;
+
 window.fetchWorksFromDB = async function () {
   try {
-    const { data, error } = await sb.from('works')
-      .select('legacy_id, title, subtitle, summary, warning_note, featured, published_at,'
-            + ' kudos_count, comment_count,'
-            + ' work_fandoms(fandoms(name)), work_ships(ships(name))')
+    const cot = 'legacy_id, title, subtitle, summary, warning_note, featured, published_at,'
+              + ' kudos_count, comment_count, cover_url,'
+              + ' work_fandoms(fandoms(name)), work_ships(ships(name))';
+    let { data, error } = await sb.from('works')
+      .select(coCotCat ? cot + ', cover_crop' : cot)
       .eq('status', 'published');
+    if (error && coCotCat) {
+      coCotCat = false;
+      ({ data, error } = await sb.from('works').select(cot).eq('status', 'published'));
+    }
     if (error || !data) return null;
 
     return data
@@ -3265,7 +3642,9 @@ window.fetchWorksFromDB = async function () {
         featured: !!w.featured,
         date: w.published_at || '',
         kudos: w.kudos_count || 0,
-        comments: w.comment_count || 0
+        comments: w.comment_count || 0,
+        cover: w.cover_url || '',
+        coverCrop: !!w.cover_crop
       }))
       // Giữ đúng thứ tự cũ của trang Works: theo số thứ tự fic.
       .filter(d => !isNaN(d.idx))
