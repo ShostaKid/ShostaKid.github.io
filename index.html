@@ -380,6 +380,11 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .pw-bia-cat{display:flex;align-items:flex-start;gap:0.5rem;cursor:pointer;
   font-family:var(--font-ui);font-size:0.6rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ui);line-height:1.6;}
 .pw-bia-cat input{width:auto;margin:2px 0 0;flex:0 0 auto;}
+.pw-bia-or{font-family:Georgia,serif;font-style:italic;font-size:0.75rem;color:var(--ui);
+  margin:1rem 0 0.4rem;padding-top:0.9rem;border-top:1px solid var(--border);}
+#pw-bia-url{width:100%;background:var(--cream2);border:1px solid var(--border);padding:8px 11px;
+  font-family:Georgia,serif;font-size:0.85rem;color:var(--ink);box-sizing:border-box;}
+#pw-bia-url:focus{outline:none;border-color:var(--gold);}
 
 /* Bảng chọn chỗ đặt ảnh minh hoạ, hiện ra sau khi tải ảnh lên xong. */
 .pw-cho-anh{border:1px solid var(--gold);background:var(--cream);padding:0.9rem 1rem;margin:0.6rem 0;}
@@ -1088,6 +1093,11 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
               <button type="button" class="mini-btn" id="pw-bia-chon" data-i18n="post_cover_pick">Choose cover</button>
               <button type="button" class="mini-btn danger" id="pw-bia-xoa" data-i18n="post_cover_del">Remove</button>
             </div>
+            <!-- Dán link: ảnh nằm ở GitHub Releases hay bất cứ đâu cũng dùng được,
+                 không tốn dung lượng Storage. Cùng khuôn với ô avatar ở trang hồ sơ. -->
+            <div class="pw-bia-or" data-i18n="post_cover_or">…or paste a link to an image hosted elsewhere</div>
+            <input type="url" id="pw-bia-url" data-i18n-ph="post_cover_url_ph" placeholder="https://github.com/.../releases/download/...">
+            <div class="field-hint" data-i18n="post_cover_url_hint">Same idea as the music: upload the file to a GitHub release, then paste its link here.</div>
             <label class="pw-bia-cat"><input type="checkbox" id="pw-bia-cat-o"><span data-i18n="post_cover_crop">Crop to a 21:9 band at the top of the reading page</span></label>
             <div class="field-hint" data-i18n="post_cover_crop_hint">Leave off to show the image whole. Turn on for tall images that would otherwise fill the screen before the first line of text.</div>
           </div>
@@ -2178,6 +2188,12 @@ const i18n = {
     post_need_title:'Please enter a title.', post_need_ch:'Add at least one chapter with some text.',
     post_err:'Could not save. Please try again.', post_img_err:'Could not upload that image.',
     post_img_first:'Save the work once before adding images.',
+    post_add_img_url:'Image from a link',
+    post_img_url_ask:'Paste the image link (GitHub release, or anywhere else):',
+    post_img_url_bad:'That link has to start with http:// or https://',
+    post_cover_or:'…or paste a link to an image hosted elsewhere',
+    post_cover_url_ph:'https://github.com/.../releases/download/...',
+    post_cover_url_hint:'Same idea as the music: upload the file to a GitHub release, then paste its link here. Nothing is stored on Supabase this way.',
     post_img_where:'Where should this image go?',
     post_img_top:'At the very top', post_img_after:'After paragraph {n}', post_img_end:'At the very end',
     post_img_cancel:'Cancel — don’t insert', post_img_done:'Image inserted.',
@@ -2295,6 +2311,12 @@ const i18n = {
     post_need_title:'Bạn cần nhập tiêu đề.', post_need_ch:'Cần ít nhất một chương có nội dung.',
     post_err:'Không lưu được. Bạn thử lại nhé.', post_img_err:'Không tải được ảnh lên.',
     post_img_first:'Lưu truyện một lần trước khi chèn ảnh.',
+    post_add_img_url:'Ảnh từ link',
+    post_img_url_ask:'Dán link ảnh (GitHub release, hoặc bất cứ đâu):',
+    post_img_url_bad:'Link phải bắt đầu bằng http:// hoặc https://',
+    post_cover_or:'…hoặc dán link ảnh đang để ở nơi khác',
+    post_cover_url_ph:'https://github.com/.../releases/download/...',
+    post_cover_url_hint:'Giống hệt cách làm với nhạc: tải tệp lên một release trên GitHub rồi dán link vào đây. Cách này không tốn dung lượng Supabase.',
     post_img_where:'Đặt ảnh này vào đâu?',
     post_img_top:'Ngay đầu chương', post_img_after:'Sau đoạn {n}', post_img_end:'Cuối chương',
     post_img_cancel:'Huỷ — không chèn nữa', post_img_done:'Đã chèn ảnh.',
@@ -3053,12 +3075,26 @@ function pwAddChapter(data) {
     if (!pwWorkId) { pwSay('post_img_first', true); return; }
     pwOto = ta; $('pw-img-file').click();
   });
+
+  // Chèn ảnh đã nằm sẵn ở nơi khác (GitHub Releases…): không tải lên gì cả,
+  // nên cũng không cần id truyện, và không tốn dung lượng Storage.
+  const imgLink = document.createElement('button');
+  imgLink.type = 'button'; imgLink.className = 'mini-btn';
+  imgLink.dataset.i18n = 'post_add_img_url';
+  imgLink.textContent = tr('post_add_img_url');
+  imgLink.addEventListener('click', () => {
+    const url = (window.prompt(tr('post_img_url_ask')) || '').trim();
+    if (!url) return;
+    if (!/^https?:\/\//i.test(url)) { pwSay('post_img_url_bad', true); return; }
+    pwSay(null);
+    moBangChonCho(ta, url);
+  });
   const xoa = document.createElement('button');
   xoa.type = 'button'; xoa.className = 'mini-btn danger';
   xoa.dataset.i18n = 'post_del_ch';
   xoa.textContent = tr('post_del_ch');
   xoa.addEventListener('click', () => wrap.remove());
-  hang.append(img, xoa);
+  hang.append(img, imgLink, xoa);
 
   const nhanNhac = document.createElement('div');
   nhanNhac.className = 'field-hint';
@@ -3207,17 +3243,26 @@ function chenAnh(ta, url, viTri) {
 }
 
 // ---------- Ảnh bìa ----------
-let pwBiaUrl = '';
+// Ô #pw-bia-url là nguồn duy nhất giữ đường dẫn bìa. Tải tệp lên chỉ là một cách
+// điền vào ô đó; dán link GitHub Releases là cách kia. Nhờ vậy hai đường không
+// bao giờ lệch nhau, và ô luôn cho thấy bìa đang thật sự trỏ đi đâu.
+function biaHienTai() { return $('pw-bia-url').value.trim(); }
 
 function veBia() {
+  const url = biaHienTai();
   const o = $('pw-bia-xem');
   o.textContent = '';
-  o.append(oBia(pwBiaUrl, 'fic-bia'));
-  $('pw-bia-xoa').disabled = !pwBiaUrl;
-  $('pw-bia-cat-o').disabled = !pwBiaUrl;
+  o.append(oBia(url, 'fic-bia'));
+  $('pw-bia-xoa').disabled = !url;
+  $('pw-bia-cat-o').disabled = !url;
 }
 
+// Dán link vào là xem trước ngay, không phải bấm gì thêm.
+$('pw-bia-url').addEventListener('input', veBia);
+
 $('pw-bia-chon').addEventListener('click', () => {
+  // Chỉ đường TẢI LÊN mới cần id truyện, vì tệp phải nằm trong thư mục của nó.
+  // Dán link thì không cần — truyện mới cũng dán được.
   if (!pwWorkId) { pwSay('post_img_first', true); return; }
   $('pw-bia-tep').click();
 });
@@ -3228,13 +3273,14 @@ $('pw-bia-tep').addEventListener('change', async (e) => {
   if (!file || !pwWorkId) return;
   const url = await pwTaiAnh(file, 'bia');
   if (!url) return;
-  pwBiaUrl = url;
+  $('pw-bia-url').value = url;
   veBia();
 });
 
 $('pw-bia-xoa').addEventListener('click', () => {
   // Chỉ gỡ khỏi truyện; tệp trên Storage do pwDonAnhThua() dọn lúc lưu.
-  pwBiaUrl = '';
+  // Link ngoài thì xoá ở đây là hết, site không đụng vào tệp của nơi khác.
+  $('pw-bia-url').value = '';
   $('pw-bia-cat-o').checked = false;
   veBia();
 });
@@ -3311,7 +3357,7 @@ async function loadPostForm(idx) {
     pwMusicWrite($('pw-music-work'), null);
     $('pw-featured').checked = false;
     $('pw-restricted').checked = false;
-    pwBiaUrl = ''; $('pw-bia-cat-o').checked = false; veBia();
+    $('pw-bia-url').value = ''; $('pw-bia-cat-o').checked = false; veBia();
     pwAddChapter();
     return;
   }
@@ -3332,7 +3378,7 @@ async function loadPostForm(idx) {
   $('pw-status').value   = w.status || 'published';
   $('pw-featured').checked = !!w.featured;
   $('pw-restricted').checked = !!w.is_restricted;
-  pwBiaUrl = w.cover_url || '';
+  $('pw-bia-url').value = w.cover_url || '';
   $('pw-bia-cat-o').checked = !!w.cover_crop;
   veBia();
 
@@ -3388,7 +3434,7 @@ $('pw-save').addEventListener('click', async () => {
     // Khoá thật nằm ở policy SELECT của bảng works: truyện bật cờ này biến mất
     // khỏi API với khách chưa đăng nhập, không phải chỉ ẩn trên giao diện.
     is_restricted: $('pw-restricted').checked,
-    cover_url:  pwBiaUrl || null,
+    cover_url:  biaHienTai() || null,
     cover_crop: !!$('pw-bia-cat-o').checked,
     published_at: $('pw-status').value === 'published' ? new Date().toISOString() : null
   };
@@ -3494,7 +3540,7 @@ async function pwDonAnhThua(workId, chuong) {
       let m;
       while ((m = re.exec(s || '')) !== null) dangDung.add(decodeURIComponent(m[1]));
     };
-    nhat(pwBiaUrl);
+    nhat(biaHienTai());
     chuong.forEach(c => nhat(c.content));
 
     const thua = tep
