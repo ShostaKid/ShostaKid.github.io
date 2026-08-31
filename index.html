@@ -753,11 +753,51 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
     <div class="about-wrap">
       <div class="about-ornament">𝄞</div>
       <div class="section-heading" style="margin-top:1rem;" data-i18n="about_head">About the Author</div>
-      <div class="about-body">
+      <!-- Nội dung này giờ đọc từ site_content.about trong DB. Bốn đoạn dưới đây
+           giữ nguyên làm bản dự phòng khi không gọi được DB (và là thứ hiện ra
+           trong khoảnh khắc trước khi truy vấn trả về). -->
+      <div class="about-body" id="about-body">
         <p data-i18n-html="about_p1">Welcome. I write under the name <strong>ShostaKid</strong>, so you can say that I'm a child of Dmitry Dmitrievich Shostakovich (kind of lol)</p>
         <p data-i18n-html="about_p2">My works, most of the time, are random thoughts that live inside my head. I write what I want here, so don't question me and enjoy as much as you can:).</p>
         <p data-i18n-html="about_p3">I write primarily for the <em>Reverse: 1999</em>, <em>Figure Skating RPF</em>, <em>Honkai: Star Rail</em> and sometimes <em>Genshin Impact</em> fandoms. There will be more, but right now those are my primary</p>
         <p data-i18n-html="about_p4">I hope you have a great time here. Thank you for stopping by.</p>
+      </div>
+      <!-- Chỉ admin thấy -->
+      <div style="margin-top:1.5rem;">
+        <button type="button" class="ao3-link" id="btn-edit-about" data-i18n="ab_edit" style="display:none;">✎ Edit this page</button>
+      </div>
+
+      <!-- Form sửa, ẩn cho tới khi bấm nút trên -->
+      <div id="about-form" style="display:none;text-align:left;margin-top:1.5rem;">
+        <div class="auth-msg" id="ab-msg"></div>
+        <div class="field">
+          <label data-i18n="ab_body_en">Bio — English</label>
+          <textarea id="ab-en" rows="8"></textarea>
+        </div>
+        <div class="field">
+          <label data-i18n="ab_body_vi">Bio — Tiếng Việt</label>
+          <textarea id="ab-vi" rows="8"></textarea>
+        </div>
+        <div class="field-hint" data-i18n="post_html_hint">Simple HTML is allowed: &lt;em&gt;, &lt;br&gt;</div>
+        <div class="section-heading" style="font-size:1rem;margin-top:2rem;" data-i18n="post_music">Music</div>
+        <div class="pw-music" id="ab-music">
+          <input type="url" class="pw-m-url" data-i18n-ph="post_m_url" placeholder="Audio link">
+          <input type="text" class="pw-m-name" data-i18n-ph="post_m_name" placeholder="Track name">
+          <div class="pw-m-row">
+            <input type="number" class="pw-m-start" min="0" step="1" data-i18n-ph="post_m_start" placeholder="Start (seconds)">
+            <select class="pw-m-source">
+              <option value="github">GitHub Releases</option>
+              <option value="archive">archive.org</option>
+              <option value="musopen">Musopen</option>
+              <option value="soundcloud">SoundCloud</option>
+              <option value="youtube">YouTube</option>
+            </select>
+          </div>
+        </div>
+        <div class="cmt-actions">
+          <button type="button" class="comment-reply" id="ab-cancel" data-i18n="cmt_cancel">Cancel</button>
+          <button type="button" class="ao3-link" id="ab-save" style="margin-top:0;" data-i18n="ab_save">Save →</button>
+        </div>
       </div>
       <div class="stat-row">
         <div class="stat-box"><span class="stat-num" id="stat-works">—</span><span class="stat-label" data-i18n="stat_works">Works</span></div>
@@ -1810,6 +1850,9 @@ const i18n = {
     post_err:'Could not save. Please try again.', post_img_err:'Could not upload that image.',
     post_img_first:'Save the work once before adding images.',
     post_add_fandom:'+ New fandom', post_add_ship:'+ New ship',
+    ab_edit:'✎ Edit this page', ab_body_en:'Bio — English', ab_body_vi:'Bio — Vietnamese',
+    ab_save:'Save →', ab_saving:'Saving…', ab_saved:'About page updated ♪',
+    ab_err:'Could not save the About page.',
     post_new_fandom:'Name of the new fandom:', post_new_ship:'Name of the new ship:',
     post_confirm_new:'Create \"%s\"? It cannot be renamed or removed from this form.',
     post_created:'Created and selected ♪', post_already_there:'That one already exists — selected it for you.',
@@ -1911,6 +1954,9 @@ const i18n = {
     post_err:'Không lưu được. Bạn thử lại nhé.', post_img_err:'Không tải được ảnh lên.',
     post_img_first:'Lưu truyện một lần trước khi chèn ảnh.',
     post_add_fandom:'+ Thêm fandom', post_add_ship:'+ Thêm ship',
+    ab_edit:'✎ Sửa trang này', ab_body_en:'Giới thiệu — Tiếng Anh', ab_body_vi:'Giới thiệu — Tiếng Việt',
+    ab_save:'Lưu →', ab_saving:'Đang lưu…', ab_saved:'Đã cập nhật trang giới thiệu ♪',
+    ab_err:'Không lưu được trang giới thiệu.',
     post_new_fandom:'Tên fandom mới:', post_new_ship:'Tên ship mới:',
     post_confirm_new:'Tạo \"%s\"? Form này không sửa hay xoá lại được.',
     post_created:'Đã tạo và chọn ♪', post_already_there:'Đã có sẵn — t chọn giúp rồi.',
@@ -2002,6 +2048,7 @@ function applyLang() {
   if (cmtSubmit && !cmtSubmit.disabled) cmtSubmit.textContent = t('cmt_post');
   // Danh sách bình luận dựng động nên phải vẽ lại (ngày tháng, badge, nút xoá).
   if (window.repaintComments) window.repaintComments();
+  if (window.repaintAbout) window.repaintAbout();
 
   const mt = document.querySelector('.music-toggle');
   if (mt) mt.textContent = musicPlaying ? t('pause') : t('play');
@@ -2205,14 +2252,9 @@ function showPage(id, el) {
     window.loadPostForm(idx);
   }
   if (id === 'about') {
-  playMusicDirect(
-    aboutMusic.source,
-    aboutMusic.url,
-    aboutMusic.id || null,
-    aboutMusic.start,
-    aboutMusic.end || null,
-    aboutMusic.name
-  );
+  // Ưu tiên nhạc lưu trong site_content; aboutMusic viết cứng chỉ còn là dự phòng.
+  const am = window.aboutMusicHienTai || aboutMusic;
+  playMusicDirect(am.source, am.url, am.id || null, am.start, am.end || null, am.name);
 } else if (id !== 'reading') {
   stopMusic();  // home, works → tắt nhạc
 }
@@ -2328,6 +2370,7 @@ function paintProfile(p) {
   $('prof-name').textContent   = p.display_name || p.username;
   $('prof-handle').textContent = '@' + p.username;
   $('nav-post').style.display = p.is_admin ? '' : 'none';
+  $('btn-edit-about').style.display = p.is_admin ? '' : 'none';
   $('prof-admin').innerHTML    = p.is_admin
     ? `<span class="admin-badge">${tr('prof_admin')}</span>` : '';
   $('pf-username').value = p.username || '';
@@ -2454,6 +2497,78 @@ $('btn-avatar-clear').addEventListener('click', async () => {
 
   if (err) { msg($('prof-msg'), raw(err.message), 'err'); return; }
   msg($('prof-msg'), 'prof_avatar_removed', 'ok');
+});
+
+// ---------- trang About: nội dung + nhạc sửa được qua web ----------
+let abData = null;   // {body_en, body_vi, music}
+
+function abSay(key, isErr) {
+  const el = $('ab-msg');
+  if (!key) { el.className = 'auth-msg'; delete el.dataset.i18n; el.textContent = ''; return; }
+  el.className = 'auth-msg show ' + (isErr ? 'err' : 'ok');
+  if (key.i18n === false) { delete el.dataset.i18n; el.textContent = key.text; }
+  else { el.dataset.i18n = key; el.textContent = tr(key); }
+}
+
+// Vẽ bio theo ngôn ngữ đang chọn. Dùng innerHTML vì nội dung vốn có <strong>,
+// <em> — và chỉ admin ghi được vào bảng này nên đó là chữ của chủ nhà.
+function paintAbout() {
+  if (!abData) return;
+  const vi = document.documentElement.getAttribute('data-lang') === 'vi';
+  const html = (vi ? abData.body_vi : abData.body_en) || abData.body_en || abData.body_vi;
+  if (html) $('about-body').innerHTML = html;
+  // Nhạc trang About lấy từ DB, thay cho hằng aboutMusic viết cứng.
+  if (abData.music && abData.music.url) window.aboutMusicHienTai = abData.music;
+}
+window.repaintAbout = paintAbout;
+
+async function loadAbout() {
+  const { data, error } = await sb.from('site_content')
+    .select('value').eq('key', 'about').maybeSingle();
+  if (error || !data || !data.value) return;   // hỏng thì giữ nguyên bản viết cứng
+  abData = data.value;
+  paintAbout();
+}
+
+$('btn-edit-about').addEventListener('click', () => {
+  abSay(null);
+  $('ab-en').value = (abData && abData.body_en) || '';
+  $('ab-vi').value = (abData && abData.body_vi) || '';
+  pwMusicWrite($('ab-music'), abData && abData.music);
+  $('about-form').style.display = '';
+  $('btn-edit-about').style.display = 'none';
+  $('ab-en').focus();
+});
+
+$('ab-cancel').addEventListener('click', () => {
+  $('about-form').style.display = 'none';
+  $('btn-edit-about').style.display = '';
+  abSay(null);
+});
+
+$('ab-save').addEventListener('click', async () => {
+  const btn = $('ab-save');
+  abSay(null);
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { abSay('prof_need_signin', true); return; }
+
+  busy(btn, true, 'ab_saving');
+  const giaTri = {
+    body_en: $('ab-en').value.trim(),
+    body_vi: $('ab-vi').value.trim(),
+    music:   pwMusicRead($('ab-music'))
+  };
+  const { error } = await sb.from('site_content')
+    .update({ value: giaTri, updated_by: session.user.id })
+    .eq('key', 'about');
+  busy(btn, false, 'ab_save');
+
+  if (error) { abSay(raw(error.message), true); return; }
+  abData = giaTri;
+  paintAbout();
+  $('about-form').style.display = 'none';
+  $('btn-edit-about').style.display = '';
+  abSay('ab_saved');
 });
 
 // ---------- trang đăng / sửa truyện (chỉ admin) ----------
@@ -3690,6 +3805,7 @@ async function guardProfile() {
     msg($('auth-msg'), 'prof_need_signin', 'err');
   }
 }
+loadAbout();
 guardProfile();
 </script>
 </body>

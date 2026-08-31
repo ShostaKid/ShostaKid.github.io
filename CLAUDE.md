@@ -137,6 +137,7 @@ Migration đã chạy, theo thứ tự:
 15. `auto_assign_legacy_id`
 16. `create_work_images_bucket`
 17. `fix_chapters_insert_allow_admin`
+18. `create_site_content`
 
 ### Ba cái bẫy đã gặp — đừng lặp lại
 
@@ -749,6 +750,29 @@ Ba lớp chặn nhầm lẫn:
 Vẫn **không có chỗ sửa/xoá** trong form. Gõ sai thì phải sửa bằng SQL — đúng loại
 lỗi đã xảy ra với `Nevuillette/Furina`. Bảng `ships` có `canonical_id` để gộp trùng
 nếu cần.
+
+### Trang About sửa được qua web (migration 18)
+
+Bảng `site_content(key, value jsonb, updated_at, updated_by)`. Một hàng khoá
+`about` chứa `body_en`, `body_vi`, `music`. Dạng key/value để sau này thêm mục
+khác không cần bảng mới; thêm trường mới vào JSON cũng không cần migration.
+
+Đọc công khai, **chỉ admin ghi**, và GRANT theo **cột** nên client không tự đặt
+`updated_at` — cột đó do trigger `touch_updated_at` giữ.
+
+Bốn đoạn `about_p1`–`about_p4` trong bảng i18n **giữ nguyên làm dự phòng**: nếu
+không gọi được DB thì trang About vẫn hiện đủ nội dung. Hàng `about` được nạp sẵn
+đúng nội dung đang hardcode nên sau migration trang không đổi một chữ.
+
+Bio lưu **một khối HTML mỗi ngôn ngữ**, không phải 4 đoạn rời — chủ repo tự thêm
+bớt đoạn được. Hiển thị bằng `innerHTML` (giống tóm tắt truyện) vì nội dung vốn
+có `<strong>`, `<em>`, và chỉ admin ghi được vào bảng này.
+
+`applyLang()` gọi `repaintAbout()` để bio đổi theo ngôn ngữ. Nhạc trang About lấy
+từ `site_content`; hằng `aboutMusic` viết cứng chỉ còn là dự phòng.
+
+**Chữ ký "— ShostaKid" và link AO3 / X vẫn hardcode** — chủ repo chốt để nguyên.
+Muốn sửa được thì thêm khoá vào JSON và thêm ô trên form, không cần migration.
 ## Bước 6 — trang đọc lấy nội dung từ database (cập nhật 2026-08-30)
 
 `loadChapter()` giờ đọc `chapters.content` thay vì `fetch` file `.txt` từ GitHub.
