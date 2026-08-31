@@ -65,6 +65,37 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .nav-links a{font-family:var(--font-ui);font-size:0.72rem;letter-spacing:2.5px;color:var(--ink2);text-decoration:none;text-transform:uppercase;cursor:pointer;transition:color 0.2s;}
 .nav-links a:hover,.nav-links a.active{color:var(--ui-head);}
 
+/* ----- khu cá nhân bên phải ----- */
+/* "Sign In" nằm ngoài .nav-links nên phải tự khai báo lại kiểu chữ nav. */
+.nav-signin{font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2px;color:var(--ui);
+  text-decoration:none;text-transform:uppercase;cursor:pointer;padding:6px 12px;
+  border:1px solid var(--border);border-radius:2px;transition:color 0.2s,border-color 0.2s,background 0.2s;}
+.nav-signin:hover,.nav-signin.active{color:var(--ui-head);border-color:var(--gold);background:var(--cream2);}
+
+.nav-me{position:relative;display:flex;align-items:center;}
+/* Avatar là nút mở menu. Ảnh đặt bằng background-image chứ không phải <img>,
+   vì avatar_url là dữ liệu người dùng nhập — cách này không dựng thẻ mới. */
+.nav-avatar{width:30px;height:30px;padding:0;border-radius:50%;cursor:pointer;
+  border:1px solid var(--border);background:var(--cream2) center/cover no-repeat;
+  /* --ui chứ không phải --ui-head: nền ở đây là --cream2 tối hơn một chút,
+     --ui-head trên nền đó chỉ còn 4.15, dưới ngưỡng AA. */
+  font-family:var(--font-ui);font-size:0.72rem;letter-spacing:0;color:var(--ui);
+  display:flex;align-items:center;justify-content:center;transition:border-color 0.2s;}
+.nav-avatar:hover,.nav-avatar[aria-expanded="true"]{border-color:var(--gold);}
+
+.nav-menu{position:absolute;top:calc(100% + 10px);right:0;min-width:190px;z-index:120;
+  background:var(--cream);border:1px solid var(--border);border-radius:2px;
+  box-shadow:0 8px 26px rgba(44,35,24,0.14);padding:6px 0;
+  opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity 0.18s,transform 0.18s,visibility 0.18s;}
+.nav-menu.open{opacity:1;visibility:visible;transform:translateY(0);}
+/* Vạch vàng mảnh trên đỉnh — cùng ngôn ngữ trang trí với các khối khác của trang. */
+.nav-menu::before{content:'';position:absolute;top:-1px;left:0;right:0;height:2px;background:var(--gold);}
+.nav-menu a{display:block;padding:9px 16px;cursor:pointer;text-decoration:none;
+  font-family:var(--font-ui);font-size:0.66rem;letter-spacing:1.6px;text-transform:uppercase;
+  color:var(--ui);transition:color 0.15s,background 0.15s;white-space:nowrap;}
+.nav-menu a:hover{color:var(--ui-head);background:var(--cream2);}
+.nav-menu-out{border-top:1px solid var(--border);margin-top:6px;padding-top:11px !important;}
+
 #music-bar{background:rgba(242,237,224,0.95);border-bottom:1px solid var(--border);padding:8px 3rem;display:flex;align-items:center;gap:1rem;font-family:var(--font-ui);font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);min-height:36px;}
 #music-bar.hidden{display:none;}
 .music-now{display:flex;align-items:center;gap:8px;flex:1;}
@@ -326,7 +357,10 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   .nav-links { gap: 0.9rem; min-width: 0; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
   .nav-links::-webkit-scrollbar { display: none; }
   .nav-links a { font-size: 0.6rem; letter-spacing: 1.5px; white-space: nowrap; }
-  .nav-utils { flex-shrink: 0; }
+  .nav-utils { flex-shrink: 0; gap: 6px; }
+  .nav-signin { font-size: 0.56rem; letter-spacing: 1.2px; padding: 5px 8px; white-space: nowrap; }
+  .nav-avatar { width: 26px; height: 26px; font-size: 0.64rem; }
+  .nav-menu { min-width: 170px; }
 
   #theme-btn {
     font-size: 1.1rem;
@@ -574,16 +608,29 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 <div id="site">
   <nav>
     <div class="nav-logo">Shosta<span>Kid</span></div>
+    <!-- Điều hướng NỘI DUNG: chỉ ba mục này, nằm giữa.
+         data-page là cách chọn ổn định — trước đây code trỏ nth-child(2) để lấy
+         mục Works, thêm bớt một mục là gãy. -->
     <div class="nav-links">
-      <a class="active" data-i18n="nav_home" onclick="showPage('home',this)">Home</a>
-      <a data-i18n="nav_works" onclick="showPage('works',this)">Works</a>
-      <a data-i18n="nav_about" onclick="showPage('about',this)">About</a>
-      <a id="nav-signin" data-i18n="nav_signin" onclick="showPage('auth',this)">Sign In</a>
-      <a id="nav-post" data-i18n="nav_post" onclick="showPage('post',this)" style="display:none;">Post</a>
-      <a id="nav-bookmarks" data-i18n="nav_bookmarks" onclick="showPage('bookmarks',this)" style="display:none;">My Bookmarks</a>
-      <a id="nav-profile" data-i18n="nav_profile" onclick="showPage('profile',this)" style="display:none;">My Profile</a>
+      <a class="active" data-page="home"  data-i18n="nav_home"  onclick="showPage('home',this)">Home</a>
+      <a data-page="works" data-i18n="nav_works" onclick="showPage('works',this)">Works</a>
+      <a data-page="about" data-i18n="nav_about" onclick="showPage('about',this)">About</a>
     </div>
+
+    <!-- Khu CÁ NHÂN + tiện ích, nằm phải -->
     <div class="nav-utils">
+      <a id="nav-signin" class="nav-signin" data-i18n="nav_signin" onclick="showPage('auth',this)">Sign In</a>
+
+      <div class="nav-me" id="nav-me" style="display:none;">
+        <button type="button" id="nav-avatar" class="nav-avatar" aria-haspopup="true" aria-expanded="false" title="Menu"></button>
+        <div class="nav-menu" id="nav-menu">
+          <a id="nav-profile"   data-i18n="nav_profile">My Profile</a>
+          <a id="nav-bookmarks" data-i18n="nav_bookmarks">My Bookmarks</a>
+          <a id="nav-post" data-i18n="nav_post" style="display:none;">Post</a>
+          <a id="nav-logout" class="nav-menu-out" data-i18n="nav_logout">Log out</a>
+        </div>
+      </div>
+
       <button id="lang-btn" onclick="toggleLang()" title="Đổi ngôn ngữ / Switch language">VI</button>
       <button id="theme-btn" onclick="toggleTheme()" title="Toggle theme">☾</button>
     </div>
@@ -629,7 +676,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 
   </div>
   <div style="text-align:center;margin-top:2rem;">
-    <button class="ao3-link" onclick="showPage('works',document.querySelector('.nav-links a:nth-child(2)'))" data-i18n="view_all">View All Works →</button>
+    <button class="ao3-link" onclick="showPage('works',document.querySelector('.nav-links a[data-page=\'works\']'))" data-i18n="view_all">View All Works →</button>
   </div>
 </div>
     <footer><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
@@ -1161,7 +1208,7 @@ function buildSidebar() {
     tag.onclick = (e) => {
       e.stopPropagation();
       const ship = tag.textContent.trim();
-      if (currentPage !== 'works') showPage('works', document.querySelector('.nav-links a:nth-child(2)'));
+      if (currentPage !== 'works') showPage('works', document.querySelector('.nav-links a[data-page="works"]'));
       activeShips.clear();
       activeShips.add(ship);
       document.querySelectorAll('.ship-btn, .mobile-pill').forEach(btn => {
@@ -1891,6 +1938,7 @@ const i18n = {
     about_p3:'I write primarily for the <em>Reverse: 1999</em>, <em>Figure Skating RPF</em>, <em>Honkai: Star Rail</em> and sometimes <em>Genshin Impact</em> fandoms. There will be more, but right now those are my primary',
     about_p4:'I hope you have a great time here. Thank you for stopping by.',
     nav_signin:'Sign In', nav_profile:'My Profile', nav_bookmarks:'My Bookmarks', nav_post:'Post',
+    nav_logout:'Log Out',
     post_head:'Post a Work', post_edit_head:'Edit Work', post_title:'Title', post_subtitle:'Subtitle',
     post_summary:'Summary', post_warning:'Content warning', post_fandom:'Fandom', post_ships:'Ships',
     post_status:'Status', post_published:'Published', post_draft:'Draft', post_featured:'Show in My Favorite Children',
@@ -1996,6 +2044,7 @@ const i18n = {
     about_p3:'Tôi chủ yếu viết cho các fandom <em>Reverse: 1999</em>, <em>Figure Skating RPF</em>, <em>Honkai: Star Rail</em> và đôi khi cả <em>Genshin Impact</em>. Sau này sẽ có thêm, nhưng hiện tại đó là những fandom chính.',
     about_p4:'Hy vọng bạn có khoảng thời gian vui vẻ ở đây. Cảm ơn vì đã ghé qua.',
     nav_signin:'Đăng nhập', nav_profile:'Hồ sơ của tôi', nav_bookmarks:'Truyện đã lưu', nav_post:'Đăng truyện',
+    nav_logout:'Đăng xuất',
     post_head:'Đăng truyện', post_edit_head:'Sửa truyện', post_title:'Tiêu đề', post_subtitle:'Phụ đề',
     post_summary:'Tóm tắt', post_warning:'Cảnh báo nội dung', post_fandom:'Fandom', post_ships:'Ship',
     post_status:'Trạng thái', post_published:'Đã đăng', post_draft:'Bản nháp', post_featured:'Hiện ở mục truyện tâm đắc',
@@ -2292,8 +2341,11 @@ function showPage(id, el) {
   history.pushState({page: id}, '', '#' + id);
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
-  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+  // .nav-signin nằm ngoài .nav-links nhưng cũng nhận .active, nên phải xoá cùng
+  // — không thì nó sáng mãi sau khi rời trang đăng nhập.
+  document.querySelectorAll('.nav-links a, .nav-signin').forEach(a=>a.classList.remove('active'));
   if (el) el.classList.add('active');
+  if (window.closeNavMenu) window.closeNavMenu();
   prevPage = currentPage; currentPage = id;
   // Trang "Truyện đã lưu" nạp lại mỗi lần mở, vì người dùng có thể vừa bỏ lưu
   // ở trang đọc xong quay lại đây.
@@ -2322,15 +2374,20 @@ function goBack() {
   document.getElementById('back-top').classList.remove('visible');
   document.getElementById('back-top').classList.remove('tucked');
   document.getElementById('float-toggle').classList.remove('visible');
+  // Phải chốt đích TRƯỚC khi gọi showPage: showPage() gán lại prevPage = currentPage
+  // (lúc đó là 'reading'), nên đọc prevPage sau đó thì luôn rơi về 'home'.
+  const veLai = prevPage === 'works' ? 'works' : 'home';
   showPage(prevPage, null);
-  if (prevPage==='works') document.querySelector('.nav-links a:nth-child(2)').classList.add('active');
-  else document.querySelector('.nav-links a:nth-child(1)').classList.add('active');
+  document.querySelector('.nav-links a[data-page="' + veLai + '"]').classList.add('active');
 }
 
 window.addEventListener('popstate', (e) => {
-  if (!e.state) { showPage('home', document.querySelector('.nav-links a:first-child')); return; }
+  if (!e.state) { showPage('home', document.querySelector('.nav-links a[data-page="home"]')); return; }
   if (e.state.page === 'reading') { openFic(e.state.fic); return; }
-  const el = document.querySelector(`.nav-links a[onclick*="${e.state.page}"]`);
+  // Các trang cá nhân (profile/bookmarks/post) không còn mục nào trên thanh nav
+  // để làm sáng — el = null là đúng, chỉ riêng auth thì sáng nút Sign In.
+  const el = document.querySelector(`.nav-links a[data-page="${e.state.page}"]`)
+          || (e.state.page === 'auth' ? document.querySelector('.nav-signin') : null);
   showPage(e.state.page, el);
 });
 
@@ -2385,12 +2442,59 @@ function busy(btn, on, labelKey) {
 
 // ---------- điều hướng theo trạng thái đăng nhập ----------
 function paintNav(session) {
-  $('nav-signin').style.display    = session ? 'none' : '';
-  $('nav-profile').style.display   = session ? '' : 'none';
-  $('nav-bookmarks').style.display = session ? '' : 'none';
-  // Nút đăng truyện chỉ hiện với admin; paintProfile() bật lên khi biết chắc.
-  if (!session) $('nav-post').style.display = 'none';
+  // Đăng nhập rồi thì thay nút Sign In bằng cụm avatar; các mục cá nhân dời hết
+  // vào menu đổ xuống nên chỉ cần bật/tắt một khối.
+  $('nav-signin').style.display = session ? 'none' : '';
+  $('nav-me').style.display     = session ? '' : 'none';
+  if (!session) {
+    // Nút đăng truyện chỉ hiện với admin; paintProfile() bật lên khi biết chắc.
+    $('nav-post').style.display = 'none';
+    paintNavAvatar(null);
+    closeNavMenu();
+  }
 }
+
+// Avatar trên thanh nav: đặt bằng background-image, không dựng thẻ <img> mới,
+// vì avatar_url là dữ liệu người dùng nhập.
+function paintNavAvatar(profile) {
+  const nut = $('nav-avatar');
+  const url = ((profile && profile.avatar_url) || '').trim();
+  const chu = (((profile && (profile.display_name || profile.username)) || '♩')
+                .trim().charAt(0) || '♩').toUpperCase();
+  if (/^https?:\/\//i.test(url)) {
+    nut.style.backgroundImage = 'url("' + url.replace(/["\\]/g, '') + '")';
+    nut.textContent = '';
+  } else {
+    nut.style.backgroundImage = '';
+    nut.textContent = chu;
+  }
+}
+
+// ---------- menu đổ xuống ----------
+function closeNavMenu() {
+  $('nav-menu').classList.remove('open');
+  $('nav-avatar').setAttribute('aria-expanded', 'false');
+}
+window.closeNavMenu = closeNavMenu;   // showPage() gọi để đóng menu khi chuyển trang
+
+$('nav-avatar').addEventListener('click', (e) => {
+  e.stopPropagation();               // không để chính cú bấm này rơi xuống document và đóng lại ngay
+  const mo = $('nav-menu').classList.toggle('open');
+  $('nav-avatar').setAttribute('aria-expanded', mo ? 'true' : 'false');
+});
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('#nav-me')) closeNavMenu();
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeNavMenu(); });
+
+$('nav-profile'  ).addEventListener('click', () => window.showPage('profile'));
+$('nav-bookmarks').addEventListener('click', () => window.showPage('bookmarks'));
+$('nav-post'     ).addEventListener('click', () => window.showPage('post'));
+$('nav-logout'   ).addEventListener('click', async () => {
+  closeNavMenu();
+  await sb.auth.signOut();
+  window.showPage('home', document.querySelector('.nav-links a[data-page="home"]'));
+});
 
 // Dựng bằng DOM thay vì chuỗi HTML: avatar_url là dữ liệu người dùng nhập,
 // không nhét thẳng vào innerHTML.
@@ -2420,6 +2524,7 @@ function paintAvatar(box, profile) {
 function paintProfile(p) {
   currentProfile = p;
   paintAvatar($('prof-avatar-box'), p);
+  paintNavAvatar(p);
   $('prof-name').textContent   = p.display_name || p.username;
   $('prof-handle').textContent = '@' + p.username;
   $('nav-post').style.display = p.is_admin ? '' : 'none';
@@ -2493,6 +2598,7 @@ async function saveAvatarUrl(url, session) {
   currentProfile = data;
   $('pf-avatar').value = data.avatar_url || '';
   paintAvatar($('prof-avatar-box'), data);
+  paintNavAvatar(data);
   dropStaleAvatar(old, data.avatar_url, session.user.id);
   return null;
 }
@@ -3216,7 +3322,7 @@ window.loadWorkActions = loadWorkActions;
 $('btn-edit-work').addEventListener('click', () => {
   if (waFic === null) return;
   window.__pwEditIdx = waFic;          // showPage đọc số này rồi nạp đúng truyện
-  window.showPage('post', $('nav-post'));
+  window.showPage('post');   // nav-post nằm trong menu đổ xuống, không phải mục nav để làm sáng
 });
 
 $('btn-kudos').addEventListener('click', async () => {
@@ -3822,7 +3928,7 @@ $('form-profile').addEventListener('submit', async (e) => {
 // ---------- đăng xuất ----------
 $('btn-signout').addEventListener('click', async () => {
   await sb.auth.signOut();
-  window.showPage('home', document.querySelector('.nav-links a:nth-child(1)'));
+  window.showPage('home', document.querySelector('.nav-links a[data-page="home"]'));
 });
 
 // ---------- đồng bộ trạng thái ----------
