@@ -3300,16 +3300,11 @@ async function loadPostForm(idx) {
   }
 
   head.dataset.i18n = 'post_edit_head'; head.textContent = tr('post_edit_head');
-  const cotW = 'id,title,subtitle,summary,warning_note,status,featured,cover_url,'
-             + 'work_fandoms(fandom_id), work_ships(ship_id),'
-             + 'chapters(id,position,title,content,music)';
-  let { data: w } = await sb.from('works')
-    .select(coCotCat ? cotW + ',cover_crop' : cotW)
+  const { data: w } = await sb.from('works')
+    .select('id,title,subtitle,summary,warning_note,status,featured,cover_url,cover_crop,'
+          + 'work_fandoms(fandom_id), work_ships(ship_id),'
+          + 'chapters(id,position,title,content,music)')
     .eq('legacy_id', 'fic-' + idx).maybeSingle();
-  if (!w && coCotCat) {   // có thể do cột cover_crop chưa tồn tại — thử lại không có nó
-    coCotCat = false;
-    ({ data: w } = await sb.from('works').select(cotW).eq('legacy_id', 'fic-' + idx).maybeSingle());
-  }
   if (!w) { pwSay('post_err', true); return; }
 
   pwWorkId = w.id;
@@ -3373,10 +3368,9 @@ $('pw-save').addEventListener('click', async () => {
     status:   $('pw-status').value,
     featured: $('pw-featured').checked,
     cover_url:  pwBiaUrl || null,
+    cover_crop: !!$('pw-bia-cat-o').checked,
     published_at: $('pw-status').value === 'published' ? new Date().toISOString() : null
   };
-  // Chỉ gửi cover_crop khi cột đã tồn tại; gửi bừa là hỏng cả lệnh lưu.
-  if (coCotCat) patch.cover_crop = !!$('pw-bia-cat-o').checked;
 
   let workId = pwWorkId, err = null;
   if (workId) {
@@ -3609,25 +3603,13 @@ window.fetchChapters = async function (ficIdx) {
 // Không cần lọc is_restricted ở đây: policy SELECT của bảng works đã bỏ hẳn
 // những hàng đó với khách chưa đăng nhập, nên truyện bị hạn chế biến mất khỏi
 // danh sách — không lộ cả tên lẫn tóm tắt.
-// TẠM THỜI: cột cover_crop chỉ có sau khi chạy migration add_cover_crop.
-// PostgREST từ chối NGUYÊN truy vấn nếu select nhắc tới cột không tồn tại — nghĩa
-// là thiếu cột thì cả trang Works tụt về fics.json, mất 1 truyện và mất số kudos.
-// Nên hỏi cột đó một lần; hỏng thì bỏ ra và nhớ luôn.
-// Xoá cờ này sau khi migration đã chạy xong.
-let coCotCat = true;
-
 window.fetchWorksFromDB = async function () {
   try {
-    const cot = 'legacy_id, title, subtitle, summary, warning_note, featured, published_at,'
-              + ' kudos_count, comment_count, cover_url,'
-              + ' work_fandoms(fandoms(name)), work_ships(ships(name))';
-    let { data, error } = await sb.from('works')
-      .select(coCotCat ? cot + ', cover_crop' : cot)
+    const { data, error } = await sb.from('works')
+      .select('legacy_id, title, subtitle, summary, warning_note, featured, published_at,'
+            + ' kudos_count, comment_count, cover_url, cover_crop,'
+            + ' work_fandoms(fandoms(name)), work_ships(ships(name))')
       .eq('status', 'published');
-    if (error && coCotCat) {
-      coCotCat = false;
-      ({ data, error } = await sb.from('works').select(cot).eq('status', 'published'));
-    }
     if (error || !data) return null;
 
     return data
