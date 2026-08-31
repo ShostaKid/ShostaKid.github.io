@@ -731,6 +731,24 @@ Giờ `playMusic()` nhớ bài đang phát trong `nhacDangPhat = {source, url, s
 | Nguồn iframe (YouTube/SoundCloud) khác `start` | Đành dựng lại — không seek được từ ngoài |
 
 `stopMusic()` phải xoá `nhacDangPhat`, không thì lần sau tưởng vẫn đang phát.
+
+### Tạo fandom / ship mới ngay trong form
+
+Không cần migration: policy `fandoms` và `ships` vốn đã là `ALL` với `is_admin()`,
+và `authenticated` đã có đủ GRANT — admin **đã** tạo được qua API từ trước, chỉ là
+form chưa cho nhập.
+
+Nút **+ Thêm fandom** / **+ Thêm ship** cạnh mỗi ô chọn. `pwSlug()` bỏ dấu tiếng
+Việt (kể cả `đ`) rồi rút thành slug — dùng chung cho cả slug của truyện.
+
+Ba lớp chặn nhầm lẫn:
+1. Trùng tên (kể cả khác hoa thường) → **chọn cái có sẵn**, không đẻ bản trùng.
+2. Hỏi xác nhận kèm chính cái tên sắp tạo, nói rõ **form không sửa/xoá lại được**.
+3. Ship mới tự gắn `fandom_id` theo fandom đang chọn, để sidebar xếp đúng nhóm.
+
+Vẫn **không có chỗ sửa/xoá** trong form. Gõ sai thì phải sửa bằng SQL — đúng loại
+lỗi đã xảy ra với `Nevuillette/Furina`. Bảng `ships` có `canonical_id` để gộp trùng
+nếu cần.
 ## Bước 6 — trang đọc lấy nội dung từ database (cập nhật 2026-08-30)
 
 `loadChapter()` giờ đọc `chapters.content` thay vì `fetch` file `.txt` từ GitHub.

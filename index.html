@@ -848,10 +848,12 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <div class="field">
           <label data-i18n="post_fandom">Fandom</label>
           <select id="pw-fandom"></select>
+          <button type="button" class="comment-reply" id="pw-add-fandom" data-i18n="post_add_fandom" style="margin-top:0.4rem;">+ New fandom</button>
         </div>
         <div class="field">
           <label data-i18n="post_ships">Ships</label>
           <select id="pw-ships" multiple size="6"></select>
+          <button type="button" class="comment-reply" id="pw-add-ship" data-i18n="post_add_ship" style="margin-top:0.4rem;">+ New ship</button>
           <div class="field-hint" data-i18n="post_ships_hint">Hold Ctrl (or Cmd) to pick more than one.</div>
         </div>
         <div class="field">
@@ -1807,6 +1809,11 @@ const i18n = {
     post_need_title:'Please enter a title.', post_need_ch:'Add at least one chapter with some text.',
     post_err:'Could not save. Please try again.', post_img_err:'Could not upload that image.',
     post_img_first:'Save the work once before adding images.',
+    post_add_fandom:'+ New fandom', post_add_ship:'+ New ship',
+    post_new_fandom:'Name of the new fandom:', post_new_ship:'Name of the new ship:',
+    post_confirm_new:'Create \"%s\"? It cannot be renamed or removed from this form.',
+    post_created:'Created and selected ♪', post_already_there:'That one already exists — selected it for you.',
+    post_name_bad:'That name cannot be used.',
     post_music:'Music', post_music_hint:'Applies to every chapter. A chapter can override it below.',
     post_m_url:'Audio link (GitHub Releases, archive.org…)', post_m_name:'Track name shown to readers',
     post_m_start:'Start (seconds)', post_ch_music:'Music for this chapter only',
@@ -1903,6 +1910,11 @@ const i18n = {
     post_need_title:'Bạn cần nhập tiêu đề.', post_need_ch:'Cần ít nhất một chương có nội dung.',
     post_err:'Không lưu được. Bạn thử lại nhé.', post_img_err:'Không tải được ảnh lên.',
     post_img_first:'Lưu truyện một lần trước khi chèn ảnh.',
+    post_add_fandom:'+ Thêm fandom', post_add_ship:'+ Thêm ship',
+    post_new_fandom:'Tên fandom mới:', post_new_ship:'Tên ship mới:',
+    post_confirm_new:'Tạo \"%s\"? Form này không sửa hay xoá lại được.',
+    post_created:'Đã tạo và chọn ♪', post_already_there:'Đã có sẵn — t chọn giúp rồi.',
+    post_name_bad:'Tên này không dùng được.',
     post_music:'Nhạc nền', post_music_hint:'Dùng cho mọi chương. Từng chương có thể ghi đè bên dưới.',
     post_m_url:'Link nhạc (GitHub Releases, archive.org…)', post_m_name:'Tên bản nhạc hiện cho người đọc',
     post_m_start:'Bắt đầu từ giây', post_ch_music:'Nhạc riêng cho chương này',
@@ -2538,6 +2550,8 @@ function pwAddChapter(data) {
 }
 
 $('pw-add-ch').addEventListener('click', () => pwAddChapter());
+$('pw-add-fandom').addEventListener('click', () => pwThemMuc('fandom'));
+$('pw-add-ship').addEventListener('click', () => pwThemMuc('ship'));
 
 // Chèn ảnh: tải lên bucket work-images rồi chèn thẻ <img> ngay tại con trỏ.
 $('pw-img-file').addEventListener('change', async (e) => {
@@ -2564,8 +2578,46 @@ $('pw-img-file').addEventListener('change', async (e) => {
   pwSay(null);
 });
 
-// Nạp danh sách fandom / ship có sẵn. Người đăng chỉ CHỌN, không tự thêm mới —
-// tạo fandom/ship mới là quyền admin ở tầng DB (policy `chỉ admin ghi`).
+// Bỏ dấu tiếng Việt rồi rút gọn thành slug. Dùng chung cho fandom, ship và
+// slug của truyện, để mọi thứ sinh ra cùng một kiểu.
+function pwSlug(s) {
+  return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/đ/g, 'd').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
+}
+
+// Tạo fandom hoặc ship mới. Quyền đã có sẵn từ đầu (policy `chỉ admin ghi`),
+// chỉ là form trước đây không cho nhập.
+async function pwThemMuc(loai) {
+  const el = loai === 'fandom' ? $('pw-fandom') : $('pw-ships');
+  const ten = (window.prompt(tr(loai === 'fandom' ? 'post_new_fandom' : 'post_new_ship')) || '').trim();
+  if (!ten) return;
+
+  const slug = pwSlug(ten);
+  if (!slug) { pwSay('post_name_bad', true); return; }
+
+  // Đã có sẵn (kể cả khác hoa thường) thì chọn luôn, đừng đẻ thêm bản trùng.
+  const trung = [...el.options].find(o => o.textContent.toLowerCase() === ten.toLowerCase());
+  if (trung) { trung.selected = true; pwSay('post_already_there'); return; }
+
+  // Hỏi lại trước khi ghi: form không có chỗ sửa/xoá, gõ sai là cái tên sai đó
+  // nằm vĩnh viễn trong bộ lọc ở sidebar (đúng lỗi đã xảy ra với Nevuillette).
+  if (!window.confirm(tr('post_confirm_new').replace('%s', ten))) return;
+
+  const bang = loai === 'fandom' ? 'fandoms' : 'ships';
+  const hang = { name: ten, slug };
+  // Ship gắn theo fandom đang chọn, để sidebar xếp nó vào đúng nhóm.
+  if (loai === 'ship' && $('pw-fandom').value) hang.fandom_id = $('pw-fandom').value;
+
+  const { data, error } = await sb.from(bang).insert(hang).select('id,name').single();
+  if (error) { pwSay(raw(error.message), true); return; }
+
+  const o = document.createElement('option');
+  o.value = data.id; o.textContent = data.name; o.selected = true;
+  el.appendChild(o);
+  pwSay('post_created');
+}
+
+// Nạp danh sách fandom / ship có sẵn.
 async function pwLoadChoices() {
   const [f, s] = await Promise.all([
     sb.from('fandoms').select('id,name').order('name'),
