@@ -1893,7 +1893,9 @@ function ensureChapters(ficIdx) {
 // để nội dung kẹt ở trạng thái cũ (đang khoá mà vừa đăng nhập xong, hoặc ngược lại).
 window.veLaiKhiDoiDangNhap = function () {
   if (currentPage === 'reading' && currentFic !== null && currentFic !== undefined) {
-    loadChapter(currentFic, currentChapter);
+    // giuCho = true: đây là vẽ lại tại chỗ, không phải mở trang mới, nên tuyệt
+    // đối không kéo người đọc về đầu trang.
+    loadChapter(currentFic, currentChapter, true);
   }
 };
 
@@ -1931,7 +1933,10 @@ function veHopKhoa(body) {
   body.append(hop);
 }
 
-async function loadChapter(ficIdx, chapterIdx) {
+// giuCho = true khi chỉ vẽ lại nội dung tại chỗ (ví dụ vừa đăng nhập, hoặc dữ
+// liệu database về muộn). Lúc đó phải giữ nguyên chỗ người ta đang đọc — với
+// truyện dài mà nhảy về đầu trang là mất dấu hẳn.
+async function loadChapter(ficIdx, chapterIdx, giuCho) {
   const fic = fics[ficIdx];
   const body = document.getElementById('reading-body');
   const footer = document.getElementById('reading-footer');
@@ -1954,7 +1959,7 @@ async function loadChapter(ficIdx, chapterIdx) {
     const kbl = document.getElementById('comments-wrap');
     if (kbl) kbl.style.display = 'none';
     updateChapterNav(ficIdx, chapterIdx);
-    window.scrollTo(0, 0);
+    if (!giuCho) window.scrollTo(0, 0);
   };
 
   if (khoaLai()) { veKhoa(); return; }
@@ -2000,7 +2005,7 @@ async function loadChapter(ficIdx, chapterIdx) {
   // Truyện mới không có trong fics.json; nhạc theo chương thì getMusicData()
   // đã tự ưu tiên chapters.music rồi, ở đây chỉ cần đừng lỗi khi thiếu fics[i].
   if (!fics[ficIdx] || Array.isArray(fics[ficIdx].music)) playMusic(ficIdx, chapterIdx);
-  window.scrollTo(0,0);
+  if (!giuCho) window.scrollTo(0,0);
 }
 
 function updateChapterNav(ficIdx, chapterIdx) {
@@ -2978,8 +2983,16 @@ function busy(btn, on, labelKey) {
 function paintNav(session) {
   // Script chính (không phải module) cần biết đã đăng nhập chưa, để khoá nội
   // dung truyện "chỉ thành viên" và để đổi đích của nút gửi yêu cầu.
+  const truoc = window.skDaDangNhap;
   window.skDaDangNhap = !!session;
-  if (window.veLaiKhiDoiDangNhap) window.veLaiKhiDoiDangNhap();
+
+  // CHỈ vẽ lại khi trạng thái thật sự đổi. supabase-js làm mới token mỗi lần tab
+  // được focus lại và bắn onAuthStateChange kèm theo, nên gọi vô điều kiện là cứ
+  // alt-tab quay về một cái lại dựng lại cả chương — vừa phí, vừa nháy màn hình.
+  if (truoc !== undefined && truoc !== window.skDaDangNhap
+      && window.veLaiKhiDoiDangNhap) {
+    window.veLaiKhiDoiDangNhap();
+  }
   // Đăng nhập rồi thì thay nút Sign In bằng cụm avatar; các mục cá nhân dời hết
   // vào menu đổ xuống nên chỉ cần bật/tắt một khối.
   $('nav-signin').style.display = session ? 'none' : '';
