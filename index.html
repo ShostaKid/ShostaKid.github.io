@@ -241,15 +241,14 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
    một dòng của nó và mang màu vàng nghiêng. Không còn dấu hai chấm nào để rơi. */
 .reading-fandom{font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2.5px;color:var(--ui);
   text-transform:uppercase;margin-bottom:0.85rem;}
-.reading-title{font-family:var(--font-ui);font-size:2.05rem;font-weight:400;line-height:1.25;
+.reading-title{font-family:var(--font-ui);font-size:2.4rem;font-weight:400;line-height:1.25;
   letter-spacing:0.5px;color:var(--ink);margin:0;}
-.reading-title em{font-style:italic;color:var(--ui-head);}
-.reading-sub{font-family:var(--font-ui);font-size:1.18rem;font-style:italic;line-height:1.4;
-  color:var(--ui-head);margin-top:0.45rem;}
-@media (max-width:600px){
-  .reading-title{font-size:1.62rem;}
-  .reading-sub{font-size:1.02rem;}
-}
+/* Tiêu đề phụ nằm CÙNG HÀNG với tiêu đề chính và cùng cỡ chữ — thừa hưởng cả
+   font lẫn font-size từ .reading-title, chỉ khác ở chỗ nghiêng và màu vàng,
+   đúng như tiêu đề trên thẻ truyện. Tách nó xuống dòng riêng cỡ nhỏ hơn thì nó
+   đọc ra thành chú thích của tiêu đề chứ không còn là một phần của tên truyện. */
+.reading-title em,.reading-sub{font-style:italic;color:var(--ui-head);}
+@media (max-width:600px){ .reading-title{font-size:1.85rem;} }
 .reading-warning{font-family:Georgia,serif;font-style:italic;color:#993C1D;font-size:0.9rem;border-left:2px solid #D85A30;padding-left:1rem;margin:1.2rem 0;}
 .reading-divider{text-align:center;margin:2rem 0;color:var(--gold);font-size:1.3rem;letter-spacing:8px;}
 
@@ -2146,8 +2145,7 @@ function openFic(i) {
 
   document.getElementById('reading-header').innerHTML = `
     <div class="reading-fandom">${f.fandom}</div>
-    <div class="reading-title">${f.title}</div>
-    ${f.subtitle ? `<div class="reading-sub">${f.subtitle}</div>` : ''}
+    <div class="reading-title">${f.title}${f.subtitle ? `: <em class="reading-sub">${f.subtitle}</em>` : ''}</div>
     ${f.warning ? `<div class="reading-warning">⚠ ${f.warning}</div>` : ''}
     <div class="reading-divider">✦ ✦ ✦</div>
     ${chapterNavHtml}`;
