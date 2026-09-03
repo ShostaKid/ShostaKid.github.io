@@ -197,6 +197,30 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
   font-family:'Lora',Georgia,serif;font-style:italic;font-size:0.85rem;color:var(--ink2);white-space:pre-wrap;}
 .rq-dieu{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.9rem;padding-top:0.8rem;border-top:1px solid var(--border);}
 
+/* ----- Danh sách thành viên ----- */
+.mb-the{display:flex;gap:1.1rem;align-items:flex-start;width:100%;text-align:left;
+  border:1px solid var(--border);border-left:2px solid var(--gold);background:var(--cream2);
+  padding:1.1rem 1.2rem;margin-bottom:1rem;cursor:pointer;transition:border-color 0.2s,background 0.2s;}
+.mb-the:hover{border-color:var(--gold-light);border-left-color:var(--gold);background:var(--cream);}
+.mb-av,.mb-av img,.mb-av .avatar-fallback{width:52px;height:52px;flex:0 0 52px;border-radius:50%;
+  object-fit:cover;display:block;overflow:hidden;}
+.mb-av .avatar-fallback{background:var(--cream);border:1px solid var(--border);font-size:1.3rem;}
+.mb-than{min-width:0;flex:1;}
+.mb-ten{font-family:var(--font-ui);font-size:1.05rem;color:var(--ink);line-height:1.3;
+  display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;}
+.mb-tay{font-family:var(--font-ui);font-size:0.6rem;letter-spacing:1.6px;color:var(--ui);margin-top:0.25rem;}
+.mb-bio{font-family:'Lora',Georgia,serif;font-size:0.88rem;color:var(--ink2);line-height:1.65;
+  margin-top:0.6rem;white-space:pre-wrap;overflow-wrap:anywhere;}
+/* Cắt bio dài ở danh sách; bản đầy đủ nằm ở trang hồ sơ riêng. */
+.mb-the .mb-bio{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.mb-bio-trong{font-style:italic;color:var(--ui);}
+
+/* Trang hồ sơ một thành viên */
+.mb-dau{display:flex;gap:1.5rem;align-items:center;margin:1.5rem 0 1.8rem;}
+.mb-dau .mb-av,.mb-dau .mb-av img,.mb-dau .mb-av .avatar-fallback{width:88px;height:88px;flex-basis:88px;font-size:2.1rem;}
+.mb-dau .mb-ten{font-size:1.6rem;}
+.mb-khoi-bio{border-top:1px solid var(--border);padding-top:1.4rem;}
+
 /* ----- Ảnh minh hoạ trong thân truyện ----- */
 /* Trước đây không có luật nào cho img ở đây, nên ảnh giữ nguyên cỡ gốc và đẩy
    rộng cả cột chữ — ảnh chụp điện thoại rộng 3000–4000px thì vỡ hẳn bố cục. */
@@ -208,9 +232,24 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .reading-wrap{max-width:720px;margin:0 auto;padding:4rem 2rem;}
 .back-btn{font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--ui);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:3rem;transition:color 0.2s;}
 .back-btn:hover{color:var(--ui-head);}
-.reading-title{font-family:var(--font-ui);font-size:2.4rem;font-weight:400;line-height:1.2;color:var(--ink);margin-bottom:0.5rem;}
-.reading-title em{font-style:italic;color:var(--gold-dark);}
-.reading-fandom{font-family:var(--font-ui);font-size:0.65rem;letter-spacing:2px;color:var(--ui);text-transform:uppercase;margin-bottom:0.5rem;}
+/* Đầu trang đọc.
+   Trước đây tiêu đề phụ bị nối vào tiêu đề chính bằng dấu hai chấm, nên gặp
+   tiêu đề dài là dấu ':' rơi lại cuối dòng một còn tên truyện phụ tụt xuống dòng
+   hai — trông như bị vỡ. Fandom thì nằm DƯỚI tiêu đề ở cỡ chữ bé xíu, thành ra
+   khối đầu trang nặng đầu nhẹ đuôi.
+   Nay: fandom lên trên làm dòng dẫn, tiêu đề đứng riêng, tiêu đề phụ xuống hẳn
+   một dòng của nó và mang màu vàng nghiêng. Không còn dấu hai chấm nào để rơi. */
+.reading-fandom{font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2.5px;color:var(--ui);
+  text-transform:uppercase;margin-bottom:0.85rem;}
+.reading-title{font-family:var(--font-ui);font-size:2.05rem;font-weight:400;line-height:1.25;
+  letter-spacing:0.5px;color:var(--ink);margin:0;}
+.reading-title em{font-style:italic;color:var(--ui-head);}
+.reading-sub{font-family:var(--font-ui);font-size:1.18rem;font-style:italic;line-height:1.4;
+  color:var(--ui-head);margin-top:0.45rem;}
+@media (max-width:600px){
+  .reading-title{font-size:1.62rem;}
+  .reading-sub{font-size:1.02rem;}
+}
 .reading-warning{font-family:Georgia,serif;font-style:italic;color:#993C1D;font-size:0.9rem;border-left:2px solid #D85A30;padding-left:1rem;margin:1.2rem 0;}
 .reading-divider{text-align:center;margin:2rem 0;color:var(--gold);font-size:1.3rem;letter-spacing:8px;}
 
@@ -772,6 +811,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
           <a id="nav-profile"   data-i18n="nav_profile">My Profile</a>
           <a id="nav-bookmarks" data-i18n="nav_bookmarks">My Bookmarks</a>
           <a id="nav-requests" data-i18n="nav_requests">Request a Fic</a>
+          <a id="nav-members" data-i18n="nav_members">Members</a>
           <a id="nav-post" data-i18n="nav_post" style="display:none;">Post</a>
           <a id="nav-logout" class="nav-menu-out" data-i18n="nav_logout">Log out</a>
         </div>
@@ -1230,6 +1270,34 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <div class="sub-heading" id="rq-ds-head" data-i18n="rq_mine">My requests</div>
         <div id="rq-ds"></div>
       </div>
+    </div>
+    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+  </div>
+
+  <!-- DANH SÁCH THÀNH VIÊN -->
+  <div class="page" id="page-members" style="background:var(--cream);">
+    <div class="form-wrap">
+      <div class="section-heading" data-i18n="mb_head">Members</div>
+      <div class="auth-msg" id="mb-msg"></div>
+
+      <!-- Chưa đăng nhập thì không dựng danh sách. Chủ repo chốt: chỉ thành viên. -->
+      <div id="mb-canhbao" class="khoa-hop" style="display:none;">
+        <div class="khoa-bieu">✦</div>
+        <h3 data-i18n="only_member">Members only</h3>
+        <p data-i18n="mb_need_signin">The member list is for signed-in readers. Sign in to see who else is here.</p>
+        <button type="button" class="ao3-link" id="mb-dangnhap" style="margin-top:0;" data-i18n="khoa_nut">Sign in →</button>
+      </div>
+
+      <div id="mb-ds"></div>
+    </div>
+    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+  </div>
+
+  <!-- HỒ SƠ MỘT THÀNH VIÊN (chỉ đọc) -->
+  <div class="page" id="page-member" style="background:var(--cream);">
+    <div class="form-wrap" style="max-width:620px;">
+      <button class="back-btn" onclick="showPage('members')" data-i18n="mb_back">← Members</button>
+      <div id="mb-mot"></div>
     </div>
     <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
@@ -2077,8 +2145,9 @@ function openFic(i) {
     : '<div class="chapter-nav" id="chapter-nav-top" style="display:none"></div>';
 
   document.getElementById('reading-header').innerHTML = `
-    <div class="reading-title">${f.title}${f.subtitle ? ': ' + f.subtitle : ''}</div>
     <div class="reading-fandom">${f.fandom}</div>
+    <div class="reading-title">${f.title}</div>
+    ${f.subtitle ? `<div class="reading-sub">${f.subtitle}</div>` : ''}
     ${f.warning ? `<div class="reading-warning">⚠ ${f.warning}</div>` : ''}
     <div class="reading-divider">✦ ✦ ✦</div>
     ${chapterNavHtml}`;
@@ -2372,6 +2441,12 @@ const i18n = {
     nav_logout:'Log Out',
     link_hong:'That link points to a work that no longer exists — or one you need to be signed in to read.',
     nav_requests:'Request a Fic',
+    nav_members:'Members',
+    mb_head:'Members',
+    mb_need_signin:'The member list is for signed-in readers. Sign in to see who else is here.',
+    mb_back:'← Members',
+    mb_tham_gia:'joined',
+    mb_chua_co_bio:'Hasn’t written a bio yet.',
     only_member:'Members only',
     khoa_loi:'This one is for signed-in readers. An account is free and takes a moment — then this page will open right up.',
     khoa_nut:'Sign in →',
@@ -2521,6 +2596,12 @@ const i18n = {
     nav_logout:'Đăng xuất',
     link_hong:'Link này trỏ tới một truyện không còn tồn tại — hoặc truyện phải đăng nhập mới đọc được.',
     nav_requests:'Gửi yêu cầu',
+    nav_members:'Thành viên',
+    mb_head:'Thành viên',
+    mb_need_signin:'Danh sách thành viên dành cho người đã đăng nhập. Đăng nhập để xem ai đang ở đây cùng bạn.',
+    mb_back:'← Thành viên',
+    mb_tham_gia:'tham gia',
+    mb_chua_co_bio:'Chưa viết giới thiệu.',
     only_member:'Chỉ thành viên',
     khoa_loi:'Truyện này dành cho bạn đọc đã đăng nhập. Tạo tài khoản không mất gì và chỉ tốn một lát — xong là đọc được ngay.',
     khoa_nut:'Đăng nhập →',
@@ -2874,6 +2955,8 @@ function showPage(id, el) {
   // ở trang đọc xong quay lại đây.
   if (id === 'bookmarks' && window.loadBookmarks) window.loadBookmarks();
   if (id === 'requests'  && window.loadRequests)  window.loadRequests();
+  if (id === 'members'   && window.loadMembers)   window.loadMembers();
+  if (id === 'member'    && window.loadMember)    window.loadMember();
   if (id === 'post' && window.loadPostForm) {
     // __pwEditIdx do nút Sửa truyện đặt; không có thì mở form trống để đăng mới.
     const idx = window.__pwEditIdx;
@@ -3033,6 +3116,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeNavMe
 $('nav-profile'  ).addEventListener('click', () => window.showPage('profile'));
 $('nav-bookmarks').addEventListener('click', () => window.showPage('bookmarks'));
 $('nav-requests' ).addEventListener('click', () => window.showPage('requests'));
+$('nav-members'  ).addEventListener('click', () => window.showPage('members'));
 $('nav-post'     ).addEventListener('click', () => window.showPage('post'));
 $('nav-logout'   ).addEventListener('click', async () => {
   closeNavMenu();
@@ -3815,6 +3899,145 @@ async function pwDonAnhThua(workId, chuong) {
     if (thua.length) await sb.storage.from('work-images').remove(thua);
   } catch (_) { /* dọn rác hỏng thì thôi */ }
 }
+
+// ---------- Danh sách thành viên ----------
+// Bảng profiles vốn đã cho đọc công khai (policy `true`, và anon có GRANT SELECT
+// trên đủ các cột này), nên trang này không lộ thêm gì so với trước — nó chỉ làm
+// thứ vốn đã công khai trở nên nhìn thấy được. Chủ repo chốt: chỉ thành viên xem.
+function mbAvatar(p) {
+  const box = document.createElement('span');
+  box.className = 'mb-av';
+  paintAvatar(box, p);       // dùng lại đúng hàm của trang hồ sơ
+  return box;
+}
+
+// bio là chữ do BẤT KỲ người đăng ký nào nhập. Luôn dựng bằng textContent —
+// đây là chỗ đầu tiên trong site đem bio ra hiển thị, dùng innerHTML ở đây là
+// mở thẳng một lỗ XSS cho người lạ. (Trang About dùng innerHTML được vì chỉ
+// admin ghi được vào bảng site_content.)
+function mbDatBio(el, bio) {
+  const s = (bio || '').trim();
+  if (s) { el.className = 'mb-bio'; el.textContent = s; }
+  else   { el.className = 'mb-bio mb-bio-trong'; el.textContent = tr('mb_chua_co_bio'); }
+}
+
+function mbNgay(iso) {
+  const locale = (document.documentElement.getAttribute('data-lang') === 'vi') ? 'vi-VN' : 'en-GB';
+  return new Date(iso).toLocaleDateString(locale, { year: 'numeric', month: 'long' });
+}
+
+function mbTen(p) { return p.display_name || p.username || '—'; }
+
+let mbDsCache = [];
+
+async function loadMembers() {
+  const el = $('mb-msg');
+  el.className = 'auth-msg'; el.textContent = '';
+
+  const { data: { session } } = await sb.auth.getSession();
+  $('mb-canhbao').style.display = session ? 'none' : '';
+  $('mb-ds').style.display      = session ? '' : 'none';
+  if (!session) return;
+
+  const { data, error } = await sb.from('profiles')
+    .select('id, username, display_name, avatar_url, bio, is_admin, created_at')
+    .order('created_at', { ascending: true });
+
+  const ds = $('mb-ds');
+  ds.textContent = '';
+  if (error) {
+    el.className = 'auth-msg show err';
+    el.textContent = raw(error.message);
+    return;
+  }
+  mbDsCache = data || [];
+
+  mbDsCache.forEach(p => {
+    // <button> chứ không phải <div>: bấm được bằng bàn phím và đọc màn hình
+    // hiểu đây là thứ bấm được.
+    const the = document.createElement('button');
+    the.type = 'button';
+    the.className = 'mb-the';
+    the.addEventListener('click', () => { window.__xemThanhVien = p.id; window.showPage('member'); });
+
+    the.append(mbAvatar(p));
+
+    const than = document.createElement('div');
+    than.className = 'mb-than';
+
+    const ten = document.createElement('div');
+    ten.className = 'mb-ten';
+    ten.append(document.createTextNode(mbTen(p)));
+    if (p.is_admin) {
+      const badge = document.createElement('span');
+      badge.className = 'admin-badge';
+      badge.textContent = tr('prof_admin');
+      ten.append(badge);
+    }
+    than.append(ten);
+
+    const tay = document.createElement('div');
+    tay.className = 'mb-tay';
+    tay.textContent = '@' + (p.username || '') + ' · ' + tr('mb_tham_gia') + ' ' + mbNgay(p.created_at);
+    than.append(tay);
+
+    const bio = document.createElement('div');
+    mbDatBio(bio, p.bio);
+    than.append(bio);
+
+    the.append(than);
+    ds.append(the);
+  });
+}
+window.loadMembers = loadMembers;
+
+async function loadMember() {
+  const o = $('mb-mot');
+  o.textContent = '';
+  const id = window.__xemThanhVien;
+  if (!id) { window.showPage('members'); return; }
+
+  // Ưu tiên bản đã có từ danh sách; vào thẳng bằng nút Back trình duyệt thì hỏi lại.
+  let p = mbDsCache.find(x => x.id === id);
+  if (!p) {
+    const { data } = await sb.from('profiles')
+      .select('id, username, display_name, avatar_url, bio, is_admin, created_at')
+      .eq('id', id).maybeSingle();
+    p = data;
+  }
+  if (!p) { window.showPage('members'); return; }
+
+  const dau = document.createElement('div');
+  dau.className = 'mb-dau';
+  dau.append(mbAvatar(p));
+
+  const khoi = document.createElement('div');
+  const ten = document.createElement('div');
+  ten.className = 'mb-ten';
+  ten.append(document.createTextNode(mbTen(p)));
+  if (p.is_admin) {
+    const badge = document.createElement('span');
+    badge.className = 'admin-badge';
+    badge.textContent = tr('prof_admin');
+    ten.append(badge);
+  }
+  const tay = document.createElement('div');
+  tay.className = 'mb-tay';
+  tay.textContent = '@' + (p.username || '') + ' · ' + tr('mb_tham_gia') + ' ' + mbNgay(p.created_at);
+  khoi.append(ten, tay);
+  dau.append(khoi);
+
+  const hop = document.createElement('div');
+  hop.className = 'mb-khoi-bio';
+  const bio = document.createElement('div');
+  mbDatBio(bio, p.bio);
+  hop.append(bio);
+
+  o.append(dau, hop);
+}
+window.loadMember = loadMember;
+
+$('mb-dangnhap').addEventListener('click', () => window.showPage('auth', $('nav-signin')));
 
 // ---------- Gửi yêu cầu ----------
 function rqSay(key, isErr, tho) {
