@@ -208,6 +208,102 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
   font-family:'Lora',Georgia,serif;font-style:italic;font-size:0.85rem;color:var(--ink2);white-space:pre-wrap;}
 .rq-dieu{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.9rem;padding-top:0.8rem;border-top:1px solid var(--border);}
 
+/* ===== TRANG OPUS ===== */
+.opus-wrap{max-width:1180px;margin:0 auto;padding:3rem 2rem;}
+.opus-dan{font-family:'Lora',Georgia,serif;font-style:italic;font-size:0.95rem;color:var(--ink2);
+  line-height:1.7;max-width:640px;margin:0 0 1.6rem;}
+.opus-thanh{display:flex;align-items:center;gap:0.7rem;flex-wrap:wrap;margin-bottom:1.6rem;}
+.opus-tong{margin-left:auto;font-family:var(--font-ui);font-size:0.6rem;letter-spacing:2px;
+  text-transform:uppercase;color:var(--ui);}
+
+/* align-items:start để thẻ mở ra thì CHỈ nó cao lên, thẻ bên cạnh giữ nguyên.
+   Đừng cho thẻ đang mở chiếm cả hàng (grid-column:1/-1): nó bị đẩy xuống hàng
+   riêng và để lại một mảng trống to ở chỗ cũ. */
+.opus-ke{display:grid;grid-template-columns:1fr;gap:1.4rem;align-items:start;}
+@media (min-width:900px){ .opus-ke{grid-template-columns:1fr 1fr;} }
+
+.opus-the{border:1px solid var(--border);background:rgba(250,247,240,0.85);position:relative;
+  overflow:hidden;transition:border-color 0.25s,background 0.25s,box-shadow 0.25s;}
+.opus-the:hover{border-color:var(--gold-light);background:#fbf8f0;}
+.opus-the.mo{border-color:var(--gold);box-shadow:0 6px 26px rgba(44,35,24,0.09);}
+.opus-the::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:var(--gold);opacity:0.35;transition:opacity 0.25s;}
+.opus-the.mo::before{opacity:1;}
+
+.opus-dau{display:flex;align-items:flex-start;gap:1.1rem;padding:1.5rem 1.7rem;cursor:pointer;
+  width:100%;text-align:left;background:none;border:none;font:inherit;color:inherit;}
+/* Số Opus: khối vuông viền vàng ở góc trái, đọc được ngay chứ không phải chữ
+   dựng dọc bé xíu như bản mẫu. */
+.opus-so{flex:0 0 auto;width:46px;height:46px;border:1px solid var(--gold);border-radius:2px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(184,151,42,0.07);line-height:1;}
+.opus-so-nhan{font-family:var(--font-ui);font-size:0.42rem;letter-spacing:1.6px;text-transform:uppercase;
+  color:var(--ui);margin-bottom:2px;}
+.opus-so-num{font-family:var(--font-ui);font-size:1.15rem;font-weight:600;color:var(--ui-head);}
+
+.opus-than{flex:1;min-width:0;}
+.opus-ten{font-family:var(--font-ui);font-size:1.4rem;line-height:1.2;color:var(--ink);margin-bottom:0.4rem;}
+.opus-ten em{font-style:italic;color:var(--ui-head);}
+.opus-mo-ta{font-family:'Lora',Georgia,serif;font-style:italic;font-size:0.88rem;color:var(--ink2);
+  line-height:1.65;margin-bottom:0.7rem;}
+.opus-nhan{display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center;}
+.opus-nhan span.nh{font-family:var(--font-ui);font-size:0.54rem;letter-spacing:1px;text-transform:uppercase;
+  color:var(--ink2);border:1px solid var(--border);padding:2px 7px;background:var(--cream2);}
+.opus-nhan span.canh{color:#993C1D;border-color:#D85A30;}
+
+.opus-phai{flex:0 0 auto;text-align:center;padding-left:0.5rem;}
+.opus-dem{font-family:var(--font-ui);font-size:2.4rem;line-height:1;color:var(--ui-head);}
+.opus-dvi{font-family:var(--font-ui);font-size:0.48rem;letter-spacing:2px;text-transform:uppercase;
+  color:var(--ui);margin-top:0.3rem;}
+.opus-mui{font-family:var(--font-ui);font-size:0.9rem;color:var(--gold);margin-top:0.8rem;
+  display:block;transition:transform 0.25s;}
+.opus-the.mo .opus-mui{transform:rotate(180deg);}
+
+/* Ký hiệu nhạc cụ — SVG nét, không dùng emoji vì emoji có màu và phá tông trang. */
+.nhac-cu{display:inline-flex;gap:5px;align-items:center;}
+.nhac-cu svg{width:17px;height:17px;stroke:var(--ui-head);fill:none;
+  stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto;}
+.nhac-cu svg .to{fill:var(--ui-head);stroke:none;}
+.opus-dau .nhac-cu svg{width:19px;height:19px;}
+
+.opus-trong{display:none;padding:0 1.7rem 1.5rem;}
+.opus-the.mo .opus-trong{display:block;}
+.opus-vach{height:1px;background:var(--border);margin-bottom:1rem;}
+.opus-track{display:flex;align-items:baseline;gap:0.9rem;padding:0.6rem 0.5rem;
+  border-bottom:1px solid rgba(212,196,154,0.42);cursor:pointer;transition:background 0.18s;
+  width:100%;text-align:left;background:none;border-left:none;border-right:none;border-top:none;
+  font:inherit;color:inherit;}
+.opus-track:hover{background:var(--cream2);}
+.opus-track:last-child{border-bottom:none;}
+.opus-track-so{flex:0 0 28px;font-family:var(--font-ui);font-size:0.66rem;color:var(--gold);letter-spacing:1px;}
+.opus-track-than{flex:1;min-width:0;}
+.opus-track-ten{font-family:var(--font-ui);font-size:0.97rem;line-height:1.35;color:var(--ink);}
+.opus-track-ten em{font-style:italic;color:var(--ui-head);}
+.opus-track-phu{font-family:var(--font-ui);font-size:0.54rem;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--ui);margin-top:0.22rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;}
+.opus-track-canh{color:#993C1D;}
+.opus-track-khoa{color:var(--ui-head);}
+
+/* Form sửa nhóm, chỉ admin thấy */
+.opus-sua-nut{position:absolute;top:10px;right:12px;z-index:2;}
+.opus-form{border-top:1px solid var(--border);margin:0 1.7rem;padding:1.1rem 0 1.4rem;}
+.opus-form .field{margin-bottom:0.8rem;}
+.opus-form input,.opus-form textarea{width:100%;background:var(--cream);border:1px solid var(--border);
+  padding:8px 11px;font-family:Georgia,serif;font-size:0.88rem;color:var(--ink);box-sizing:border-box;resize:vertical;}
+.opus-form input:focus,.opus-form textarea:focus{outline:none;border-color:var(--gold);}
+.opus-form-nut{display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:0.9rem;}
+
+@media (max-width:640px){
+  .opus-wrap{padding:2rem 1.2rem;}
+  .opus-dau{padding:1.2rem 1.1rem;gap:0.8rem;}
+  .opus-trong{padding:0 1.1rem 1.2rem;}
+  .opus-form{margin:0 1.1rem;}
+  .opus-ten{font-size:1.15rem;}
+  .opus-dem{font-size:1.9rem;}
+  .opus-so{width:40px;height:40px;}
+  .opus-so-num{font-size:1rem;}
+}
+
 /* ----- Danh sách thành viên ----- */
 .mb-the{display:flex;gap:1.1rem;align-items:flex-start;width:100%;text-align:left;
   border:1px solid var(--border);border-left:2px solid var(--gold);background:var(--cream2);
@@ -548,7 +644,9 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   .nav-utils { order: 2; margin-left: auto; flex-shrink: 0; gap: 6px; }
   .nav-links {
     order: 3; flex-basis: 100%; width: 100%;
-    justify-content: center; gap: 2.2rem;
+    /* gap 1.5rem chứ không phải 2.2rem: từ khi có mục Opus là bốn mục, ở 320px
+       thì 2.2rem chỉ còn chừa 16px lề mỗi bên — chật. 1.5rem cho lại ~30px. */
+    justify-content: center; gap: 1.5rem;
     padding-top: 0.5rem; border-top: 1px solid var(--border);
   }
   .nav-links a { font-size: 0.62rem; letter-spacing: 1.6px; white-space: nowrap; padding: 2px 0; }
@@ -819,6 +917,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
     <div class="nav-links">
       <a class="active" data-page="home"  data-i18n="nav_home"  onclick="showPage('home',this)">Home</a>
       <a data-page="works" data-i18n="nav_works" onclick="showPage('works',this)">Works</a>
+      <a data-page="opus"  data-i18n="nav_opus"  onclick="showPage('opus',this)">Opus</a>
       <a data-page="about" data-i18n="nav_about" onclick="showPage('about',this)">About</a>
     </div>
 
@@ -1297,6 +1396,24 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <div class="sub-heading" id="rq-ds-head" data-i18n="rq_mine">My requests</div>
         <div id="rq-ds"></div>
       </div>
+    </div>
+    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+  </div>
+
+  <!-- OPUS — kho truyện xếp theo thể nhạc -->
+  <div class="page" id="page-opus" style="background:var(--cream);">
+    <div class="opus-wrap">
+      <div class="section-heading" data-i18n="opus_head">Opus</div>
+      <p class="opus-dan" data-i18n="opus_dan">Every work here is named after a musical form, and the name is not decorative. This is the whole archive laid out by form — a catalogue of works.</p>
+
+      <div class="opus-thanh">
+        <button type="button" class="mini-btn" id="opus-mo-het" data-i18n="opus_mo_het">Open all</button>
+        <button type="button" class="mini-btn" id="opus-dong-het" data-i18n="opus_dong_het">Close all</button>
+        <div class="opus-tong" id="opus-tong"></div>
+      </div>
+
+      <div class="auth-msg" id="opus-msg"></div>
+      <div class="opus-ke" id="opus-ke"></div>
     </div>
     <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
@@ -1923,7 +2040,15 @@ function renderAllWorks() {
   buildSidebar();
   applyFilters();
   applyLang();
+  // Trang Opus nằm ở module Supabase nên không đọc thẳng được worksData
+  // (khai bằng `let`, không nằm trên window). Phơi ra ở đây, sau mỗi lần
+  // danh sách đổi, để nó dùng lại đúng bộ dữ liệu chứ khỏi tải lần nữa.
+  window.worksDataCuaSite = worksData;
+  if (window.loadOpus && currentPage === 'opus') window.loadOpus();
 }
+// fandomLabel cũng nằm ở script cổ điển; trang Opus cần để hiện tên fandom
+// đúng như trên thẻ truyện (riêng Reverse có bản hai thứ tiếng).
+window.fandomLabel = fandomLabel;
 
 function txtToHtml(text) {
   const paragraphs = text.split(/\n\s*\n/);
@@ -2299,7 +2424,7 @@ function moTheoHash() {
     return false;          // chưa thấy -> để lượt gọi sau khi DB trả lời thử lại
   }
 
-  if (h === '#home' || h === '#works' || h === '#about') {
+  if (h === '#home' || h === '#works' || h === '#about' || h === '#opus') {
     const ten = h.slice(1);
     showPage(ten, document.querySelector('.nav-links a[data-page="' + ten + '"]'));
     return true;
@@ -2429,6 +2554,18 @@ document.addEventListener('keydown', (e) => {
 const i18n = {
   en: {
     nav_home:'Home', nav_works:'Works', nav_about:'About',
+    nav_opus:'Opus',
+    opus_head:'Opus', opus_ban:'works', opus_the_loai:'forms', opus_truyen:'works',
+    opus_dan:'Every work here is named after a musical form, and the name is not decorative. This is the whole archive laid out by form — a catalogue of works.',
+    opus_mo_het:'Open all', opus_dong_het:'Close all',
+    opus_nhom_trong:'Nothing in this group yet.',
+    opus_sua:'Edit this group', opus_luu:'Save', opus_xoa:'Delete group',
+    opus_f_ten:'Name (English)', opus_f_ten_vi:'Name (Vietnamese)',
+    opus_f_mo:'Description (English)', opus_f_mo_vi:'Description (Vietnamese)',
+    opus_f_thu_tu:'Order (smaller comes first)',
+    opus_can_ten:'The group needs a name.',
+    opus_da_luu:'Saved ♪', opus_da_xoa:'Group deleted.',
+    opus_xoa_hoi:'Delete the group “%s”? The %d works in it are NOT deleted — they just stop being grouped.',
     intro_sub:"Don't ask. Just read:)", intro_cta:'Click anywhere to enter',
     hero_sub:'I blend classical music with my thoughts',
     hero_tag:"Take a $ip y'all and enjoy",
@@ -2589,6 +2726,18 @@ const i18n = {
   },
   vi: {
     nav_home:'Trang chủ', nav_works:'Các đầu truyện', nav_about:'Về Web',
+    nav_opus:'Opus',
+    opus_head:'Opus', opus_ban:'bản', opus_the_loai:'thể loại', opus_truyen:'truyện',
+    opus_dan:'Mỗi truyện ở đây mang tên một thể nhạc, và tên đó không phải đặt cho vui. Dưới đây là toàn bộ kho truyện xếp lại theo đúng thể của chúng — như một danh mục tác phẩm.',
+    opus_mo_het:'Mở tất cả', opus_dong_het:'Đóng tất cả',
+    opus_nhom_trong:'Nhóm này chưa có truyện nào.',
+    opus_sua:'Sửa nhóm này', opus_luu:'Lưu', opus_xoa:'Xoá nhóm',
+    opus_f_ten:'Tên (tiếng Anh)', opus_f_ten_vi:'Tên (tiếng Việt)',
+    opus_f_mo:'Mô tả (tiếng Anh)', opus_f_mo_vi:'Mô tả (tiếng Việt)',
+    opus_f_thu_tu:'Thứ tự (số nhỏ đứng trước)',
+    opus_can_ten:'Nhóm phải có tên.',
+    opus_da_luu:'Đã lưu ♪', opus_da_xoa:'Đã xoá nhóm.',
+    opus_xoa_hoi:'Xoá nhóm “%s”? %d truyện trong đó KHÔNG bị xoá — chúng chỉ mất chỗ xếp.',
     intro_sub:'Viết là tự nhiên', intro_cta:'Bấm vào bất cứ đâu để vào',
     hero_sub:'Tôi trộn nhạc cổ điển với những suy nghĩ của mình',
     hero_tag:'Take a $ip y\'all',
@@ -2785,6 +2934,9 @@ function applyLang() {
   // Danh sách bình luận dựng động nên phải vẽ lại (ngày tháng, badge, nút xoá).
   if (window.repaintComments) window.repaintComments();
   if (window.repaintAbout) window.repaintAbout();
+  // Thẻ Opus dựng bằng DOM nên applyLang() không tự đổi được tên/mô tả —
+  // phải vẽ lại để lấy đúng bản name_vi / mo_ta_vi.
+  if (window.repaintOpus) window.repaintOpus();
 
   const mt = document.querySelector('.music-toggle');
   if (mt) mt.textContent = musicPlaying ? t('pause') : t('play');
@@ -2991,6 +3143,7 @@ function showPage(id, el) {
   // ở trang đọc xong quay lại đây.
   if (id === 'bookmarks' && window.loadBookmarks) window.loadBookmarks();
   if (id === 'requests'  && window.loadRequests)  window.loadRequests();
+  if (id === 'opus'      && window.loadOpus)      window.loadOpus();
   if (id === 'members'   && window.loadMembers)   window.loadMembers();
   if (id === 'member'    && window.loadMember)    window.loadMember();
   if (id === 'post' && window.loadPostForm) {
@@ -4005,6 +4158,363 @@ async function pwDonAnhThua(workId, chuong) {
     if (thua.length) await sb.storage.from('work-images').remove(thua);
   } catch (_) { /* dọn rác hỏng thì thôi */ }
 }
+
+// ---------- Trang Opus ----------
+// Ký hiệu nhạc cụ vẽ bằng SVG nét thay vì emoji: emoji có màu sẵn, đặt cạnh
+// bảng màu vàng-kem của trang là lạc hẳn tông.
+const NHAC_CU_SVG = {
+  // Đàn dây kéo (violin / viola / cello / quartet). Ba cây này nhìn gần như
+  // nhau nên dùng chung một ký hiệu — đó là cách phân loại đúng về nhạc, chứ
+  // không phải chỗ vẽ ẩu.
+  day:  '<svg viewBox="0 0 24 24"><path d="M12 2.5v6.5"/><circle cx="12" cy="2.6" r="1.1"/>'
+      + '<path d="M9.5 9C7 9 5.8 10.7 5.8 12.3c0 1.3.9 2 .9 2.9s-.9 1.3-.9 2.6C5.8 19.6 7.2 21.5 9.6 21.5h4.8c2.4 0 3.8-1.9 3.8-3.7 0-1.3-.9-1.7-.9-2.6s.9-1.6.9-2.9C18.2 10.7 17 9 14.5 9z"/></svg>',
+  // Phím đàn: hình dễ nhận nhất trong cả bộ.
+  piano:'<svg viewBox="0 0 24 24"><rect x="2.5" y="7" width="19" height="10" rx="1.2"/>'
+      + '<path d="M8.2 7v6M12 7v6M15.8 7v6"/>'
+      + '<rect class="to" x="6.6" y="7" width="1.8" height="4.6" rx="0.4"/>'
+      + '<rect class="to" x="10.4" y="7" width="1.8" height="4.6" rx="0.4"/>'
+      + '<rect class="to" x="14.2" y="7" width="1.8" height="4.6" rx="0.4"/></svg>',
+  // Sáo / flute: ống ngang có lỗ bấm.
+  sao:  '<svg viewBox="0 0 24 24"><rect x="2" y="9.8" width="20" height="4.4" rx="2.2"/>'
+      + '<circle class="to" cx="8" cy="12" r="0.95"/><circle class="to" cx="12" cy="12" r="0.95"/>'
+      + '<circle class="to" cx="16" cy="12" r="0.95"/></svg>',
+  // Accordion: hai đầu hộp, giữa là hộp xếp.
+  keo:  '<svg viewBox="0 0 24 24"><rect x="2" y="6.5" width="4" height="11" rx="1"/>'
+      + '<rect x="18" y="6.5" width="4" height="11" rx="1"/>'
+      + '<path d="M6 8l3 2-3 2 3 2-3 2M18 8l-3 2 3 2-3 2 3 2"/></svg>',
+  // Xylophone: các thanh ngắn dần.
+  go:   '<svg viewBox="0 0 24 24"><path d="M4 6.5h16M4.8 10h14.4M5.6 13.5h12.8M6.4 17h11.2"/></svg>',
+  // Nốt nhạc, dùng khi tiêu đề không nêu nhạc cụ nào.
+  not:  '<svg viewBox="0 0 24 24"><path d="M16 4v11.2"/><circle class="to" cx="13" cy="16.4" r="3"/></svg>'
+};
+
+// Đoán nhạc cụ từ tiêu đề. Một tiêu đề có thể nêu nhiều cây.
+function nhacCuTrongTen(ten) {
+  const t = (ten || '').toLowerCase();
+  const ra = [];
+  const co = (k, tu) => { if (tu.some(x => t.includes(x)) && !ra.includes(k)) ra.push(k); };
+  co('piano', ['piano']);
+  co('day',   ['violin', 'viola', 'cello', 'quartet']);
+  co('sao',   ['flute', 'sáo']);
+  co('keo',   ['accordion']);
+  co('go',    ['xylophone']);
+  return ra;
+}
+
+// Biểu tượng riêng cho vài nhóm mà đoán từ tiêu đề ra không đúng tinh thần.
+// Chamber Trio là ví dụ: hai truyện trong đó chỉ nêu mỗi "piano", nhưng một
+// piano trio thật gồm piano + violin + cello — nên vẽ đủ ba cây.
+const BIEU_TUONG_NHOM = {
+  'opus-chamber-trio': ['piano', 'day', 'day'],
+  'opus-symphony':     ['day', 'sao', 'piano']
+};
+
+function veNhacCu(ds) {
+  const box = document.createElement('span');
+  box.className = 'nhac-cu';
+  (ds || []).forEach(k => {
+    if (!NHAC_CU_SVG[k]) return;
+    const s = document.createElement('span');
+    // innerHTML ở đây an toàn: chuỗi SVG là hằng viết trong file này, không có
+    // mảnh dữ liệu người dùng nào đi vào.
+    s.innerHTML = NHAC_CU_SVG[k];
+    box.append(s.firstChild);
+  });
+  return box;
+}
+
+// Xếp trong nhóm: so tên nhưng SO SỐ NHƯ SỐ. Xếp chữ thường sẽ đặt
+// "Prelude and Fugue no.11" ngay sau bài đầu, trước cả no.3.
+const soSanhTuNhien = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare;
+
+let opusDs = [];      // [{tag, works:[...]}]
+
+function opusSay(chu, loi) {
+  const el = $('opus-msg');
+  if (!chu) { el.className = 'auth-msg'; el.textContent = ''; return; }
+  el.className = 'auth-msg show ' + (loi ? 'err' : 'ok');
+  el.textContent = chu;
+}
+
+async function loadOpus() {
+  opusSay(null);
+  const ke = $('opus-ke');
+
+  const [tRes, wtRes] = await Promise.all([
+    sb.from('tags').select('id,slug,name,name_vi,mo_ta,mo_ta_vi,thu_tu')
+      .eq('type', 'category').order('thu_tu').order('name'),
+    sb.from('work_tags').select('tag_id, works!inner(legacy_id,status)')
+  ]);
+
+  if (tRes.error) { ke.textContent = ''; opusSay(raw(tRes.error.message), true); return; }
+
+  // Dùng lại worksData của trang Works cho phần hiển thị, khỏi tải lại lần nữa.
+  const theoIdx = new Map((window.worksDataCuaSite || []).map(w => [w.idx, w]));
+  const nhomCua = new Map();
+  (wtRes.data || []).forEach(r => {
+    const w = r.works;
+    if (!w || w.status !== 'published') return;
+    const idx = parseInt(String(w.legacy_id).replace(/\D/g, ''), 10);
+    if (isNaN(idx)) return;
+    if (!nhomCua.has(r.tag_id)) nhomCua.set(r.tag_id, []);
+    nhomCua.get(r.tag_id).push(idx);
+  });
+
+  opusDs = (tRes.data || []).map(t => ({
+    tag: t,
+    works: (nhomCua.get(t.id) || [])
+      .map(i => theoIdx.get(i))
+      .filter(Boolean)
+      .sort((a, b) => soSanhTuNhien(a.title || '', b.title || ''))
+  }));
+
+  veOpus();
+}
+window.loadOpus = loadOpus;
+
+function veOpus() {
+  const ke = $('opus-ke');
+  ke.textContent = '';
+  const vi = document.documentElement.getAttribute('data-lang') === 'vi';
+  const laAdmin = !!(currentProfile && currentProfile.is_admin);
+  let tongTruyen = 0;
+
+  opusDs.forEach((n, i) => {
+    tongTruyen += n.works.length;
+    ke.append(veTheOpus(n, i + 1, vi, laAdmin));
+  });
+
+  $('opus-tong').textContent =
+    opusDs.length + ' ' + tr('opus_the_loai') + ' · ' + tongTruyen + ' ' + tr('opus_truyen');
+}
+
+function veTheOpus(n, so, vi, laAdmin) {
+  const t = n.tag;
+  const the = document.createElement('div');
+  the.className = 'opus-the';
+
+  const dau = document.createElement('button');
+  dau.type = 'button';
+  dau.className = 'opus-dau';
+  dau.setAttribute('aria-expanded', 'false');
+
+  const oSo = document.createElement('div');
+  oSo.className = 'opus-so';
+  const nhanSo = document.createElement('div');
+  nhanSo.className = 'opus-so-nhan'; nhanSo.textContent = 'Op.';
+  const num = document.createElement('div');
+  num.className = 'opus-so-num'; num.textContent = so;
+  oSo.append(nhanSo, num);
+  dau.append(oSo);
+
+  const than = document.createElement('div');
+  than.className = 'opus-than';
+
+  const ten = document.createElement('div');
+  ten.className = 'opus-ten';
+  ten.textContent = (vi && t.name_vi) ? t.name_vi : t.name;
+  than.append(ten);
+
+  const moTa = (vi && t.mo_ta_vi) ? t.mo_ta_vi : (t.mo_ta || '');
+  if (moTa) {
+    const m = document.createElement('div');
+    m.className = 'opus-mo-ta'; m.textContent = moTa;
+    than.append(m);
+  }
+
+  const nhan = document.createElement('div');
+  nhan.className = 'opus-nhan';
+  // Ký hiệu nhạc cụ: ưu tiên bộ riêng của nhóm, không có thì gộp từ tiêu đề.
+  let cu = BIEU_TUONG_NHOM[t.slug];
+  if (!cu) {
+    cu = [];
+    n.works.forEach(w => nhacCuTrongTen(w.title).forEach(k => { if (!cu.includes(k)) cu.push(k); }));
+  }
+  if (!cu.length) cu = ['not'];
+  nhan.append(veNhacCu(cu));
+
+  [...new Set(n.works.map(w => w.fandom))].forEach(f => {
+    const s = document.createElement('span'); s.className = 'nh';
+    s.textContent = window.fandomLabel(f); nhan.append(s);
+  });
+  const soCanh = n.works.filter(w => w.warning).length;
+  if (soCanh) {
+    const s = document.createElement('span'); s.className = 'nh canh';
+    s.textContent = '⚠ ' + soCanh; nhan.append(s);
+  }
+  than.append(nhan);
+  dau.append(than);
+
+  const phai = document.createElement('div');
+  phai.className = 'opus-phai';
+  const dem = document.createElement('div');
+  dem.className = 'opus-dem'; dem.textContent = n.works.length;
+  const dvi = document.createElement('div');
+  dvi.className = 'opus-dvi'; dvi.textContent = tr('opus_ban');
+  const mui = document.createElement('span');
+  mui.className = 'opus-mui'; mui.textContent = '▾';
+  phai.append(dem, dvi, mui);
+  dau.append(phai);
+
+  the.append(dau);
+
+  // ----- phần xổ xuống -----
+  const trong = document.createElement('div');
+  trong.className = 'opus-trong';
+  const vach = document.createElement('div');
+  vach.className = 'opus-vach'; trong.append(vach);
+
+  if (!n.works.length) {
+    const t0 = document.createElement('div');
+    t0.className = 'comments-empty'; t0.textContent = tr('opus_nhom_trong');
+    trong.append(t0);
+  }
+
+  const LA_MA = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
+  n.works.forEach((w, k) => {
+    const tr0 = document.createElement('button');
+    tr0.type = 'button';
+    tr0.className = 'opus-track';
+    tr0.addEventListener('click', () => window.openFic(w.idx));
+
+    const s = document.createElement('div');
+    s.className = 'opus-track-so'; s.textContent = LA_MA[k] || (k + 1);
+    tr0.append(s);
+
+    const th = document.createElement('div');
+    th.className = 'opus-track-than';
+    const tt = document.createElement('div');
+    tt.className = 'opus-track-ten';
+    tt.append(document.createTextNode(w.title || ''));
+    if (w.subtitle) {
+      tt.append(document.createTextNode(': '));
+      const em = document.createElement('em');
+      em.innerHTML = w.subtitle;   // phụ đề do chính chủ repo viết, giống thẻ truyện
+      tt.append(em);
+    }
+    th.append(tt);
+
+    const ph = document.createElement('div');
+    ph.className = 'opus-track-phu';
+    const cuBai = nhacCuTrongTen(w.title);
+    if (cuBai.length) ph.append(veNhacCu(cuBai));
+    const f = document.createElement('span');
+    f.textContent = window.fandomLabel(w.fandom) + ((w.ships && w.ships.length) ? ' · ' + w.ships[0] : '');
+    ph.append(f);
+    if (w.restricted) {
+      const k2 = document.createElement('span');
+      k2.className = 'opus-track-khoa'; k2.textContent = '· ' + tr('only_member');
+      ph.append(k2);
+    }
+    if (w.warning) {
+      const c = document.createElement('span');
+      c.className = 'opus-track-canh'; c.textContent = '· ⚠';
+      ph.append(c);
+    }
+    th.append(ph);
+    tr0.append(th);
+    trong.append(tr0);
+  });
+  the.append(trong);
+
+  dau.addEventListener('click', () => {
+    const mo = the.classList.toggle('mo');
+    dau.setAttribute('aria-expanded', mo ? 'true' : 'false');
+  });
+
+  if (laAdmin) themNutSuaOpus(the, n);
+  return the;
+}
+
+// ----- Sửa nhóm ngay tại chỗ, chỉ admin -----
+// Cố ý có cả đổi tên lẫn xoá: nút "+ Thêm fandom/ship" trong form đăng bài KHÔNG
+// có hai thứ này, và đó đúng là lý do lỗi gõ sai "Nevuillette/Furina" phải sửa
+// bằng SQL. Đừng lặp lại ở đây.
+function themNutSuaOpus(the, n) {
+  const t = n.tag;
+  const nut = document.createElement('button');
+  nut.type = 'button';
+  nut.className = 'mini-btn opus-sua-nut';
+  nut.textContent = '✎';
+  nut.title = tr('opus_sua');
+
+  const form = document.createElement('div');
+  form.className = 'opus-form';
+  form.style.display = 'none';
+
+  const o = (nhanKey, giaTri, nhieuDong) => {
+    const f = document.createElement('div'); f.className = 'field';
+    const l = document.createElement('label'); l.textContent = tr(nhanKey); f.append(l);
+    const i = nhieuDong ? document.createElement('textarea') : document.createElement('input');
+    if (nhieuDong) i.rows = 2;
+    i.value = giaTri || '';
+    f.append(i); form.append(f);
+    return i;
+  };
+  const iTen   = o('opus_f_ten',    t.name);
+  const iTenVi = o('opus_f_ten_vi', t.name_vi);
+  const iMo    = o('opus_f_mo',     t.mo_ta,    true);
+  const iMoVi  = o('opus_f_mo_vi',  t.mo_ta_vi, true);
+  const iThuTu = o('opus_f_thu_tu', t.thu_tu);
+
+  const hang = document.createElement('div');
+  hang.className = 'opus-form-nut';
+  const luu = document.createElement('button');
+  luu.type = 'button'; luu.className = 'mini-btn'; luu.textContent = tr('opus_luu');
+  const xoa = document.createElement('button');
+  xoa.type = 'button'; xoa.className = 'mini-btn danger'; xoa.textContent = tr('opus_xoa');
+  hang.append(luu, xoa);
+  form.append(hang);
+
+  nut.addEventListener('click', (e) => {
+    e.stopPropagation();
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+  });
+
+  luu.addEventListener('click', async () => {
+    const ten = iTen.value.trim();
+    if (!ten) { opusSay(tr('opus_can_ten'), true); return; }
+    const thu = parseInt(iThuTu.value, 10);
+    luu.disabled = true;
+    const { error } = await sb.from('tags').update({
+      name: ten,
+      name_vi: iTenVi.value.trim() || null,
+      mo_ta:    iMo.value.trim()   || null,
+      mo_ta_vi: iMoVi.value.trim() || null,
+      thu_tu: isNaN(thu) ? 100 : thu
+    }).eq('id', t.id);
+    luu.disabled = false;
+    if (error) { opusSay(raw(error.message), true); return; }
+    // Nạp lại TRƯỚC rồi mới báo: loadOpus() mở đầu bằng opusSay(null), báo
+    // trước là câu vừa hiện đã bị xoá ngay (đúng bẫy đã gặp ở trang Bookmark).
+    await loadOpus();
+    opusSay(tr('opus_da_luu'));
+  });
+
+  xoa.addEventListener('click', async () => {
+    // Nói rõ hậu quả: xoá nhóm thì truyện KHÔNG mất, chỉ mất chỗ xếp.
+    if (!window.confirm(tr('opus_xoa_hoi').replace('%s', t.name).replace('%d', n.works.length))) return;
+    xoa.disabled = true;
+    const { error } = await sb.from('tags').delete().eq('id', t.id);
+    xoa.disabled = false;
+    if (error) { opusSay(raw(error.message), true); return; }
+    await loadOpus();
+    opusSay(tr('opus_da_xoa'));
+  });
+
+  the.append(nut, form);
+}
+
+window.repaintOpus = () => { if (opusDs.length) veOpus(); };
+
+$('opus-mo-het').addEventListener('click', () =>
+  document.querySelectorAll('#opus-ke .opus-the').forEach(e => {
+    e.classList.add('mo'); e.querySelector('.opus-dau').setAttribute('aria-expanded', 'true');
+  }));
+$('opus-dong-het').addEventListener('click', () =>
+  document.querySelectorAll('#opus-ke .opus-the').forEach(e => {
+    e.classList.remove('mo'); e.querySelector('.opus-dau').setAttribute('aria-expanded', 'false');
+  }));
 
 // ---------- Danh sách thành viên ----------
 // Bảng profiles vốn đã cho đọc công khai (policy `true`, và anon có GRANT SELECT
