@@ -574,7 +574,8 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   .filter-btn { width: auto; white-space: nowrap; }
   .hero { padding: 3rem 1.2rem; }
   .hero-title { font-size: 1.8rem; letter-spacing: 3px; }
-  .home-columns { flex-direction: column; gap: 0; }
+  /* .home-columns cho điện thoại nay khai ở luật gốc bên dưới (mobile-first) —
+     để ở đây thì bị chính luật gốc đứng sau ghi đè, không có tác dụng gì. */
 }
 
 /* Desktop — ẩn mobile filter */
@@ -744,15 +745,25 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   padding-left: 10px;
   border-left: 2px solid var(--border);
 }
-  /* Home: 2 cột trên desktop */
+/* Home: xếp chồng trên điện thoại, 2 cột từ 769px trở lên.
+   PHẢI viết theo lối mobile-first ngay tại đây. Khối @media (max-width:768px) ở
+   phía trên file cũng có luật .home-columns{flex-direction:column}, nhưng nó
+   cùng độ ưu tiên mà lại đứng TRƯỚC, nên luật này ghi đè nó — trang chủ vẫn cố
+   xếp hai cột trên điện thoại. Hai cột với gap 2.5rem không vừa 326px chiều
+   ngang, cột bị đẩy rộng hơn cả khung cha 18px và tràn sang phải, làm nội dung
+   trông như lệch hẳn về bên trái. */
 .home-columns {
   display: flex;
-  gap: 2.5rem;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: 0;
+  align-items: stretch;
 }
 .home-col {
   flex: 1;
   min-width: 0;
+}
+@media (min-width: 769px) {
+  .home-columns { flex-direction: row; gap: 2.5rem; align-items: flex-start; }
 }
 #search-input:focus{border-color:var(--gold);}
 #search-input::placeholder{color:var(--ink3);}
