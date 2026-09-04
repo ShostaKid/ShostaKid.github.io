@@ -183,6 +183,17 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 
 .rq-the{border:1px solid var(--border);border-left:2px solid var(--gold);background:var(--cream2);
   padding:1.1rem 1.2rem;margin-bottom:1rem;}
+.rq-the.rq-moi-doi{border-left-color:var(--ui-head);background:rgba(184,151,42,0.09);}
+.rq-nhan-moi{font-family:var(--font-ui);font-size:0.52rem;letter-spacing:1.6px;text-transform:uppercase;
+  color:var(--cream);background:var(--ui-head);padding:2px 7px;border-radius:2px;}
+
+/* Chấm báo. Dùng ::after chứ không chèn thẻ con: nhãn của mục menu do
+   applyLang() ghi bằng textContent, thẻ con nào nằm trong đó cũng bị xoá
+   mỗi lần đổi ngôn ngữ. */
+.nav-me.co-cham::after{content:'';position:absolute;top:-1px;right:-1px;width:9px;height:9px;
+  border-radius:50%;background:var(--ui-head);border:2px solid var(--cream);pointer-events:none;}
+.nav-menu a.co-cham::after{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;
+  background:var(--ui-head);margin-left:7px;vertical-align:middle;}
 .rq-the-dau{display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;margin-bottom:0.7rem;}
 .rq-ngay{font-family:var(--font-ui);font-size:0.58rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ui);}
 .rq-ai{font-family:var(--font-ui);font-size:0.6rem;letter-spacing:1.5px;color:var(--ui-head);}
@@ -2448,6 +2459,7 @@ const i18n = {
     about_p4:'I hope you have a great time here. Thank you for stopping by.',
     nav_signin:'Sign In', nav_profile:'My Profile', nav_bookmarks:'My Bookmarks', nav_post:'Post',
     nav_logout:'Log Out',
+    rq_moi_nhan:'New',
     link_hong:'That link points to a work that no longer exists — or one you need to be signed in to read.',
     nav_requests:'Request a Fic',
     nav_members:'Members',
@@ -2603,6 +2615,7 @@ const i18n = {
     about_p4:'Hy vọng bạn có khoảng thời gian vui vẻ ở đây. Cảm ơn vì đã ghé qua.',
     nav_signin:'Đăng nhập', nav_profile:'Hồ sơ của tôi', nav_bookmarks:'Truyện đã lưu', nav_post:'Đăng truyện',
     nav_logout:'Đăng xuất',
+    rq_moi_nhan:'Mới',
     link_hong:'Link này trỏ tới một truyện không còn tồn tại — hoặc truyện phải đăng nhập mới đọc được.',
     nav_requests:'Gửi yêu cầu',
     nav_members:'Thành viên',
@@ -3160,6 +3173,9 @@ function paintAvatar(box, profile) {
 
 function paintProfile(p) {
   currentProfile = p;
+  // Phép đếm cho chấm báo khác nhau giữa admin và bạn đọc, mà chỉ tới đây mới
+  // biết chắc vai — nên tính chấm ở đây chứ không phải trong paintNav().
+  if (window.tinhChamBao) window.tinhChamBao();
   paintAvatar($('prof-avatar-box'), p);
   paintNavAvatar(p);
   $('prof-name').textContent   = p.display_name || p.username;
@@ -4074,6 +4090,42 @@ $('rq-dangnhap').addEventListener('click', () => window.showPage('auth', $('nav-
 const RQ_NHAN = { new:'rq_s_new', seen:'rq_s_seen', writing:'rq_s_writing',
                   done:'rq_s_done', declined:'rq_s_declined' };
 
+// ---------- Chấm báo ----------
+// Hai phép đếm khác nhau, cố ý:
+//   bạn đọc  → yêu cầu CỦA MÌNH vừa đổi trạng thái (status_changed_at)
+//   admin    → yêu cầu MỚI gửi tới (created_at)
+// RLS lo phần "của mình": bạn đọc chỉ thấy hàng của họ, admin thấy hết.
+async function docMocDaXem() {
+  const { data } = await sb.from('notif_seen').select('requests_seen_at').maybeSingle();
+  return data ? data.requests_seen_at : null;
+}
+
+function veCham(co) {
+  const me = $('nav-me'), mucMenu = $('nav-requests');
+  if (me) me.classList.toggle('co-cham', !!co);
+  if (mucMenu) mucMenu.classList.toggle('co-cham', !!co);
+}
+
+async function tinhChamBao() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { veCham(false); return; }
+
+  const moc = await docMocDaXem();
+  const laAdmin = !!(currentProfile && currentProfile.is_admin);
+
+  // head:true + count: chỉ hỏi số lượng, không kéo hàng nào về.
+  let q = sb.from('requests').select('id', { count: 'exact', head: true });
+  if (laAdmin) {
+    if (moc) q = q.gt('created_at', moc);
+  } else {
+    q = q.not('status_changed_at', 'is', null);
+    if (moc) q = q.gt('status_changed_at', moc);
+  }
+  const { count, error } = await q;
+  veCham(!error && (count || 0) > 0);
+}
+window.tinhChamBao = tinhChamBao;
+
 async function loadRequests() {
   rqSay(null);
   const { data: { session } } = await sb.auth.getSession();
@@ -4081,16 +4133,18 @@ async function loadRequests() {
   $('rq-canhbao').style.display = session ? 'none' : '';
   $('rq-form').style.display    = session ? '' : 'none';
   $('rq-cua-toi').style.display = session ? '' : 'none';
-  if (!session) return;
+  if (!session) { veCham(false); return; }
 
   const laAdmin = !!(currentProfile && currentProfile.is_admin);
+  // Đọc mốc TRƯỚC khi đánh dấu đã xem, để còn biết hàng nào là mới mà đánh dấu.
+  const mocCu = await docMocDaXem();
   // Admin thấy hết kèm tên người gửi; bạn đọc chỉ thấy của mình — RLS đã lo,
   // ở đây chỉ đổi tiêu đề và xin thêm cột tên cho đúng vai.
   $('rq-ds-head').dataset.i18n = laAdmin ? 'rq_all' : 'rq_mine';
   $('rq-ds-head').textContent  = tr(laAdmin ? 'rq_all' : 'rq_mine');
 
   const { data, error } = await sb.from('requests')
-    .select('id, body, feedback, status, admin_note, created_at, profiles(username, display_name)')
+    .select('id, body, feedback, status, admin_note, created_at, status_changed_at, profiles(username, display_name)')
     .order('created_at', { ascending: false });
 
   const ds = $('rq-ds');
@@ -4102,18 +4156,26 @@ async function loadRequests() {
     tr0.dataset.i18n = 'rq_trong';
     tr0.textContent = tr('rq_trong');
     ds.append(tr0);
-    return;
+  } else {
+    const locale = (document.documentElement.getAttribute('data-lang') === 'vi') ? 'vi-VN' : 'en-GB';
+    // "Mới" theo đúng phép đếm của từng vai — trùng khít với cái làm chấm sáng.
+    const laMoi = r => laAdmin
+      ? (!mocCu || r.created_at > mocCu)
+      : (!!r.status_changed_at && (!mocCu || r.status_changed_at > mocCu));
+    data.forEach(r => ds.append(veTheYeuCau(r, laAdmin, locale, laMoi(r))));
   }
 
-  const locale = (document.documentElement.getAttribute('data-lang') === 'vi') ? 'vi-VN' : 'en-GB';
-  data.forEach(r => ds.append(veTheYeuCau(r, laAdmin, locale)));
+  // Đã xem xong thì ghi mốc và tắt chấm. Làm SAU khi vẽ, để nhãn "Mới" ở trên
+  // còn dựa được vào mốc cũ.
+  await sb.rpc('danh_dau_da_xem_yeu_cau');
+  veCham(false);
 }
 window.loadRequests = loadRequests;
 
 // Dựng bằng DOM: nội dung yêu cầu là chữ người dùng nhập, không nhét vào innerHTML.
-function veTheYeuCau(r, laAdmin, locale) {
+function veTheYeuCau(r, laAdmin, locale, moi) {
   const the = document.createElement('div');
-  the.className = 'rq-the';
+  the.className = 'rq-the' + (moi ? ' rq-moi-doi' : '');
 
   const dau = document.createElement('div');
   dau.className = 'rq-the-dau';
@@ -4129,6 +4191,13 @@ function veTheYeuCau(r, laAdmin, locale) {
     ai.className = 'rq-ai';
     ai.textContent = r.profiles.display_name || r.profiles.username || '—';
     dau.append(ai);
+  }
+
+  if (moi) {
+    const nhan = document.createElement('span');
+    nhan.className = 'rq-nhan-moi';
+    nhan.textContent = tr('rq_moi_nhan');
+    dau.append(nhan);
   }
 
   const tt = document.createElement('span');
