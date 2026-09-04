@@ -1187,6 +1187,12 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
           <div class="field-hint" data-i18n="post_ships_hint">Hold Ctrl (or Cmd) to pick more than one.</div>
         </div>
         <div class="field">
+          <label data-i18n="post_opus">Opus</label>
+          <select id="pw-opus"></select>
+          <button type="button" class="mini-btn" id="pw-add-opus" data-i18n="post_add_opus">+ New group</button>
+          <div class="field-hint" data-i18n="post_opus_hint">Which musical form this belongs to. Shown on the Opus page. Leave as “—” if you haven’t decided.</div>
+        </div>
+        <div class="field">
           <label data-i18n="post_status">Status</label>
           <select id="pw-status">
             <option value="published" data-i18n="post_published">Published</option>
@@ -2524,6 +2530,10 @@ const i18n = {
     ab_save:'Save →', ab_saving:'Saving…', ab_saved:'About page updated ♪',
     ab_err:'Could not save the About page.',
     post_new_fandom:'Name of the new fandom:', post_new_ship:'Name of the new ship:',
+    post_opus:'Opus', post_add_opus:'+ New group',
+    post_opus_hint:'Which musical form this belongs to. Shown on the Opus page. Leave as “—” if you haven’t decided.',
+    post_new_opus:'Name of the new Opus group (e.g. Suite IV · Nocturnal):',
+    post_confirm_new_opus:'Create the group “%s”? You can write its description and set its order later on the Opus page.',
     post_confirm_new:'Create \"%s\"? It cannot be renamed or removed from this form.',
     post_created:'Created and selected ♪', post_already_there:'That one already exists — selected it for you.',
     post_name_bad:'That name cannot be used.',
@@ -2682,6 +2692,10 @@ const i18n = {
     post_new_fandom:'Tên fandom mới:', post_new_ship:'Tên ship mới:',
     post_confirm_new:'Tạo \"%s\"? Form này không sửa hay xoá lại được.',
     post_created:'Đã tạo và chọn ♪', post_already_there:'Đã có sẵn — t chọn giúp rồi.',
+    post_opus:'Opus', post_add_opus:'+ Nhóm mới',
+    post_opus_hint:'Truyện này thuộc thể nhạc nào. Hiện trên trang Opus. Chưa quyết thì cứ để “—”.',
+    post_new_opus:'Tên nhóm Opus mới (ví dụ: Suite IV · Nocturnal):',
+    post_confirm_new_opus:'Tạo nhóm “%s”? Mô tả và thứ tự hiện thì viết sau trên trang Opus.',
     post_name_bad:'Tên này không dùng được.',
     post_music:'Nhạc nền', post_music_hint:'Dùng cho mọi chương. Từng chương có thể ghi đè bên dưới.',
     post_m_url:'Link nhạc (GitHub Releases, archive.org…)', post_m_name:'Tên bản nhạc hiện cho người đọc',
@@ -3493,6 +3507,7 @@ function pwAddChapter(data) {
 $('pw-add-ch').addEventListener('click', () => pwAddChapter());
 $('pw-add-fandom').addEventListener('click', () => pwThemMuc('fandom'));
 $('pw-add-ship').addEventListener('click', () => pwThemMuc('ship'));
+$('pw-add-opus').addEventListener('click', () => pwThemOpus());
 
 // Tải một tệp ảnh lên bucket work-images. Trả về url, hoặc null nếu hỏng.
 async function pwTaiAnh(file, tenDau) {
@@ -3699,22 +3714,73 @@ async function pwThemMuc(loai) {
   pwSay('post_created');
 }
 
+// Tạo nhóm Opus mới ngay trong form. Cố ý CHỈ hỏi tên: mô tả hai thứ tiếng và
+// thứ tự hiện thì viết sau, trên trang Opus, chỗ nhìn thấy được kết quả —
+// nhét cả bốn ô vào window.prompt giữa lúc đang đăng truyện là cực hình.
+async function pwThemOpus() {
+  const el = $('pw-opus');
+  const ten = (window.prompt(tr('post_new_opus')) || '').trim();
+  if (!ten) return;
+
+  const slug = pwSlug(ten);
+  if (!slug) { pwSay('post_name_bad', true); return; }
+
+  const trung = [...el.options].find(o => o.value && o.textContent.toLowerCase() === ten.toLowerCase());
+  if (trung) { el.value = trung.value; pwSay('post_already_there'); return; }
+
+  if (!window.confirm(tr('post_confirm_new_opus').replace('%s', ten))) return;
+
+  const { data, error } = await sb.from('tags')
+    .insert({ name: ten, slug, type: 'category' })
+    .select('id,name').single();
+  if (error) { pwSay(raw(error.message), true); return; }
+
+  pwOpusIds.push(data.id);
+  const o = document.createElement('option');
+  o.value = data.id; o.textContent = data.name;
+  el.appendChild(o);
+  el.value = data.id;
+  pwSay('post_created');
+}
+
 // Nạp danh sách fandom / ship có sẵn.
+// Danh sách id của các nhóm Opus đang có. Cần giữ lại để lúc lưu chỉ xoá đúng
+// liên kết loại 'category', không đụng tới nhãn cảnh báo cũng nằm trong work_tags.
+let pwOpusIds = [];
+
 async function pwLoadChoices() {
-  const [f, s] = await Promise.all([
+  const [f, s, o] = await Promise.all([
     sb.from('fandoms').select('id,name').order('name'),
-    sb.from('ships').select('id,name').order('name')
+    sb.from('ships').select('id,name').order('name'),
+    sb.from('tags').select('id,name,name_vi,thu_tu').eq('type', 'category')
+      .order('thu_tu').order('name')
   ]);
   const fill = (el, rows) => {
     el.textContent = '';
     (rows || []).forEach(r => {
-      const o = document.createElement('option');
-      o.value = r.id; o.textContent = r.name;
-      el.appendChild(o);
+      const op = document.createElement('option');
+      op.value = r.id; op.textContent = r.name;
+      el.appendChild(op);
     });
   };
   fill($('pw-fandom'), f.data);
   fill($('pw-ships'), s.data);
+
+  // Ô Opus có thêm mục rỗng đứng đầu: truyện chưa xếp nhóm là chuyện bình thường,
+  // không nên ép chọn bừa một nhóm chỉ vì ô bắt buộc phải có giá trị.
+  pwOpusIds = (o.data || []).map(r => r.id);
+  const sel = $('pw-opus');
+  sel.textContent = '';
+  const trong = document.createElement('option');
+  trong.value = ''; trong.textContent = '—';
+  sel.appendChild(trong);
+  const vi = document.documentElement.getAttribute('data-lang') === 'vi';
+  (o.data || []).forEach(r => {
+    const op = document.createElement('option');
+    op.value = r.id;
+    op.textContent = (vi && r.name_vi) ? r.name_vi : r.name;
+    sel.appendChild(op);
+  });
 }
 
 // Mở form. Truyền idx để sửa truyện có sẵn, bỏ trống để tạo mới.
@@ -3733,6 +3799,7 @@ async function loadPostForm(idx) {
     $('pw-featured').checked = false;
     $('pw-restricted').checked = false;
     $('pw-bia-url').value = ''; $('pw-bia-cat-o').checked = false; veBia();
+    $('pw-opus').value = '';
     pwAddChapter();
     return;
   }
@@ -3740,7 +3807,7 @@ async function loadPostForm(idx) {
   head.dataset.i18n = 'post_edit_head'; head.textContent = tr('post_edit_head');
   const { data: w } = await sb.from('works')
     .select('id,title,subtitle,summary,warning_note,status,featured,is_restricted,cover_url,cover_crop,'
-          + 'work_fandoms(fandom_id), work_ships(ship_id),'
+          + 'work_fandoms(fandom_id), work_ships(ship_id), work_tags(tag_id),'
           + 'chapters(id,position,title,content,music)')
     .eq('legacy_id', 'fic-' + idx).maybeSingle();
   if (!w) { pwSay('post_err', true); return; }
@@ -3761,6 +3828,11 @@ async function loadPostForm(idx) {
   if (fid) $('pw-fandom').value = fid;
   const sid = new Set((w.work_ships || []).map(x => x.ship_id));
   [...$('pw-ships').options].forEach(o => { o.selected = sid.has(o.value); });
+
+  // work_tags chứa cả nhãn cảnh báo lẫn nhóm Opus. Lọc ra đúng cái nào là Opus
+  // bằng danh sách id đã nạp ở pwLoadChoices(), đừng lấy bừa phần tử đầu.
+  const opusCu = (w.work_tags || []).map(x => x.tag_id).find(id => pwOpusIds.includes(id));
+  $('pw-opus').value = opusCu || '';
 
   // Nhạc "của truyện" suy từ chương đầu — schema chỉ lưu nhạc theo chương.
   const dsChuong = (w.chapters || []).slice().sort((a, b) => a.position - b.position);
@@ -3835,6 +3907,15 @@ $('pw-save').addEventListener('click', async () => {
   if ($('pw-fandom').value) {
     await sb.from('work_fandoms').insert({ work_id: workId, fandom_id: $('pw-fandom').value });
   }
+  // Opus: CHỈ xoá liên kết tới nhóm Opus, không xoá cả hàng work_tags của truyện —
+  // bảng đó còn giữ nhãn cảnh báo (rape-non-con, cuckold) từ hồi import.
+  if (pwOpusIds.length) {
+    await sb.from('work_tags').delete().eq('work_id', workId).in('tag_id', pwOpusIds);
+  }
+  if ($('pw-opus').value) {
+    await sb.from('work_tags').insert({ work_id: workId, tag_id: $('pw-opus').value });
+  }
+
   await sb.from('work_ships').delete().eq('work_id', workId);
   const ships = [...$('pw-ships').selectedOptions].map(o => ({ work_id: workId, ship_id: o.value }));
   if (ships.length) await sb.from('work_ships').insert(ships);
