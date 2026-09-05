@@ -943,3 +943,83 @@ trong form; `.mini-btn` / `.mini-btn.danger` cho nút phụ, thay việc mượn
 - **Không đo được số chương đã vẽ bằng `getComputedStyle(el,'::before').content`** —
   Chrome trả về nguyên chuỗi `"Chapter " counter(ch)` chưa tính. Muốn xác nhận thì
   kiểm `counter-reset`/`counter-increment` và hộp `::before` có kích thước.
+
+---
+
+## Đợt gọn giao diện điện thoại (cập nhật 2026-09-05)
+
+Chỉ CSS + đồng bộ trạng thái nút lọc, **không đụng backend, không migration**.
+Chốt của chủ repo: gập cả hai mục trang chủ, **mặc định đóng cả hai**; tên tiếng
+Anh bỏ chữ "My"; **thanh nav giữ nguyên như cũ** (bản thử phóng to vùng bấm bị
+chê "hơi bị to quá") — đừng tự ý sửa lại nav.
+
+### Trang chủ: hai mục thành thẻ gập
+
+DOM dựng **một kiểu duy nhất cho mọi khổ màn hình** (`.home-dau` = đầu thẻ,
+`.home-than` = thân), rồi để CSS quyết định:
+
+- Điện thoại: đầu thẻ có viền + nền, kèm số lượng `(4)` và tên truyện mới nhất
+  làm dòng nếm thử; thân đóng, bấm mới mở (`.home-col.mo`).
+- Máy tính (`min-width:769px`): lột sạch viền/nền/padding, trả `margin-bottom`
+  về 2.5rem và bật lại gạch `::after` → **giống hệt bản cũ**, `pointer-events:none`
+  nên không bấm nhầm. Đã đo lại: hai cột, gạch 343px, thân luôn mở.
+
+Làm một DOM chung như vậy để xoay máy không phải dựng lại gì. Đừng tách thành
+hai nhánh markup.
+
+Kết quả đo ở 320/360/390/768px: nút "Xem tất cả truyện" kết thúc ở 659–697px,
+tức **nằm trọn trong màn hình đầu** (trước đây phải cuộn qua 4 thẻ truyện).
+
+### Trang Works: dải fandom ra ngoài bảng gập
+
+`#mobile-fandom-list` chuyển từ trong `#mobile-filter-panel` ra ngoài, thành
+`.mobile-fandom-dai` cuộn ngang, luôn hiện. Bảng gập giờ chỉ còn mục Ship.
+
+**Bẫy bố cục:** `.works-layout` có `align-items:flex-start` (cần cho sidebar máy
+tính). Khi media query xoay nó thành `flex-direction:column` thì flex-start là
+trục **ngang**, nên `.works-main` co giãn theo **max-content**. Dải cuộn ngang có
+max-content ~819px → kéo cả trang Works rộng 835px và sinh cuộn ngang trên máy
+390px. Vá bằng `.works-main{width:100%}` trong media query. **Đừng bỏ dòng đó.**
+
+### Ba lỗi có sẵn lòi ra khi dải fandom hết bị che
+
+Cả ba đã nằm trong code từ trước, chỉ không ai thấy vì dải fandom bị giấu trong
+bảng gập. Đã sửa cùng đợt này:
+
+1. **`applyFilters()` gán `card.style.display='block'`** — mà thẻ truyện là
+   `.fic-card-bia` (`display:flex`) để ảnh bìa nằm cạnh phần chữ. Gán `block` là
+   đè mất, bìa rơi xuống nằm **trên** chữ. Chỉ trang Works dính; trang chủ không
+   chạy qua `applyFilters()` nên vẫn đúng — đó là lý do hai trang trông khác nhau.
+   Đổi thành `''`. `searchFics()` cũ cũng vậy.
+2. **`toggleAccordion()` xoá `active` của cả `.mobile-pill` trần** ở dòng "clear
+   ship filters" **sau** khi vừa đặt active cho pill fandom → chọn fandom trên
+   sidebar máy tính thì pill fandom trên điện thoại không bao giờ sáng. Đã giới
+   hạn thành `.ship-btn, #mobile-ship-list .mobile-pill`. Chỗ bấm nhãn ship trên
+   thẻ truyện cũng cùng lỗi, sửa y vậy.
+3. **So chữ `textContent.trim()==='All'`** để nhận pill "Tất cả" — sai ngay khi
+   trang đang ở tiếng Việt. Giờ nhận bằng `id="mobile-all-pill"`.
+
+Nhánh "đóng accordion → về All" trước đây còn gỡ `active` khỏi cả pill All, nên
+không pill nào sáng dù đang lọc All. Đã cho All sáng lại.
+
+### Các mục gọn khác
+
+- Thẻ truyện trên điện thoại: padding 1rem, tóm tắt **và** cảnh báo kẹp 2 dòng
+  (`-webkit-line-clamp`). Trung bình **399px → 189px**/thẻ, một màn hình thấy 3 thẻ
+  thay vì 2. Có fic khai cảnh báo dài 5 dòng, một mình nó đội thẻ lên 285px —
+  đó là lý do phải kẹp cả cảnh báo chứ không riêng tóm tắt.
+- Hero điện thoại rút còn `2.2rem 1.2rem 1.8rem`, hoa văn ♩ nhỏ lại.
+- Vùng bấm: pill fandom và nút Filter `min-height:44px` (chỉ tăng padding thì ra
+  ~31px, chưa đủ).
+- `.chapter-nav` trên trang đọc cho xuống hàng được và ô chọn chương co lại —
+  trước đó tên chương dài đẩy nút Next ra ngoài 21px, sinh cuộn ngang cả trang.
+  Lỗi này **có từ trước**, đã đối chiếu với bản chưa sửa.
+
+### Bẫy khi đo
+
+- **`resize_window` của pane trình duyệt không bám** sau khi trang tự điều hướng;
+  `innerWidth` vẫn trả 800 dù báo đã đặt 390. Cách đo tin được: nhét một
+  `<iframe>` **cùng origin** rộng đúng 390px rồi đo bên trong nó.
+- **Transition không chạy khi pane bị ẩn.** `getComputedStyle(...).transform` của
+  mũi tên trả `matrix(1,0,0,1,0,0)` mãi, dễ tưởng CSS sai. Tắt tạm `transition`
+  rồi đo lại thì ra đúng `matrix(-1,0,0,-1,0,0)`.

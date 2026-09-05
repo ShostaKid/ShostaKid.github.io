@@ -679,20 +679,79 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 
   /* Works layout mobile — stack vertical */
   .works-layout { flex-direction: column; gap: 0; padding: 1.5rem 1rem; }
+  /* .works-layout có align-items:flex-start (cần cho sidebar trên máy tính).
+     Khi xoay thành cột thì flex-start là trục ngang → .works-main co giãn theo
+     MAX-CONTENT chứ không theo bề ngang khung. Dải fandom cuộn ngang có
+     max-content ~819px nên nó kéo cả trang Works rộng 835px và sinh cuộn ngang.
+     Ép 100% là hết; đừng bỏ dòng này khi sửa bố cục Works. */
+  .works-main { width: 100%; }
 
   /* Ẩn desktop sidebar */
   .fandom-sidebar { display: none; }
 
+  /* Dải fandom luôn hiện, cuộn ngang. Bọc dưới lớp ngăn cuộn dội (overscroll)
+     để vuốt hết dải không kéo luôn cả trang sang ngang. */
+  .mobile-fandom-dai {
+    display: flex; gap: 6px;
+    overflow-x: auto; overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; -ms-overflow-style: none;
+    margin-bottom: 8px; padding-bottom: 2px;
+  }
+  .mobile-fandom-dai::-webkit-scrollbar { display: none; }
+  /* min-height 44px chứ không chỉ tăng padding: padding 5px + chữ 0.6rem mới
+     ra ~31px, dưới ngưỡng vùng bấm tối thiểu. */
+  .mobile-fandom-dai .mobile-pill {
+    flex: 0 0 auto; min-height: 44px; padding: 5px 14px;
+  }
+
   /* Mobile filter toggle button */
-  #mobile-filter-toggle { display: flex; }
+  #mobile-filter-toggle { display: flex; min-height: 44px; }
 
   /* Mobile filter panel */
   #mobile-filter-panel { display: none; }
   #mobile-filter-panel.open { display: block; }
+  #mobile-filter-panel .mobile-pill { min-height: 40px; }
 
   .filter-btn { width: auto; white-space: nowrap; }
-  .hero { padding: 3rem 1.2rem; }
-  .hero-title { font-size: 1.8rem; letter-spacing: 3px; }
+  .works-head { margin-bottom: 1.2rem; }
+
+  /* Thanh chương trên trang đọc: [Prev][chọn chương][Next] một hàng cứng, mà ô
+     chọn rộng theo tên chương dài nhất → tràn ra khỏi màn hình 21px và sinh
+     cuộn ngang cả trang. Cho xuống hàng được và cho ô chọn co lại. */
+  .chapter-nav { flex-wrap: wrap; gap: 8px; }
+  .chapter-nav button { padding: 8px 12px; }
+  .chapter-nav select { flex: 1 1 130px; min-width: 0; max-width: 100%; }
+
+  /* Hero gọn lại: bản cũ chiếm gần trọn màn hình đầu nên cuộn mãi mới thấy
+     truyện. Vẫn giữ đủ hoa văn ♩ và dải ✦✦✦ cho ra dáng cũ. */
+  .hero { padding: 2.2rem 1.2rem 1.8rem; }
+  .hero-ornament { font-size: 3rem; margin-bottom: -0.6rem; }
+  .hero-title { font-size: 1.8rem; letter-spacing: 3px; margin-bottom: 0.6rem; }
+  .hero-subtitle { font-size: 1rem; margin-bottom: 1rem; }
+  .hero-divider { margin: 0.9rem 0; }
+  .hero-tagline { font-size: 0.8rem; letter-spacing: 2px; }
+
+  .home-boc { padding: 1.8rem 1rem 2.5rem; }
+
+  /* Thẻ truyện gọn lại trên điện thoại — bản cũ cao ~400px nên một màn hình
+     chỉ chứa được hai thẻ. Tóm tắt cắt còn 2 dòng, ai muốn đọc thì mở truyện. */
+  .fic-card { padding: 1rem 1.1rem; margin-bottom: 1rem; }
+  .fic-title { font-size: 1.05rem; }
+  .fic-meta { font-size: 0.6rem; gap: 1rem; margin-bottom: 0.55rem; }
+  /* Cảnh báo cũng kẹp 2 dòng: có fic khai cảnh báo dài 5 dòng, một mình nó đội
+     thẻ từ ~190 lên 285px, phá hết công gọn của phần còn lại. */
+  .fic-warning {
+    font-size: 0.8rem; margin-bottom: 0.45rem;
+    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  .fic-summary {
+    font-size: 0.83rem; line-height: 1.5;
+    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  .fic-tags { margin-top: 0.6rem; gap: 5px; }
   /* .home-columns cho điện thoại nay khai ở luật gốc bên dưới (mobile-first) —
      để ở đây thì bị chính luật gốc đứng sau ghi đè, không có tác dụng gì. */
 }
@@ -701,6 +760,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 @media (min-width: 769px) {
   #mobile-filter-toggle { display: none !important; }
   #mobile-filter-panel { display: none !important; }
+  .mobile-fandom-dai { display: none !important; }
 }
 
 /* Mobile filter toggle button */
@@ -881,8 +941,60 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   flex: 1;
   min-width: 0;
 }
+.home-boc { max-width: 1100px; margin: 0 auto; padding: 3.5rem 2rem; }
+.home-xem-het { text-align: center; margin-top: 2rem; }
+
+/* Thẻ gập của trang chủ — mặc định (điện thoại) là ĐÓNG cả hai.
+   Nhiều người phản hồi là mở trang chủ trên điện thoại không thấy truyện đâu:
+   hai tiêu đề mục + bốn thẻ truyện cao ~400px mỗi thẻ đẩy nút "Xem tất cả"
+   xuống tận màn hình thứ tư. Gập lại thì cả hai mục lẫn nút đó nằm gọn trong
+   màn hình đầu, ai muốn xem thì bấm mở. */
+.home-dau {
+  display: block; width: 100%; text-align: left;
+  font-family: var(--font-ui); color: inherit;
+  background: rgba(250,247,240,0.85);
+  border: 1px solid var(--border);
+  padding: 13px 15px; margin-bottom: 1rem;
+  cursor: pointer; transition: border-color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+[data-theme="dark"] .home-dau { background: rgba(30,24,16,0.9); }
+.home-dau:hover { border-color: var(--gold-light); }
+.home-dau-tren { display: flex; align-items: center; gap: 0.7rem; }
+.home-dau .section-heading { margin-bottom: 0; flex: 1; min-width: 0; }
+.home-dau .section-heading::after { display: none; }
+.home-so {
+  font-family: var(--font-ui); font-size: 0.62rem; letter-spacing: 1.5px;
+  color: var(--ui); flex: 0 0 auto;
+}
+.home-mui {
+  color: var(--ui-head); font-size: 0.72rem; line-height: 1;
+  flex: 0 0 auto; transition: transform 0.25s;
+}
+.home-col.mo .home-mui { transform: rotate(180deg); }
+/* Dòng nếm thử: tên truyện mới nhất của mục, chỉ hiện lúc đang đóng. */
+.home-mo {
+  display: block; margin-top: 0.45rem;
+  font-family: 'Lora', Georgia, serif; font-style: italic;
+  font-size: 0.8rem; color: var(--ink3); line-height: 1.4;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.home-mo:empty { display: none; }
+.home-col.mo .home-mo { display: none; }
+.home-than { display: none; }
+.home-col.mo .home-than { display: block; }
+
 @media (min-width: 769px) {
   .home-columns { flex-direction: row; gap: 2.5rem; align-items: flex-start; }
+  /* Máy tính: lột sạch dáng thẻ, trả về đúng tiêu đề mục như bản cũ. */
+  .home-dau {
+    background: none; border: none; padding: 0; margin-bottom: 0;
+    cursor: default; pointer-events: none;
+  }
+  .home-dau .section-heading { margin-bottom: 2.5rem; }
+  .home-dau .section-heading::after { display: block; }
+  .home-so, .home-mui, .home-mo { display: none; }
+  .home-than { display: block; }
 }
 #search-input:focus{border-color:var(--gold);}
 #search-input::placeholder{color:var(--ink3);}
@@ -980,21 +1092,45 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
         <span class="continue-arrow">→</span>
       </div>
     </div>
-  <div style="max-width:1100px;margin:0 auto;padding:3.5rem 2rem;">
+  <div class="home-boc">
+  <!-- Hai mục của trang chủ dựng sẵn dạng "đầu thẻ + thân thẻ" cho MỌI khổ màn
+       hình, rồi để CSS quyết định. Trên máy tính .home-dau bị lột hết viền/nền
+       và thân luôn mở nên trông y hệt bản cũ; trên điện thoại nó thành thẻ gập.
+       Một cấu trúc DOM duy nhất như vậy thì xoay máy không phải dựng lại gì. -->
   <div class="home-columns">
 
-    <div class="home-col">
-      <div class="section-heading" data-i18n="head_latest">My Latest Works</div>
-      <div id="home-latest"></div>
+    <div class="home-col" id="home-col-latest">
+      <button class="home-dau" type="button" onclick="toggleHomeCol('latest')"
+              aria-expanded="false" aria-controls="home-latest-than">
+        <span class="home-dau-tren">
+          <span class="section-heading" data-i18n="head_latest">Latest Works</span>
+          <span class="home-so" id="home-latest-so"></span>
+          <span class="home-mui" aria-hidden="true">&#9662;</span>
+        </span>
+        <span class="home-mo" id="home-latest-mo"></span>
+      </button>
+      <div class="home-than" id="home-latest-than">
+        <div id="home-latest"></div>
+      </div>
     </div>
 
-    <div class="home-col">
-      <div class="section-heading" data-i18n="head_fav">My Favorite Children</div>
-      <div id="home-favorites"></div>
+    <div class="home-col" id="home-col-fav">
+      <button class="home-dau" type="button" onclick="toggleHomeCol('fav')"
+              aria-expanded="false" aria-controls="home-fav-than">
+        <span class="home-dau-tren">
+          <span class="section-heading" data-i18n="head_fav">Favorite Children</span>
+          <span class="home-so" id="home-fav-so"></span>
+          <span class="home-mui" aria-hidden="true">&#9662;</span>
+        </span>
+        <span class="home-mo" id="home-fav-mo"></span>
+      </button>
+      <div class="home-than" id="home-fav-than">
+        <div id="home-favorites"></div>
+      </div>
     </div>
 
   </div>
-  <div style="text-align:center;margin-top:2rem;">
+  <div class="home-xem-het">
     <button class="ao3-link" onclick="showPage('works',document.querySelector('.nav-links a[data-page=\'works\']'))" data-i18n="view_all">View All Works →</button>
   </div>
 </div>
@@ -1013,20 +1149,21 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 
       <div class="works-main">
 
+        <!-- Dải fandom (chỉ hiện trên mobile) — nay nằm NGOÀI bảng gập và luôn
+             mở, cuộn ngang. Trước đây nó nằm trong bảng gập nên mặc định người
+             xem điện thoại không thấy nút lọc nào, phải bấm "Filter" mới biết
+             có gì; lọc theo fandom là thao tác hay dùng nhất nên cho ra ngoài.
+             Trước đây ba pill này còn viết cứng nên mobile chỉ lọc được 3/6
+             fandom; giờ buildSidebar() dựng theo đúng fandom có thật. -->
+        <div class="mobile-fandom-dai" id="mobile-fandom-list">
+          <button class="mobile-pill active" id="mobile-all-pill" data-i18n="all" onclick="setFandom('all',this,true)">All</button>
+        </div>
         <!-- Mobile filter toggle (chỉ hiện trên mobile) -->
         <button id="mobile-filter-toggle" onclick="toggleMobileFilter()">
           <span><span data-i18n="filter">Filter</span> <span id="mobile-filter-count"></span></span>
           <span class="toggle-arrow">▼</span>
         </button>
         <div id="mobile-filter-panel">
-          <div class="mobile-filter-section">
-            <span class="mobile-filter-label" data-i18n="fandom">Fandom</span>
-            <!-- Trước đây ba pill này viết cứng nên mobile chỉ lọc được 3/6 fandom.
-                 Giờ buildSidebar() dựng theo đúng fandom có thật trong dữ liệu. -->
-            <div class="mobile-filter-pills" id="mobile-fandom-list">
-              <button class="mobile-pill active" data-i18n="all" onclick="setFandom('all',this,true)">All</button>
-            </div>
-          </div>
           <div class="mobile-filter-section">
             <span class="mobile-filter-label" data-i18n="ship">Ship</span>
             <div class="mobile-filter-pills" id="mobile-ship-list"></div>
@@ -1666,7 +1803,9 @@ function buildSidebar() {
       if (currentPage !== 'works') showPage('works', document.querySelector('.nav-links a[data-page="works"]'));
       activeShips.clear();
       activeShips.add(ship);
-      document.querySelectorAll('.ship-btn, .mobile-pill').forEach(btn => {
+      // Cũng chỉ quét danh sách ship: toggle trên '.mobile-pill' trần sẽ tắt
+      // luôn pill fandom đang sáng, dù activeFandom không hề đổi.
+      document.querySelectorAll('.ship-btn, #mobile-ship-list .mobile-pill').forEach(btn => {
         btn.classList.toggle('active', btn.textContent.trim() === ship);
       });
       applyFilters();
@@ -1687,24 +1826,32 @@ function toggleAccordion(item, fandom) {
     activeFandom = fandom;
     // Deactivate All button
     document.querySelector('.all-btn')?.classList.remove('active');
-    // Sync mobile fandom pills
-    document.querySelectorAll('#mobile-filter-panel .mobile-pill').forEach(b => {
-      const inShipList = document.getElementById('mobile-ship-list')?.contains(b);
-      if (!inShipList) b.classList.toggle('active', b.textContent.includes(fandom));
+    // Sync mobile fandom pills. Dải fandom giờ là #mobile-fandom-list nằm ngoài
+    // bảng gập, nên trỏ thẳng vào nó — khỏi phải lọc ngược ra khỏi danh sách ship.
+    document.querySelectorAll('#mobile-fandom-list .mobile-pill').forEach(b => {
+      b.classList.toggle('active', b.textContent.includes(fandom));
     });
   } else {
     // Đóng → về All
     activeFandom = 'all';
     document.querySelector('.all-btn')?.classList.add('active');
-    document.querySelectorAll('#mobile-filter-panel .mobile-pill').forEach(b => {
-      const inShipList = document.getElementById('mobile-ship-list')?.contains(b);
-      if (!inShipList) b.classList.remove('active');
+    // Bản cũ gỡ 'active' khỏi cả pill "All", nên trên điện thoại không pill nào
+    // sáng dù đang lọc All. Hồi đó dải nằm trong bảng gập nên không ai thấy;
+    // giờ nó luôn hiện, phải cho pill "All" sáng lại. Nhận ra nó bằng id chứ
+    // đừng so chữ: sang tiếng Việt nó là "Tất cả".
+    document.querySelectorAll('#mobile-fandom-list .mobile-pill').forEach(b => {
+      b.classList.toggle('active', b.id === 'mobile-all-pill');
     });
   }
 
-  // Clear ship filters khi đổi fandom
+  // Clear ship filters khi đổi fandom.
+  // Phải giới hạn trong #mobile-ship-list: '.mobile-pill' trần sẽ quét luôn dải
+  // fandom và gỡ mất 'active' vừa đặt ở trên — chọn fandom trên sidebar máy tính
+  // thì pill fandom tương ứng trên điện thoại không bao giờ sáng. Lỗi có sẵn,
+  // trước đây không lộ vì dải fandom nằm khuất trong bảng gập.
   activeShips.clear();
-  document.querySelectorAll('.ship-btn, .mobile-pill').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.ship-btn, #mobile-ship-list .mobile-pill')
+    .forEach(b => b.classList.remove('active'));
   updateMobileFilterCount();
   applyFilters();
 }
@@ -1733,13 +1880,13 @@ function setFandom(fandom, btn, isMobile) {
     document.querySelector('.all-btn')?.classList.remove('active');
   }
 
-  // Sync mobile fandom pills
-  document.querySelectorAll('#mobile-filter-panel .mobile-pill').forEach(b => {
-    const inShipList = document.getElementById('mobile-ship-list')?.contains(b);
-    if (!inShipList) {
-      const matches = (fandom === 'all' && b.textContent.trim() === 'All') || b.textContent.includes(fandom);
-      b.classList.toggle('active', matches);
-    }
+  // Sync mobile fandom pills. Nhận pill "All" bằng id: so chữ 'All' là sai khi
+  // trang đang ở tiếng Việt (nhãn thành "Tất cả") — lỗi cũ, trước đây không lộ
+  // vì dải fandom nằm khuất trong bảng gập.
+  document.querySelectorAll('#mobile-fandom-list .mobile-pill').forEach(b => {
+    const matches = (fandom === 'all' && b.id === 'mobile-all-pill')
+                 || (fandom !== 'all' && b.textContent.includes(fandom));
+    b.classList.toggle('active', matches);
   });
 
   if (btn) btn.classList.add('active');
@@ -1779,7 +1926,10 @@ function applyFilters() {
     }
 
     const show = fandomMatch && titleMatch && shipMatch;
-    card.style.display = show ? 'block' : 'none';
+    // '' chứ KHÔNG phải 'block': thẻ truyện là .fic-card-bia (display:flex) để
+    // ảnh bìa nằm cạnh phần chữ. Gán 'block' là đè mất, bìa rơi xuống nằm trên
+    // chữ — chỉ trang Works dính vì trang chủ không chạy qua applyFilters().
+    card.style.display = show ? '' : 'none';
     if (show) visibleCount++;
   });
 
@@ -2000,6 +2150,24 @@ function renderHome() {
 
   fill(document.getElementById('home-latest'), latest);
   fill(document.getElementById('home-favorites'), favorites);
+  homeTomTat('latest', latest);
+  homeTomTat('fav', favorites);
+}
+
+// Số lượng + tên truyện đầu tiên, hiện trên đầu thẻ gập lúc nó đang đóng.
+// Chỉ có tên truyện nên không cần dịch, applyLang() không phải đụng tới.
+function homeTomTat(khoa, list) {
+  const so = document.getElementById('home-' + khoa + '-so');
+  if (so) so.textContent = list.length ? '(' + list.length + ')' : '';
+  const mo = document.getElementById('home-' + khoa + '-mo');
+  if (mo) mo.textContent = list.length ? list[0].title : '';
+}
+
+function toggleHomeCol(khoa) {
+  const col = document.getElementById('home-col-' + khoa);
+  if (!col) return;
+  const dangMo = col.classList.toggle('mo');
+  col.querySelector('.home-dau')?.setAttribute('aria-expanded', dangMo ? 'true' : 'false');
 }
 
 // Thứ tự trang Works. Mặc định mới nhất trước — trước đây xếp theo số thứ tự fic
@@ -2580,7 +2748,7 @@ const i18n = {
     hero_sub:'I blend classical music with my thoughts',
     hero_tag:"Take a $ip y'all and enjoy",
     continue:'Continue reading:',
-    head_latest:'My Latest Works', head_fav:'My Favorite Children',
+    head_latest:'Latest Works', head_fav:'Favorite Children',
     view_all:'View All Works →',
     browse:'Browse', all:'All', filter:'Filter', fandom:'Fandom', ship:'Ship',
     head_all:'All Works', no_results:'No works found for this filter.',
@@ -3208,7 +3376,7 @@ window.addEventListener('popstate', (e) => {
   const q = query.toLowerCase().trim();
   document.querySelectorAll('#page-works .fic-card').forEach(card => {
     const title = card.querySelector('.fic-title').textContent.toLowerCase();
-    card.style.display = (!q || title.includes(q)) ? 'block' : 'none';
+    card.style.display = (!q || title.includes(q)) ? '' : 'none';
   });
 }
 
