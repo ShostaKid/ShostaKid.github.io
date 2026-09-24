@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ShostaKid</title>
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Nunito:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Nunito:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -12,22 +12,20 @@
 --ink:#2C2318;--ink2:#5C4F3A;--ink3:#8C7D66;--border:#D4C49A;
 
 --ui:#6B5B42;--ui-head:#836717;
+/* Dùng cho giao diện đĩa than (Home / Works / Opus): đường kẻ mảnh, chữ cảnh báo,
+   chữ nằm trên nền --ui-head (nút chính). */
+--hair:#E6DBBE;--warn:#993C1D;--on-head:#FAF7F0;
 --font-ui:'Playfair Display',serif;
 }
 /* UI tiếng Việt dùng Nunito cho dấu hiển thị chuẩn */
 [data-lang="vi"]{--font-ui:'Nunito',sans-serif;}
-[data-lang="vi"] .nav-links a,[data-lang="vi"] .section-heading,[data-lang="vi"] .filter-btn{letter-spacing:1.8px;}
-[data-lang="vi"] .hero-title,[data-lang="vi"] .intro-title{letter-spacing:4px;}
+[data-lang="vi"] .nav-links a,[data-lang="vi"] .section-heading{letter-spacing:1.8px;}
+[data-lang="vi"] .intro-title{letter-spacing:4px;}
 #lang-btn{background:none;border:1px solid var(--border);font-family:var(--font-ui);font-size:0.6rem;letter-spacing:1.5px;cursor:pointer;color:var(--ui);padding:4px 9px;transition:all 0.2s;line-height:1;}
 #lang-btn:hover{border-color:var(--ui-head);color:var(--ui-head);}
 .nav-utils{display:flex;align-items:center;gap:8px;}
 body{background:var(--cream);color:var(--ink);font-family:Georgia,'Times New Roman',serif;min-height:100vh;overflow-x:hidden;}
 
-/* GOTHIC PATTERN */
-.gothic-bg{position:relative;background-color:var(--cream);}
-.gothic-bg::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(184,151,42,0.07) 0px,rgba(184,151,42,0.07) 1px,transparent 1px,transparent 56px),repeating-linear-gradient(-45deg,rgba(184,151,42,0.07) 0px,rgba(184,151,42,0.07) 1px,transparent 1px,transparent 56px);pointer-events:none;z-index:0;}
-.gothic-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 100% at 50% 50%,transparent 40%,rgba(212,180,100,0.13) 70%,rgba(184,151,42,0.22) 100%);pointer-events:none;z-index:0;}
-.gothic-bg>*{position:relative;z-index:1;}
 
 /* INTRO */
 #intro{position:fixed;inset:0;z-index:2147483647;background:#0a0805;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.8s ease;}
@@ -109,14 +107,6 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .page.active{display:block;}
 @keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-.hero{padding:6rem 3rem 5rem;text-align:center;border-bottom:1px solid var(--border);}
-.hero-ornament{font-family:var(--font-ui);font-size:5rem;color:var(--gold);opacity:0.18;line-height:1;margin-bottom:-1rem;}
-.hero-title{font-family:var(--font-ui);font-size:2.8rem;font-weight:400;letter-spacing:6px;text-transform:uppercase;margin-bottom:1rem;color:var(--ink);}
-.hero-subtitle{font-family:var(--font-ui);font-style:italic;font-size:1.3rem;color:var(--ink2);letter-spacing:1px;margin-bottom:2rem;}
-.hero-divider{display:flex;align-items:center;justify-content:center;gap:1.2rem;margin:1.5rem 0;}
-.hero-divider::before,.hero-divider::after{content:'';flex:1;max-width:120px;height:1px;background:linear-gradient(to right,transparent,var(--border));}
-.hero-divider::after{background:linear-gradient(to left,transparent,var(--border));}
-.hero-tagline{font-family:Georgia,serif;font-size:1rem;color:var(--ink3);letter-spacing:3px;text-transform:uppercase;}
 
 .fics-section{max-width:860px;margin:0 auto;padding:3.5rem 2rem;}
 .section-heading{font-family:var(--font-ui);font-size:0.78rem;letter-spacing:4px;text-transform:uppercase;color:var(--ui-head);margin-bottom:2.5rem;display:flex;align-items:center;gap:1rem;}
@@ -208,88 +198,6 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
   font-family:'Lora',Georgia,serif;font-style:italic;font-size:0.85rem;color:var(--ink2);white-space:pre-wrap;}
 .rq-dieu{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.9rem;padding-top:0.8rem;border-top:1px solid var(--border);}
 
-/* ===== TRANG OPUS ===== */
-.opus-wrap{max-width:1180px;margin:0 auto;padding:3rem 2rem;}
-.opus-dan{font-family:'Lora',Georgia,serif;font-style:italic;font-size:0.95rem;color:var(--ink2);
-  line-height:1.7;max-width:640px;margin:0 0 1.6rem;}
-.opus-thanh{display:flex;align-items:center;gap:0.7rem;flex-wrap:wrap;margin-bottom:1.6rem;}
-.opus-tong{margin-left:auto;font-family:var(--font-ui);font-size:0.6rem;letter-spacing:2px;
-  text-transform:uppercase;color:var(--ui);}
-
-/* align-items:start để thẻ mở ra thì CHỈ nó cao lên, thẻ bên cạnh giữ nguyên.
-   Đừng cho thẻ đang mở chiếm cả hàng (grid-column:1/-1): nó bị đẩy xuống hàng
-   riêng và để lại một mảng trống to ở chỗ cũ. */
-.opus-ke{display:grid;grid-template-columns:1fr;gap:1.4rem;align-items:start;}
-@media (min-width:900px){ .opus-ke{grid-template-columns:1fr 1fr;} }
-
-.opus-the{border:1px solid var(--border);background:rgba(250,247,240,0.85);position:relative;
-  overflow:hidden;transition:border-color 0.25s,background 0.25s,box-shadow 0.25s;}
-.opus-the:hover{border-color:var(--gold-light);background:#fbf8f0;}
-.opus-the.mo{border-color:var(--gold);box-shadow:0 6px 26px rgba(44,35,24,0.09);}
-.opus-the::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
-  background:var(--gold);opacity:0.35;transition:opacity 0.25s;}
-.opus-the.mo::before{opacity:1;}
-
-.opus-dau{display:flex;align-items:flex-start;gap:1.1rem;padding:1.5rem 1.7rem;cursor:pointer;
-  width:100%;text-align:left;background:none;border:none;font:inherit;color:inherit;}
-/* Số Opus: khối vuông viền vàng ở góc trái, đọc được ngay chứ không phải chữ
-   dựng dọc bé xíu như bản mẫu. */
-.opus-so{flex:0 0 auto;width:46px;height:46px;border:1px solid var(--gold);border-radius:2px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:rgba(184,151,42,0.07);line-height:1;}
-.opus-so-nhan{font-family:var(--font-ui);font-size:0.42rem;letter-spacing:1.6px;text-transform:uppercase;
-  color:var(--ui);margin-bottom:2px;}
-.opus-so-num{font-family:var(--font-ui);font-size:1.15rem;font-weight:600;color:var(--ui-head);}
-
-.opus-than{flex:1;min-width:0;}
-.opus-ten{font-family:var(--font-ui);font-size:1.4rem;line-height:1.2;color:var(--ink);margin-bottom:0.4rem;}
-.opus-ten em{font-style:italic;color:var(--ui-head);}
-.opus-mo-ta{font-family:'Lora',Georgia,serif;font-style:italic;font-size:0.88rem;color:var(--ink2);
-  line-height:1.65;margin-bottom:0.7rem;}
-.opus-nhan{display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center;}
-.opus-nhan span.nh{font-family:var(--font-ui);font-size:0.54rem;letter-spacing:1px;text-transform:uppercase;
-  color:var(--ink2);border:1px solid var(--border);padding:2px 7px;background:var(--cream2);}
-.opus-nhan span.canh{color:#993C1D;border-color:#D85A30;}
-
-.opus-phai{flex:0 0 auto;text-align:center;padding-left:0.5rem;}
-.opus-dem{font-family:var(--font-ui);font-size:2.4rem;line-height:1;color:var(--ui-head);}
-.opus-dvi{font-family:var(--font-ui);font-size:0.48rem;letter-spacing:2px;text-transform:uppercase;
-  color:var(--ui);margin-top:0.3rem;}
-.opus-mui{font-family:var(--font-ui);font-size:0.9rem;color:var(--gold);margin-top:0.8rem;
-  display:block;transition:transform 0.25s;}
-.opus-the.mo .opus-mui{transform:rotate(180deg);}
-
-/* Hoa văn nhạc cụ IN CHÌM sau nội dung thẻ.
-   Bản trước dùng mấy ký hiệu 17px xếp thành hàng — ở cỡ đó chúng thành mấy vệt
-   vụn, nhìn như rác chứ không ra nhạc cụ. Giờ là một hình lớn, rất mờ, nằm sau
-   chữ; nội dung để z-index 1 nên luôn nổi lên trên. */
-.opus-hoa{position:absolute;right:14px;top:78px;transform:translateY(-50%);
-  width:74px;height:128px;opacity:0.07;pointer-events:none;z-index:0;color:var(--ui-head);}
-.opus-hoa svg{width:100%;height:100%;display:block;}
-[data-theme="dark"] .opus-hoa{opacity:0.11;}   /* nền tối cần đậm hơn một chút */
-/* Nội dung phải nổi lên trên hoa văn. Neo hoa văn theo phần ĐẦU thẻ (top:78px)
-   chứ không theo giữa thẻ: thẻ mở ra cao gấp đôi, neo giữa thì hoa văn trôi
-   xuống giữa danh sách truyện. */
-.opus-dau > *,.opus-trong{position:relative;z-index:1;}
-
-.opus-trong{display:none;padding:0 1.7rem 1.5rem;}
-.opus-the.mo .opus-trong{display:block;}
-.opus-vach{height:1px;background:var(--border);margin-bottom:1rem;}
-.opus-track{display:flex;align-items:baseline;gap:0.9rem;padding:0.6rem 0.5rem;
-  border-bottom:1px solid rgba(212,196,154,0.42);cursor:pointer;transition:background 0.18s;
-  width:100%;text-align:left;background:none;border-left:none;border-right:none;border-top:none;
-  font:inherit;color:inherit;}
-.opus-track:hover{background:var(--cream2);}
-.opus-track:last-child{border-bottom:none;}
-.opus-track-so{flex:0 0 28px;font-family:var(--font-ui);font-size:0.66rem;color:var(--gold);letter-spacing:1px;}
-.opus-track-than{flex:1;min-width:0;}
-.opus-track-ten{font-family:var(--font-ui);font-size:0.97rem;line-height:1.35;color:var(--ink);}
-.opus-track-ten em{font-style:italic;color:var(--ui-head);}
-.opus-track-phu{font-family:var(--font-ui);font-size:0.54rem;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--ui);margin-top:0.22rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;}
-.opus-track-canh{color:#993C1D;}
-.opus-track-khoa{color:var(--ui-head);}
-
 /* Form sửa nhóm, chỉ admin thấy */
 .opus-sua-nut{position:absolute;top:10px;right:12px;z-index:2;}
 .opus-form{border-top:1px solid var(--border);margin:0 1.7rem;padding:1.1rem 0 1.4rem;}
@@ -299,16 +207,6 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .opus-form input:focus,.opus-form textarea:focus{outline:none;border-color:var(--gold);}
 .opus-form-nut{display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:0.9rem;}
 
-@media (max-width:640px){
-  .opus-wrap{padding:2rem 1.2rem;}
-  .opus-dau{padding:1.2rem 1.1rem;gap:0.8rem;}
-  .opus-trong{padding:0 1.1rem 1.2rem;}
-  .opus-form{margin:0 1.1rem;}
-  .opus-ten{font-size:1.15rem;}
-  .opus-dem{font-size:1.9rem;}
-  .opus-so{width:40px;height:40px;}
-  .opus-so-num{font-size:1rem;}
-}
 
 /* ----- Danh sách thành viên ----- */
 .mb-the{display:flex;gap:1.1rem;align-items:flex-start;width:100%;text-align:left;
@@ -397,15 +295,6 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 .stat-num{font-family:var(--font-ui);font-size:2.2rem;color:var(--ui-head);display:block;}
 .stat-label{font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ui);}
 footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2px;color:var(--ui);text-transform:uppercase;}
-/* CONTINUE READING BANNER */
-#continue-banner{display:none;max-width:860px;margin:0 auto 0;padding:1rem 2rem;}
-#continue-banner .continue-inner{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--border);padding:12px 20px;background:rgba(184,151,42,0.04);cursor:pointer;transition:all 0.2s;gap:1rem;}
-#continue-banner .continue-inner:hover{border-color:var(--gold);background:rgba(184,151,42,0.08);}
-.continue-text{font-family:var(--font-ui);font-size:0.72rem;letter-spacing:1.5px;color:var(--ink2);}
-.continue-text strong{color:var(--gold-dark);}
-.continue-arrow{color:var(--gold);font-size:1rem;}
-.continue-dismiss{background:none;border:none;color:var(--ui);cursor:pointer;font-size:0.9rem;padding:4px;transition:color 0.2s;}
-.continue-dismiss:hover{color:var(--ui-head);}
 
 /* FONT SIZE TOGGLE */
 #font-controls{position:fixed;right:1.5rem;bottom:5rem;display:none;flex-direction:column;gap:4px;z-index:90;transition:opacity 0.2s;}
@@ -435,7 +324,9 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 /* DARK THEME */
 [data-theme="dark"]{
   --cream:#16120D;--cream2:#1E1810;
-  --gold:#C9A84C;--gold-light:#D4B86A;--gold-dark:#A07830;
+  /* --gold-dark nền tối: #A07830 chỉ đạt 4.64 trên nền; #D4B86A đạt 9.64 (số La Mã, kim đĩa). */
+  --gold:#C9A84C;--gold-light:#D4B86A;--gold-dark:#D4B86A;
+  --hair:#2B2317;--warn:#E48A63;--on-head:#16120D;
   --ink:#E8DFC8;--ink2:#C4B090;--ink3:#7A6D58;--border:#332A1A;
   --ui:#A89878;--ui-head:#C9A84C;   /* nền tối: 6.59 và 8.16 */
 }
@@ -447,41 +338,13 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 [data-theme="dark"] #music-bar{background:rgba(22,18,13,0.95);}
 [data-theme="dark"] .fic-card{background:rgba(30,24,16,0.9);}
 [data-theme="dark"] .fic-card:hover{background:rgba(38,30,20,0.97);}
-/* Thẻ Opus dùng nền sáng viết cứng giống .fic-card nên cũng phải có bản nền tối.
-   Thiếu hai dòng này là chữ sáng nằm trên thẻ sáng — gần như không đọc được. */
-[data-theme="dark"] .opus-the{background:rgba(30,24,16,0.9);}
-[data-theme="dark"] .opus-the:hover{background:rgba(38,30,20,0.97);}
 [data-theme="dark"] .stat-box{background:rgba(30,24,16,0.7);}
 [data-theme="dark"] #page-reading,[data-theme="dark"] #page-about{background:var(--cream)!important;}
-[data-theme="dark"] .gothic-bg{background-color:var(--cream);}
-[data-theme="dark"] .gothic-bg::before{background-image:repeating-linear-gradient(45deg,rgba(201,168,76,0.06) 0px,rgba(201,168,76,0.06) 1px,transparent 1px,transparent 56px),repeating-linear-gradient(-45deg,rgba(201,168,76,0.06) 0px,rgba(201,168,76,0.06) 1px,transparent 1px,transparent 56px);}
 [data-theme="dark"] #intro{background:#080604;}
 [data-theme="dark"] footer{border-color:var(--border);}
 #theme-btn{background:none;border:none;font-size:1rem;cursor:pointer;color:var(--ui);padding:4px 8px;transition:color 0.2s;line-height:1;}
 #theme-btn:hover{color:var(--ui-head);}
 
-/* WORKS SIDEBAR LAYOUT */
-.works-head{display:flex;align-items:center;gap:1.2rem;margin-bottom:2.5rem;}
-.works-head .section-heading{flex:1;}
-.sort-btn{width:auto!important;flex-shrink:0;white-space:nowrap;}
-.works-layout{display:flex;max-width:1360px;margin:0 auto;padding:3rem 2rem;gap:2.5rem;align-items:flex-start;min-height:calc(100vh - 60px);}
-.fandom-sidebar{width:170px;flex-shrink:0;position:sticky;top:90px;display:flex;flex-direction:column;gap:6px;}
-.sidebar-heading{font-family:var(--font-ui);font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--ui-head);margin-bottom:0.8rem;padding-bottom:0.6rem;border-bottom:1px solid var(--border);}
-.works-main{flex:1;min-width:0;}
-/* Thẻ xếp lưới 2 cột trên màn rộng. Trước đây một cột 826px làm mỗi thẻ dàn
-   ngang quá dài và thưa; khối vốn đã căn giữa nên đây là chuyện lấp chỗ trống. */
-#works-grid{display:grid;grid-template-columns:1fr;gap:1.5rem;}
-#works-grid .fic-card{margin-bottom:0;}
-@media (min-width:1100px){ #works-grid{grid-template-columns:1fr 1fr;} }
-.filter-btn{font-family:var(--font-ui);font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--border);padding:7px 12px;color:var(--ui);cursor:pointer;transition:all 0.2s;text-align:left;width:100%;}
-.filter-btn:hover,.filter-btn.active{border-color:var(--ui-head);color:var(--ui-head);background:rgba(184,151,42,0.06);}
-.filter-btn.ship-btn{font-size:0.58rem;letter-spacing:1px;padding:5px 10px;border-color:transparent;color:var(--ui);}
-.filter-btn.ship-btn:hover,.filter-btn.ship-btn.active{border-color:var(--ui-head);color:var(--ui-head);background:rgba(184,151,42,0.06);}
-.sidebar-divider{height:1px;background:var(--border);margin:0.8rem 0;}
-.active-filters{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:1rem;}
-.active-filter-tag{font-family:var(--font-ui);font-size:0.58rem;letter-spacing:1px;text-transform:uppercase;color:var(--ui-head);border:1px solid var(--ui-head);padding:2px 8px;display:flex;align-items:center;gap:4px;background:rgba(184,151,42,0.06);}
-.active-filter-tag button{background:none;border:none;color:var(--ui-head);cursor:pointer;font-size:0.7rem;padding:0;line-height:1;}
-.no-results{text-align:center;padding:3rem 1rem;font-family:var(--font-ui);font-style:italic;font-size:0.9rem;color:var(--ui);display:none;}
 
 /* ===== ACCOUNT: đăng nhập / đăng ký / hồ sơ ===== */
 .auth-wrap{max-width:420px;margin:0 auto;padding:4rem 2rem;}
@@ -677,62 +540,12 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   .auth-wrap,
   .reading-wrap { padding: 2rem 1.2rem; }
 
-  /* Works layout mobile — stack vertical */
-  .works-layout { flex-direction: column; gap: 0; padding: 1.5rem 1rem; }
-  /* .works-layout có align-items:flex-start (cần cho sidebar trên máy tính).
-     Khi xoay thành cột thì flex-start là trục ngang → .works-main co giãn theo
-     MAX-CONTENT chứ không theo bề ngang khung. Dải fandom cuộn ngang có
-     max-content ~819px nên nó kéo cả trang Works rộng 835px và sinh cuộn ngang.
-     Ép 100% là hết; đừng bỏ dòng này khi sửa bố cục Works. */
-  .works-main { width: 100%; }
-
-  /* Ẩn desktop sidebar */
-  .fandom-sidebar { display: none; }
-
-  /* Dải fandom luôn hiện, cuộn ngang. Bọc dưới lớp ngăn cuộn dội (overscroll)
-     để vuốt hết dải không kéo luôn cả trang sang ngang. */
-  .mobile-fandom-dai {
-    display: flex; gap: 6px;
-    overflow-x: auto; overscroll-behavior-x: contain;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; -ms-overflow-style: none;
-    margin-bottom: 8px; padding-bottom: 2px;
-  }
-  .mobile-fandom-dai::-webkit-scrollbar { display: none; }
-  /* min-height 44px chứ không chỉ tăng padding: padding 5px + chữ 0.6rem mới
-     ra ~31px, dưới ngưỡng vùng bấm tối thiểu. */
-  .mobile-fandom-dai .mobile-pill {
-    flex: 0 0 auto; min-height: 44px; padding: 5px 14px;
-  }
-
-  /* Mobile filter toggle button */
-  #mobile-filter-toggle { display: flex; min-height: 44px; }
-
-  /* Mobile filter panel */
-  #mobile-filter-panel { display: none; }
-  #mobile-filter-panel.open { display: block; }
-  #mobile-filter-panel .mobile-pill { min-height: 40px; }
-
-  .filter-btn { width: auto; white-space: nowrap; }
-  .works-head { margin-bottom: 1.2rem; }
-
   /* Thanh chương trên trang đọc: [Prev][chọn chương][Next] một hàng cứng, mà ô
      chọn rộng theo tên chương dài nhất → tràn ra khỏi màn hình 21px và sinh
      cuộn ngang cả trang. Cho xuống hàng được và cho ô chọn co lại. */
   .chapter-nav { flex-wrap: wrap; gap: 8px; }
   .chapter-nav button { padding: 8px 12px; }
   .chapter-nav select { flex: 1 1 130px; min-width: 0; max-width: 100%; }
-
-  /* Hero gọn lại: bản cũ chiếm gần trọn màn hình đầu nên cuộn mãi mới thấy
-     truyện. Vẫn giữ đủ hoa văn ♩ và dải ✦✦✦ cho ra dáng cũ. */
-  .hero { padding: 2.2rem 1.2rem 1.8rem; }
-  .hero-ornament { font-size: 3rem; margin-bottom: -0.6rem; }
-  .hero-title { font-size: 1.8rem; letter-spacing: 3px; margin-bottom: 0.6rem; }
-  .hero-subtitle { font-size: 1rem; margin-bottom: 1rem; }
-  .hero-divider { margin: 0.9rem 0; }
-  .hero-tagline { font-size: 0.8rem; letter-spacing: 2px; }
-
-  .home-boc { padding: 1.8rem 1rem 2.5rem; }
 
   /* Thẻ truyện gọn lại trên điện thoại — bản cũ cao ~400px nên một màn hình
      chỉ chứa được hai thẻ. Tóm tắt cắt còn 2 dòng, ai muốn đọc thì mở truyện. */
@@ -752,82 +565,6 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
     overflow: hidden;
   }
   .fic-tags { margin-top: 0.6rem; gap: 5px; }
-  /* .home-columns cho điện thoại nay khai ở luật gốc bên dưới (mobile-first) —
-     để ở đây thì bị chính luật gốc đứng sau ghi đè, không có tác dụng gì. */
-}
-
-/* Desktop — ẩn mobile filter */
-@media (min-width: 769px) {
-  #mobile-filter-toggle { display: none !important; }
-  #mobile-filter-panel { display: none !important; }
-  .mobile-fandom-dai { display: none !important; }
-}
-
-/* Mobile filter toggle button */
-#mobile-filter-toggle {
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  background: none;
-  border: 1px solid var(--border);
-  padding: 10px 16px;
-  font-family: var(--font-ui);
-  font-size: 0.72rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--ink2);
-  cursor: pointer;
-  margin-bottom: 0;
-  transition: all 0.2s;
-}
-#mobile-filter-toggle:hover, #mobile-filter-toggle.open {
-  border-color: var(--gold);
-  color: var(--gold);
-}
-#mobile-filter-toggle .toggle-arrow { transition: transform 0.2s; }
-#mobile-filter-toggle.open .toggle-arrow { transform: rotate(180deg); }
-
-/* Mobile filter panel */
-#mobile-filter-panel {
-  border: 1px solid var(--border);
-  border-top: none;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-  background: var(--cream);
-}
-.mobile-filter-section { margin-bottom: 1rem; }
-.mobile-filter-section:last-child { margin-bottom: 0; }
-.mobile-filter-label {
-  font-family: var(--font-ui);
-  font-size: 0.6rem;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 0.6rem;
-  display: block;
-}
-.mobile-filter-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.mobile-pill {
-  font-family: var(--font-ui);
-  font-size: 0.6rem;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  background: none;
-  border: 1px solid var(--border);
-  padding: 5px 12px;
-  color: var(--ink3);
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
-}
-.mobile-pill:hover, .mobile-pill.active {
-  border-color: var(--ui-head);
-  color: var(--ui-head);
-  background: rgba(184,151,42,0.06);
 }
 
 /* COMMENT SECTION */
@@ -889,131 +626,401 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   font-size: 0.9rem;
 }
 
-/* Clickable tags */
-.tag.clickable {
-  cursor: pointer;
-  transition: all 0.15s;
+
+/* =====================================================================
+   GIAO DIỆN ĐĨA THAN — Home / Works / Opus (bản thiết kế Claude Design, 09/2026)
+   Mọi class mới mang tiền tố dt- để không đụng các class cũ còn dùng ở trang
+   khác (.fic-card vẫn dùng cho trang Bookmark).
+   Chữ chức năng dùng var(--font-ui): Playfair cho EN, Nunito cho VI.
+   ===================================================================== */
+.dt-main{max-width:1440px;margin:0 auto;padding:64px clamp(20px,7vw,104px) 72px;display:flex;flex-direction:column;gap:64px;}
+.dt-eyebrow{font-family:var(--font-ui);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ui);}
+.dt-title{font-family:var(--font-ui);font-weight:600;color:var(--ui-head);line-height:1.3;}
+.dt-sub{font-family:'Lora',Georgia,serif;font-style:italic;color:var(--ink2);}
+.dt-btn{min-height:50px;padding:0 26px;border:none;background:var(--ui-head);color:var(--on-head);font-family:var(--font-ui);font-size:16px;cursor:pointer;}
+.dt-btn-line{min-height:50px;padding:0 26px;border:1px solid var(--ui-head);background:transparent;color:var(--ui-head);font-family:var(--font-ui);font-size:16px;cursor:pointer;}
+.dt-btn:hover{filter:brightness(1.08);}
+.dt-btn-line:hover{background:rgba(184,151,42,0.07);}
+.dt-main button:focus-visible,.dt-main input:focus-visible,#dt-sheet button:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+.dt-chip{flex-shrink:0;min-height:36px;padding:7px 14px;border:1px solid var(--border);background:transparent;color:var(--ink);
+  font-family:var(--font-ui);font-size:14px;cursor:pointer;display:inline-flex;gap:8px;align-items:baseline;white-space:nowrap;}
+.dt-chip small{font-size:11px;opacity:.7;}
+.dt-chip[aria-pressed="true"]{background:var(--ui-head);border-color:var(--ui-head);color:var(--on-head);}
+.dt-flag{font-family:var(--font-ui);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 9px;border:1px solid var(--border);color:var(--ui);}
+.dt-flag.lock{border-color:var(--ui-head);color:var(--ui-head);}
+.dt-flag.warn{border-color:var(--warn);color:var(--warn);}
+.dt-flags{display:flex;gap:8px;flex-wrap:wrap;}
+.dt-flags:empty{display:none;}
+.dt-ic{display:block;flex-shrink:0;}
+
+/* ---- bìa đĩa + đĩa than nằm sau, trượt ra khi được chọn ---- */
+.dt-card{display:flex;flex-direction:column;gap:12px;padding:0;border:none;background:transparent;cursor:pointer;text-align:left;min-width:0;color:inherit;font:inherit;}
+.dt-slw{position:relative;width:100%;aspect-ratio:1/1;}
+.dt-rec{position:absolute;top:5%;left:5%;width:90%;height:90%;border-radius:50%;
+  background:repeating-radial-gradient(circle,#1A1510 0 2px,#241D15 2px 4px);
+  transform:translateX(4%);opacity:0;transition:transform .5s cubic-bezier(.2,.75,.2,1),opacity .3s;}
+.dt-rec::after{content:'';position:absolute;left:34%;top:34%;width:32%;height:32%;border-radius:50%;background:var(--gold);}
+.dt-card.dt-on .dt-rec{transform:translateX(34%);opacity:1;}
+/* Nền tối: rãnh đĩa #1A1510 gần như trùng nền #16120D, đĩa tàng hình. Thêm viền vàng mờ. */
+[data-theme="dark"] .dt-rec,[data-theme="dark"] .dt-tt-rec,[data-theme="dark"] .dt-cont-art .r{box-shadow:0 0 0 1px rgba(201,168,76,.35),0 10px 24px rgba(0,0,0,.4);}
+.dt-sl{position:absolute;inset:0;background:var(--sleeve);box-shadow:0 10px 24px rgba(44,35,24,.22);
+  outline:2px solid transparent;outline-offset:3px;display:flex;flex-direction:column;align-items:center;
+  justify-content:space-between;padding:14px;color:var(--s-ink);overflow:hidden;transition:outline-color .2s;}
+.dt-card.dt-on .dt-sl{outline-color:var(--gold);}
+.dt-sl::before{content:'';position:absolute;inset:7px;border:1px solid var(--s-frame);pointer-events:none;z-index:1;}
+.dt-sl-lab{font-family:var(--font-ui);font-size:10px;letter-spacing:2.5px;text-transform:uppercase;position:relative;}
+.dt-sl-name{font-family:var(--font-ui);font-style:italic;font-size:13px;color:var(--s-ink2);text-align:center;position:relative;}
+.dt-sl .dt-ic{width:40%;height:40%;}
+.dt-sl img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.dt-sl-lock{position:absolute;top:10px;right:10px;z-index:2;font-family:var(--font-ui);font-size:9px;letter-spacing:1.5px;
+  text-transform:uppercase;padding:3px 6px;background:var(--gold);color:#16120D;}
+.dt-card-meta{display:flex;flex-direction:column;gap:4px;min-width:0;}
+.dt-card-meta .dt-title{font-size:15px;}
+.dt-card-meta .dt-sub{font-size:14px;line-height:1.35;}
+.dt-card-small{font-family:var(--font-ui);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ui);padding-top:2px;}
+
+/* ---- liner notes: khung On the turntable (máy tính) và bảng trượt (điện thoại) ---- */
+.dt-liner{display:flex;flex-direction:column;gap:22px;}
+.dt-tt{position:relative;height:var(--tt-s);}
+.dt-tt-rec{position:absolute;left:calc(var(--tt-s) * .51);top:calc(var(--tt-s) * .035);width:calc(var(--tt-s) * .93);height:calc(var(--tt-s) * .93);
+  border-radius:50%;background:repeating-radial-gradient(circle,#1A1510 0 2px,#241D15 2px 4px);box-shadow:0 10px 24px rgba(44,35,24,.3);}
+.dt-tt-rec::after{content:'';position:absolute;left:33.5%;top:33.5%;width:33%;height:33%;border-radius:50%;background:var(--gold);}
+.dt-tt-rec::before{content:'';position:absolute;left:calc(50% - 4px);top:calc(50% - 4px);width:8px;height:8px;border-radius:50%;background:#16120D;z-index:1;}
+.dt-tt .dt-sl{width:var(--tt-s);height:var(--tt-s);right:auto;bottom:auto;padding:18px;box-shadow:0 12px 28px rgba(44,35,24,.3);}
+.dt-tt .dt-sl-lab{font-size:11px;letter-spacing:3px;}
+.dt-tt .dt-sl-name{font-size:14px;}
+.dt-liner h2{margin:0;font-family:var(--font-ui);font-weight:600;font-size:26px;line-height:1.25;color:var(--ui-head);}
+.dt-liner .dt-sub.big{font-size:20px;margin-top:6px;}
+.dt-liner blockquote{margin:0;padding:0 0 0 18px;border-left:1px solid var(--gold);font-family:'Lora',Georgia,serif;font-style:italic;
+  font-size:16px;line-height:1.7;color:var(--ink2);}
+.dt-liner dl{margin:0;display:grid;grid-template-columns:104px minmax(0,1fr);row-gap:10px;column-gap:12px;font-family:var(--font-ui);font-size:14px;}
+.dt-liner dt{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--ui);padding-top:3px;}
+.dt-liner dd{margin:0;color:var(--ink);}
+.dt-liner dd.music{font-family:'Lora',Georgia,serif;font-style:italic;color:var(--ink2);}
+.dt-liner-btns{display:grid;grid-template-columns:minmax(0,1fr) 50px;gap:10px;}
+.dt-liner-btns .dt-btn{font-size:17px;padding:0 14px;}
+.dt-bm{min-height:50px;border:1px solid var(--ui-head);background:transparent;color:var(--ui-head);font-size:18px;cursor:pointer;}
+.dt-bm[aria-pressed="true"]{background:var(--ui-head);color:var(--on-head);}
+.dt-bm:disabled{opacity:.5;cursor:default;}
+
+#dt-scrim{position:fixed;inset:0;background:rgba(22,18,13,.45);opacity:0;pointer-events:none;transition:opacity .3s;z-index:200;}
+#dt-scrim.on{opacity:1;pointer-events:auto;}
+#dt-sheet{position:fixed;left:0;right:0;bottom:0;max-height:88%;overflow-y:auto;overscroll-behavior:contain;background:var(--cream2);
+  border-top:1px solid var(--border);box-shadow:0 -12px 30px rgba(22,18,13,.25);transform:translateY(104%);
+  transition:transform .45s cubic-bezier(.2,.75,.2,1),visibility 0s linear .45s;padding:10px 20px 28px;z-index:201;visibility:hidden;}
+#dt-sheet.on{transform:translateY(0);visibility:visible;transition:transform .45s cubic-bezier(.2,.75,.2,1),visibility 0s;}
+#dt-sheet:focus{outline:none;}
+.dt-sheet-head{display:flex;justify-content:space-between;align-items:center;}
+.dt-sheet-x{width:44px;height:44px;border:none;background:transparent;color:var(--ink);font-size:26px;cursor:pointer;}
+#dt-sheet .dt-liner{gap:16px;}
+#dt-sheet .dt-liner h2{font-size:21px;}
+#dt-sheet .dt-liner .dt-sub.big{font-size:17px;}
+#dt-sheet .dt-liner blockquote{font-size:15px;padding-left:14px;line-height:1.65;}
+#dt-sheet .dt-liner dl{grid-template-columns:92px minmax(0,1fr);font-size:13px;row-gap:8px;}
+#dt-sheet .dt-liner-btns{grid-template-columns:minmax(0,1fr) 52px;}
+#dt-sheet .dt-liner-btns .dt-btn,#dt-sheet .dt-bm{min-height:52px;}
+
+.dt-sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;border-bottom:1px solid var(--border);padding-bottom:14px;}
+.dt-sec-head h2{margin:6px 0 0;font-family:var(--font-ui);font-weight:400;font-style:italic;font-size:44px;line-height:1.05;color:var(--ink);}
+.dt-link-btn{min-height:44px;padding:0 4px 0 18px;border:none;background:transparent;color:var(--ui-head);font-family:var(--font-ui);font-size:16px;cursor:pointer;white-space:nowrap;}
+.dt-sec{display:flex;flex-direction:column;gap:24px;}
+.dt-credit{font-family:'Lora',Georgia,serif;font-size:12px;color:var(--ui);}
+
+/* ===== HOME ===== */
+.dt-hero{display:grid;grid-template-columns:minmax(0,1fr) 520px;gap:72px;align-items:center;}
+.dt-hero.dt-mot-cot{grid-template-columns:1fr;}
+.dt-hero-left{display:flex;flex-direction:column;gap:20px;}
+.dt-hero h1{margin:0;font-family:'Playfair Display',Georgia,serif;font-weight:400;font-size:96px;line-height:.92;letter-spacing:2px;color:var(--ink);text-transform:none;}
+.dt-hero p{margin:0;font-family:'Lora',Georgia,serif;font-style:italic;font-size:22px;line-height:1.5;color:var(--ink2);}
+.dt-hero-btns{display:flex;gap:12px;padding-top:8px;flex-wrap:wrap;}
+.dt-hero-right{display:flex;flex-direction:column;gap:14px;}
+.dt-cont{display:flex;gap:18px;align-items:center;width:100%;padding:18px;border:1px solid var(--border);background:var(--cream2);cursor:pointer;text-align:left;color:inherit;font:inherit;}
+.dt-cont:hover{border-color:var(--gold);}
+.dt-cont-art{position:relative;flex-shrink:0;width:117px;height:88px;}
+.dt-cont-art .r{position:absolute;left:29px;top:0;width:88px;height:88px;border-radius:50%;background:repeating-radial-gradient(circle,#1A1510 0 2px,#241D15 2px 4px);}
+.dt-cont-art .r::after{content:'';position:absolute;left:34%;top:34%;width:32%;height:32%;border-radius:50%;background:var(--gold);}
+.dt-cont-art .s{position:absolute;left:0;top:0;width:88px;height:88px;background:var(--sleeve);color:var(--s-ink);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.dt-cont-art .s .dt-ic{width:36px;height:36px;}
+.dt-cont-art .s img{width:100%;height:100%;object-fit:cover;}
+.dt-cont-txt{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1;}
+.dt-cont-txt .dt-eyebrow{font-size:10px;letter-spacing:2.5px;}
+.dt-cont-txt .dt-title{font-size:18px;}
+.dt-cont-txt .dt-sub{font-size:15px;}
+.dt-bar{display:block;height:3px;background:var(--hair);margin-top:6px;}
+.dt-bar i{display:block;height:3px;background:var(--gold);}
+.dt-cont-play{font-size:20px;color:var(--ui-head);}
+.dt-shelf2{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:56px;align-items:start;}
+.dt-grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:28px;row-gap:36px;}
+.dt-grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:32px;}
+.dt-home-liner{display:flex;flex-direction:column;gap:12px;}
+.dt-home-liner .dt-eyebrow{font-size:10px;letter-spacing:2.5px;}
+.dt-home-liner .dt-title{font-size:24px;line-height:1.25;}
+.dt-home-liner .dt-sub{font-size:19px;}
+.dt-home-liner p{margin:0;padding-left:14px;border-left:1px solid var(--gold);font-family:'Lora',Georgia,serif;font-style:italic;font-size:16px;line-height:1.65;color:var(--ink2);}
+.dt-home-liner .small{font-family:var(--font-ui);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ui);}
+.dt-home-liner .music{font-family:'Lora',Georgia,serif;font-size:14px;color:var(--ink2);}
+.dt-home-liner .music b{font-family:var(--font-ui);font-weight:400;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ui-head);margin-right:8px;}
+.dt-home-liner .dt-btn{align-self:flex-start;min-height:48px;}
+.dt-forms{display:grid;grid-template-columns:repeat(13,minmax(0,1fr));gap:8px;}
+.dt-form-tile{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 4px;border:1px solid var(--hair);background:transparent;cursor:pointer;color:var(--ui-head);min-width:0;font:inherit;}
+.dt-form-tile:hover{border-color:var(--gold);}
+.dt-form-tile .dt-ic{width:40px;height:40px;}
+.dt-form-tile .lab{font-family:var(--font-ui);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ui);}
+.dt-form-tile .nm{font-family:var(--font-ui);font-size:13px;line-height:1.2;text-align:center;color:var(--ink);}
+.dt-view-all{display:none;}
+@media (max-width:1279px){
+  .dt-hero{grid-template-columns:minmax(0,1fr) 420px;gap:48px;}
+  .dt-hero h1{font-size:76px;}
+  .dt-shelf2{grid-template-columns:minmax(0,1fr) 380px;gap:40px;}
+  .dt-forms{grid-template-columns:repeat(7,minmax(0,1fr));}
 }
-.tag.clickable:hover {
-  border-color: var(--gold);
-  color: var(--gold-dark);
-  background: rgba(184,151,42,0.08);
+@media (max-width:1023px){
+  .dt-hero{grid-template-columns:1fr;}
+  .dt-shelf2{grid-template-columns:minmax(0,1fr) 320px;gap:32px;}
+  .dt-grid3,.dt-grid4{grid-template-columns:repeat(2,minmax(0,1fr));}
 }
 
-/* ACCORDION SIDEBAR */
-.accordion-item { margin-bottom: 4px; }
-.accordion-header {
-  width: 100%;
-  display: flex !important;
-  justify-content: space-between;
-  align-items: center;
-}
-.acc-arrow { font-size: 0.6rem; transition: transform 0.25s; opacity: 0.6; }
-.accordion-item.open .acc-arrow { transform: rotate(180deg); }
-.accordion-ships {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease, margin 0.2s ease;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-.accordion-item.open .accordion-ships {
-  max-height: 500px;
-  margin: 4px 0 6px 8px;
-  padding-left: 10px;
-  border-left: 2px solid var(--border);
-}
-/* Home: xếp chồng trên điện thoại, 2 cột từ 769px trở lên.
-   PHẢI viết theo lối mobile-first ngay tại đây. Khối @media (max-width:768px) ở
-   phía trên file cũng có luật .home-columns{flex-direction:column}, nhưng nó
-   cùng độ ưu tiên mà lại đứng TRƯỚC, nên luật này ghi đè nó — trang chủ vẫn cố
-   xếp hai cột trên điện thoại. Hai cột với gap 2.5rem không vừa 326px chiều
-   ngang, cột bị đẩy rộng hơn cả khung cha 18px và tràn sang phải, làm nội dung
-   trông như lệch hẳn về bên trái. */
-.home-columns {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  align-items: stretch;
-}
-.home-col {
-  flex: 1;
-  min-width: 0;
-}
-.home-boc { max-width: 1100px; margin: 0 auto; padding: 3.5rem 2rem; }
-.home-xem-het { text-align: center; margin-top: 2rem; }
+/* ===== WORKS ===== */
+.dt-w-head{display:flex;justify-content:space-between;align-items:flex-end;gap:48px;}
+.dt-w-head h1{margin:16px 0 0;font-family:var(--font-ui);font-weight:400;font-style:italic;font-size:104px;line-height:.9;letter-spacing:-2px;color:var(--ink);}
+.dt-w-head p{margin:0;max-width:470px;font-family:'Lora',Georgia,serif;font-style:italic;font-size:17px;line-height:1.7;color:var(--ink2);}
+.dt-filters{display:flex;flex-direction:column;gap:14px;padding:20px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.dt-f-row{display:grid;grid-template-columns:96px minmax(0,1fr);gap:16px;align-items:center;}
+.dt-f-row.len{grid-template-columns:96px minmax(0,1fr) auto;}
+.dt-f-row[hidden]{display:none!important;}
+.dt-f-lab{font-family:var(--font-ui);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ui);}
+.dt-chips{display:flex;gap:8px;flex-wrap:wrap;}
+.dt-order{display:flex;gap:8px;align-items:center;}
+.dt-search{width:100%;max-width:420px;min-height:40px;padding:8px 12px;border:1px solid var(--border);background:var(--cream2);color:var(--ink);font-family:'Lora',Georgia,serif;font-size:15px;}
+.dt-search::placeholder{color:var(--ui);font-style:italic;}
+.dt-search:focus{border-color:var(--gold);outline:none;}
+.dt-w-body{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:64px;align-items:start;}
+.dt-shelf{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.dt-grid-shelf{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:28px;row-gap:40px;}
+.dt-more{align-self:center;min-height:48px;padding:12px 28px;}
+.dt-empty{margin:0;font-family:'Lora',Georgia,serif;font-style:italic;font-size:18px;color:var(--ink2);}
+.dt-aside{position:sticky;top:84px;padding:28px;background:var(--cream2);border:1px solid var(--border);max-height:calc(100vh - 104px);overflow-y:auto;
+  scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.dt-aside:empty{display:none;}
+@media (max-width:1279px){ .dt-grid-shelf{grid-template-columns:repeat(3,minmax(0,1fr));} .dt-w-body{grid-template-columns:minmax(0,1fr) 360px;gap:40px;} .dt-w-head h1{font-size:84px;} }
+@media (max-width:1023px){ .dt-grid-shelf{grid-template-columns:repeat(2,minmax(0,1fr));} .dt-w-body{grid-template-columns:minmax(0,1fr) 320px;gap:28px;} }
 
-/* Thẻ gập của trang chủ — mặc định (điện thoại) là ĐÓNG cả hai.
-   Nhiều người phản hồi là mở trang chủ trên điện thoại không thấy truyện đâu:
-   hai tiêu đề mục + bốn thẻ truyện cao ~400px mỗi thẻ đẩy nút "Xem tất cả"
-   xuống tận màn hình thứ tư. Gập lại thì cả hai mục lẫn nút đó nằm gọn trong
-   màn hình đầu, ai muốn xem thì bấm mở. */
-.home-dau {
-  display: block; width: 100%; text-align: left;
-  font-family: var(--font-ui); color: inherit;
-  background: rgba(250,247,240,0.85);
-  border: 1px solid var(--border);
-  padding: 13px 15px; margin-bottom: 1rem;
-  cursor: pointer; transition: border-color 0.2s;
-  -webkit-tap-highlight-color: transparent;
-}
-[data-theme="dark"] .home-dau { background: rgba(30,24,16,0.9); }
-.home-dau:hover { border-color: var(--gold-light); }
-.home-dau-tren { display: flex; align-items: center; gap: 0.7rem; }
-.home-dau .section-heading { margin-bottom: 0; flex: 1; min-width: 0; }
-.home-dau .section-heading::after { display: none; }
-.home-so {
-  font-family: var(--font-ui); font-size: 0.62rem; letter-spacing: 1.5px;
-  color: var(--ui); flex: 0 0 auto;
-}
-.home-mui {
-  color: var(--ui-head); font-size: 0.72rem; line-height: 1;
-  flex: 0 0 auto; transition: transform 0.25s;
-}
-.home-col.mo .home-mui { transform: rotate(180deg); }
-/* Dòng nếm thử: tên truyện mới nhất của mục, chỉ hiện lúc đang đóng. */
-.home-mo {
-  display: block; margin-top: 0.45rem;
-  font-family: 'Lora', Georgia, serif; font-style: italic;
-  font-size: 0.8rem; color: var(--ink3); line-height: 1.4;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.home-mo:empty { display: none; }
-.home-col.mo .home-mo { display: none; }
-.home-than { display: none; }
-.home-col.mo .home-than { display: block; }
+/* ===== OPUS — bàn xoay ===== */
+.dt-o-head{display:flex;justify-content:space-between;align-items:flex-end;gap:48px;}
+.dt-o-head h1{margin:18px 0 0;font-family:'Playfair Display',Georgia,serif;font-weight:400;font-style:italic;font-size:112px;line-height:.88;letter-spacing:-2px;color:var(--ink);}
+.dt-o-head p{margin:0;max-width:520px;font-family:'Lora',Georgia,serif;font-style:italic;font-size:17px;line-height:1.7;color:var(--ink2);}
+.dt-rule{height:1px;background:var(--border);}
+.dt-o-body{display:grid;grid-template-columns:640px minmax(0,1fr);gap:72px;align-items:start;}
+.dt-o-left{display:flex;flex-direction:column;gap:28px;align-items:flex-start;min-width:0;}
+/* Chỉ xén theo chiều ngang: khối .dt-rotor vuông, xoay 45° là đường chéo thò ra
+   ngoài sinh cuộn ngang; xén cả chiều dọc thì mất bóng đổ dưới đáy đĩa. */
+.dt-tt-box{--k:1;overflow-x:clip;position:relative;width:calc(640px * var(--k));height:calc(600px * var(--k));}
+.dt-tt-scale{position:absolute;left:0;top:0;width:640px;height:600px;transform:scale(var(--k));transform-origin:0 0;}
+.dt-platter{position:absolute;left:0;top:20px;width:560px;height:560px;border-radius:50%;background:#120F0B;border:1px solid var(--border);box-shadow:0 24px 60px rgba(44,35,24,.28);}
+.dt-rotor{position:absolute;inset:0;border-radius:50%;transition:transform .9s cubic-bezier(.2,.75,.2,1);}
+.dt-rotor::before{content:'';position:absolute;inset:14px;border-radius:50%;background:repeating-radial-gradient(circle,rgba(232,223,200,.05) 0 1px,transparent 1px 5px);}
+.dt-rotor::after{content:'';position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 20deg,transparent 0deg,rgba(232,223,200,.07) 30deg,transparent 60deg,transparent 180deg,rgba(232,223,200,.06) 210deg,transparent 240deg);pointer-events:none;}
+.dt-slot{position:absolute;left:280px;top:280px;width:0;height:0;transition:transform .9s cubic-bezier(.2,.75,.2,1);z-index:1;}
+.dt-slot button{position:absolute;left:0;top:0;transform:translate(-50%,-50%);width:var(--d);height:var(--d);border-radius:50%;
+  border:1px solid rgba(201,168,76,.28);background:rgba(22,18,13,.85);color:#C9A84C;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;padding:0;transition:width .3s,height .3s,background .3s;--d:54px;}
+.dt-slot button[aria-pressed="true"]{--d:66px;background:var(--gold);border-color:var(--gold);color:#16120D;}
+.dt-slot button .dt-ic{width:30px;height:30px;}
+.dt-slot button[aria-pressed="true"] .dt-ic{width:38px;height:38px;}
+.dt-label{position:absolute;left:175px;top:175px;width:210px;height:210px;border-radius:50%;background:var(--cream2);border:2px solid var(--gold);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:20px;color:var(--ui-head);z-index:2;}
+.dt-label .dt-ic{width:44px;height:44px;}
+.dt-label .dt-eyebrow{font-size:10px;}
+.dt-label .nm{font-family:'Playfair Display',Georgia,serif;font-size:21px;line-height:1.15;color:var(--ink);}
+.dt-label .dot{width:8px;height:8px;border-radius:50%;background:var(--ink);}
+.dt-tonearm{position:absolute;left:0;top:0;pointer-events:none;z-index:3;}
+.dt-o-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;width:560px;max-width:100%;}
+.dt-o-nav button{display:flex;flex-direction:column;gap:6px;min-height:60px;padding:12px 16px;border:1px solid var(--border);background:transparent;cursor:pointer;text-align:left;color:inherit;font:inherit;}
+.dt-o-nav button:hover{border-color:var(--gold);}
+.dt-o-nav button:last-child{align-items:flex-end;text-align:right;}
+.dt-o-nav .dt-eyebrow{font-size:10px;}
+.dt-o-nav .nm{font-family:var(--font-ui);font-size:15px;color:var(--ink);}
+.dt-o-nav-m{display:none;}
+.dt-o-list{display:flex;flex-direction:column;gap:28px;min-width:0;padding-top:12px;position:relative;}
+.dt-o-list h2{margin:14px 0 0;font-family:'Playfair Display',Georgia,serif;font-weight:400;font-size:56px;line-height:1.05;color:var(--ink);}
+.dt-o-list .desc{margin:14px 0 0;font-family:'Lora',Georgia,serif;font-style:italic;font-size:19px;line-height:1.6;color:var(--ink2);}
+.dt-o-list ol{list-style:none;margin:0;padding:0;border-top:1px solid var(--border);}
+.dt-o-list li{border-bottom:1px solid var(--hair);}
+.dt-o-row{display:grid;grid-template-columns:56px minmax(0,1fr);gap:24px;align-items:baseline;width:100%;padding:22px 12px 22px 0;border:none;background:transparent;cursor:pointer;text-align:left;color:inherit;font:inherit;}
+.dt-o-row:hover{background:var(--cream2);}
+.dt-o-num{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:18px;color:var(--gold-dark);text-align:right;}
+.dt-o-txt{display:flex;flex-direction:column;gap:8px;min-width:0;}
+.dt-o-t{font-family:var(--font-ui);font-size:23px;line-height:1.35;}
+.dt-o-t .sep{color:var(--ui);}
+.dt-o-t em{font-family:'Lora',Georgia,serif;font-size:21px;color:var(--ink2);}
+.dt-o-meta{font-family:'Lora',Georgia,serif;font-size:14px;line-height:1.5;color:var(--ui);}
+.dt-o-mu{display:flex;gap:10px;align-items:baseline;font-family:'Lora',Georgia,serif;font-size:14px;line-height:1.5;color:var(--ink2);}
+.dt-o-mu b{font-family:var(--font-ui);font-weight:400;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--ui-head);flex-shrink:0;}
+.dt-o-mu i{font-style:italic;}
+.dt-o-empty{font-family:'Lora',Georgia,serif;font-style:italic;color:var(--ink2);padding:18px 0;}
+/* Nút ✎ sửa nhóm (admin) nằm ở góc phải đầu danh sách; form mở ngay bên dưới. */
+.dt-o-list .opus-sua-nut{position:absolute;top:12px;right:0;}
+.dt-o-list .opus-form{margin:0;}
+.dt-opus-msg{max-width:1440px;margin:24px auto 0;}
+@media (max-width:1279px){ .dt-o-body{grid-template-columns:minmax(0,520px) minmax(0,1fr);gap:48px;} .dt-o-head h1{font-size:88px;} }
+@media (max-width:1023px){ .dt-o-body{grid-template-columns:1fr;} }
 
-@media (min-width: 769px) {
-  .home-columns { flex-direction: row; gap: 2.5rem; align-items: flex-start; }
-  /* Máy tính: lột sạch dáng thẻ, trả về đúng tiêu đề mục như bản cũ. */
-  .home-dau {
-    background: none; border: none; padding: 0; margin-bottom: 0;
-    cursor: default; pointer-events: none;
-  }
-  .home-dau .section-heading { margin-bottom: 2.5rem; }
-  .home-dau .section-heading::after { display: block; }
-  .home-so, .home-mui, .home-mo { display: none; }
-  .home-than { display: block; }
+/* ===== ĐIỆN THOẠI ===== */
+@media (max-width:768px){
+  .dt-main{padding:32px 0 40px;gap:36px;}
+  .dt-px{padding-left:20px;padding-right:20px;}
+  .dt-sec-head{border-bottom:none;padding-bottom:0;}
+  .dt-sec-head h2{font-size:30px;}
+  .dt-sec{gap:16px;}
+  .dt-eyebrow{font-size:10px;}
+  .dt-hero{gap:16px;}
+  .dt-hero h1{font-size:52px;line-height:.95;letter-spacing:1px;}
+  .dt-hero p{font-size:17px;}
+  .dt-hero-btns .dt-btn,.dt-hero-btns .dt-btn-line{flex:1;min-height:48px;padding:0 12px;font-size:15px;}
+  .dt-cont{padding:14px;}
+  .dt-cont-art{width:85px;height:64px;}
+  .dt-cont-art .r{left:21px;width:64px;height:64px;}
+  .dt-cont-art .s{width:64px;height:64px;}
+  .dt-cont-txt .dt-title{font-size:15px;}
+  .dt-cont-txt .dt-sub{font-size:14px;}
+  .dt-shelf2{grid-template-columns:1fr;}
+  .dt-home-liner{display:none;}
+  .dt-grid3,.dt-grid4,.dt-grid-shelf{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px;row-gap:22px;}
+  .dt-grid3 > :nth-child(n+5){display:none;}
+  .dt-card{gap:8px;}
+  .dt-sl{padding:11px;box-shadow:0 8px 18px rgba(44,35,24,.22);}
+  .dt-sl::before{inset:5px;}
+  .dt-sl-lab{font-size:9px;letter-spacing:2px;}
+  .dt-sl-name{font-size:11px;}
+  .dt-sl .dt-ic{width:34%;height:34%;}
+  .dt-card-meta{gap:3px;}
+  .dt-card-meta .dt-title{font-size:14px;}
+  .dt-card-meta .dt-sub{font-size:13px;}
+  .dt-card-small{font-size:9px;letter-spacing:1.2px;}
+  /* Điện thoại mở bảng trượt thay cho đĩa trượt ra, nên thẻ không cần trạng thái chọn. */
+  .dt-card.dt-on .dt-rec{transform:translateX(4%);opacity:0;}
+  .dt-card.dt-on .dt-sl{outline-color:transparent;}
+  .dt-link-btn.dt-desk{display:none;}
+  .dt-view-all{display:block;margin:-12px 20px 0;min-height:48px;}
+  .dt-forms{display:flex;overflow-x:auto;padding:0 20px 6px;gap:8px;scrollbar-width:none;}
+  .dt-forms::-webkit-scrollbar{display:none;}
+  .dt-form-tile{flex-shrink:0;width:92px;padding:12px 4px;gap:6px;min-height:44px;}
+  .dt-form-tile .dt-ic{width:36px;height:36px;}
+  .dt-form-tile .nm{font-size:12px;}
+  /* Works */
+  .dt-w-head{flex-direction:column;align-items:flex-start;gap:8px;}
+  .dt-w-head h1{font-size:56px;margin-top:8px;}
+  .dt-w-head p{display:none;}
+  .dt-filters{gap:10px;padding:14px 0;}
+  .dt-f-row,.dt-f-row.len{display:flex;gap:8px;overflow-x:auto;padding:0 20px;scrollbar-width:none;}
+  .dt-f-row::-webkit-scrollbar{display:none;}
+  .dt-f-lab{display:none;}
+  .dt-chips{flex-wrap:nowrap;flex-shrink:0;}
+  .dt-chip{min-height:44px;padding:8px 14px;}
+  .dt-order{flex-shrink:0;}
+  .dt-order::before{content:'';width:1px;align-self:stretch;background:var(--border);margin:4px 4px;}
+  .dt-search{max-width:none;min-height:44px;}
+  .dt-w-body{grid-template-columns:1fr;}
+  .dt-aside{display:none;}
+  .dt-shelf{gap:18px;}
+  .dt-shelf > .dt-eyebrow{padding:0 20px;}
+  .dt-grid-shelf{padding:0 20px;row-gap:26px;}
+  .dt-shelf .dt-empty{padding:0 20px;}
+  .dt-more{align-self:stretch;margin:4px 20px 0;min-height:50px;}
+  /* Opus */
+  .dt-o-head{flex-direction:column;align-items:flex-start;gap:12px;}
+  .dt-o-head h1{font-size:64px;margin-top:12px;}
+  .dt-o-head p{font-size:14px;line-height:1.65;}
+  .dt-rule{display:none;}
+  .dt-o-body{gap:22px;}
+  .dt-o-left{gap:22px;align-items:stretch;}
+  .dt-tt-box{margin-left:10px;}
+  /* Icon trên đĩa to sẵn trước khi thu (--dm do JS tính) để sau khi thu vẫn >= 46px. */
+  .dt-slot button{--d:var(--dm,76px);}
+  .dt-slot button[aria-pressed="true"]{--d:calc(var(--dm,76px) * 1.18);}
+  .dt-slot button .dt-ic{width:calc(var(--d) * .55);height:calc(var(--d) * .55);}
+  .dt-slot button[aria-pressed="true"] .dt-ic{width:calc(var(--d) * .58);height:calc(var(--d) * .58);}
+  .dt-o-nav{display:none;}
+  .dt-o-nav-m{display:grid;grid-template-columns:52px minmax(0,1fr) 52px;align-items:center;gap:8px;padding:0 24px;}
+  .dt-o-nav-m button{width:52px;height:52px;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--ink);font-size:20px;cursor:pointer;}
+  .dt-o-nav-m .dt-eyebrow{text-align:center;font-size:10px;letter-spacing:2px;}
+  .dt-o-list{padding:0 24px;gap:18px;}
+  .dt-o-list h2{font-size:32px;line-height:1.1;margin-top:8px;}
+  .dt-o-list .desc{font-size:16px;}
+  .dt-o-list .opus-sua-nut{right:24px;top:0;}
+  .dt-o-row{grid-template-columns:34px minmax(0,1fr);gap:12px;padding:18px 0;}
+  .dt-o-num{font-size:16px;text-align:left;}
+  .dt-o-t{font-size:18px;}
+  .dt-o-t em{font-size:17px;}
+  .dt-o-meta,.dt-o-mu{font-size:13px;}
+  .dt-o-mu{display:block;}
+  .dt-o-mu b{font-size:9px;margin-right:6px;}
+  .dt-credit{font-size:11px;}
+  .dt-opus-msg{margin:16px 20px 0;}
 }
-#search-input:focus{border-color:var(--gold);}
-#search-input::placeholder{color:var(--ink3);}
-
-.accordion-ships .ship-btn {
-  color: var(--ink2);
-  font-size: 0.58rem;
-  padding: 5px 10px;
-  border-color: transparent;
-  letter-spacing: 1.5px;
-}
-.accordion-ships .ship-btn:hover,
-.accordion-ships .ship-btn.active {
-  color: var(--ui-head);
-  border-color: var(--ui-head);
+@media (prefers-reduced-motion:reduce){
+  .dt-rec,.dt-rotor,.dt-slot,.dt-slot button,#dt-sheet,#dt-scrim,.dt-sl{transition:none!important;}
 }
 </style>
 </head>
 <body>
+<!-- Bộ icon nhạc cụ cho bìa đĩa và bàn xoay Opus. Gọi bằng <svg><use href="#ic-…"></svg>.
+     Nguồn: game-icons.net (Lorc, Delapouite & cộng sự), CC BY 3.0 — BẮT BUỘC ghi nguồn,
+     dòng ghi nguồn nằm ở trang Opus. cello / upright-piano / triangle do Claude Design vẽ;
+     c-clef / f-clef / note / viola vẽ tay thêm (09/2026). -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="ic-violin" viewBox="0 0 512 512" fill="currentColor"><path fill="currentColor" d="m470.9 26l-23 7.69l-.1 12.66l17.8 17.81l12.7-.1l7.7-23.04zm-32.5 37l-227 210.5l27.2 27L449 73.57zm-39.6-19.33L385.7 56.7l15.6 15.5l13.5-12.53zm53.5 53.59l-12.5 13.54l15.5 15.4l13.1-13zm-79.6-27.52l-13 13.02l14.6 14.61l13.5-12.58zm54.5 54.46l-12.5 13.6l14.5 14.5l13.1-13.1zm-124 39.2c-28.7-17.5-72-25.4-116.3 47.8l-7.2-1.4l-7.3 13c3.8 1 13.5 8.2 12.4 12.1c-3.5 11.3-48.2 64.3-70.6 44.5c-2.9-2.6-5.8-5.7-8-9.6l-14.35 7.9c1.23 10-1.95 13.8-6.38 15.8c-82.975 36.6-64.15 78.6-33.01 126.9l3.11-3c22.09-22.2 43.62-54.6 62.73-82.7l6.1-9.3l13 13l10.1-10.1l-10.8-10.9l18.8-7.3l5.1 5.2l33.3-33.4c-2.9-3-5.9-6-8.9-8.9zm45.5 45.5L239 327l-8.9-8.9l-33.3 33.3l5 5.1l-7.1 18.9l-10.9-11l-10.1 10.2l12.8 12.9l-9.2 6.3c-27.6 18.9-60.6 40.6-82.61 62.7l-3.14 3c48.45 31.2 90.45 50 127.05-33c2-4.4 5.7-7.6 15.8-6.4l7.8-14.3c-3.8-2.3-7-5-9.6-8c-19.8-22.4 33.2-67.2 44.5-70.7c3.9-1.1 11 8.6 12.1 12.4l13-7.1l-1.4-7.2c73.2-44.3 65.4-87.7 47.9-116.3M206.9 295l-33.2 33.3l10.1 10.1l33.3-33.3zm-46.3 46.3l-10.2 10.1l10.2 10.1l10.1-10.1zm-33.4 13c-16.4 24.2-34.63 51-54.84 72l2.97 10.3l10.36 3c21.11-20.1 48.01-38.4 72.11-54.8z"/></symbol>
+  <symbol id="ic-piano-keys" viewBox="0 0 512 512" fill="currentColor"><path fill="currentColor" d="M24 80v352h64V288H72V80zm96 0v208h-16v144h64V288h-16V80zm80 0v208h-16v144h64V288h-16V80zm80 0v208h-16v144h64V80zm64 0v352h64V288h-16V80zm96 0v208h-16v144h64V80z"/></symbol>
+  <symbol id="ic-flute" viewBox="0 0 512 512" fill="currentColor"><path fill="currentColor" d="M449.4 26.29c-5.4 2.56-14.6 7-27.2 14.14c-17.6 9.98-37.7 23.64-45.9 34.27c-1.8 2.33-5 10.39-6.8 17.25c-1.2 4.49-1.4 6.02-1.8 8.25l44 44c2.2-.4 3.8-.6 8.3-1.8c6.9-1.8 15-5 17.3-6.8c10.6-8.2 24.3-28.2 34.2-45.79c7.2-12.62 11.6-21.81 14.2-27.24zM435 54.32l22.7 22.63l-12.8 12.74l-22.7-22.63zm-77.1 61.48L42.49 431.3c7.86 3 15.66 8.3 22.77 15.4c7.09 7.1 12.37 14.9 15.42 22.7L396.1 154zm-8.3 30.7h.1a16 16 0 0 1 11.1 4.7a16 16 0 0 1 0 22.6a16 16 0 0 1-22.7 0a16 16 0 0 1 0-22.6a16 16 0 0 1 11.5-4.7m-45.1 45.3a16 16 0 0 1 11 4.6a16 16 0 0 1 0 22.7a16 16 0 0 1-22.6 0a16 16 0 0 1 0-22.7a16 16 0 0 1 11.6-4.6M259.2 237a16 16 0 0 1 11.1 4.7a16 16 0 0 1 0 22.6a16 16 0 0 1-22.6 0a16 16 0 0 1 0-22.6a16 16 0 0 1 11.5-4.7m-45.3 45.3h.1a16 16 0 0 1 11 4.7a16 16 0 0 1 0 22.6a16 16 0 0 1-22.6 0a16 16 0 0 1 0-22.6a16 16 0 0 1 11.5-4.7m-45.2 45.3a16 16 0 0 1 11.1 4.6a16 16 0 0 1 0 22.7a16 16 0 0 1-22.7 0a16 16 0 0 1 0-22.7a16 16 0 0 1 11.6-4.6M29.04 446.5c-1.44 0-2.13.4-2.25.5c-.21.2-1.2 2.3.43 7.5c1.7 5.2 5.87 12.1 12.02 18.2c6.15 6.2 13.01 10.4 18.24 12.1c5.16 1.6 7.29.6 7.5.4s1.2-2.4-.43-7.5c-1.69-5.2-5.87-12.1-12.02-18.3c-6.15-6.1-13.01-10.3-18.24-12c-1.93-.6-3.44-.8-4.58-.9z"/></symbol>
+  <symbol id="ic-cello" viewBox="0 0 512 512" fill="currentColor"><g transform="translate(256 0) scale(1.18 1) translate(-256 0)"><path fill-rule="evenodd" d="M256 176c-58 0-88 28-88 70c0 30 18 48 34 60c-26 14-58 42-58 94c0 58 50 86 112 86s112-28 112-86c0-52-32-80-58-94c16-12 34-30 34-60c0-42-30-70-88-70zM214 330c-10 22 10 44-2 70l10 3c12-28-8-50 2-70zM298 330c10 22-10 44 2 70l-10 3c-12-28 8-50-2-70zM222 414h68v10h-68zM249 190h14v200h-14z"/><path d="M244 64h24v118h-24z"/><path fill-rule="evenodd" d="M256 20c-18 0-30 12-30 28s12 26 28 26c10 0 16-6 16-14s-6-12-12-12a6 6 0 0 0 0 12c2 0 3 1 3 2s-2 4-6 4c-9 0-16-7-16-16s8-18 17-18c12 0 20 10 20 22c0 8-3 14-8 18l10 6c7-6 12-14 12-24c0-20-14-34-34-34z"/><path d="M218 84h26v12h-26zM268 84h26v12h-26zM218 112h26v12h-26zM268 112h26v12h-26z"/><path d="M251 484h10v24h-10z"/></g></symbol>
+  <symbol id="ic-grand-piano" viewBox="0 0 512 512" fill="currentColor"><path fill="currentColor" d="m376.3 30.6l-63.3 3L61.43 230.9l261.47-51.5c5.8-4.6 10.9-9 15.4-13.1L302 75.6l15.5-6.2l33.7 84.2c55.1-60.2-20.4-71.1 25.1-123M357 168l-13.2 11.9l9.6 24.1c-9.1-.4-19.2-.6-30.5-.7L61.43 254.9s.34 2.2.84 5.5c2.36 15.5-7.73 30.2-23.07 33.6c-8.93 2-16.61 3.7-16.61 3.7l3.95 21.2l334.16 30.5l126-53.9l-.9-43.4c-81.1-8.7-11.4-39.4-114-47zm-16.2 51.3c7.1.1 13.4.4 19 .7l21.5 53.8l-273.6-14.5l209.9-39.9c8.5-.1 16.2-.2 23.2-.1m37.6 2.4c56.8 7.8 14.9 32.1 65 36.5l-44.9 13.5zM83.78 284.8L358.4 307l-18.1 16.1l-280.68-25.9zm-1.35 53.6l13.65 97.1l-3.47 6.2l.36 15.8l17.13 1.6l17.1-6.2v-13.2l-4.8-3.9l9.1-93zM184 350.5V426l105.2 9v-75.2l-16.7-1.5V417l-71.8-6v-59zm209.8 2.7l-29.4 10.9l-24.8-2l15.6 99.4l-3.9 5.1l.8 18l17.1 1.7l15.9-7.4l.3-13.2l-3.9-3.9zm-208.7 89.6l-28.4 9.5l3.1 14.4l102.3 10.1l21-7.4l1.1-18.3z"/></symbol>
+  <symbol id="ic-upright-piano" viewBox="0 0 512 512" fill="currentColor"><path d="M56 64h400a8 8 0 0 1 8 8v16H48V72a8 8 0 0 1 8-8z"/><path fill-rule="evenodd" d="M72 88h368v160H72zM96 108h320v124H96zM106 118h300v104H106zM150 212l6-64c32-5 66-1 94 12v64c-28-13-62-17-100-12zM362 212l-6-64c-32-5-66-1-94 12v64c28-13 62-17 100-12z"/><path d="M60 248h392v14H60z"/><path fill-rule="evenodd" d="M64 262h384v56H64zM78 262h356v52H78z"/><path d="M101.9 262h3v52h-3zM127.4 262h3v52h-3zM152.8 262h3v52h-3zM178.2 262h3v52h-3zM203.6 262h3v52h-3zM229.1 262h3v52h-3zM254.5 262h3v52h-3zM279.9 262h3v52h-3zM305.4 262h3v52h-3zM330.8 262h3v52h-3zM356.2 262h3v52h-3zM381.6 262h3v52h-3zM407.1 262h3v52h-3z"/><path d="M97.9 262h11v32h-11zM123.4 262h11v32h-11zM174.2 262h11v32h-11zM199.6 262h11v32h-11zM225.1 262h11v32h-11zM275.9 262h11v32h-11zM301.4 262h11v32h-11zM352.2 262h11v32h-11zM377.6 262h11v32h-11zM403.1 262h11v32h-11z"/><path d="M56 318h400v20H56z"/><path fill-rule="evenodd" d="M80 338h352v112H80zM110 358h292v74H110zM120 368h272v54H120z"/><path d="M64 450h384v14H64zM64 464h56v18H64zM392 464h56v18h-56z"/><path d="M226 432h14v18h-14zM249 432h14v18h-14zM272 432h14v18h-14z"/></symbol>
+  <symbol id="ic-clarinet" viewBox="0 0 512 512" fill="currentColor"><path fill="currentColor" d="M37.1 28.45c-.27 29.1 9.07 46.67 25.07 67.1l9.66-9.6l14.73 14.75l-11.46 11.4l9.81 12.6l31.19-31.25l-12.2-10.1l-7.83 7.8l-14.74-14.7l6.37-6.4zm92.2 78.25L98.11 138l14.09 14.1l31.3-31.2zm25.7 25.7l-31 31l10 10c10-4 22-1 30 7c15 14 37 37 37 37l29-11zm12 20c3 2 3 7 0 10s-7 3-10 0s-3-8 0-10c3.2-2.8 7.3-2.6 10 0m22 21c3 3 3 8 0 11c-3 2-8 2-11 0c-3-3-3-8 0-11c3.4-2.8 8.1-2.8 11 0M141.3 184c-2.9 0-5.5.5-7.9 1.3l76.8 76.7l53.2-17.2s28.4 27.6 44 42.7c6 5.9 14.9 7.7 22.8 4.8c-27.1-26.8-55.3-54-82.8-80.9l-53 17.1s-24.2-24.2-38.2-38.1c-4-4.1-9.3-6.3-14.9-6.4m68.7 10.4c3 3 3 8 0 11s-8 3-11 0c-2-3-2-8 0-11c3.4-2.8 8.1-2.8 11 0m34.2 31.3l9.5 9.3l-40.2 12.6l-9.3-9.3zm14.8 31.7l-30 11l9 9l73 79l38-37l-18-16l-1 1c-11 3-22 0-31-7c-15-16-40-40-40-40m3 13c3 3 3 8 0 11s-8 3-11 0s-3-8 0-11c4.3-2.7 7.1-2 11 0m22 22c3 3 3 8 0 11s-7 3-10 0s-3-8 0-11c3.3-1.9 7.1-1.9 10 0m23 23c3 3 3 8 0 11c-3 2-8 2-11 0c-3-3-3-8 0-11c3.4-2.8 8.1-2.8 11 0m52.7 15.5l-37.3 37.3l14.1 14.1l37.3-37.2zm26.2 26.3l-37.3 37.3c19.2 19.2 14.6 55.7 14.6 55.7s11.6-17.5 35.7-41.5l.5-.6c24.5-24.5 42.2-36.2 42.2-36.2s-36.5 4.5-55.7-14.7m85.5 14.5c-9.4 0-35.6 19.4-62.3 46.1c-30.4 30.4-50.7 59.5-45.2 64.9c5.4 5.5 34.5-14.8 64.9-45.2s50.7-59.5 45.2-64.9c-.6-.6-1.4-.9-2.6-.9"/></symbol>
+  <symbol id="ic-accordion" viewBox="0 0 512 512" fill="currentColor"><path fill="currentColor" d="M343.8 87.8L340.3 403c3.5-1 7.1-1 10.7-2l20.6-310.4c-9.1-.95-19.1-2.31-27.8-2.8m48.6 4.2l-20.5 309h9L419 95.9s-9.8-1.9-26.6-3.9m-101.1.3L306.4 412c4.1-1 8.4-3 13-4l3.5-313.7zm-110.9 7.6c-8.8 2-17.7 4.2-26.6 6.7l88.2 7.8L269.5 430s6.1-4 16.4-9l-14.8-315.7zm262.4 1.5l-42.5 300.1s17.8-6.6 30.1-11.2c7.3-2.8 12.6-9 14.1-16.7c8.5-42.4 36.6-183.7 47.1-236.4c2.4-11.3-4.4-22.5-15.5-25.9c-15-4.5-33.3-9.9-33.3-9.9m-325.6 24.5s-56.64 18.6-84.95 28c-8.87 2.9-14.03 12.1-11.86 21.2C32.62 226.5 70.73 386.6 83.5 440c1.12 5 4.06 9 8.17 11c4.11 3 9.03 4 13.63 2c14-3 31.1-7 31.1-7s26.6 6 47.4 10c15.7 4 32.1 2 46.4-6c8.4-4 16-8 16-8l-30.6-308.5zm-4.8 43.3l51.6 4.4L196.1 419l-45.2-8c18.1-23.2 20.6-74.6 13.1-124.4c-7.9-53.2-27.4-104.5-51.5-116.9zm-23.2.5c4.84.2 9.09 3.7 9.96 8.7L140.6 414c1 6-2.8 11-8.5 12c-5.6 1-11-2-12-8l-.2-1l-18.4 5l-3.36-16l18.86-5l-1.7-10.4l-19.27 5.2l-3.43-16.3l19.8-5.4l-6.3-35.4l-20.87 5.7l-3.44-16.3l21.51-5.9l-1.9-10.3l-21.75 6l-3.44-16.3l22.37-6.2l-1.86-10.5l-22.71 6.2l-3.44-16.3l23.26-6.4l-6.27-35.7l-24.42 6.7l-3.44-16.3l24.97-6.9l-2.13-12l-25.36 6.9l-3.43-16.3l25.89-7.1l-1-5.7c-1-5.7 2.79-11.1 8.46-12.1c.71-.1 1.41-.2 2.1-.2"/></symbol>
+  <symbol id="ic-trombone" viewBox="0 0 512 512" fill="currentColor"><path fill="currentColor" d="M92.2 34.29h-2.29c-15.74.37-31.19 7.48-41.51 20.73c-8.73 11.3-13.05 25.74-11.34 40.04c1.7 14.34 9.3 27.44 20.43 36.24l118.81 94.3l-10.5 13.1l-11.1-9l-14.7 19.4s34.9 27.7 52.3 41.4l15.4-19.7l-28.8-21.8l10.5-13.1l28.7 21.7l15.5-19.6L73.28 111.7c-6.61-4.8-10.48-11.85-11.4-19.58c-.92-7.72 1.18-15.49 6.48-21.67c9.87-12.71 28.34-14.92 41.04-4.9l58.2 45.85c.3.2 70.3 55.3 106.4 102.4c7.2 9.4 13 18.3 16.4 26.3c2.1 5.3 3.7 9.8 2.1 13.5c-2.4 5.8-.2 12.5 5.2 15.7c5.3 3.1 12.2 1.8 16.1-3.1l54.1-68.8c3.9-4.9 3.5-11.9-.9-16.4c-4.3-4.5-11.4-5.1-16.4-1.3c-3.2 2.4-7.9 1.9-13.5 1.1c-8.6-1.4-18.7-4.9-29.5-9.7c-54.2-24.1-124.2-79.18-124.7-79.45l-58.1-45.74a54.34 54.34 0 0 0-32.6-11.62M110 76.64L84.01 109.7L97.12 120l25.98-33.06zm32 24.06l-25.9 33.1l13 10.3L155 111zm55.4 43.7l-26 33l13 10.4l26-33.1zm-75.1 55.8L104 223.5l23.5 13.5l13.5-17.2zm124.3 48.1l-41.2 52.5l215.8 169.8c14.5 11.4 35.5 8.9 47-5.6c11.3-14.5 8.8-35.5-5.6-46.8zm-.7 32.5l201.2 157c3.6 2.8 4.3 8.1 1.4 11.8c-2.9 3.6-8.2 4.3-11.8 1.4L235.6 294z"/></symbol>
+  <symbol id="ic-xylophone" viewBox="0 0 512 512" fill="currentColor"><path fill="currentColor" d="M25 57v270h78V57zm96 16v238h78V73zm-57 7a16 16 0 0 1 16 16a16 16 0 0 1-16 16a16 16 0 0 1-16-16a16 16 0 0 1 16-16m153 9v206h78V89zm-57 7a16 16 0 0 1 16 16a16 16 0 0 1-16 16a16 16 0 0 1-16-16a16 16 0 0 1 16-16m153 9v174h78V105zm-57 7a16 16 0 0 1 16 16a16 16 0 0 1-16 16a16 16 0 0 1-16-16a16 16 0 0 1 16-16m153 9v142h78V121zm-57 7a16 16 0 0 1 16 16a16 16 0 0 1-16 16a16 16 0 0 1-16-16a16 16 0 0 1 16-16m96 16a16 16 0 0 1 16 16a16 16 0 0 1-16 16a16 16 0 0 1-16-16a16 16 0 0 1 16-16m0 64a16 16 0 0 1 16 16a16 16 0 0 1-16 16a16 16 0 0 1-16-16a16 16 0 0 1 16-16m-96 16a16 16 0 0 1 16 16a16 16 0 0 1-16 16a16 16 0 0 1-16-16a16 16 0 0 1 16-16m-96 16a16 16 0 0 1 16 16a16 16 0 0 1-16 16a16 16 0 0 1-16-16a16 16 0 0 1 16-16m-96 16a16 16 0 0 1 16 16a16 16 0 0 1-16 16a16 16 0 0 1-16-16a16 16 0 0 1 16-16m-96 16a16 16 0 0 1 16 16a16 16 0 0 1-16 16a16 16 0 0 1-16-16a16 16 0 0 1 16-16m352 57c-12.81 0-23 10.19-23 23s10.19 23 23 23s23-10.19 23-23s-10.19-23-23-23m-40.977 23.967l-162.242 40.56L65.117 375.07l-2.234 17.86l101.53 12.691L29.815 439.27l4.368 17.46l179.7-44.925l193.313 24.164a40.6 40.6 0 0 1 2.246-17.857l-147.187-18.4l117.162-29.29a40.6 40.6 0 0 1-4.395-17.455zM448 409c-12.81 0-23 10.19-23 23s10.19 23 23 23s23-10.19 23-23s-10.19-23-23-23"/></symbol>
+  <symbol id="ic-tuba" viewBox="0 0 512 512" fill="currentColor"><path fill="currentColor" d="M207.1 35.3c-6.5 0-12 5-12.5 11.5s4 12.3 10.4 13.4c32.2 5.3 52.9 35.2 67.7 72.9c10 25.3 17.1 54.2 22.1 83.2c24.7-5.7 47.1-5.7 64.5-4c4.9-27.6 11.8-55.1 21.4-79.2c14.8-37.7 35.5-67.6 67.7-72.9c6.4-1.1 10.9-6.9 10.4-13.4s-6-11.5-12.5-11.5zm-6 68.5c-54.3.4-109.52 32.8-109.52 99.5v159.6C91.58 443 155.2 484 219.6 484c58.3 0 116.1-34 126.3-99.7c.5-1.4.7-2.7.6-4.2v-.1c.7-5.5 1-11.2 1-17.1v-41.7c.9-17.5 2.3-37.9 4.7-59.4c-13.5-1.1-31.1-.8-50.5 4.4c2.1 20.2 3.4 39.3 4.2 55.8v40.9c0 53.1-43.5 79.1-86.3 79.1s-86.3-26-86.3-79.1V203.3c0-47.9 48.6-63.4 86.3-56.2c20.4 3.9 39.1 14.5 42.8 33.4V227c6.2-2.7 12.4-5 18.5-6.9c-2.5-13.1-5.4-26.3-8.8-39.1c-7-26.2-16-50.9-28.2-70.5c-5.3-1.8-10.8-3.2-16.5-4.3c-8.6-1.6-17.4-2.4-26.3-2.4m-20.4 87.1c-4.5 0-8.3 3.7-8.3 8.3v4.2c0 4.6 3.8 8.4 8.3 8.4c4.6 0 8.4-3.8 8.4-8.4v-4.2c0-4.6-3.8-8.3-8.4-8.3m25.5 0c-4.5 0-8.3 3.7-8.3 8.3v4.2c0 4.6 3.8 8.4 8.3 8.4c4.6 0 8.4-3.8 8.4-8.4v-4.2c0-4.6-3.8-8.3-8.4-8.3m25.6 0c-4.5 0-8.3 3.7-8.3 8.3v4.2c0 4.6 3.8 8.4 8.3 8.4c4.6 0 8.4-3.8 8.4-8.4v-4.2c0-4.6-3.8-8.3-8.4-8.3M180.7 224c-4.5 0-8.3 3.7-8.3 8.2v41.2c0 4.6 3.8 8.3 8.3 8.3c4.6 0 8.4-3.7 8.4-8.3v-41.2c0-4.5-3.8-8.2-8.4-8.2m25.5 0c-4.5 0-8.3 3.7-8.3 8.2v41.2c0 4.6 3.8 8.3 8.3 8.3c4.6 0 8.4-3.7 8.4-8.3v-41.2c0-4.5-3.8-8.2-8.4-8.2m25.6 0c-4.5 0-8.3 3.7-8.3 8.2v41.2c0 4.6 3.8 8.3 8.3 8.3c4.6 0 8.4-3.7 8.4-8.3v-41.2c0-4.5-3.8-8.2-8.4-8.2m108.5 4c-23.3-.1-52.8 4.2-83.4 20v19c52-30 101.8-22 119.9-18l4.7-16c-8.5-2.2-23-4.9-41.2-5m56.5 8l-5.2 19l20.5 9.1l8.5-24.4zm-241 6.1c-4 8-6.4 18.8-6.4 33.9v84.1c0 40.9 34.2 62.9 69 62.9s69-22 69-62.9v-89.3c-8.2 3.2-16.6 7.2-25 12.4v76.9c0 25.6-22.4 37.6-44 37.6s-44-12-44-37.6v-62.6c-10.7-2.8-18.6-12.6-18.6-24.2zm95.9 48.3c-.9.7-1.8 1.4-2.8 2.1c-2.3 1.8-4.9 3.1-7.6 4l-1.2.4l-.9.3v53.4c0 10.9-8.7 16.2-17.2 16.2c-11.8 0-25.3-.1-25.3-.1c5.5 8.3 15.4 12.6 25.3 12.6c14.9 0 29.7-9.7 29.7-28.7zm-64.8 7.9v33.6c0 5.2 2.1 10.3 5.9 14.1c3.7 3.7 8.8 5.8 14.1 5.8s10.3-2.1 14.1-5.8c3.7-3.8 5.8-8.9 5.8-14.1v-33.6h-12.5v33.6c0 1.9-.8 3.8-2.2 5.2s-3.2 2.2-5.2 2.2s-3.9-.8-5.3-2.2s-2.2-3.3-2.2-5.2v-33.6z"/></symbol>
+  <symbol id="ic-harp" viewBox="0 0 512 512" fill="currentColor"><path fill="currentColor" d="m120.7 27.53l-28.93 8.56C112.1 187.8 125.6 321.9 183.9 455H228c-40-140.6-84.2-280.4-107.3-427.47m19.9 10.36c2.6 16.05 5.5 32.03 8.7 47.95c9.8 2.67 19.9 6.9 30.1 11.85c18.3 8.71 37.3 19.81 56.1 29.51s37.3 17.9 53.6 21.1c16.4 3.2 29.8 1.7 41.6-7c22.2-16.4 38.4-26.2 51.3-31.4c12.8-5.2 23.3-5.9 31.6-1.8c7.8 4 11.5 11.1 14.2 17.1l5.1-11.3c-7.3-12.9-18.1-21.38-32.9-23.26c-16.2-2.05-38.4 4.06-66 25.66c-14.4 11.3-33 9.7-50.6 2.8c-17.5-6.9-35.7-18.9-54.2-31.64c-18.6-12.74-37.3-26.21-54.8-35.98c-12.3-6.86-23.8-11.66-33.8-13.59m12.8 68.31q7.2 34.5 15.6 68.7v-62.2c-5.4-2.6-10.6-4.8-15.6-6.5M404.8 124c-27 110.6-55.1 223.8-97.7 331h38.6c34.5-94.4 51-203.5 70.3-311.3c-1.8-3.8-3-7.4-4.3-10.4c-2.3-5.3-4.3-8.1-6.3-9.1c-.2-.1-.4-.2-.6-.2M199 128.1v160.4c5.9 21.1 11.9 42.1 18 63.1V137.8c-6.1-3.2-12.1-6.5-18-9.7M361 142q-8.1 5.4-18 12.6V288h1c5.9-20.9 11.5-41.8 17-62.8zm-114 10.8V455h18V160.2c-6-2.2-12-4.7-18-7.4m66 14.3c-5.9.7-11.9.8-18 .2v269.8c6.3-16.4 12.3-32.9 18-49.6zM163.9 473l-15.1 16h214.4l-15.1-16z"/></symbol>
+  <symbol id="ic-triangle" viewBox="0 0 512 512" fill="currentColor"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M226 164L90 410h332L270 136" stroke-width="28"/><path d="M256 118V40" stroke-width="10"/><circle cx="256" cy="34" r="14" stroke-width="10"/><path d="M320 486L482 324" stroke-width="16"/></g><circle cx="482" cy="324" r="16" fill="currentColor"/></symbol>
+  <symbol id="ic-g-clef" viewBox="0 0 512 512" fill="currentColor"><path fill="currentColor" d="m238.75 138.492l18.147-18.829c.898-21.472 9.107-59.37 26.166-60.771c6.994.097 14.566 5.833 15.742 16.021c3.25 28.145-11.833 40.563-29.072 57.372l-31.408 32.586l-.037-.038c-28.467 31.447-65.355 70.37-69.772 106.973c-5.588 53.77 31.264 108.42 87.149 105.693l-3.178-18.066c-37.522-4.905-69.771-43.77-56.711-81.312c23.275-60.413 75.664-92.822 116.333-148.022c11.474-15.574 14.575-46.945 11.815-63.128c-2.76-16.184-14.345-43.066-32.059-45.017c-34.714-4.59-60.724 62.476-53.114 116.538zm25.667 75.896l-15.508 15.248c.542 2.775 1.166 6.185 2.088 12.14c-34.017 21.505-36.576 66.707-12.186 90.96c5.177 5.31 15.165-2.767 10.104-8.674c-10.971-19.786-12.097-44.028 5.742-57.137c8.78 50.539 24.627 117.16 30.164 170.895c.364 3.535-6.593 10.614-9.973 11.396c0-22.091-17.908-40-40-40c-22.09 0-40 17.909-40 40c.017 20.193 15.266 36.007 35.123 39.668c42.008 7.745 78.659-17.935 72.76-53.16c-8.793-59.062-21.986-121.007-30.857-175.32c12.066-1.253 28.875 5.169 36.428 12.847c8.575 9.297 12.95 22.35 11.982 32.787c-.924 9.96-7.425 20.992-17.06 30.381l3.662 20.776c17.346-12.583 35.117-30.185 36.94-49.844c1.518-16.352-5.01-40.324-18.08-52.273c-16.885-15.437-38.313-18.553-57.349-16.612c-2.004-13.065-3.018-18.039-3.98-24.078"/></symbol>
+  <!-- ===== Vẽ tay cho khớp bộ (không có trên game-icons.net) ===== -->
+  <!-- Khoá Đô (khoá Alto): hai vạch dọc + hai thuỳ cong gặp nhau ở giữa. -->
+  <symbol id="ic-c-clef" viewBox="0 0 512 512" fill="currentColor">
+    <rect x="112" y="56" width="58" height="400" rx="6"/>
+    <rect x="192" y="56" width="20" height="400" rx="4"/>
+    <path d="M212 256 L262 214 C284 164 300 104 346 86 C394 68 430 104 424 150 C418 196 376 212 348 188 C334 176 336 152 352 144 C366 138 378 146 382 158 C392 142 386 112 360 110 C318 108 298 170 280 238 Z"/>
+    <path d="M212 256 L262 298 C284 348 300 408 346 426 C394 444 430 408 424 362 C418 316 376 300 348 324 C334 336 336 360 352 368 C366 374 378 366 382 354 C392 370 386 400 360 402 C318 404 298 342 280 274 Z"/>
+  </symbol>
+  <!-- Khoá Fa: đầu tròn đặc, một vòng cung lớn, hai chấm bên phải. -->
+  <symbol id="ic-f-clef" viewBox="0 0 512 512" fill="currentColor">
+    <circle cx="138" cy="186" r="46"/>
+    <path d="M110 170 C120 96 196 60 262 62 C360 66 410 138 402 222 C392 330 290 408 118 452 L112 428 C252 382 330 312 338 222 C346 146 312 98 260 96 C212 94 170 118 158 150 Z"/>
+    <circle cx="452" cy="150" r="26"/>
+    <circle cx="452" cy="262" r="26"/>
+  </symbol>
+  <!-- Nốt móc đơn. -->
+  <symbol id="ic-note" viewBox="0 0 512 512" fill="currentColor">
+    <ellipse cx="196" cy="392" rx="88" ry="62" transform="rotate(-22 196 392)"/>
+    <rect x="262" y="70" width="26" height="326" rx="6"/>
+    <path d="M276 70 C300 150 400 176 402 272 C403 318 386 350 368 372 C382 330 386 296 372 262 C352 214 312 196 276 190 Z"/>
+  </symbol>
+  <!-- Viola: dáng violin (thu nhỏ, lùi xuống góc phải) + khoá Đô nhỏ ở góc trái —
+       khoá Đô là khoá riêng của viola, nên nhìn là phân biệt được với violin. -->
+  <symbol id="ic-viola" viewBox="0 0 512 512" fill="currentColor">
+    <use href="#ic-violin" transform="translate(150 150) scale(0.7)"/>
+    <use href="#ic-c-clef" transform="translate(-40 -10) scale(0.56)"/>
+  </symbol>
+</svg>
+
+<!-- Bảng trượt liner notes (chỉ dùng trên điện thoại). Dựng nội dung bằng JS. -->
+<div id="dt-scrim"></div>
+<div id="dt-sheet" role="dialog" aria-modal="true" aria-labelledby="dt-sheet-title" tabindex="-1">
+  <div class="dt-sheet-head">
+    <span class="dt-eyebrow" id="dt-sheet-title" data-i18n="dt_on_tt">On the turntable</span>
+    <button type="button" class="dt-sheet-x" id="dt-sheet-x" data-i18n-aria="dt_close" aria-label="Close">×</button>
+  </div>
+  <div id="dt-sheet-body"></div>
+</div>
 
 <div id="progress-bar"></div>
 
@@ -1072,122 +1079,19 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
     <button class="music-toggle" onclick="toggleMusic()">Pause</button>
   </div>
 
-  <!-- HOME -->
-  <div class="page active gothic-bg" id="page-home">
+  <!-- HOME — "Tonight's programme". Toàn bộ nội dung dựng bằng JS trong
+       renderHome() (script cổ điển), vì phụ thuộc worksData và nhóm Opus. -->
+  <div class="page active" id="page-home">
     <!-- Hiện khi link #fic-N trỏ tới truyện không tồn tại (hoặc bị is_restricted
          mà người xem chưa đăng nhập). Tự ẩn sau vài giây. -->
     <div id="link-hong"></div>
-    <div class="hero">
-      <div class="hero-ornament">♩</div>
-      <h1 class="hero-title">ShostaKid</h1>
-      <p class="hero-subtitle" data-i18n="hero_sub">I blend classical music with my thoughts</p>
-      <div class="hero-divider"><span style="color:var(--gold);letter-spacing:4px;">✦ ✦ ✦</span></div>
-      <p class="hero-tagline" data-i18n="hero_tag">Take a $ip y'all and enjoy</p>
-    </div>
-
-    <!-- Continue Reading Banner -->
-    <div id="continue-banner">
-      <div class="continue-inner" onclick="resumeReading()">
-        <span class="continue-text"><span data-i18n="continue">Continue reading:</span> <strong id="continue-title"></strong></span>
-        <span class="continue-arrow">→</span>
-      </div>
-    </div>
-  <div class="home-boc">
-  <!-- Hai mục của trang chủ dựng sẵn dạng "đầu thẻ + thân thẻ" cho MỌI khổ màn
-       hình, rồi để CSS quyết định. Trên máy tính .home-dau bị lột hết viền/nền
-       và thân luôn mở nên trông y hệt bản cũ; trên điện thoại nó thành thẻ gập.
-       Một cấu trúc DOM duy nhất như vậy thì xoay máy không phải dựng lại gì. -->
-  <div class="home-columns">
-
-    <div class="home-col" id="home-col-latest">
-      <button class="home-dau" type="button" onclick="toggleHomeCol('latest')"
-              aria-expanded="false" aria-controls="home-latest-than">
-        <span class="home-dau-tren">
-          <span class="section-heading" data-i18n="head_latest">Latest Works</span>
-          <span class="home-so" id="home-latest-so"></span>
-          <span class="home-mui" aria-hidden="true">&#9662;</span>
-        </span>
-        <span class="home-mo" id="home-latest-mo"></span>
-      </button>
-      <div class="home-than" id="home-latest-than">
-        <div id="home-latest"></div>
-      </div>
-    </div>
-
-    <div class="home-col" id="home-col-fav">
-      <button class="home-dau" type="button" onclick="toggleHomeCol('fav')"
-              aria-expanded="false" aria-controls="home-fav-than">
-        <span class="home-dau-tren">
-          <span class="section-heading" data-i18n="head_fav">Favorite Children</span>
-          <span class="home-so" id="home-fav-so"></span>
-          <span class="home-mui" aria-hidden="true">&#9662;</span>
-        </span>
-        <span class="home-mo" id="home-fav-mo"></span>
-      </button>
-      <div class="home-than" id="home-fav-than">
-        <div id="home-favorites"></div>
-      </div>
-    </div>
-
-  </div>
-  <div class="home-xem-het">
-    <button class="ao3-link" onclick="showPage('works',document.querySelector('.nav-links a[data-page=\'works\']'))" data-i18n="view_all">View All Works →</button>
-  </div>
-</div>
+    <div id="dt-home"></div>
     <footer><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
 
-  <!-- WORKS -->
-  <div class="page gothic-bg" id="page-works">
-    <div class="works-layout">
-
-      <aside class="fandom-sidebar">
-        <div class="sidebar-heading" data-i18n="browse">Browse</div>
-        <button class="filter-btn all-btn active" data-i18n="all" onclick="setFandom('all',this)">All</button>
-        <div id="fandom-accordion"></div>
-      </aside>
-
-      <div class="works-main">
-
-        <!-- Dải fandom (chỉ hiện trên mobile) — nay nằm NGOÀI bảng gập và luôn
-             mở, cuộn ngang. Trước đây nó nằm trong bảng gập nên mặc định người
-             xem điện thoại không thấy nút lọc nào, phải bấm "Filter" mới biết
-             có gì; lọc theo fandom là thao tác hay dùng nhất nên cho ra ngoài.
-             Trước đây ba pill này còn viết cứng nên mobile chỉ lọc được 3/6
-             fandom; giờ buildSidebar() dựng theo đúng fandom có thật. -->
-        <div class="mobile-fandom-dai" id="mobile-fandom-list">
-          <button class="mobile-pill active" id="mobile-all-pill" data-i18n="all" onclick="setFandom('all',this,true)">All</button>
-        </div>
-        <!-- Mobile filter toggle (chỉ hiện trên mobile) -->
-        <button id="mobile-filter-toggle" onclick="toggleMobileFilter()">
-          <span><span data-i18n="filter">Filter</span> <span id="mobile-filter-count"></span></span>
-          <span class="toggle-arrow">▼</span>
-        </button>
-        <div id="mobile-filter-panel">
-          <div class="mobile-filter-section">
-            <span class="mobile-filter-label" data-i18n="ship">Ship</span>
-            <div class="mobile-filter-pills" id="mobile-ship-list"></div>
-          </div>
-        </div>
-
-        <div style="margin-bottom:1.5rem;position:relative;">
-  <input id="search-input" type="text" data-i18n-ph="search_ph" placeholder="Search by title..."
-    oninput="applyFilters()"
-    style="width:100%;font-family:var(--font-ui);font-size:0.85rem;letter-spacing:1px;color:var(--ink2);background:var(--cream);border:1px solid var(--border);padding:10px 16px 10px 40px;outline:none;transition:border-color 0.2s;">
-  <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--ui);font-size:0.9rem;">🔍</span>
-</div>
-        <div id="active-filters" class="active-filters"></div>
-        <div class="works-head">
-          <div class="section-heading" style="margin-bottom:0;" data-i18n="head_all">All Works</div>
-          <button type="button" id="sort-btn" class="filter-btn sort-btn" data-i18n="sort_new">Newest first</button>
-        </div>
-        <div id="no-results" class="no-results" data-i18n="no_results">No works found for this filter.</div>
-
-        <!-- 36 thẻ .fic-card trước đây viết cứng ở đây. Giờ dựng từ Supabase
-             (lùi về fics.json nếu không gọi được DB) — xem renderWorks(). -->
-        <div id="works-grid"></div>
-      </div><!-- /.works-main -->
-    </div><!-- /.works-layout -->
+  <!-- WORKS — kệ đĩa + khung On the turntable. Dựng trong renderWorks(). -->
+  <div class="page" id="page-works">
+    <div id="dt-works"></div>
     <footer><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div><!-- /#page-works -->
 
@@ -1452,6 +1356,12 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
           <label><input type="checkbox" id="pw-restricted" style="width:auto;margin-right:0.5rem;"><span data-i18n="post_restricted">Members only — hide from readers who aren’t signed in</span></label>
           <div class="field-hint" data-i18n="post_restricted_hint">The work disappears from the listing and its chapters cannot be fetched at all unless the reader is signed in. This is enforced by the database, not by hiding it on the page.</div>
         </div>
+        <div class="field">
+          <!-- Form trước đây không có ô này nên mọi truyện đăng qua web đều mang
+               language='en' mặc định — 9 truyện tiếng Việt đã bị ghi sai như vậy. -->
+          <label><input type="checkbox" id="pw-lang-vi" style="width:auto;margin-right:0.5rem;"><span data-i18n="post_lang_vi">Written in Vietnamese</span></label>
+          <div class="field-hint" data-i18n="post_lang_vi_hint">Leave unticked for English. Shown as the Language line in the work’s liner notes.</div>
+        </div>
 
         <div class="sub-heading" data-i18n="post_cover">Cover image</div>
         <div class="field-hint" style="margin-bottom:0.9rem;" data-i18n="post_cover_hint">One image for the whole work. Shown as a book spine on the Works page, and above the text when the work is opened.</div>
@@ -1547,21 +1457,11 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
     <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
 
-  <!-- OPUS — kho truyện xếp theo thể nhạc -->
+  <!-- OPUS — bàn xoay chọn thể nhạc. Dựng trong renderOpus(); phần sửa nhóm
+       (chỉ admin) do module Supabase gắn vào qua window.dtNutSuaNhom. -->
   <div class="page" id="page-opus" style="background:var(--cream);">
-    <div class="opus-wrap">
-      <div class="section-heading" data-i18n="opus_head">Opus</div>
-      <p class="opus-dan" data-i18n="opus_dan">Every work here is named after a musical form, and the name is not decorative. This is the whole archive laid out by form — a catalogue of works.</p>
-
-      <div class="opus-thanh">
-        <button type="button" class="mini-btn" id="opus-mo-het" data-i18n="opus_mo_het">Open all</button>
-        <button type="button" class="mini-btn" id="opus-dong-het" data-i18n="opus_dong_het">Close all</button>
-        <div class="opus-tong" id="opus-tong"></div>
-      </div>
-
-      <div class="auth-msg" id="opus-msg"></div>
-      <div class="opus-ke" id="opus-ke"></div>
-    </div>
+    <div class="auth-msg dt-opus-msg" id="opus-msg"></div>
+    <div id="dt-opus"></div>
     <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
 
@@ -1708,270 +1608,8 @@ window.addEventListener('scroll', () => {
   bar.style.width = pct + '%';
 });
 
-// --- Fandom filter ---
-// =============================================
-// FILTER SYSTEM — fandom + ship kết hợp
-// =============================================
-let activeShips = new Set();
-let activeFandom = 'all';
-
-function buildSidebar() {
-  // data-fandom giờ chính là tên fandom trong DB, nên không cần bảng ánh xạ
-  // nhãn nữa (bảng cũ khai 'Genshin Impact' trong khi thẻ ghi 'Genshin',
-  // làm mục Genshin trên sidebar hiện cụt).
-
-  // Scan fic cards → build fandom → ships map (giữ thứ tự xuất hiện)
-  const fandomShips = {};
-  document.querySelectorAll('#page-works .fic-card').forEach(card => {
-    const fandom = card.dataset.fandom;
-    if (!fandom) return;
-    if (!fandomShips[fandom]) fandomShips[fandom] = new Set();
-    card.querySelectorAll('.tag').forEach(tag => fandomShips[fandom].add(tag.textContent.trim()));
-  });
-
-  // --- Desktop accordion ---
-  const accordion = document.getElementById('fandom-accordion');
-  if (accordion) {
-    accordion.innerHTML = '';
-    Object.entries(fandomShips).forEach(([fandom, ships]) => {
-      const item = document.createElement('div');
-      item.className = 'accordion-item';
-      item.dataset.fandom = fandom;
-
-      const header = document.createElement('button');
-      header.className = 'filter-btn accordion-header';
-      const hLabel = document.createElement('span');
-      hLabel.textContent = fandom;
-      const hArrow = document.createElement('span');
-      hArrow.className = 'acc-arrow';
-      hArrow.textContent = '▾';
-      header.append(hLabel, hArrow);
-      header.onclick = () => toggleAccordion(item, fandom);
-
-      const shipsDiv = document.createElement('div');
-      shipsDiv.className = 'accordion-ships';
-      [...ships].sort().forEach(ship => {
-        const btn = document.createElement('button');
-        btn.className = 'filter-btn ship-btn';
-        btn.textContent = ship;
-        btn.onclick = () => toggleShip(ship, btn);
-        shipsDiv.appendChild(btn);
-      });
-
-      item.appendChild(header);
-      item.appendChild(shipsDiv);
-      accordion.appendChild(item);
-    });
-  }
-
-  // --- Mobile fandom pills ---
-  // Trước đây ba pill này viết cứng nên Genshin / Spider-Verse / Others
-  // không lọc được trên điện thoại. Giờ dựng theo fandom có thật.
-  const mobileFandoms = document.getElementById('mobile-fandom-list');
-  if (mobileFandoms) {
-    [...mobileFandoms.querySelectorAll('.mobile-pill')].slice(1).forEach(b => b.remove());
-    Object.keys(fandomShips).forEach(fandom => {
-      const btn = document.createElement('button');
-      btn.className = 'mobile-pill';
-      btn.textContent = fandom;
-      btn.onclick = () => setFandom(fandom, btn, true);
-      mobileFandoms.appendChild(btn);
-    });
-  }
-
-  // --- Mobile ship list (flat, unchanged) ---
-  const mobileContainer = document.getElementById('mobile-ship-list');
-  if (mobileContainer) {
-    mobileContainer.innerHTML = '';
-    const allShips = new Set();
-    Object.values(fandomShips).forEach(set => set.forEach(s => allShips.add(s)));
-    [...allShips].sort().forEach(ship => {
-      const btn = document.createElement('button');
-      btn.className = 'mobile-pill';
-      btn.textContent = ship;
-      btn.onclick = () => toggleShip(ship, btn, true);
-      mobileContainer.appendChild(btn);
-    });
-  }
-
-  // Make tags in fic cards clickable
-  document.querySelectorAll('#page-works .fic-card .tag').forEach(tag => {
-    tag.classList.add('clickable');
-    tag.onclick = (e) => {
-      e.stopPropagation();
-      const ship = tag.textContent.trim();
-      if (currentPage !== 'works') showPage('works', document.querySelector('.nav-links a[data-page="works"]'));
-      activeShips.clear();
-      activeShips.add(ship);
-      // Cũng chỉ quét danh sách ship: toggle trên '.mobile-pill' trần sẽ tắt
-      // luôn pill fandom đang sáng, dù activeFandom không hề đổi.
-      document.querySelectorAll('.ship-btn, #mobile-ship-list .mobile-pill').forEach(btn => {
-        btn.classList.toggle('active', btn.textContent.trim() === ship);
-      });
-      applyFilters();
-      window.scrollTo(0, 0);
-    };
-  });
-}
-
-function toggleAccordion(item, fandom) {
-  const isOpen = item.classList.contains('open');
-
-  // Đóng tất cả accordion item đang mở
-  document.querySelectorAll('.accordion-item.open').forEach(i => i.classList.remove('open'));
-
-  if (!isOpen) {
-    // Mở item này + filter theo fandom
-    item.classList.add('open');
-    activeFandom = fandom;
-    // Deactivate All button
-    document.querySelector('.all-btn')?.classList.remove('active');
-    // Sync mobile fandom pills. Dải fandom giờ là #mobile-fandom-list nằm ngoài
-    // bảng gập, nên trỏ thẳng vào nó — khỏi phải lọc ngược ra khỏi danh sách ship.
-    document.querySelectorAll('#mobile-fandom-list .mobile-pill').forEach(b => {
-      b.classList.toggle('active', b.textContent.includes(fandom));
-    });
-  } else {
-    // Đóng → về All
-    activeFandom = 'all';
-    document.querySelector('.all-btn')?.classList.add('active');
-    // Bản cũ gỡ 'active' khỏi cả pill "All", nên trên điện thoại không pill nào
-    // sáng dù đang lọc All. Hồi đó dải nằm trong bảng gập nên không ai thấy;
-    // giờ nó luôn hiện, phải cho pill "All" sáng lại. Nhận ra nó bằng id chứ
-    // đừng so chữ: sang tiếng Việt nó là "Tất cả".
-    document.querySelectorAll('#mobile-fandom-list .mobile-pill').forEach(b => {
-      b.classList.toggle('active', b.id === 'mobile-all-pill');
-    });
-  }
-
-  // Clear ship filters khi đổi fandom.
-  // Phải giới hạn trong #mobile-ship-list: '.mobile-pill' trần sẽ quét luôn dải
-  // fandom và gỡ mất 'active' vừa đặt ở trên — chọn fandom trên sidebar máy tính
-  // thì pill fandom tương ứng trên điện thoại không bao giờ sáng. Lỗi có sẵn,
-  // trước đây không lộ vì dải fandom nằm khuất trong bảng gập.
-  activeShips.clear();
-  document.querySelectorAll('.ship-btn, #mobile-ship-list .mobile-pill')
-    .forEach(b => b.classList.remove('active'));
-  updateMobileFilterCount();
-  applyFilters();
-}
-
-function toggleMobileFilter() {
-  const btn = document.getElementById('mobile-filter-toggle');
-  const panel = document.getElementById('mobile-filter-panel');
-  btn.classList.toggle('open');
-  panel.classList.toggle('open');
-}
-
-function updateMobileFilterCount() {
-  const count = activeShips.size + (activeFandom !== 'all' ? 1 : 0);
-  const el = document.getElementById('mobile-filter-count');
-  if (el) el.textContent = count > 0 ? `(${count})` : '';
-}
-
-function setFandom(fandom, btn, isMobile) {
-  activeFandom = fandom;
-
-  // Close all accordion items when All is selected
-  if (fandom === 'all') {
-    document.querySelectorAll('.accordion-item.open').forEach(i => i.classList.remove('open'));
-    document.querySelector('.all-btn')?.classList.add('active');
-  } else {
-    document.querySelector('.all-btn')?.classList.remove('active');
-  }
-
-  // Sync mobile fandom pills. Nhận pill "All" bằng id: so chữ 'All' là sai khi
-  // trang đang ở tiếng Việt (nhãn thành "Tất cả") — lỗi cũ, trước đây không lộ
-  // vì dải fandom nằm khuất trong bảng gập.
-  document.querySelectorAll('#mobile-fandom-list .mobile-pill').forEach(b => {
-    const matches = (fandom === 'all' && b.id === 'mobile-all-pill')
-                 || (fandom !== 'all' && b.textContent.includes(fandom));
-    b.classList.toggle('active', matches);
-  });
-
-  if (btn) btn.classList.add('active');
-  updateMobileFilterCount();
-  applyFilters();
-}
-
-function toggleShip(ship, btn, isMobile) {
-  if (activeShips.has(ship)) {
-    activeShips.delete(ship);
-    // Deactivate both desktop + mobile buttons for this ship
-    document.querySelectorAll('.ship-btn, .mobile-pill').forEach(b => {
-      if (b.textContent.trim() === ship) b.classList.remove('active');
-    });
-  } else {
-    activeShips.add(ship);
-    document.querySelectorAll('.ship-btn, .mobile-pill').forEach(b => {
-      if (b.textContent.trim() === ship) b.classList.add('active');
-    });
-  }
-  updateMobileFilterCount();
-  applyFilters();
-}
-
-function applyFilters() {
-  const query = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
-  let visibleCount = 0;
-
-  document.querySelectorAll('#page-works .fic-card').forEach(card => {
-    const fandomMatch = activeFandom === 'all' || (card.dataset.fandom || '').includes(activeFandom);
-    const titleMatch = !query || card.querySelector('.fic-title').textContent.toLowerCase().includes(query);
-
-    let shipMatch = true;
-    if (activeShips.size > 0) {
-      const cardTags = new Set([...card.querySelectorAll('.tag')].map(t => t.textContent.trim()));
-      shipMatch = [...activeShips].every(s => cardTags.has(s));
-    }
-
-    const show = fandomMatch && titleMatch && shipMatch;
-    // '' chứ KHÔNG phải 'block': thẻ truyện là .fic-card-bia (display:flex) để
-    // ảnh bìa nằm cạnh phần chữ. Gán 'block' là đè mất, bìa rơi xuống nằm trên
-    // chữ — chỉ trang Works dính vì trang chủ không chạy qua applyFilters().
-    card.style.display = show ? '' : 'none';
-    if (show) visibleCount++;
-  });
-
-  // No results message
-  const noResults = document.getElementById('no-results');
-  if (noResults) noResults.style.display = visibleCount === 0 ? 'block' : 'none';
-
-  // Active filter tags display
-  renderActiveFilters();
-  updateMobileFilterCount();
-}
-
-function renderActiveFilters() {
-  const container = document.getElementById('active-filters');
-  if (!container) return;
-  container.innerHTML = '';
-
-  if (activeFandom !== 'all') {
-    const tag = document.createElement('div');
-    tag.className = 'active-filter-tag';
-    tag.innerHTML = `${activeFandom} <button onclick="setFandom('all', document.querySelector('.fandom-sidebar .filter-btn:not(.ship-btn)'))">×</button>`;
-    container.appendChild(tag);
-  }
-
-  activeShips.forEach(ship => {
-    const tag = document.createElement('div');
-    tag.className = 'active-filter-tag';
-    tag.innerHTML = `${ship} <button onclick="removeShip('${ship}')">×</button>`;
-    container.appendChild(tag);
-  });
-}
-
-function removeShip(ship) {
-  activeShips.delete(ship);
-  document.querySelectorAll('.ship-btn, .mobile-pill').forEach(btn => {
-    if (btn.textContent.trim() === ship) btn.classList.remove('active');
-  });
-  updateMobileFilterCount();
-  applyFilters();
-}
-
-function searchFics(query) { applyFilters(); }
+// Bộ lọc sidebar/accordion/pill cũ đã thay bằng dải chip của trang Works
+// trong giao diện đĩa than — xem renderWorks().
 
 // --- Home page: auto-render từ fics[] ---
 // =============================================
@@ -2008,7 +1646,14 @@ function worksFromFics() {
     ships: f.tags || [],
     featured: !!f.featured,
     date: f.date || '',
-    kudos: null, comments: null      // bản dự phòng không có số đếm
+    kudos: null, comments: null,     // bản dự phòng không có số đếm
+    // Các trường của giao diện đĩa than. fics.json không biết nhóm Opus, số chữ
+    // hay ngôn ngữ — bìa sẽ hiện "Overture" và dòng số chữ tự ẩn.
+    uuid: null, lang: null, words: null, groupSlug: null, cover: '',
+    nch: (f.chapters || []).length || null,
+    music: [].concat(f.musicName || []).filter(Boolean)
+      .map(s => String(s).replace(/\s+-\s+/g, ' — '))
+      .filter((s, k, a) => a.indexOf(s) === k)
   }));
 }
 
@@ -2132,97 +1777,599 @@ function makeCardEl(d) {
 
   return card;
 }
+// makeCardEl() giờ chỉ còn trang Bookmark dùng (window.makeCardEl). Home / Works
+// / Opus dựng bìa đĩa bằng dtThe() bên dưới.
 
-function fill(el, list) {
-  el.textContent = '';
-  const frag = document.createDocumentFragment();
-  list.forEach(d => frag.append(makeCardEl(d)));
-  el.append(frag);
+// =============================================
+// GIAO DIỆN ĐĨA THAN — Home / Works / Opus
+// Bản thiết kế Claude Design (09/2026). Mỗi truyện là một bìa đĩa; thông tin
+// truyện là "liner notes"; Opus là bàn xoay chọn thể nhạc.
+// Dựng 100% bằng createElement: tên/tóm tắt là dữ liệu nhập vào.
+// =============================================
+
+// Màu bìa theo fandom. Fandom mới chưa có ở đây thì lấy màu Spider-Verse.
+const MAU_BIA = {
+  'Figure Skating RPF': '#1F2A3A', 'Reverse: 1999': '#5A2320', 'Honkai: Star Rail': '#23352F',
+  'Genshin Impact': '#2B3350', 'Spider-Verse': '#2A2522', 'Others': '#EFE7D4'
+};
+const BIA_KEM = '#EFE7D4';
+
+// Icon của từng nhóm Opus, theo slug. Nhóm không có ở đây (kể cả nhóm tạo sau
+// bằng form) lần lượt lấy ký hiệu nhạc trong ICON_DU_PHONG — bộ nhạc cụ đã dùng
+// hết cho 13 nhóm, không còn nhạc cụ trống để chia.
+const ICON_NHOM = {
+  'opus-concerto': 'violin', 'opus-prelude-fugue': 'piano-keys', 'opus-sonata': 'flute',
+  'opus-chamber-trio': 'cello', 'opus-nocturne': 'grand-piano', 'opus-impromptu': 'upright-piano',
+  'opus-rhapsody': 'clarinet', 'opus-fantasia': 'accordion', 'opus-symphony': 'trombone',
+  'opus-suite-1': 'xylophone', 'opus-suite-2': 'tuba', 'opus-suite-3': 'harp',
+  'suite-iv-scherzo': 'triangle'
+};
+const ICON_DU_PHONG = ['f-clef', 'c-clef', 'note', 'g-clef'];
+
+const LA_MA = n => { let s = '', x = n;
+  [[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']]
+    .forEach(([v, k]) => { while (x >= v) { s += k; x -= v; } });
+  return s; };
+const GIA_TRI_LA_MA = s => { const m = {I:1,V:5,X:10,L:50,C:100}; let t0 = 0;
+  for (let i = 0; i < s.length; i++) { const a = m[s[i]] || 0, b = m[s[i+1]] || 0; t0 += a < b ? -a : a; } return t0; };
+const soTuNhien = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare;
+
+// ---- Nhóm Opus ----
+// Module Supabase nạp bảng tags rồi gọi datNhomOpus(). Suite nhận ra bằng TÊN
+// ("Suite IV · Scherzo"), không bằng slug: nhóm tạo từ form có slug kiểu
+// "suite-iv-scherzo", không theo khuôn opus-suite-N.
+// Số "Op." là vị trí trong các nhóm KHÔNG phải suite — thêm một thể mới xen giữa
+// thì số của các thể sau nó dời theo.
+let NHOM = [];
+window.datNhomOpus = function (tags) {
+  let op = 0, duPhong = 0;
+  NHOM = (tags || []).map(t0 => {
+    const m = /^Suite\s+([IVXLC]+)\s*·\s*(.+)$/.exec(t0.name || '');
+    const mVi = /·\s*(.+)$/.exec(t0.name_vi || '');
+    return { id: t0.id, slug: t0.slug, name: t0.name, name_vi: t0.name_vi || '', mo_ta: t0.mo_ta || '',
+      mo_ta_vi: t0.mo_ta_vi || '', thu_tu: t0.thu_tu, suite: !!m, num: m ? m[1] : null,
+      ngan: m ? m[2] : t0.name,
+      nganVi: m ? (mVi ? mVi[1] : m[2]) : (t0.name_vi || t0.name) };
+  }).sort((a, b) => (a.thu_tu - b.thu_tu)
+      || (a.suite && b.suite ? GIA_TRI_LA_MA(a.num) - GIA_TRI_LA_MA(b.num) : soTuNhien(a.name, b.name)));
+  NHOM.forEach(g => {
+    if (!g.suite) g.num = String(++op);
+    g.icon = ICON_NHOM[g.slug] || ICON_DU_PHONG[duPhong++ % ICON_DU_PHONG.length];
+  });
+  window.opusNhom = NHOM;
+};
+const nhomCua = w => (w.groupSlug && NHOM.find(g => g.slug === w.groupSlug)) || null;
+const laVi = () => currentLang === 'vi';
+function nhanNhom(g)    { return g ? (g.suite ? t('dt_suite') + ' ' + g.num : 'Op. ' + g.num) : t('dt_overture'); }
+function tenNganNhom(g) { return g ? (laVi() ? g.nganVi : g.ngan) : t('dt_no_opus'); }
+function tenDuNhom(g)   { return g ? nhanNhom(g) + ' · ' + tenNganNhom(g) : t('dt_overture_long'); }
+
+// Icon trên bìa. Riêng nhóm Concerto: nhận nhạc cụ trong tên truyện (4 nhạc cụ
+// chủ repo chốt), vì cùng một nhóm có cả piano, violin, viola, cello concerto.
+// Viola phải xét TRƯỚC violin. Mọi nhóm khác lấy icon của nhóm.
+function iconCua(w) {
+  const g = nhomCua(w);
+  if (g && g.slug === 'opus-concerto') {
+    const ten = (w.title || '').toLowerCase();
+    if (/\bviola\b/.test(ten))  return 'viola';
+    if (/\bviolin\b/.test(ten)) return 'violin';
+    if (/\bcello\b/.test(ten))  return 'cello';
+    if (/\bpiano\b/.test(ten))  return 'grand-piano';
+  }
+  return g ? g.icon : 'g-clef';
+}
+
+// ---- Tiện ích dựng DOM ----
+const SVGNS = 'http://www.w3.org/2000/svg';
+function dtEl(tag, props, ...con) {
+  const el = document.createElement(tag);
+  if (props) Object.entries(props).forEach(([k, v]) => {
+    if (v === null || v === undefined || v === false) return;
+    if (k === 'class') el.className = v;
+    else if (k === 'style' && typeof v === 'object') Object.entries(v).forEach(([p, gt]) => el.style.setProperty(p, gt));
+    else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+    else el.setAttribute(k, v === true ? '' : v);
+  });
+  con.flat(Infinity).forEach(c => {
+    if (c === null || c === undefined || c === false) return;
+    el.append(c instanceof Node ? c : document.createTextNode(String(c)));
+  });
+  return el;
+}
+function dtIcon(ten) {
+  const s = document.createElementNS(SVGNS, 'svg');
+  s.setAttribute('class', 'dt-ic'); s.setAttribute('aria-hidden', 'true'); s.setAttribute('focusable', 'false');
+  const u = document.createElementNS(SVGNS, 'use'); u.setAttribute('href', '#ic-' + ten);
+  s.append(u);
+  return s;
+}
+// Tóm tắt / phụ đề có thể chứa HTML do chủ repo viết (<em>, <br>). Bóc ra chữ
+// trơn bằng DOMParser — không chạy script, không tải ảnh như gán innerHTML.
+function chuTron(s) {
+  if (!s || !/[<&]/.test(s)) return (s || '').trim();
+  return (new DOMParser().parseFromString(String(s), 'text/html').body.textContent || '').replace(/\s+/g, ' ').trim();
+}
+const catNgan = (s, n) => s.length > n ? s.slice(0, n - 2).replace(/\s+\S*$/, '') + '…' : s;
+const dtSo = n => Number(n).toLocaleString(laVi() ? 'vi-VN' : 'en-US');
+const dtNgay = d => { if (!d) return ''; const x = new Date(d); if (isNaN(x)) return '';
+  return laVi() ? x.toLocaleDateString('vi-VN') : x.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); };
+const laDienThoai = () => window.matchMedia('(max-width:768px)').matches;
+const doDai = w => w.words == null ? null : w.words < 2000 ? 'Miniature' : w.words <= 5000 ? 'Chamber' : 'Symphonic';
+const soChuong = n => n + ' ' + (n === 1 ? t('dt_mv1') : t('dt_mvn'));
+const nhacText = w => (w.music || []).length > 2
+  ? w.music.slice(0, 2).join(' / ') + ' (+' + (w.music.length - 2) + ')' : (w.music || []).join(' / ');
+const theoMoiNhat = (a, b) => {
+  const x = a.date ? new Date(a.date).getTime() : 0, y = b.date ? new Date(b.date).getTime() : 0;
+  return (y - x) || (b.idx - a.idx);
+};
+function mauBia(w) {
+  const nen = MAU_BIA[w.fandom] || '#2A2522', kem = nen === BIA_KEM;
+  // #7A5F14 thay cho #836717 của bản thiết kế: #836717 trên nền kem chỉ đạt 4.35.
+  return { '--sleeve': nen, '--s-ink': kem ? '#7A5F14' : '#D4B86A',
+    '--s-ink2': kem ? '#5C4F3A' : 'rgba(232,223,200,.72)',
+    '--s-frame': kem ? 'rgba(131,103,23,.55)' : 'rgba(212,184,106,.55)' };
+}
+
+// ---- Bìa đĩa ----
+function dtBia(w) {
+  const g = nhomCua(w);
+  const s = dtEl('div', { class: 'dt-sl', style: mauBia(w) });
+  const ve = () => s.prepend(dtEl('span', { class: 'dt-sl-lab' }, nhanNhom(g)), dtIcon(iconCua(w)),
+                             dtEl('span', { class: 'dt-sl-name' }, tenNganNhom(g)));
+  // Có ảnh bìa riêng thì ảnh phủ kín ô vuông thay cho phần vẽ; ảnh hỏng thì lùi
+  // về vẽ. Chỉ nhận http(s), giống oBia().
+  const url = String(w.cover || '').trim();
+  if (/^https?:\/\//i.test(url)) {
+    const img = dtEl('img', { src: url, alt: '', loading: 'lazy' });
+    img.addEventListener('error', () => { img.remove(); ve(); });
+    s.append(img);
+  } else ve();
+  if (w.restricted) s.append(dtEl('span', { class: 'dt-sl-lock' }, t('only_member')));
+  return s;
+}
+function dtThe(w, chon, coDongNho) {
+  return dtEl('button', { type: 'button', class: 'dt-card', 'aria-pressed': 'false', 'data-idx': w.idx,
+      onclick: e => chon(w, e.currentTarget) },
+    dtEl('div', { class: 'dt-slw' }, dtEl('div', { class: 'dt-rec', 'aria-hidden': 'true' }), dtBia(w)),
+    dtEl('div', { class: 'dt-card-meta' },
+      dtEl('div', { class: 'dt-title' }, w.title),
+      w.subtitle ? dtEl('div', { class: 'dt-sub' }, chuTron(w.subtitle)) : null,
+      coDongNho ? dtEl('div', { class: 'dt-card-small' },
+        [w.fandom === 'Others' ? '' : w.fandom, w.words != null ? dtSo(w.words) + ' ' + t('dt_words') : '']
+          .filter(Boolean).join(' · ')) : null));
+}
+function danhDauChon(khung, idx) {
+  khung.querySelectorAll('.dt-card').forEach(c => {
+    const on = Number(c.dataset.idx) === idx;
+    c.classList.toggle('dt-on', on);
+    c.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+}
+
+// ---- Liner notes ----
+function dtMoTruyen(idx) { dongBangTruot(true); openFic(idx); }
+function nutLuu(w) {
+  if (!w.uuid) return null;   // bản dự phòng fics.json không có id thật để lưu
+  const b = dtEl('button', { type: 'button', class: 'dt-bm', 'aria-label': t('dt_bookmark'), title: t('dt_bookmark'),
+    'aria-pressed': (window.skDaLuu && window.skDaLuu.has(w.uuid)) ? 'true' : 'false', 'data-uuid': w.uuid,
+    onclick: e => { if (window.dtLuuTruyen) window.dtLuuTruyen(w, e.currentTarget); } }, '✦');
+  return b;
+}
+// Module gọi hàm này khi danh sách "đã lưu" đổi (đăng nhập/xuất, vừa lưu ở trang đọc).
+window.dtVeLaiNutLuu = function () {
+  document.querySelectorAll('.dt-bm[data-uuid]').forEach(b =>
+    b.setAttribute('aria-pressed', (window.skDaLuu && window.skDaLuu.has(b.dataset.uuid)) ? 'true' : 'false'));
+};
+function dtLiner(w, co) {
+  const g = nhomCua(w);
+  const tt = dtEl('div', { class: 'dt-tt', 'aria-hidden': 'true', style: { '--tt-s': co + 'px' } },
+    dtEl('div', { class: 'dt-tt-rec' }), dtBia(w));
+  const tom = catNgan(chuTron(w.summary), 260);
+  return dtEl('div', { class: 'dt-liner' },
+    tt,
+    dtEl('div', null, dtEl('h2', null, w.title), w.subtitle ? dtEl('div', { class: 'dt-sub big' }, chuTron(w.subtitle)) : null),
+    tom ? dtEl('blockquote', null, tom) : null,
+    dtEl('dl', null,
+      dtEl('dt', null, t('dt_form')), dtEl('dd', null, tenDuNhom(g)),
+      dtEl('dt', null, t('fandom')), dtEl('dd', null, fandomLabel(w.fandom)),
+      (w.ships || []).filter(s => s !== 'Others').length
+        ? [dtEl('dt', null, t('dt_pairing')), dtEl('dd', null, w.ships.filter(s => s !== 'Others').join(', '))] : null,
+      (w.words != null || w.nch) ? [dtEl('dt', null, t('dt_length')), dtEl('dd', null,
+        [w.words != null ? dtSo(w.words) + ' ' + t('dt_words') : '', w.nch ? soChuong(w.nch) : ''].filter(Boolean).join(' · '))] : null,
+      w.lang ? [dtEl('dt', null, t('dt_language')), dtEl('dd', null, w.lang === 'vi' ? 'Tiếng Việt' : 'English')] : null,
+      (w.music || []).length ? [dtEl('dt', null, t('dt_played')), dtEl('dd', { class: 'music' }, nhacText(w))] : null),
+    dtEl('div', { class: 'dt-flags' },
+      w.restricted ? dtEl('span', { class: 'dt-flag lock' }, t('only_member')) : null,
+      w.warning ? dtEl('span', { class: 'dt-flag warn', title: w.warning }, t('dt_cw')) : null,
+      w.kudos > 0 ? dtEl('span', { class: 'dt-flag' }, '♥ ' + w.kudos + ' kudos') : null),
+    dtEl('div', { class: 'dt-liner-btns' },
+      dtEl('button', { type: 'button', class: 'dt-btn', onclick: () => dtMoTruyen(w.idx) },
+        co > 200 ? t('dt_play_first') : t('dt_play')),
+      nutLuu(w)));
+}
+
+// ---- Bảng trượt (điện thoại) ----
+let bangTruotVe = null;
+function moBangTruot(w, tu) {
+  const sheet = document.getElementById('dt-sheet');
+  bangTruotVe = tu || document.activeElement;
+  const than = document.getElementById('dt-sheet-body');
+  than.textContent = '';
+  than.append(dtLiner(w, 150));
+  document.getElementById('dt-sheet-x').setAttribute('aria-label', t('dt_close'));
+  sheet.classList.add('on');
+  document.getElementById('dt-scrim').classList.add('on');
+  document.body.style.overflow = 'hidden';
+  sheet.scrollTop = 0;
+  setTimeout(() => sheet.focus(), 30);
+}
+// khongTraFocus: khi đóng để mở truyện thì đừng kéo focus về bìa (trang đã đổi).
+function dongBangTruot(khongTraFocus) {
+  const sheet = document.getElementById('dt-sheet');
+  if (!sheet || !sheet.classList.contains('on')) return;
+  sheet.classList.remove('on');
+  document.getElementById('dt-scrim').classList.remove('on');
+  document.body.style.overflow = '';
+  if (!khongTraFocus && bangTruotVe && bangTruotVe.focus) bangTruotVe.focus();
+  bangTruotVe = null;
+}
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('dt-scrim').addEventListener('click', () => dongBangTruot());
+  document.getElementById('dt-sheet-x').addEventListener('click', () => dongBangTruot());
+});
+document.addEventListener('keydown', e => {
+  const sheet = document.getElementById('dt-sheet');
+  if (!sheet || !sheet.classList.contains('on')) return;
+  if (e.key === 'Escape') { e.preventDefault(); dongBangTruot(); return; }
+  if (e.key === 'Tab') {   // giữ focus trong bảng khi đang mở
+    const ds = [...sheet.querySelectorAll('button,[href],input')].filter(x => x.offsetParent !== null);
+    if (!ds.length) return;
+    const dau = ds[0], cuoi = ds[ds.length - 1];
+    if (e.shiftKey && (document.activeElement === dau || document.activeElement === sheet)) { e.preventDefault(); cuoi.focus(); }
+    else if (!e.shiftKey && document.activeElement === cuoi) { e.preventDefault(); dau.focus(); }
+  }
+});
+
+// =============================================
+// HOME — "Tonight's programme"
+// =============================================
+let homeChon = null;   // idx đang nằm trên khung liner notes của New arrivals
+
+function theDocDo() {
+  // Đọc dở: sk-continue do saveReadingProgress() ghi. Quá 30 ngày thì thôi.
+  let d = null;
+  try { d = JSON.parse(localStorage.getItem('sk-continue') || 'null'); } catch (_) {}
+  if (!d || Date.now() - d.timestamp > 30 * 24 * 60 * 60 * 1000) return null;
+  const w = worksData.find(x => x.idx === d.ficIdx);
+  if (!w) return null;
+  const ch = (d.chapter || 0) + 1;
+  const nhan = w.nch
+    ? t('dt_mv_of').replace('{a}', LA_MA(ch)).replace('{b}', LA_MA(w.nch))
+    : t('dt_mv_one').replace('{a}', LA_MA(ch));
+  const bia = dtEl('span', { class: 's' });
+  const url = String(w.cover || '').trim();
+  if (/^https?:\/\//i.test(url)) bia.append(dtEl('img', { src: url, alt: '' })); else bia.append(dtIcon(iconCua(w)));
+  return dtEl('button', { type: 'button', class: 'dt-cont', style: mauBia(w), onclick: () => resumeReading() },
+    dtEl('span', { class: 'dt-cont-art', 'aria-hidden': 'true' }, dtEl('span', { class: 'r' }), bia),
+    dtEl('span', { class: 'dt-cont-txt' },
+      dtEl('span', { class: 'dt-eyebrow' }, t('dt_paused') + ' · ' + nhan),
+      dtEl('span', { class: 'dt-title' }, w.title),
+      w.subtitle ? dtEl('span', { class: 'dt-sub' }, chuTron(w.subtitle)) : null,
+      w.nch ? dtEl('span', { class: 'dt-bar', 'aria-hidden': 'true' },
+        dtEl('i', { style: { width: Math.min(100, Math.round(ch / w.nch * 100)) + '%' } })) : null),
+    dtEl('span', { class: 'dt-cont-play', 'aria-hidden': 'true' }, '▶'));
 }
 
 function renderHome() {
-  // Latest: 4 fic mới nhất theo ngày đăng
-  const latest = [...worksData]
-    .sort((a, b) => new Date(b.date) - new Date(a.date))
-    .slice(0, 4);
-  // Favorites: fic có featured, giữ nguyên thứ tự danh sách
-  const favorites = worksData.filter(d => d.featured);
+  const goc = document.getElementById('dt-home');
+  if (!goc) return;
+  const moi = [...worksData].sort(theoMoiNhat).slice(0, 6);
+  const thich = worksData.filter(w => w.featured);
+  if (!moi.some(w => w.idx === homeChon) && !thich.some(w => w.idx === homeChon)) homeChon = moi[0] ? moi[0].idx : null;
 
-  fill(document.getElementById('home-latest'), latest);
-  fill(document.getElementById('home-favorites'), favorites);
-  homeTomTat('latest', latest);
-  homeTomTat('fav', favorites);
+  const khungLiner = dtEl('div', { class: 'dt-home-liner', 'aria-live': 'polite' });
+  const veLiner = () => {
+    khungLiner.textContent = '';
+    const w = worksData.find(x => x.idx === homeChon);
+    if (!w) return;
+    const tom = catNgan(chuTron(w.summary), 260);
+    khungLiner.append(
+      dtEl('div', { class: 'dt-eyebrow' }, [tenDuNhom(nhomCua(w)), dtNgay(w.date)].filter(Boolean).join('  ·  ')),
+      dtEl('div', { class: 'dt-title' }, w.title),
+      w.subtitle ? dtEl('div', { class: 'dt-sub' }, chuTron(w.subtitle)) : null,
+      tom ? dtEl('p', null, tom) : null,
+      dtEl('div', { class: 'small' }, [fandomLabel(w.fandom), w.words != null ? dtSo(w.words) + ' ' + t('dt_words') : '',
+        w.nch ? soChuong(w.nch) : ''].filter(Boolean).join('  ·  ')),
+      (w.music || []).length ? dtEl('div', { class: 'music' }, dtEl('b', null, t('dt_played')), dtEl('em', null, nhacText(w))) : null,
+      dtEl('button', { type: 'button', class: 'dt-btn', onclick: () => dtMoTruyen(w.idx) }, t('dt_play')));
+  };
+  const keMoi = dtEl('div', { class: 'dt-grid3' });
+  const keThich = dtEl('div', { class: 'dt-grid4' });
+  const chon = (w, el) => {
+    homeChon = w.idx; danhDauChon(keMoi, w.idx); danhDauChon(keThich, w.idx); veLiner();
+    if (laDienThoai()) moBangTruot(w, el);
+    else if (el && keThich.contains(el)) khungLiner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+  moi.forEach(w => keMoi.append(dtThe(w, chon, false)));
+  thich.forEach(w => keThich.append(dtThe(w, chon, false)));
+  danhDauChon(keMoi, homeChon); danhDauChon(keThich, homeChon); veLiner();
+
+  const docDo = theDocDo();
+  const denWorks = () => showPage('works', document.querySelector('.nav-links a[data-page="works"]'));
+  const denOpus  = slug => { if (slug) window.opusChon = slug; showPage('opus', document.querySelector('.nav-links a[data-page="opus"]')); };
+
+  goc.textContent = '';
+  goc.append(dtEl('main', { class: 'dt-main' },
+    dtEl('section', { class: 'dt-hero dt-px' + (docDo ? '' : ' dt-mot-cot') },
+      dtEl('div', { class: 'dt-hero-left' },
+        dtEl('div', { class: 'dt-eyebrow' }, t('dt_programme')),
+        dtEl('h1', null, 'ShostaKid'),
+        // Giữ nguyên chữ "$" — chơi chữ có chủ ý.
+        dtEl('p', null, t('hero_sub') + '.', dtEl('br'), t('hero_tag') + '.'),
+        dtEl('div', { class: 'dt-hero-btns' },
+          dtEl('button', { type: 'button', class: 'dt-btn', onclick: denWorks }, t('dt_browse')),
+          dtEl('button', { type: 'button', class: 'dt-btn-line', onclick: () => denOpus() }, t('dt_open_opus')))),
+      docDo ? dtEl('div', { class: 'dt-hero-right' }, dtEl('div', { class: 'dt-eyebrow' }, t('dt_left_off')), docDo) : null),
+    moi.length ? dtEl('section', { class: 'dt-sec dt-px' },
+      dtEl('div', { class: 'dt-sec-head' }, dtEl('div', null, dtEl('div', { class: 'dt-eyebrow' }, t('dt_latest')), dtEl('h2', null, t('dt_new_arrivals')))),
+      dtEl('div', { class: 'dt-shelf2' }, keMoi, khungLiner)) : null,
+    thich.length ? dtEl('section', { class: 'dt-sec dt-px' },
+      dtEl('div', { class: 'dt-sec-head' },
+        dtEl('div', null, dtEl('div', { class: 'dt-eyebrow' }, t('dt_chosen')), dtEl('h2', null, t('head_fav'))),
+        dtEl('button', { type: 'button', class: 'dt-link-btn dt-desk', onclick: denWorks }, t('view_all'))),
+      keThich) : null,
+    dtEl('button', { type: 'button', class: 'dt-btn-line dt-view-all', onclick: denWorks }, t('view_all')),
+    NHOM.length ? dtEl('section', { class: 'dt-sec' },
+      dtEl('div', { class: 'dt-sec-head dt-px' }, dtEl('div', null, dtEl('div', { class: 'dt-eyebrow' }, 'Opus'), dtEl('h2', null, t('dt_by_form')))),
+      dtEl('div', { class: 'dt-forms' }, NHOM.map(g => dtEl('button', { type: 'button', class: 'dt-form-tile', onclick: () => denOpus(g.slug) },
+        dtIcon(g.icon), dtEl('span', { class: 'lab' }, nhanNhom(g)), dtEl('span', { class: 'nm' }, tenNganNhom(g)))))) : null));
 }
 
-// Số lượng + tên truyện đầu tiên, hiện trên đầu thẻ gập lúc nó đang đóng.
-// Chỉ có tên truyện nên không cần dịch, applyLang() không phải đụng tới.
-function homeTomTat(khoa, list) {
-  const so = document.getElementById('home-' + khoa + '-so');
-  if (so) so.textContent = list.length ? '(' + list.length + ')' : '';
-  const mo = document.getElementById('home-' + khoa + '-mo');
-  if (mo) mo.textContent = list.length ? list[0].title : '';
-}
+// =============================================
+// WORKS — kệ đĩa
+// =============================================
+// Thứ tự: 'new' (mới nhất) hoặc 'long' (dài nhất), nhớ ở localStorage. Giá trị
+// 'old' của bản cũ không còn — gặp thì coi như 'new'.
+const WS = { fandom: 'all', len: 'all', sort: 'new', ships: new Set(), q: '', xemHet: false, chon: null };
+try { const s0 = localStorage.getItem('sk-sort'); if (s0 === 'long') WS.sort = 'long'; } catch (e) {}
 
-function toggleHomeCol(khoa) {
-  const col = document.getElementById('home-col-' + khoa);
-  if (!col) return;
-  const dangMo = col.classList.toggle('mo');
-  col.querySelector('.home-dau')?.setAttribute('aria-expanded', dangMo ? 'true' : 'false');
-}
-
-// Thứ tự trang Works. Mặc định mới nhất trước — trước đây xếp theo số thứ tự fic
-// nên truyện từ tháng 4 nằm trên cùng, trông cũ. Lựa chọn nhớ ở localStorage.
-let worksSort = 'new';
-try { worksSort = localStorage.getItem('sk-sort') || 'new'; } catch (e) {}
-
-function sortedWorks() {
-  const ds = [...worksData];
-  // Không có ngày thì lùi về số thứ tự fic, để truyện thiếu published_at không trôi lung tung.
-  const key = d => d.date ? new Date(d.date).getTime() : d.idx;
-  ds.sort((a, b) => worksSort === 'new' ? key(b) - key(a) : key(a) - key(b));
-  return ds;
-}
-
-function paintSortBtn() {
-  const b = document.getElementById('sort-btn');
-  if (!b) return;
-  const k = worksSort === 'new' ? 'sort_new' : 'sort_old';
-  b.dataset.i18n = k;
-  b.textContent = t(k);
-}
-
-function toggleSort() {
-  worksSort = worksSort === 'new' ? 'old' : 'new';
-  try { localStorage.setItem('sk-sort', worksSort); } catch (e) {}
-  paintSortBtn();
-  renderWorks();
-  buildSidebar();     // sidebar quét DOM thẻ nên phải dựng lại sau khi đổi thứ tự
-  applyFilters();     // giữ nguyên bộ lọc đang bật
+function locWorks() {
+  const q = WS.q.trim().toLowerCase();
+  return worksData.filter(w =>
+      (WS.fandom === 'all' || w.fandom === WS.fandom)
+      && (WS.len === 'all' || doDai(w) === WS.len)
+      && (!q || (w.title + ' ' + chuTron(w.subtitle)).toLowerCase().includes(q))
+      && [...WS.ships].every(s => (w.ships || []).includes(s)))
+    .sort(WS.sort === 'long' ? ((a, b) => (b.words || 0) - (a.words || 0) || theoMoiNhat(a, b)) : theoMoiNhat);
 }
 
 function renderWorks() {
-  fill(document.getElementById('works-grid'), sortedWorks());
-  paintSortBtn();
-  const statEl = document.getElementById('stat-works');
-  if (statEl) statEl.textContent = worksData.length;
+  const goc = document.getElementById('dt-works');
+  if (!goc) return;
+  const fandoms = ['all', ...Object.keys(MAU_BIA).filter(f => worksData.some(w => w.fandom === f)),
+                   ...[...new Set(worksData.map(w => w.fandom))].filter(f => !(f in MAU_BIA))];
+  const aside = dtEl('aside', { class: 'dt-aside', 'aria-live': 'polite', 'aria-label': t('dt_on_tt') });
+  const ke = dtEl('section', { class: 'dt-shelf', 'aria-label': t('dt_works_h1') });
+  const boLoc = dtEl('div', { class: 'dt-filters' });
+  const chip = (nhan, bat, fn, so) => dtEl('button', { type: 'button', class: 'dt-chip', 'aria-pressed': bat ? 'true' : 'false', onclick: fn },
+    nhan, so !== undefined ? dtEl('small', null, so) : null);
+
+  const veAside = ds => {
+    aside.textContent = '';
+    const w = ds.find(x => x.idx === WS.chon);
+    if (w) aside.append(dtEl('div', { class: 'dt-eyebrow', style: { 'margin-bottom': '22px' } }, t('dt_on_tt')), dtLiner(w, 230));
+  };
+  const veKe = () => {
+    const ds = locWorks();
+    if (!ds.some(w => w.idx === WS.chon)) WS.chon = ds[0] ? ds[0].idx : null;
+    const gioiHan = laDienThoai() ? 10 : 12;
+    const hien = WS.xemHet ? ds : ds.slice(0, gioiHan);
+    ke.textContent = '';
+    ke.append(dtEl('div', { class: 'dt-eyebrow' }, t('dt_on_shelf').replace('{n}', ds.length) + (laDienThoai() ? ' · ' + t('dt_tap') : '')));
+    if (!ds.length) ke.append(dtEl('p', { class: 'dt-empty' }, t('no_results')));
+    const luoi = dtEl('div', { class: 'dt-grid-shelf' });
+    const chon = (w, el) => { WS.chon = w.idx; danhDauChon(luoi, w.idx); veAside(ds); if (laDienThoai()) moBangTruot(w, el); };
+    hien.forEach(w => luoi.append(dtThe(w, chon, true)));
+    danhDauChon(luoi, WS.chon);
+    ke.append(luoi);
+    if (!WS.xemHet && ds.length > gioiHan)
+      ke.append(dtEl('button', { type: 'button', class: 'dt-btn-line dt-more', onclick: () => { WS.xemHet = true; veKe(); } },
+        t('dt_show_all').replace('{n}', ds.length)));
+    veAside(ds);
+  };
+  const veBoLoc = () => {
+    // Giữ vị trí cuộn ngang của các dải chip (điện thoại) khi vẽ lại.
+    const cuon = [...boLoc.querySelectorAll('.dt-f-row')].map(r => r.scrollLeft);
+    boLoc.textContent = '';
+    const tim = dtEl('input', { id: 'dt-q', class: 'dt-search', type: 'search', placeholder: t('search_ph'), 'aria-label': t('search_ph'),
+      oninput: e => { WS.q = e.target.value; WS.xemHet = false; veKe(); } });
+    tim.value = WS.q;
+    const ships = WS.fandom === 'all' ? []
+      : [...new Set(worksData.filter(w => w.fandom === WS.fandom).flatMap(w => w.ships || []))].filter(s => s !== 'Others').sort(soTuNhien);
+    const daiNgan = laDienThoai();
+    boLoc.append(
+      dtEl('div', { class: 'dt-f-row' }, dtEl('label', { class: 'dt-f-lab', for: 'dt-q' }, t('dt_search')), tim),
+      dtEl('div', { class: 'dt-f-row' }, dtEl('div', { class: 'dt-f-lab' }, t('fandom')),
+        dtEl('div', { class: 'dt-chips' }, fandoms.map(f => chip(f === 'all' ? t('all') : f, WS.fandom === f,
+          () => { WS.fandom = f; WS.ships.clear(); WS.xemHet = false; ve(); },
+          f === 'all' ? worksData.length : worksData.filter(w => w.fandom === f).length)))),
+      // Lọc theo ship: bản thiết kế không vẽ nhưng dặn giữ. Chỉ hiện sau khi đã
+      // chọn fandom, để hàng chip không dài bất tận.
+      ships.length ? dtEl('div', { class: 'dt-f-row' }, dtEl('div', { class: 'dt-f-lab' }, t('dt_pairing')),
+        dtEl('div', { class: 'dt-chips' }, ships.map(s => chip(s, WS.ships.has(s),
+          () => { WS.ships.has(s) ? WS.ships.delete(s) : WS.ships.add(s); WS.xemHet = false; ve(); })))) : null,
+      dtEl('div', { class: 'dt-f-row len' }, dtEl('div', { class: 'dt-f-lab' }, t('dt_length')),
+        dtEl('div', { class: 'dt-chips' }, [['all', 'dt_any_len'], ['Miniature', daiNgan ? 'dt_mini' : 'dt_mini_l'],
+          ['Chamber', daiNgan ? 'dt_chamber' : 'dt_chamber_l'], ['Symphonic', daiNgan ? 'dt_symph' : 'dt_symph_l']]
+          .map(([k, nhan]) => chip(t(nhan), WS.len === k, () => { WS.len = k; WS.xemHet = false; ve(); }))),
+        dtEl('div', { class: 'dt-order' }, dtEl('span', { class: 'dt-f-lab', style: { 'margin-right': '6px' } }, t('dt_order')),
+          chip(t('dt_newest'), WS.sort === 'new', () => doiThuTu('new')),
+          chip(t('dt_longest'), WS.sort === 'long', () => doiThuTu('long')))));
+    [...boLoc.querySelectorAll('.dt-f-row')].forEach((r, i) => { r.scrollLeft = cuon[i] || 0; });
+  };
+  const doiThuTu = k => { WS.sort = k; try { localStorage.setItem('sk-sort', k); } catch (e) {} ve(); };
+  function ve() { veBoLoc(); veKe(); }
+  ve();
+
+  goc.textContent = '';
+  goc.append(dtEl('main', { class: 'dt-main' },
+    dtEl('header', { class: 'dt-w-head dt-px' },
+      dtEl('div', null, dtEl('div', { class: 'dt-eyebrow' }, t('dt_shelf_of').replace('{n}', worksData.length)),
+        dtEl('h1', null, t('dt_works_h1'))),
+      dtEl('p', null, t('dt_shelf_intro'))),
+    boLoc,
+    dtEl('div', { class: 'dt-w-body' }, ke, aside)));
 }
 
-// Vẽ lại toàn bộ phần danh sách. buildSidebar() và applyFilters() vẫn đọc DOM
-// y như cũ, nên đổi nguồn dữ liệu không phải sửa gì trong bộ lọc/tìm kiếm.
+// =============================================
+// OPUS — bàn xoay
+// =============================================
+const KIM = -35;                       // góc kim đọc, độ
+const OPUS = { chon: 0, rot: KIM };
+// Xoay tới thể i theo đường NGẮN NHẤT từ góc hiện tại; rot tích luỹ, không reset.
+function xoayToi(i) {
+  const buoc = 360 / NHOM.length;
+  const dich = KIM - i * buoc;
+  const d = ((((dich - OPUS.rot) % 360) + 540) % 360) - 180;
+  OPUS.rot += d; OPUS.chon = i;
+}
+let opusVe = null;   // hàm vẽ lại phần phụ thuộc lựa chọn của lần dựng gần nhất
+
+function renderOpus() {
+  const goc = document.getElementById('dt-opus');
+  if (!goc) return;
+  goc.textContent = '';
+  if (!NHOM.length) return;            // chưa nạp được bảng tags (DB ngủ)
+  if (window.opusChon) {
+    const i = NHOM.findIndex(g => g.slug === window.opusChon);
+    if (i >= 0) xoayToi(i);
+    window.opusChon = null;
+  }
+  if (OPUS.chon >= NHOM.length) { OPUS.chon = 0; OPUS.rot = KIM; }
+  const buoc = 360 / NHOM.length;
+
+  const rotor = dtEl('div', { class: 'dt-rotor' });
+  const oTrenDia = NHOM.map((g, i) => {
+    const b = dtEl('button', { type: 'button', 'aria-label': nhanNhom(g) + ', ' + tenNganNhom(g), 'aria-pressed': 'false',
+      onclick: () => { xoayToi(i); opusVe(); } }, dtIcon(g.icon));
+    const o = dtEl('div', { class: 'dt-slot' }, b);
+    rotor.append(o);
+    return o;
+  });
+  const nhanGiua = dtEl('div', { class: 'dt-label' });
+  // Kim đọc tô bằng biến CSS qua thuộc tính style (thuộc tính fill= của SVG không
+  // nhận var()), nên đổi theme là màu tự đổi — không cần dựng lại.
+  const kim = document.createElementNS(SVGNS, 'svg');
+  [['class', 'dt-tonearm'], ['width', '640'], ['height', '600'], ['viewBox', '0 0 640 600'], ['aria-hidden', 'true']]
+    .forEach(([k, v]) => kim.setAttribute(k, v));
+  [['circle', { cx: 596, cy: 52, r: 30, style: 'fill:var(--cream2);stroke:var(--gold);stroke-width:2' }],
+   ['circle', { cx: 596, cy: 52, r: 9, style: 'fill:var(--gold)' }],
+   ['path', { d: 'M596 52 L626 20', style: 'stroke:var(--gold-dark);stroke-width:10;stroke-linecap:round' }],
+   ['path', { d: 'M596 52 L560 140 L505 158', style: 'fill:none;stroke:var(--gold-dark);stroke-width:6;stroke-linecap:round;stroke-linejoin:round' }],
+   ['rect', { x: 478, y: 146, width: 34, height: 20, rx: 3, style: 'fill:var(--gold)', transform: 'rotate(-18 495 156)' }]]
+    .forEach(([tag, at]) => { const e = document.createElementNS(SVGNS, tag); Object.entries(at).forEach(([k, v]) => e.setAttribute(k, v)); kim.append(e); });
+  const hop = dtEl('div', { class: 'dt-tt-box' }, dtEl('div', { class: 'dt-tt-scale' }, dtEl('div', { class: 'dt-platter' }, rotor, nhanGiua), kim));
+
+  const truoc = dtEl('button', { type: 'button', onclick: () => { xoayToi((OPUS.chon - 1 + NHOM.length) % NHOM.length); opusVe(); } });
+  const sau   = dtEl('button', { type: 'button', onclick: () => { xoayToi((OPUS.chon + 1) % NHOM.length); opusVe(); } });
+  const nhanM = dtEl('div', { class: 'dt-eyebrow' });
+  const dieuHuongM = dtEl('div', { class: 'dt-o-nav-m' },
+    dtEl('button', { type: 'button', 'aria-label': t('dt_prev'), onclick: () => truoc.click() }, '↺'), nhanM,
+    dtEl('button', { type: 'button', 'aria-label': t('dt_next'), onclick: () => sau.click() }, '↻'));
+  const ds = dtEl('section', { class: 'dt-o-list', 'aria-live': 'polite' });
+
+  opusVe = () => {
+    const g = NHOM[OPUS.chon];
+    oTrenDia.forEach((o, i) => {
+      const a = i * buoc;
+      o.style.transform = 'rotate(' + a + 'deg) translate(236px) rotate(' + (-(a + OPUS.rot)) + 'deg)';   // icon luôn đứng thẳng
+      o.firstChild.setAttribute('aria-pressed', i === OPUS.chon ? 'true' : 'false');
+    });
+    rotor.style.transform = 'rotate(' + OPUS.rot + 'deg)';
+    nhanGiua.textContent = '';
+    nhanGiua.append(dtIcon(g.icon), dtEl('div', { class: 'dt-eyebrow' }, nhanNhom(g)), dtEl('div', { class: 'nm' }, tenNganNhom(g)), dtEl('div', { class: 'dot' }));
+    const p = NHOM[(OPUS.chon - 1 + NHOM.length) % NHOM.length], n = NHOM[(OPUS.chon + 1) % NHOM.length];
+    truoc.textContent = ''; truoc.append(dtEl('span', { class: 'dt-eyebrow' }, '↺ ' + t('dt_prev')), dtEl('span', { class: 'nm' }, tenDuNhom(p)));
+    sau.textContent = '';   sau.append(dtEl('span', { class: 'dt-eyebrow' }, t('dt_next') + ' ↻'), dtEl('span', { class: 'nm' }, tenDuNhom(n)));
+    nhanM.textContent = nhanNhom(g);
+
+    const truyen = worksData.filter(w => w.groupSlug === g.slug).sort((a, b) => soTuNhien(a.title, b.title));
+    const soKhoa = truyen.filter(w => w.restricted).length, soCanh = truyen.filter(w => w.warning).length;
+    const manh = [truyen.length + ' ' + (truyen.length === 1 ? t('dt_work1') : t('dt_workn'))];
+    if (soKhoa) manh.push(t('dt_locked_n').replace('{n}', soKhoa));
+    if (soCanh) manh.push(t('dt_warn_n').replace('{n}', soCanh));
+    const moTa = laVi() ? (g.mo_ta_vi || g.mo_ta) : g.mo_ta;
+    ds.textContent = '';
+    ds.append(
+      dtEl('div', null,
+        dtEl('div', { class: 'dt-eyebrow' }, (g.suite ? '' : 'Op. ' + g.num + '  ·  ') + manh.join('  ·  ')),
+        // Riêng tổ khúc: tiêu đề đầy đủ "Suite I · Danse Macabre".
+        dtEl('h2', null, g.suite ? tenDuNhom(g) : tenNganNhom(g)),
+        moTa ? dtEl('p', { class: 'desc' }, moTa) : null),
+      truyen.length
+        ? dtEl('ol', null, truyen.map((w, k) => {
+            const meta = [w.fandom === 'Others' ? '' : fandomLabel(w.fandom), (w.ships || []).filter(s => s !== 'Others').join(', '),
+              w.words != null ? dtSo(w.words) + ' ' + t('dt_words') : ''].filter(Boolean).join('  ·  ');
+            return dtEl('li', null, dtEl('button', { type: 'button', class: 'dt-o-row', onclick: () => openFic(w.idx) },
+              dtEl('span', { class: 'dt-o-num' }, LA_MA(k + 1) + '.'),
+              dtEl('span', { class: 'dt-o-txt' },
+                dtEl('span', { class: 'dt-o-t' }, dtEl('span', { class: 'dt-title' }, w.title),
+                  w.subtitle ? [dtEl('span', { class: 'sep' }, ':  '), dtEl('em', null, chuTron(w.subtitle))] : null),
+                meta ? dtEl('span', { class: 'dt-o-meta' }, meta) : null,
+                (w.music || []).length ? dtEl('span', { class: 'dt-o-mu' }, dtEl('b', null, t('dt_played')), ' ', dtEl('i', null, nhacText(w))) : null,
+                (w.restricted || w.warning) ? dtEl('span', { class: 'dt-flags' },
+                  w.restricted ? dtEl('span', { class: 'dt-flag lock' }, t('only_member')) : null,
+                  w.warning ? dtEl('span', { class: 'dt-flag warn' }, t('dt_cw')) : null) : null)));
+          }))
+        : dtEl('div', { class: 'dt-o-empty' }, t('opus_nhom_trong')),
+      dtEl('div', { class: 'dt-credit' }, t('dt_credit')));
+    // Nút ✎ sửa nhóm — chỉ admin; module Supabase dựng và tự kiểm quyền.
+    if (window.dtNutSuaNhom) window.dtNutSuaNhom(ds, g, truyen.length);
+  };
+
+  goc.append(dtEl('main', { class: 'dt-main' },
+    dtEl('header', { class: 'dt-o-head dt-px' },
+      dtEl('div', null, dtEl('div', { class: 'dt-eyebrow' }, t('dt_catalogue')), dtEl('h1', null, 'Opus')),
+      dtEl('p', null, t('opus_dan'))),
+    dtEl('div', { class: 'dt-rule' }),
+    dtEl('div', { class: 'dt-o-body' },
+      dtEl('div', { class: 'dt-o-left' }, hop, dtEl('div', { class: 'dt-o-nav' }, truoc, sau), dieuHuongM),
+      ds)));
+  opusVe();
+  vuaBanXoay();
+}
+// Thu bàn xoay cho vừa bề ngang. Trên điện thoại icon được phóng to TRƯỚC khi
+// thu (--dm) để sau khi thu vẫn còn >= 46px bấm được.
+function vuaBanXoay() {
+  const hop = document.querySelector('#dt-opus .dt-tt-box');
+  if (!hop || !hop.parentElement.clientWidth) return;
+  const rong = laDienThoai() ? document.documentElement.clientWidth - 19 : Math.min(640, hop.parentElement.clientWidth);
+  const k = Math.min(1, rong / 640);
+  hop.style.setProperty('--k', k.toFixed(4));
+  hop.style.setProperty('--dm', Math.max(76, Math.ceil(46 / k)) + 'px');
+}
+
+// Vẽ lại cả ba trang: đổi ngôn ngữ, đổi theme (màu kim đĩa đọc từ biến CSS),
+// đổi dữ liệu, hoặc xoay máy qua mốc điện thoại/máy tính.
+function veLaiDiaThan() { renderHome(); renderWorks(); renderOpus(); }
+window.veLaiDiaThan = veLaiDiaThan;
+let dangLaDienThoai = laDienThoai();
+window.addEventListener('resize', () => {
+  vuaBanXoay();
+  if (laDienThoai() !== dangLaDienThoai) { dangLaDienThoai = laDienThoai(); dongBangTruot(true); veLaiDiaThan(); }
+});
+
 // Module Supabase gọi hàm này sau khi đăng/sửa truyện để danh sách cập nhật ngay.
 window.applyWorksData = function (rows) { worksData = rows; worksFromDB = true; renderAllWorks(); };
 
 function renderAllWorks() {
-  renderWorks();
-  renderHome();
-  buildSidebar();
-  applyFilters();
-  applyLang();
-  // Trang Opus nằm ở module Supabase nên không đọc thẳng được worksData
-  // (khai bằng `let`, không nằm trên window). Phơi ra ở đây, sau mỗi lần
-  // danh sách đổi, để nó dùng lại đúng bộ dữ liệu chứ khỏi tải lần nữa.
+  // Module Supabase (trang Bookmark) đọc worksData qua đây vì biến khai bằng
+  // `let` không nằm trên window.
   window.worksDataCuaSite = worksData;
-  if (window.loadOpus && currentPage === 'opus') window.loadOpus();
+  // Dữ liệu vừa đổi (thường là từ bản dự phòng fics.json sang DB): chọn lại đĩa
+  // mới nhất, đừng giữ lựa chọn của bản dự phòng — bên đó thứ tự ngày khác.
+  WS.chon = null; homeChon = null;
+  applyLang();   // applyLang() tự vẽ lại ba trang đĩa than
 }
 // fandomLabel cũng nằm ở script cổ điển; trang Opus cần để hiện tên fandom
 // đúng như trên thẻ truyện (riêng Reverse có bản hai thứ tiếng).
@@ -2537,8 +2684,6 @@ function enterSite() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const sb2 = document.getElementById('sort-btn');
-  if (sb2) sb2.addEventListener('click', toggleSort);
   const intro = document.getElementById('intro');
   intro.addEventListener('click', enterSite);
   document.addEventListener('keydown', () => { if(intro.style.display !== 'none') enterSite(); }, {once: true});
@@ -2547,13 +2692,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadFicsData();
 
   // Vẽ ngay bằng dữ liệu tĩnh để trang không trống trong lúc đợi DB.
+  // (Thẻ "đọc dở" nằm luôn trong renderHome(), không còn banner riêng.)
   worksData = worksFromFics();
-  renderWorks();
-  renderHome();
-  buildSidebar();
-  showContinueBanner();
+  window.worksDataCuaSite = worksData;
   initFontSize();
-  applyLang();
+  applyLang();       // applyLang() vẽ ba trang đĩa than
 
   // Rồi thay bằng dữ liệu thật từ Supabase (có số kudos/bình luận, và
   // truyện is_restricted tự biến mất với khách chưa đăng nhập).
@@ -2637,18 +2780,8 @@ function saveReadingProgress() {
   localStorage.setItem('sk-continue', JSON.stringify(data));
 }
 
-function showContinueBanner() {
-  const raw = localStorage.getItem('sk-continue');
-  if (!raw) return;
-  try {
-    const data = JSON.parse(raw);
-    // Only show if less than 30 days old
-    if (Date.now() - data.timestamp > 30 * 24 * 60 * 60 * 1000) return;
-    if (!fics[data.ficIdx] && !worksData.some(w => w.idx === data.ficIdx)) return;
-    document.getElementById('continue-title').textContent = data.title;
-    document.getElementById('continue-banner').style.display = 'block';
-  } catch(e) {}
-}
+// Banner "Continue reading" cũ đã thay bằng thẻ "Where you left off" trong
+// renderHome() → theDocDo().
 
 function resumeReading() {
   const raw = localStorage.getItem('sk-continue');
@@ -2750,6 +2883,28 @@ const i18n = {
     continue:'Continue reading:',
     head_latest:'Latest Works', head_fav:'Favorite Children',
     view_all:'View All Works →',
+    // ---- giao diện đĩa than (Home / Works / Opus) ----
+    dt_programme:"Tonight's programme", dt_browse:'Browse the shelf', dt_open_opus:'Open the Opus',
+    dt_left_off:'Where you left off', dt_paused:'Paused',
+    dt_mv_of:'Movement {a} of {b}', dt_mv_one:'Movement {a}',
+    dt_latest:'Latest works', dt_new_arrivals:'New arrivals', dt_chosen:'Chosen by the author', dt_by_form:'Browse by form',
+    dt_works_h1:'Works', dt_shelf_of:'The record shelf · {n} works',
+    dt_shelf_intro:'Every work is a record in its own sleeve. Pick one from the shelf and it goes on the turntable, with its liner notes beside it.',
+    dt_search:'Search', dt_length:'Length', dt_order:'Order', dt_pairing:'Pairing',
+    dt_any_len:'Any length', dt_mini:'Miniature', dt_chamber:'Chamber', dt_symph:'Symphonic',
+    dt_mini_l:'Miniature · under 2k', dt_chamber_l:'Chamber · 2k–5k', dt_symph_l:'Symphonic · 5k+',
+    dt_newest:'Newest', dt_longest:'Longest',
+    dt_on_shelf:'{n} on the shelf', dt_tap:'tap a sleeve', dt_show_all:'Show the whole shelf ({n})',
+    dt_on_tt:'On the turntable', dt_form:'Form', dt_language:'Language', dt_played:'Played with',
+    dt_words:'words', dt_mv1:'movement', dt_mvn:'movements', dt_cw:'Content warning',
+    dt_play:'Play · Read', dt_play_first:'Play · Read from the first movement',
+    dt_bookmark:'Bookmark', dt_close:'Close',
+    dt_overture:'Overture', dt_no_opus:'No Opus yet', dt_overture_long:'Overture · not yet in an Opus',
+    dt_catalogue:'Catalogue of works', dt_prev:'Previous', dt_next:'Next', dt_suite:'Suite',
+    dt_work1:'work', dt_workn:'works', dt_locked_n:'{n} members only', dt_warn_n:'{n} content warning',
+    dt_credit:'Instrument icons by Lorc, Delapouite & contributors, game-icons.net, licensed under CC BY 3.0.',
+    post_lang_vi:'Written in Vietnamese',
+    post_lang_vi_hint:'Leave unticked for English. Shown as the Language line in the work’s liner notes.',
     browse:'Browse', all:'All', filter:'Filter', fandom:'Fandom', ship:'Ship',
     head_all:'All Works', no_results:'No works found for this filter.',
     sort_new:'Newest first', sort_old:'Oldest first',
@@ -2836,7 +2991,7 @@ const i18n = {
     post_restricted:'Members only — hide from readers who aren’t signed in',
     post_restricted_hint:'The work disappears from the listing and its chapters cannot be fetched at all unless the reader is signed in. This is enforced by the database, not by hiding it on the page.',
     post_cover:'Cover image',
-    post_cover_hint:'One image for the whole work. Shown as a book spine on the Works page, and above the text when the work is opened.',
+    post_cover_hint:'One image for the whole work. Shown as the record sleeve on the shelf (cropped square), and above the text when the work is opened.',
     post_cover_pick:'Choose cover', post_cover_del:'Remove',
     post_cover_crop:'Crop to a 21:9 band at the top of the reading page',
     post_cover_crop_hint:'Leave off to show the image whole. Turn on for tall images that would otherwise fill the screen before the first line of text.',
@@ -2922,6 +3077,28 @@ const i18n = {
     continue:'Đang đọc dở:',
     head_latest:'Truyện mới nhất trên Web', head_fav:'Những đứa con tôi thích nhất',
     view_all:'Xem tất cả truyện →',
+    // ---- giao diện đĩa than (Home / Works / Opus) ----
+    dt_programme:'Chương trình tối nay', dt_browse:'Xem kệ đĩa', dt_open_opus:'Mở Opus',
+    dt_left_off:'Bạn đang đọc dở', dt_paused:'Tạm dừng',
+    dt_mv_of:'Chương {a} / {b}', dt_mv_one:'Chương {a}',
+    dt_latest:'Truyện mới', dt_new_arrivals:'Mới lên kệ', dt_chosen:'Tác giả chọn', dt_by_form:'Duyệt theo thể nhạc',
+    dt_works_h1:'Truyện', dt_shelf_of:'Kệ đĩa · {n} truyện',
+    dt_shelf_intro:'Mỗi truyện là một đĩa than trong bìa của nó. Chọn một đĩa trên kệ, đĩa sẽ lên bàn xoay kèm lời giới thiệu bên cạnh.',
+    dt_search:'Tìm', dt_length:'Độ dài', dt_order:'Sắp xếp', dt_pairing:'Ship',
+    dt_any_len:'Mọi độ dài', dt_mini:'Miniature', dt_chamber:'Chamber', dt_symph:'Symphonic',
+    dt_mini_l:'Miniature · dưới 2k', dt_chamber_l:'Chamber · 2k–5k', dt_symph_l:'Symphonic · trên 5k',
+    dt_newest:'Mới nhất', dt_longest:'Dài nhất',
+    dt_on_shelf:'{n} đĩa trên kệ', dt_tap:'chạm vào một bìa', dt_show_all:'Xem cả kệ ({n})',
+    dt_on_tt:'Trên bàn xoay', dt_form:'Thể', dt_language:'Ngôn ngữ', dt_played:'Nhạc đi kèm',
+    dt_words:'chữ', dt_mv1:'chương', dt_mvn:'chương', dt_cw:'Có cảnh báo',
+    dt_play:'Phát · Đọc', dt_play_first:'Phát · Đọc từ chương đầu',
+    dt_bookmark:'Lưu truyện', dt_close:'Đóng',
+    dt_overture:'Overture', dt_no_opus:'Chưa vào Opus', dt_overture_long:'Overture · chưa thuộc Opus nào',
+    dt_catalogue:'Danh mục tác phẩm', dt_prev:'Trước', dt_next:'Sau', dt_suite:'Tổ khúc',
+    dt_work1:'bản', dt_workn:'bản', dt_locked_n:'{n} chỉ thành viên', dt_warn_n:'{n} có cảnh báo',
+    dt_credit:'Icon nhạc cụ: Lorc, Delapouite & cộng sự, game-icons.net, giấy phép CC BY 3.0.',
+    post_lang_vi:'Truyện viết bằng tiếng Việt',
+    post_lang_vi_hint:'Để trống nếu là tiếng Anh. Hiện ở dòng Ngôn ngữ trong khung giới thiệu truyện.',
     browse:'Duyệt', all:'Tất cả', filter:'Lọc', fandom:'Fandom', ship:'Ship',
     head_all:'Tất cả truyện', no_results:'Không tìm thấy truyện nào với bộ lọc này.',
     sort_new:'Mới nhất trước', sort_old:'Cũ nhất trước',
@@ -3008,7 +3185,7 @@ const i18n = {
     post_restricted:'Chỉ thành viên — ẩn với người chưa đăng nhập',
     post_restricted_hint:'Truyện biến mất khỏi danh sách và không thể lấy nội dung chương nếu chưa đăng nhập. Đây là khoá ở tầng database, không phải chỉ ẩn trên giao diện.',
     post_cover:'Ảnh bìa',
-    post_cover_hint:'Một ảnh cho cả truyện. Hiện như gáy sách ở trang Works, và ở đầu trang đọc.',
+    post_cover_hint:'Một ảnh cho cả truyện. Hiện làm bìa đĩa trên kệ (cắt vuông), và ở đầu trang đọc.',
     post_cover_pick:'Chọn ảnh bìa', post_cover_del:'Xoá bìa',
     post_cover_crop:'Cắt về dải ngang 21:9 ở đầu trang đọc',
     post_cover_crop_hint:'Để tắt thì ảnh hiện nguyên vẹn. Bật cho những ảnh cao, không thì nó chiếm hết màn hình trước dòng chữ đầu tiên.',
@@ -3112,15 +3289,14 @@ function applyLang() {
   // Danh sách bình luận dựng động nên phải vẽ lại (ngày tháng, badge, nút xoá).
   if (window.repaintComments) window.repaintComments();
   if (window.repaintAbout) window.repaintAbout();
-  // Thẻ Opus dựng bằng DOM nên applyLang() không tự đổi được tên/mô tả —
-  // phải vẽ lại để lấy đúng bản name_vi / mo_ta_vi.
-  if (window.repaintOpus) window.repaintOpus();
+  // Home / Works / Opus dựng bằng DOM với chữ lấy từ t() lúc dựng, nên đổi
+  // ngôn ngữ là phải dựng lại (kể cả name_vi / mo_ta_vi của nhóm Opus).
+  veLaiDiaThan();
 
   const mt = document.querySelector('.music-toggle');
   if (mt) mt.textContent = musicPlaying ? t('pause') : t('play');
 
   if (currentPage === 'reading') updateChapterNav(currentFic, currentChapter);
-  renderActiveFilters();
 }
 
 function toggleLang() {
@@ -3316,7 +3492,12 @@ function showPage(id, el) {
   document.querySelectorAll('.nav-links a, .nav-signin').forEach(a=>a.classList.remove('active'));
   if (el) el.classList.add('active');
   if (window.closeNavMenu) window.closeNavMenu();
+  dongBangTruot(true);
   prevPage = currentPage; currentPage = id;
+  // Về trang chủ thì dựng lại để thẻ "Where you left off" lấy đúng chỗ vừa đọc.
+  if (id === 'home') renderHome();
+  // Bàn xoay đo bề ngang lúc dựng; trang đang ẩn thì đo ra 0, nên đo lại khi hiện.
+  if (id === 'opus') vuaBanXoay();
   // Trang "Truyện đã lưu" nạp lại mỗi lần mở, vì người dùng có thể vừa bỏ lưu
   // ở trang đọc xong quay lại đây.
   if (id === 'bookmarks' && window.loadBookmarks) window.loadBookmarks();
@@ -3357,7 +3538,8 @@ function goBack() {
   document.getElementById('float-toggle').classList.remove('visible');
   // Phải chốt đích TRƯỚC khi gọi showPage: showPage() gán lại prevPage = currentPage
   // (lúc đó là 'reading'), nên đọc prevPage sau đó thì luôn rơi về 'home'.
-  const veLai = prevPage === 'works' ? 'works' : 'home';
+  // Trang Opus cũng mở được truyện (bấm dòng trong danh sách), nên cũng là đích quay về.
+  const veLai = (prevPage === 'works' || prevPage === 'opus') ? prevPage : 'home';
   showPage(prevPage, null);
   document.querySelector('.nav-links a[data-page="' + veLai + '"]').classList.add('active');
 }
@@ -3371,14 +3553,6 @@ window.addEventListener('popstate', (e) => {
           || (e.state.page === 'auth' ? document.querySelector('.nav-signin') : null);
   showPage(e.state.page, el);
 });
-
-  function searchFics(query) {
-  const q = query.toLowerCase().trim();
-  document.querySelectorAll('#page-works .fic-card').forEach(card => {
-    const title = card.querySelector('.fic-title').textContent.toLowerCase();
-    card.style.display = (!q || title.includes(q)) ? '' : 'none';
-  });
-}
 
 // (Xử lý mở fic từ #fic-N đã gộp vào DOMContentLoaded ở trên,
 // vì cần đợi fics.json load xong trước khi có thể openFic)
@@ -3435,6 +3609,9 @@ function paintNav(session) {
       && window.veLaiKhiDoiDangNhap) {
     window.veLaiKhiDoiDangNhap();
   }
+  // Danh sách truyện đã lưu, cho nút ✦ trên bìa đĩa. Cũng chỉ nạp khi trạng
+  // thái đổi (lần đầu truoc là undefined nên luôn nạp).
+  if (truoc !== window.skDaDangNhap) napDaLuu(session);
   // Đăng nhập rồi thì thay nút Sign In bằng cụm avatar; các mục cá nhân dời hết
   // vào menu đổ xuống nên chỉ cần bật/tắt một khối.
   $('nav-signin').style.display = session ? 'none' : '';
@@ -3516,8 +3693,17 @@ function paintAvatar(box, profile) {
   box.appendChild(img);
 }
 
+// Nút ✎ sửa nhóm trên trang Opus chỉ dựng khi biết chắc là admin — mà hồ sơ về
+// SAU khi trang đã vẽ. Nên vai đổi (đăng nhập / đăng xuất) là vẽ lại bàn xoay.
+function veLaiOpusNeuDoiVai(truoc) {
+  const nay = !!(currentProfile && currentProfile.is_admin);
+  if (nay !== truoc && window.renderOpus) window.renderOpus();
+}
+
 function paintProfile(p) {
+  const laAdminTruoc = !!(currentProfile && currentProfile.is_admin);
   currentProfile = p;
+  veLaiOpusNeuDoiVai(laAdminTruoc);
   // Phép đếm cho chấm báo khác nhau giữa admin và bạn đọc, mà chỉ tới đây mới
   // biết chắc vai — nên tính chấm ở đây chứ không phải trong paintNav().
   if (window.tinhChamBao) window.tinhChamBao();
@@ -4140,6 +4326,7 @@ async function loadPostForm(idx) {
     pwMusicWrite($('pw-music-work'), null);
     $('pw-featured').checked = false;
     $('pw-restricted').checked = false;
+    $('pw-lang-vi').checked = false;
     $('pw-bia-url').value = ''; $('pw-bia-cat-o').checked = false; veBia();
     $('pw-opus').value = '';
     pwAddChapter();
@@ -4148,7 +4335,7 @@ async function loadPostForm(idx) {
 
   head.dataset.i18n = 'post_edit_head'; head.textContent = tr('post_edit_head');
   const { data: w } = await sb.from('works')
-    .select('id,title,subtitle,summary,warning_note,status,featured,is_restricted,cover_url,cover_crop,published_at,'
+    .select('id,title,subtitle,summary,warning_note,status,featured,is_restricted,cover_url,cover_crop,published_at,language,'
           + 'work_fandoms(fandom_id), work_ships(ship_id), work_tags(tag_id),'
           + 'chapters(id,position,title,content,music,published_at)')
     .eq('legacy_id', 'fic-' + idx).maybeSingle();
@@ -4163,6 +4350,7 @@ async function loadPostForm(idx) {
   $('pw-status').value   = w.status || 'published';
   $('pw-featured').checked = !!w.featured;
   $('pw-restricted').checked = !!w.is_restricted;
+  $('pw-lang-vi').checked = w.language === 'vi';
   $('pw-bia-url').value = w.cover_url || '';
   $('pw-bia-cat-o').checked = !!w.cover_crop;
   veBia();
@@ -4228,6 +4416,7 @@ $('pw-save').addEventListener('click', async () => {
     // Khoá thật nằm ở policy SELECT của bảng works: truyện bật cờ này biến mất
     // khỏi API với khách chưa đăng nhập, không phải chỉ ẩn trên giao diện.
     is_restricted: $('pw-restricted').checked,
+    language: $('pw-lang-vi').checked ? 'vi' : 'en',
     cover_url:  biaHienTai() || null,
     cover_crop: !!$('pw-bia-cat-o').checked,
     // Giữ ngày đăng gốc; chỉ lần ĐẦU TIÊN truyện được đăng mới lấy giờ hiện tại.
@@ -4366,260 +4555,45 @@ async function pwDonAnhThua(workId, chuong) {
 }
 
 // ---------- Trang Opus ----------
-// Ký hiệu nhạc cụ vẽ bằng SVG nét thay vì emoji: emoji có màu sẵn, đặt cạnh
-// bảng màu vàng-kem của trang là lạc hẳn tông.
-const HOA_VAN = {
-  violin: '<svg viewBox="0 0 120 280" xmlns="http://www.w3.org/2000/svg" fill="currentColor">'
-        + '<path d="M60 14c-5.5 0-9.5 3.6-9.5 8.4 0 3.4 2 5.9 5 7.1v4.2c-4.6 1-7.4 4.1-7.4 8.2 0 3.3 1.9 5.8 4.8 7'
-        + 'v83.6c-15.6 2.4-27.4 12.4-27.4 26.6 0 9.4 5.2 16.6 12.6 20.7 2.4 1.3 3.4 2.4 3.4 3.8 0 1.5-1.1 2.6-3.6 4'
-        + 'C29.8 192.6 22 202.6 22 216.2 22 237.6 39.4 253 60 253s38-15.4 38-36.8c0-13.6-7.8-23.6-17.9-32.4'
-        + '-2.5-1.4-3.6-2.5-3.6-4 0-1.4 1-2.5 3.4-3.8 7.4-4.1 12.6-11.3 12.6-20.7 0-14.2-11.8-24.2-27.4-26.6V44.9'
-        + 'c2.9-1.2 4.8-3.7 4.8-7 0-4.1-2.8-7.2-7.4-8.2v-4.2c3-1.2 5-3.7 5-7.1C69.5 17.6 65.5 14 60 14z"/></svg>',
-  piano:  '<svg viewBox="0 0 120 280" xmlns="http://www.w3.org/2000/svg">'
-        + '<g fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round">'
-        + '<rect x="14" y="60" width="92" height="160" rx="4"/>'
-        + '<path d="M40 60v112M66 60v112M92 60v112"/></g>'
-        + '<g fill="currentColor"><rect x="28" y="60" width="13" height="86" rx="3"/>'
-        + '<rect x="54" y="60" width="13" height="86" rx="3"/>'
-        + '<rect x="80" y="60" width="13" height="86" rx="3"/></g></svg>',
-  khoa:   '<svg viewBox="0 0 120 280" xmlns="http://www.w3.org/2000/svg">'
-        + '<text x="60" y="215" text-anchor="middle" font-size="240" fill="currentColor"'
-        + ' font-family="Georgia, \'Times New Roman\', serif">&#119070;</text></svg>',
-  not:    '<svg viewBox="0 0 120 280" xmlns="http://www.w3.org/2000/svg">'
-        + '<text x="60" y="212" text-anchor="middle" font-size="230" fill="currentColor"'
-        + ' font-family="Georgia, \'Times New Roman\', serif">&#9835;</text></svg>'
-};
-
-// Hoa văn của từng nhóm. Khai tay chứ không đoán từ tiêu đề: nocturne và
-// impromptu vốn là nhạc cho piano dù tiêu đề không hề nhắc chữ "piano".
-// Nhóm nào không có trong bảng này (kể cả nhóm chủ repo tự tạo sau) thì lấy
-// khoá Sol — nó luôn hợp, không bao giờ trông sai.
-const HOA_VAN_NHOM = {
-  'opus-concerto': 'violin',
-  'opus-sonata': 'violin',
-  'opus-chamber-trio': 'piano',
-  'opus-nocturne': 'piano',
-  'opus-impromptu': 'piano',
-  'opus-rhapsody': 'not',
-  'opus-suite-1': 'not',
-  'opus-suite-3': 'not'
-};
-
-function veHoaVan(slug) {
-  const d = document.createElement('div');
-  d.className = 'opus-hoa';
-  d.setAttribute('aria-hidden', 'true');
-  // innerHTML an toàn: chuỗi SVG là hằng viết trong file này, không có dữ liệu
-  // người dùng nào đi vào.
-  d.innerHTML = HOA_VAN[HOA_VAN_NHOM[slug] || 'khoa'];
-  return d;
-}
-
-
-// Xếp trong nhóm: so tên nhưng SO SỐ NHƯ SỐ. Xếp chữ thường sẽ đặt
-// "Prelude and Fugue no.11" ngay sau bài đầu, trước cả no.3.
-const soSanhTuNhien = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare;
-
-let opusDs = [];      // [{tag, works:[...]}]
-
+// Bàn xoay dựng ở script cổ điển (renderOpus, dùng chung dữ liệu với Home/Works).
+// Module chỉ lo hai việc: nạp bảng nhóm khi cần, và phần sửa/xoá nhóm của admin.
 function opusSay(chu, loi) {
   const el = $('opus-msg');
-  if (!chu) { el.className = 'auth-msg'; el.textContent = ''; return; }
-  el.className = 'auth-msg show ' + (loi ? 'err' : 'ok');
+  if (!chu) { el.className = 'auth-msg dt-opus-msg'; el.textContent = ''; return; }
+  el.className = 'auth-msg dt-opus-msg show ' + (loi ? 'err' : 'ok');
   el.textContent = chu;
 }
 
-async function loadOpus() {
+// napLai = true: vừa sửa/xoá nhóm, phải đọc lại bảng tags dù đã có.
+async function loadOpus(napLai) {
   opusSay(null);
-  const ke = $('opus-ke');
-
-  const [tRes, wtRes] = await Promise.all([
-    sb.from('tags').select('id,slug,name,name_vi,mo_ta,mo_ta_vi,thu_tu')
-      .eq('type', 'category').order('thu_tu').order('name'),
-    sb.from('work_tags').select('tag_id, works!inner(legacy_id,status)')
-  ]);
-
-  if (tRes.error) { ke.textContent = ''; opusSay(raw(tRes.error.message), true); return; }
-
-  // Dùng lại worksData của trang Works cho phần hiển thị, khỏi tải lại lần nữa.
-  const theoIdx = new Map((window.worksDataCuaSite || []).map(w => [w.idx, w]));
-  const nhomCua = new Map();
-  (wtRes.data || []).forEach(r => {
-    const w = r.works;
-    if (!w || w.status !== 'published') return;
-    const idx = parseInt(String(w.legacy_id).replace(/\D/g, ''), 10);
-    if (isNaN(idx)) return;
-    if (!nhomCua.has(r.tag_id)) nhomCua.set(r.tag_id, []);
-    nhomCua.get(r.tag_id).push(idx);
-  });
-
-  opusDs = (tRes.data || []).map(t => ({
-    tag: t,
-    works: (nhomCua.get(t.id) || [])
-      .map(i => theoIdx.get(i))
-      .filter(Boolean)
-      .sort((a, b) => soSanhTuNhien(a.title || '', b.title || ''))
-  }));
-
-  veOpus();
+  if (napLai || !(window.opusNhom && window.opusNhom.length)) {
+    const { data, error } = await sb.from('tags').select('id,slug,name,name_vi,mo_ta,mo_ta_vi,thu_tu')
+      .eq('type', 'category').order('thu_tu').order('name');
+    if (error) { opusSay(raw(error.message), true); return; }
+    window.datNhomOpus(data || []);
+    // Tên nhóm hiện cả trên bìa đĩa ở Home/Works, nên vẽ lại cả ba trang.
+    window.veLaiDiaThan();
+    return;
+  }
+  window.renderOpus();
 }
 window.loadOpus = loadOpus;
 
-function veOpus() {
-  const ke = $('opus-ke');
-  ke.textContent = '';
-  const vi = document.documentElement.getAttribute('data-lang') === 'vi';
-  const laAdmin = !!(currentProfile && currentProfile.is_admin);
-  let tongTruyen = 0;
-
-  opusDs.forEach((n, i) => {
-    tongTruyen += n.works.length;
-    ke.append(veTheOpus(n, i + 1, vi, laAdmin));
-  });
-
-  $('opus-tong').textContent =
-    opusDs.length + ' ' + tr('opus_the_loai') + ' · ' + tongTruyen + ' ' + tr('opus_truyen');
-}
-
-function veTheOpus(n, so, vi, laAdmin) {
-  const t = n.tag;
-  const the = document.createElement('div');
-  the.className = 'opus-the';
-  the.append(veHoaVan(t.slug));   // nằm dưới cùng, nội dung phủ lên trên
-
-  const dau = document.createElement('button');
-  dau.type = 'button';
-  dau.className = 'opus-dau';
-  dau.setAttribute('aria-expanded', 'false');
-
-  const oSo = document.createElement('div');
-  oSo.className = 'opus-so';
-  const nhanSo = document.createElement('div');
-  nhanSo.className = 'opus-so-nhan'; nhanSo.textContent = 'Op.';
-  const num = document.createElement('div');
-  num.className = 'opus-so-num'; num.textContent = so;
-  oSo.append(nhanSo, num);
-  dau.append(oSo);
-
-  const than = document.createElement('div');
-  than.className = 'opus-than';
-
-  const ten = document.createElement('div');
-  ten.className = 'opus-ten';
-  ten.textContent = (vi && t.name_vi) ? t.name_vi : t.name;
-  than.append(ten);
-
-  const moTa = (vi && t.mo_ta_vi) ? t.mo_ta_vi : (t.mo_ta || '');
-  if (moTa) {
-    const m = document.createElement('div');
-    m.className = 'opus-mo-ta'; m.textContent = moTa;
-    than.append(m);
-  }
-
-  const nhan = document.createElement('div');
-  nhan.className = 'opus-nhan';
-  [...new Set(n.works.map(w => w.fandom))].forEach(f => {
-    const s = document.createElement('span'); s.className = 'nh';
-    s.textContent = window.fandomLabel(f); nhan.append(s);
-  });
-  const soCanh = n.works.filter(w => w.warning).length;
-  if (soCanh) {
-    const s = document.createElement('span'); s.className = 'nh canh';
-    s.textContent = '⚠ ' + soCanh; nhan.append(s);
-  }
-  than.append(nhan);
-  dau.append(than);
-
-  const phai = document.createElement('div');
-  phai.className = 'opus-phai';
-  const dem = document.createElement('div');
-  dem.className = 'opus-dem'; dem.textContent = n.works.length;
-  const dvi = document.createElement('div');
-  dvi.className = 'opus-dvi'; dvi.textContent = tr('opus_ban');
-  const mui = document.createElement('span');
-  mui.className = 'opus-mui'; mui.textContent = '▾';
-  phai.append(dem, dvi, mui);
-  dau.append(phai);
-
-  the.append(dau);
-
-  // ----- phần xổ xuống -----
-  const trong = document.createElement('div');
-  trong.className = 'opus-trong';
-  const vach = document.createElement('div');
-  vach.className = 'opus-vach'; trong.append(vach);
-
-  if (!n.works.length) {
-    const t0 = document.createElement('div');
-    t0.className = 'comments-empty'; t0.textContent = tr('opus_nhom_trong');
-    trong.append(t0);
-  }
-
-  const LA_MA = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
-  n.works.forEach((w, k) => {
-    const tr0 = document.createElement('button');
-    tr0.type = 'button';
-    tr0.className = 'opus-track';
-    tr0.addEventListener('click', () => window.openFic(w.idx));
-
-    const s = document.createElement('div');
-    s.className = 'opus-track-so'; s.textContent = LA_MA[k] || (k + 1);
-    tr0.append(s);
-
-    const th = document.createElement('div');
-    th.className = 'opus-track-than';
-    const tt = document.createElement('div');
-    tt.className = 'opus-track-ten';
-    tt.append(document.createTextNode(w.title || ''));
-    if (w.subtitle) {
-      tt.append(document.createTextNode(': '));
-      const em = document.createElement('em');
-      em.innerHTML = w.subtitle;   // phụ đề do chính chủ repo viết, giống thẻ truyện
-      tt.append(em);
-    }
-    th.append(tt);
-
-    const ph = document.createElement('div');
-    ph.className = 'opus-track-phu';
-    const f = document.createElement('span');
-    f.textContent = window.fandomLabel(w.fandom) + ((w.ships && w.ships.length) ? ' · ' + w.ships[0] : '');
-    ph.append(f);
-    if (w.restricted) {
-      const k2 = document.createElement('span');
-      k2.className = 'opus-track-khoa'; k2.textContent = '· ' + tr('only_member');
-      ph.append(k2);
-    }
-    if (w.warning) {
-      const c = document.createElement('span');
-      c.className = 'opus-track-canh'; c.textContent = '· ⚠';
-      ph.append(c);
-    }
-    th.append(ph);
-    tr0.append(th);
-    trong.append(tr0);
-  });
-  the.append(trong);
-
-  dau.addEventListener('click', () => {
-    const mo = the.classList.toggle('mo');
-    dau.setAttribute('aria-expanded', mo ? 'true' : 'false');
-  });
-
-  if (laAdmin) themNutSuaOpus(the, n);
-  return the;
-}
-
 // ----- Sửa nhóm ngay tại chỗ, chỉ admin -----
+// renderOpus() gọi hàm này mỗi lần vẽ danh sách của nhóm đang chọn.
 // Cố ý có cả đổi tên lẫn xoá: nút "+ Thêm fandom/ship" trong form đăng bài KHÔNG
 // có hai thứ này, và đó đúng là lý do lỗi gõ sai "Nevuillette/Furina" phải sửa
 // bằng SQL. Đừng lặp lại ở đây.
-function themNutSuaOpus(the, n) {
-  const t = n.tag;
+window.dtNutSuaNhom = function (khung, g, soTruyen) {
+  if (!(currentProfile && currentProfile.is_admin)) return;
+
   const nut = document.createElement('button');
   nut.type = 'button';
   nut.className = 'mini-btn opus-sua-nut';
   nut.textContent = '✎';
   nut.title = tr('opus_sua');
+  nut.setAttribute('aria-label', tr('opus_sua'));
 
   const form = document.createElement('div');
   form.className = 'opus-form';
@@ -4630,15 +4604,15 @@ function themNutSuaOpus(the, n) {
     const l = document.createElement('label'); l.textContent = tr(nhanKey); f.append(l);
     const i = nhieuDong ? document.createElement('textarea') : document.createElement('input');
     if (nhieuDong) i.rows = 2;
-    i.value = giaTri || '';
+    i.value = giaTri == null ? '' : giaTri;
     f.append(i); form.append(f);
     return i;
   };
-  const iTen   = o('opus_f_ten',    t.name);
-  const iTenVi = o('opus_f_ten_vi', t.name_vi);
-  const iMo    = o('opus_f_mo',     t.mo_ta,    true);
-  const iMoVi  = o('opus_f_mo_vi',  t.mo_ta_vi, true);
-  const iThuTu = o('opus_f_thu_tu', t.thu_tu);
+  const iTen   = o('opus_f_ten',    g.name);
+  const iTenVi = o('opus_f_ten_vi', g.name_vi);
+  const iMo    = o('opus_f_mo',     g.mo_ta,    true);
+  const iMoVi  = o('opus_f_mo_vi',  g.mo_ta_vi, true);
+  const iThuTu = o('opus_f_thu_tu', g.thu_tu);
 
   const hang = document.createElement('div');
   hang.className = 'opus-form-nut';
@@ -4649,8 +4623,7 @@ function themNutSuaOpus(the, n) {
   hang.append(luu, xoa);
   form.append(hang);
 
-  nut.addEventListener('click', (e) => {
-    e.stopPropagation();
+  nut.addEventListener('click', () => {
     form.style.display = form.style.display === 'none' ? 'block' : 'none';
   });
 
@@ -4664,40 +4637,33 @@ function themNutSuaOpus(the, n) {
       name_vi: iTenVi.value.trim() || null,
       mo_ta:    iMo.value.trim()   || null,
       mo_ta_vi: iMoVi.value.trim() || null,
-      thu_tu: isNaN(thu) ? 100 : thu
-    }).eq('id', t.id);
+      thu_tu: isNaN(thu) ? g.thu_tu : thu
+    }).eq('id', g.id);
     luu.disabled = false;
     if (error) { opusSay(raw(error.message), true); return; }
     // Nạp lại TRƯỚC rồi mới báo: loadOpus() mở đầu bằng opusSay(null), báo
     // trước là câu vừa hiện đã bị xoá ngay (đúng bẫy đã gặp ở trang Bookmark).
-    await loadOpus();
+    await loadOpus(true);
     opusSay(tr('opus_da_luu'));
   });
 
   xoa.addEventListener('click', async () => {
     // Nói rõ hậu quả: xoá nhóm thì truyện KHÔNG mất, chỉ mất chỗ xếp.
-    if (!window.confirm(tr('opus_xoa_hoi').replace('%s', t.name).replace('%d', n.works.length))) return;
+    if (!window.confirm(tr('opus_xoa_hoi').replace('%s', g.name).replace('%d', soTruyen))) return;
     xoa.disabled = true;
-    const { error } = await sb.from('tags').delete().eq('id', t.id);
+    const { error } = await sb.from('tags').delete().eq('id', g.id);
     xoa.disabled = false;
     if (error) { opusSay(raw(error.message), true); return; }
-    await loadOpus();
+    // Truyện trong nhóm vừa xoá mất chỗ xếp → nạp lại cả danh sách truyện để bìa
+    // của chúng chuyển về "Overture".
+    const moi = await window.fetchWorksFromDB();
+    if (moi && moi.length) window.applyWorksData(moi);
+    await loadOpus(true);
     opusSay(tr('opus_da_xoa'));
   });
 
-  the.append(nut, form);
-}
-
-window.repaintOpus = () => { if (opusDs.length) veOpus(); };
-
-$('opus-mo-het').addEventListener('click', () =>
-  document.querySelectorAll('#opus-ke .opus-the').forEach(e => {
-    e.classList.add('mo'); e.querySelector('.opus-dau').setAttribute('aria-expanded', 'true');
-  }));
-$('opus-dong-het').addEventListener('click', () =>
-  document.querySelectorAll('#opus-ke .opus-the').forEach(e => {
-    e.classList.remove('mo'); e.querySelector('.opus-dau').setAttribute('aria-expanded', 'false');
-  }));
+  khung.append(nut, form);
+};
 
 // ---------- Danh sách thành viên ----------
 // Bảng profiles vốn đã cho đọc công khai (policy `true`, và anon có GRANT SELECT
@@ -5180,15 +5146,40 @@ window.fetchChapters = async function (ficIdx) {
 // danh sách — không lộ cả tên lẫn tóm tắt.
 window.fetchWorksFromDB = async function () {
   try {
-    const { data, error } = await sb.from('works')
-      .select('legacy_id, title, subtitle, summary, warning_note, featured, published_at,'
-            + ' kudos_count, comment_count, cover_url, cover_crop, is_restricted,'
-            + ' work_fandoms(fandoms(name)), work_ships(ships(name))')
-      .eq('status', 'published');
+    // Cùng lúc nạp bảng nhóm Opus: bìa đĩa cần nhãn "Op. 1 / Suite II" và icon.
+    // chapters(...) chỉ lấy trạng thái + nhạc để đếm số chương và tên bản nhạc —
+    // KHÔNG lấy content. Với truyện Members only, khách nhận mảng rỗng (RLS), nên
+    // số chữ phải lấy từ works.word_count (trigger giữ), đừng cộng từ chương.
+    const [res, tRes] = await Promise.all([
+      sb.from('works')
+        .select('id, legacy_id, title, subtitle, summary, warning_note, featured, published_at,'
+              + ' kudos_count, comment_count, cover_url, cover_crop, is_restricted, language, word_count,'
+              + ' work_fandoms(fandoms(name)), work_ships(ships(name)),'
+              + ' work_tags(tags(slug,type)), chapters(position,status,music)')
+        .eq('status', 'published'),
+      sb.from('tags').select('id,slug,name,name_vi,mo_ta,mo_ta_vi,thu_tu')
+        .eq('type', 'category').order('thu_tu').order('name')
+    ]);
+    const { data, error } = res;
     if (error || !data) return null;
+    if (!tRes.error && window.datNhomOpus) window.datNhomOpus(tRes.data || []);
+
+    // Tên nhạc: bỏ trùng (không phân biệt hoa thường), đổi " - " thành " — ".
+    const tenNhac = ds => {
+      const da = new Set();
+      return ds.map(c => c.music && c.music.name).filter(Boolean)
+        .map(s => String(s).replace(/\s+-\s+/g, ' — ').replace(/\s{2,}/g, ' ').trim())
+        .filter(s => { const k = s.toLowerCase(); if (da.has(k)) return false; da.add(k); return true; });
+    };
 
     return data
       .map(w => ({
+        uuid: w.id,
+        lang: w.language || null,
+        words: (typeof w.word_count === 'number') ? w.word_count : null,
+        nch: (w.chapters || []).filter(c => c.status === 'published').length || null,
+        music: tenNhac((w.chapters || []).filter(c => c.status === 'published').sort((a, b) => a.position - b.position)),
+        groupSlug: ((w.work_tags || []).map(x => x.tags).find(t0 => t0 && t0.type === 'category') || {}).slug || null,
         idx: parseInt(String(w.legacy_id).replace(/\D/g, ''), 10),
         title: w.title || '',
         subtitle: w.subtitle || '',
@@ -5378,6 +5369,7 @@ $('btn-bookmark').addEventListener('click', async () => {
     btn.disabled = false;
     if (error) { waSay('wa_err'); return; }
     waMine.bookmark = false; paintActions(session); waSay('wa_bm_removed');
+    window.skDaLuu.delete(waWork.id); window.dtVeLaiNutLuu();
     return;
   }
 
@@ -5388,7 +5380,40 @@ $('btn-bookmark').addEventListener('click', async () => {
   btn.disabled = false;
   if (error) { waSay('wa_err'); return; }
   waMine.bookmark = true; paintActions(session); waSay('wa_bm_added');
+  window.skDaLuu.add(waWork.id); window.dtVeLaiNutLuu();
 });
+
+// ---------- nút ✦ trên khung liner notes (giao diện đĩa than) ----------
+// Tập work_id người đang đăng nhập đã lưu, để nút ✦ hiện đúng trạng thái mà
+// không phải hỏi DB mỗi lần mở một bìa. Nạp lại khi đăng nhập/đăng xuất.
+window.skDaLuu = new Set();
+async function napDaLuu(session) {
+  if (!session) { window.skDaLuu = new Set(); window.dtVeLaiNutLuu(); return; }
+  const { data, error } = await sb.from('bookmarks').select('work_id').eq('user_id', session.user.id);
+  if (error) return;
+  window.skDaLuu = new Set((data || []).map(r => r.work_id));
+  window.dtVeLaiNutLuu();
+}
+window.dtLuuTruyen = async function (w, btn) {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) {
+    // Giống nút Bookmark ở trang đọc: đăng nhập xong mở thẳng truyện đó.
+    try { sessionStorage.setItem('sk-return-fic', String(w.idx)); } catch (_) {}
+    window.showPage('auth', $('nav-signin'));
+    msg($('auth-msg'), 'wa_bm_signin', 'err');
+    return;
+  }
+  btn.disabled = true;
+  const daLuu = window.skDaLuu.has(w.uuid);
+  const { error } = daLuu
+    ? await sb.from('bookmarks').delete().eq('work_id', w.uuid).eq('user_id', session.user.id)
+    : await sb.from('bookmarks').insert({ work_id: w.uuid, user_id: session.user.id });
+  btn.disabled = false;
+  // 23505 = đã lưu từ trước (tab khác) — coi như lưu thành công.
+  if (error && error.code !== '23505') { btn.title = tr('wa_err'); return; }
+  if (daLuu) window.skDaLuu.delete(w.uuid); else window.skDaLuu.add(w.uuid);
+  window.dtVeLaiNutLuu();
+};
 
 // ---------- bình luận ----------
 // Dùng lại work_id mà loadWorkActions() đã tra: cùng một truyện, khỏi hỏi DB hai lần.
@@ -5929,7 +5954,9 @@ sb.auth.onAuthStateChange((event, session) => {
     clearMsg($('auth-msg'));
     loadProfile(session);
   } else {
+    const laAdminTruoc = !!(currentProfile && currentProfile.is_admin);
     currentProfile = null;
+    veLaiOpusNeuDoiVai(laAdminTruoc);
     // Đang đứng ở trang hồ sơ mà mất session thì đẩy về trang đăng nhập.
     // (currentPage của site khai báo bằng `let` nên không nằm trên window —
     //  đọc trạng thái từ DOM thay vì đoán.)

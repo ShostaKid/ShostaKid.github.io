@@ -147,6 +147,7 @@ Migration đã chạy, theo thứ tự:
 25. `opus_add_symphony_group`
 26. `works_word_count_from_chapters`
 27. `restore_published_at_language_suite_iv`
+28. `suite_iv_description`
 
 (Bốn migration `import_*` chạy một lần lúc nhập dữ liệu, đã dọn — không đánh số ở đây.)
 
@@ -1088,3 +1089,92 @@ của truyện Members only (RLS), nên cộng từ chương là ra 0 cho đúng
 Còn treo: mô tả EN/VI của Suite IV (chủ repo viết), fic-46 Overture chưa thuộc
 nhóm Opus nào. Slug `suite-iv-scherzo` lệch khuôn `opus-suite-N` — cố ý để nguyên;
 giao diện nhận suite bằng **tên** ("Suite IV · …"), không bằng slug.
+
+---
+
+## Giao diện đĩa than — Home / Works / Opus (cập nhật 2026-09-24)
+
+Dựng lại ba trang theo bản thiết kế Claude Design mà chủ repo đã duyệt (file bàn
+giao `ShostaKid-redesign-handoff.md`, không nằm trong repo). Mỗi truyện là một
+**bìa đĩa**; thông tin truyện là **liner notes**; Opus là **bàn xoay** chọn thể nhạc.
+Trang đọc, tài khoản, Post, Request, Members, Bookmark, nav **không đổi**.
+
+### Ai làm gì
+
+- **Script cổ điển** dựng cả ba trang: `renderHome()`, `renderWorks()`,
+  `renderOpus()`, gom trong `veLaiDiaThan()`. Mọi thứ dựng bằng `dtEl()`
+  (createElement); tóm tắt/phụ đề có HTML thì bóc chữ bằng `chuTron()` (DOMParser —
+  không chạy script, không tải ảnh). Class mới đều mang tiền tố `dt-`.
+- **Module Supabase**: `fetchWorksFromDB()` lấy thêm `id, language, word_count,
+  work_tags(tags(slug,type)), chapters(position,status,music)` và nạp bảng nhóm
+  rồi gọi `window.datNhomOpus()`. `loadOpus(napLai)` chỉ còn nạp bảng nhóm;
+  `window.dtNutSuaNhom()` gắn nút ✎ sửa/xoá nhóm (chỉ admin) vào danh sách của
+  nhóm đang chọn; `window.dtLuuTruyen()` + `window.skDaLuu` cho nút ✦.
+- `applyLang()` gọi `veLaiDiaThan()` — chữ lấy từ `t()` lúc dựng nên đổi ngôn ngữ
+  là phải dựng lại. `renderAllWorks()` giờ chỉ gọi `applyLang()`.
+- `makeCardEl()` (thẻ cũ) **vẫn giữ** — trang Bookmark còn dùng.
+
+### Dữ liệu — đừng lấy sai nguồn
+
+- **Số chữ lấy từ `works.word_count`** (trigger migration 26 giữ). Đừng cộng từ
+  `chapters`: khách chưa đăng nhập nhận mảng chương RỖNG cho truyện Members only.
+- Số chương và tên nhạc thì chỉ có từ `chapters` → với truyện Members only, khách
+  không thấy hai dòng đó. Code tự ẩn khi `nch`/`music` trống, không hiện "0".
+- Nhánh dự phòng `fics.json` không có nhóm Opus/số chữ/ngôn ngữ: bìa hiện
+  "Overture", các dòng tương ứng tự ẩn.
+
+### Nhóm Opus và icon
+
+- `datNhomOpus()` sắp theo `thu_tu`; **suite nhận ra bằng TÊN** (`Suite IV · …`),
+  không bằng slug. Số "Op." = vị trí trong các nhóm không phải suite → thêm một
+  thể mới xen giữa là số của các thể sau dời theo.
+- Icon nhóm: bảng `ICON_NHOM` theo slug. Nhóm không có trong bảng (kể cả nhóm tạo
+  sau) lần lượt lấy `ICON_DU_PHONG` = khoá Fa, khoá Đô, nốt nhạc, khoá Sol — bộ
+  nhạc cụ đã dùng hết cho 13 nhóm.
+- **Riêng nhóm Concerto** (`iconCua()`): nhận nhạc cụ trong tên truyện — chỉ 4 cái
+  chủ repo chốt: viola, violin, cello, piano (→ grand piano). **Viola xét trước
+  violin.** Nhóm khác luôn lấy icon của nhóm, kể cả khi tên có chữ "violin"
+  (Violin concerto in C♯ minor nằm ở Suite II nên vẫn là tuba — đúng ý chủ repo).
+- Sprite `<symbol id="ic-…">` nằm đầu `<body>`. Nguồn game-icons.net, **CC BY 3.0 —
+  phải giữ dòng ghi nguồn** (`dt_credit`, cuối danh sách trang Opus). Tự vẽ thêm
+  (09/2026): `c-clef`, `f-clef`, `note`, `viola` (= violin thu nhỏ + khoá Đô —
+  khoá riêng của viola, để phân biệt được với violin).
+- Bàn trên điện thoại chứa được ~15–17 nhóm trước khi icon chồng nhau; hiện 13.
+
+### Bẫy đã gặp
+
+- **Trang đang ẩn thì đo bề ngang ra 0.** `vuaBanXoay()` (thu bàn xoay theo khổ)
+  phải gọi lại trong `showPage('opus')`, không thì điện thoại hiện đĩa 640px tràn.
+- **Khối `.dt-rotor` vuông, xoay 45° là đường chéo thò ra ngoài** → cuộn ngang.
+  `.dt-tt-box` dùng `overflow-x:clip` (chỉ xén ngang; xén cả dọc là mất bóng đĩa).
+- **Kim đọc tô bằng `style="fill:var(--gold)"`**, không đọc màu bằng
+  `getComputedStyle` lúc dựng — ngay sau khi đổi `data-theme` nó có thể trả màu cũ.
+- **Transition không chạy khi pane trình duyệt bị ẩn**: đo kích thước icon trên
+  đĩa phải tắt transition trước, không thì ra số giữa chừng.
+- `renderAllWorks()` đặt lại `WS.chon`/`homeChon`: trang vẽ trước bằng `fics.json`
+  rồi mới thay bằng DB, giữ lựa chọn cũ là khung liner nằm ở sai truyện.
+- Qua mốc 768px (xoay máy) thì `veLaiDiaThan()` — số đĩa trên kệ (12/10) và cách
+  bấm bìa (chọn / mở bảng trượt) khác nhau giữa hai khổ.
+- Nền tối: rãnh đĩa `#1A1510` gần trùng nền `#16120D`, đĩa tàng hình → thêm viền
+  vàng mờ `[data-theme="dark"] .dt-rec`. Không có trong bản thiết kế gốc.
+- Chữ trên bìa Others (nền kem) dùng `#7A5F14`, không phải `#836717` của bản thiết
+  kế (4.35, dưới ngưỡng). `--gold-dark` nền tối đổi `#A07830` → `#D4B86A`.
+
+### Đã gỡ
+
+Sidebar accordion + dải pill + bảng lọc điện thoại của Works, hai thẻ gập của Home
+(đảo lại quyết định 05/09 — bản thiết kế ghi "không còn phần nào gập mặc định"),
+banner "Continue reading" (thay bằng thẻ "Where you left off"), thẻ Opus xổ xuống +
+hoa văn `HOA_VAN`, nền hoa văn `gothic-bg` của Home/Works. ~390 dòng CSS chết đã xoá.
+Lọc theo **ship** vẫn giữ: hàng chip ship hiện sau khi chọn một fandom.
+
+### Form Post: ô "Written in Vietnamese" (`pw-lang-vi`)
+
+Ghi `works.language` = `'vi'`/`'en'`. Trước đây form không có ô này nên truyện
+tiếng Việt đăng qua web luôn mang `'en'` (9 truyện đã sửa ở migration 27).
+
+### Lưu ý khi đọc `updated_at`
+
+Migration 26 và 27 chạm `updated_at` của **cả 52 truyện** (trigger `works_touch`).
+Mẹo cũ "`published_at` trùng từng giây với `updated_at` ⇒ bị form ghi đè" không
+còn dùng được cho dữ liệu trước 24/09.
