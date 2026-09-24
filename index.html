@@ -3731,6 +3731,11 @@ $('ab-save').addEventListener('click', async () => {
 // ---------- trang đăng / sửa truyện (chỉ admin) ----------
 let pwWorkId = null;   // đang sửa truyện nào; null = đang tạo mới
 let pwOto    = null;   // ô nội dung chương đang được chèn ảnh
+// Ngày đăng GỐC của truyện đang sửa. Trước đây mỗi lần bấm Lưu là ghi đè
+// published_at bằng giờ hiện tại, nên sửa một dấu phẩy là truyện nhảy lên đầu
+// "mới nhất" — 26 truyện đã bị đổi ngày đăng thành 05/09 theo cách đó.
+let pwPublishedAt = null;
+let pwThuTuMax = 0;    // thứ tự lớn nhất trong các nhóm Opus, để nhóm mới xếp cuối
 
 function pwSay(key, isErr) {
   const el = $('post-msg');
@@ -3774,6 +3779,7 @@ function pwAddChapter(data) {
   wrap.className = 'pw-ch';
   if (data && data.id) wrap.dataset.chId = data.id;   // để lúc lưu biết chương nào đã có sẵn
   if (data && data.position) wrap.dataset.chPos = data.position;  // vị trí cũ, để biết có đổi chỗ không
+  if (data && data.published_at) wrap.dataset.chPubAt = data.published_at;  // ngày đăng gốc của chương
 
   const t1 = document.createElement('input');
   t1.type = 'text'; t1.className = 'pw-ch-title'; t1.maxLength = 200;
@@ -4061,12 +4067,15 @@ async function pwThemOpus() {
 
   if (!window.confirm(tr('post_confirm_new_opus').replace('%s', ten))) return;
 
+  // Phải khai thu_tu: bỏ trống thì DB điền mặc định 100, trùng với Suite III —
+  // đó là cách Suite IV · Scherzo đã ra đời với thứ tự không xác định.
   const { data, error } = await sb.from('tags')
-    .insert({ name: ten, slug, type: 'category' })
+    .insert({ name: ten, slug, type: 'category', thu_tu: pwThuTuMax + 10 })
     .select('id,name').single();
   if (error) { pwSay(raw(error.message), true); return; }
 
   pwOpusIds.push(data.id);
+  pwThuTuMax += 10;
   const o = document.createElement('option');
   o.value = data.id; o.textContent = data.name;
   el.appendChild(o);
@@ -4100,6 +4109,7 @@ async function pwLoadChoices() {
   // Ô Opus có thêm mục rỗng đứng đầu: truyện chưa xếp nhóm là chuyện bình thường,
   // không nên ép chọn bừa một nhóm chỉ vì ô bắt buộc phải có giá trị.
   pwOpusIds = (o.data || []).map(r => r.id);
+  pwThuTuMax = Math.max(0, ...(o.data || []).map(r => r.thu_tu || 0));
   const sel = $('pw-opus');
   sel.textContent = '';
   const trong = document.createElement('option');
@@ -4120,6 +4130,7 @@ async function loadPostForm(idx) {
   await pwLoadChoices();
   $('pw-chapters').textContent = '';
   pwWorkId = null;
+  pwPublishedAt = null;
 
   const head = $('post-head');
   if (idx === undefined || idx === null) {
@@ -4137,13 +4148,14 @@ async function loadPostForm(idx) {
 
   head.dataset.i18n = 'post_edit_head'; head.textContent = tr('post_edit_head');
   const { data: w } = await sb.from('works')
-    .select('id,title,subtitle,summary,warning_note,status,featured,is_restricted,cover_url,cover_crop,'
+    .select('id,title,subtitle,summary,warning_note,status,featured,is_restricted,cover_url,cover_crop,published_at,'
           + 'work_fandoms(fandom_id), work_ships(ship_id), work_tags(tag_id),'
-          + 'chapters(id,position,title,content,music)')
+          + 'chapters(id,position,title,content,music,published_at)')
     .eq('legacy_id', 'fic-' + idx).maybeSingle();
   if (!w) { pwSay('post_err', true); return; }
 
   pwWorkId = w.id;
+  pwPublishedAt = w.published_at || null;
   $('pw-title').value    = w.title || '';
   $('pw-subtitle').value = w.subtitle || '';
   $('pw-summary').value  = w.summary || '';
@@ -4173,7 +4185,9 @@ async function loadPostForm(idx) {
   // Ô nhạc của chương chỉ điền khi chương đó KHÁC nhạc chung, để trống nghĩa là
   // "theo nhạc chung" — đúng như dòng gợi ý ghi dưới ô.
   dsChuong.forEach(c => pwAddChapter(
-    nhuNhau(c.music, nhacChung) ? { id: c.id, position: c.position, title: c.title, content: c.content } : c
+    nhuNhau(c.music, nhacChung)
+      ? { id: c.id, position: c.position, title: c.title, content: c.content, published_at: c.published_at }
+      : c
   ));
   if (!(w.chapters || []).length) pwAddChapter();
 }
@@ -4190,6 +4204,8 @@ $('pw-save').addEventListener('click', async () => {
     // Ô nhạc của chương để trống thì dùng nhạc chung của truyện.
     id: w.dataset.chId || null,
     viTriCu: w.dataset.chPos ? parseInt(w.dataset.chPos, 10) : null,
+    ngayCu: w.dataset.chPubAt || null,
+    khoi: w,               // để ghi ngược id/ngày của chương vừa chèn vào form
     music: pwMusicRead(w.querySelector('.pw-music')) || nhacChung,
     title: w.querySelector('.pw-ch-title').value.trim(),
     content: w.querySelector('.pw-ch-body').value
@@ -4214,7 +4230,10 @@ $('pw-save').addEventListener('click', async () => {
     is_restricted: $('pw-restricted').checked,
     cover_url:  biaHienTai() || null,
     cover_crop: !!$('pw-bia-cat-o').checked,
-    published_at: $('pw-status').value === 'published' ? new Date().toISOString() : null
+    // Giữ ngày đăng gốc; chỉ lần ĐẦU TIÊN truyện được đăng mới lấy giờ hiện tại.
+    // Chuyển về bản nháp cũng giữ ngày cũ, để đăng lại không bị nhảy lên đầu.
+    published_at: pwPublishedAt
+      || ($('pw-status').value === 'published' ? new Date().toISOString() : null)
   };
 
   let workId = pwWorkId, err = null;
@@ -4232,6 +4251,7 @@ $('pw-save').addEventListener('click', async () => {
   }
   if (err || !workId) { busy(btn, false, 'post_save'); pwSay(raw((err && err.message) || 'error'), true); return; }
   pwWorkId = workId;
+  pwPublishedAt = patch.published_at;
 
   // Fandom + ship: xoá hết rồi gắn lại cho khớp lựa chọn hiện tại.
   await sb.from('work_fandoms').delete().eq('work_id', workId);
@@ -4288,13 +4308,21 @@ $('pw-save').addEventListener('click', async () => {
     const c = chuong[i];
     const hang = {
       position: i + 1, title: c.title || null, content: c.content,
-      status: patch.status, published_at: patch.published_at,
+      // Chương cũ giữ ngày đăng của nó; chương mới thêm vào thì lấy giờ hiện
+      // tại — KHÔNG lấy ngày của truyện, vì chương 3 viết sau chương 1 cả tháng.
+      status: patch.status,
+      published_at: c.ngayCu || (patch.status === 'published' ? new Date().toISOString() : null),
       word_count: đếmTừ(c.content), music: c.music
     };
     const r = c.id
       ? await sb.from('chapters').update(hang).eq('id', c.id)
-      : await sb.from('chapters').insert({ ...hang, work_id: workId });
-    if (r.error) rc = r;
+      : await sb.from('chapters').insert({ ...hang, work_id: workId }).select('id').single();
+    if (r.error) { rc = r; continue; }
+    // Ghi ngược vào form. Trước đây chương vừa chèn không được đánh dấu là "đã có",
+    // nên bấm Lưu lần hai là nó bị chèn lại vào cùng vị trí → lỗi trùng khoá.
+    if (!c.id && r.data && r.data.id) c.khoi.dataset.chId = r.data.id;
+    c.khoi.dataset.chPos = i + 1;
+    if (hang.published_at) c.khoi.dataset.chPubAt = hang.published_at;
   }
 
   busy(btn, false, 'post_save');
