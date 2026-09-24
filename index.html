@@ -108,50 +108,21 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 @keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
 
-.fics-section{max-width:860px;margin:0 auto;padding:3.5rem 2rem;}
 .section-heading{font-family:var(--font-ui);font-size:0.78rem;letter-spacing:4px;text-transform:uppercase;color:var(--ui-head);margin-bottom:2.5rem;display:flex;align-items:center;gap:1rem;}
 .section-heading::after{content:'';flex:1;height:1px;background:var(--border);}
-.fic-card{border:1px solid var(--border);padding:1.8rem 2rem;margin-bottom:1.5rem;background:rgba(250,247,240,0.85);cursor:pointer;transition:all 0.25s;position:relative;backdrop-filter:blur(2px);}
-.fic-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);opacity:0;transition:opacity 0.2s;}
-.fic-card:hover{background:rgba(251,248,240,0.97);border-color:var(--gold-light);}
-.fic-card:hover::before{opacity:1;}
-.fic-title{font-family:var(--font-ui);font-size:1.22rem;font-weight:600;color:var(--ink);margin-bottom:0.35rem;line-height:1.3;}
-.fic-title em{font-style:italic;color:var(--ui-head);}
-.fic-meta{font-family:var(--font-ui);font-size:0.65rem;letter-spacing:2px;color:var(--ui);text-transform:uppercase;margin-bottom:0.8rem;display:flex;gap:1.5rem;flex-wrap:wrap;}
-.fic-stats{font-variant-numeric:tabular-nums;color:var(--ui-head);letter-spacing:1px;}
-.fic-warning{font-size:0.85rem;color:#993C1D;font-family:'Lora',Georgia,serif;font-style:italic;margin-bottom:0.6rem;}
-.fic-summary{font-family:'Lora',Georgia,serif;font-size:0.88rem;color:var(--ink2);line-height:1.65;font-style:italic;}
 
-/* ----- Ảnh bìa truyện ----- */
-/* Kiểu gáy sách: bìa dọc nhỏ bên trái, tỉ lệ 2:3, cắt bằng object-fit để mọi
-   thẻ cao bằng nhau dù ảnh gốc dọc hay ngang. */
-.fic-card-bia{display:flex;gap:1.4rem;align-items:flex-start;}
-.fic-than{min-width:0;flex:1;}
+/* ----- Ô ảnh bìa trong form Post (xem trước) ----- */
 .fic-bia{width:104px;flex:0 0 104px;aspect-ratio:2/3;object-fit:cover;display:block;border:1px solid var(--border);}
 .bia-trong{border-style:dashed;background:var(--cream2);color:var(--ink3);
   display:flex;align-items:center;justify-content:center;font-size:1.6rem;}
 @media (max-width:560px){
   .fic-bia{width:74px;flex-basis:74px;}
-  .fic-card-bia{gap:1rem;}
 }
 /* Bìa ở đầu trang đọc. Mặc định giữ nguyên tỉ lệ ảnh; .cat-219 cắt thành dải
    ngang cho những ảnh mà để nguyên sẽ chiếm hết màn hình trước dòng chữ đầu. */
 .reading-bia{width:100%;display:block;margin:1.6rem 0 0;border:1px solid var(--border);}
 .reading-bia.cat-219{aspect-ratio:21/9;object-fit:cover;}
 
-/* ----- Truyện chỉ dành cho thành viên ----- */
-/* Dải chéo góc trên-trái thẻ. overflow:hidden trên thẻ để phần thừa của dải bị
-   cắt gọn theo viền. */
-.fic-card-khoa{overflow:hidden;}
-/* Toạ độ tính chứ không ướm: dải rộng 150px nên tâm nó nằm ở (left+75, top+8).
-   Chữ dài ~78px, xoay -45° nên hai đầu chữ lệch khỏi tâm ±27px theo cả hai trục.
-   Tâm phải cách mỗi cạnh thẻ ít nhất 27px, không thì một đầu chữ lọt ra ngoài
-   và bị overflow:hidden cắt cụt. Đặt tâm ở (39, 39). */
-.fic-dai-khoa{position:absolute;top:31px;left:-36px;width:150px;transform:rotate(-45deg);
-  background:var(--ui-head);color:var(--cream);text-align:center;padding:4px 0;
-  font-family:var(--font-ui);font-size:0.5rem;letter-spacing:1.6px;text-transform:uppercase;
-  box-shadow:0 1px 4px rgba(44,35,24,0.25);pointer-events:none;z-index:2;}
-[data-lang="vi"] .fic-dai-khoa{letter-spacing:0.8px;}
 
 /* Bảng thay cho nội dung chương khi chưa đăng nhập. */
 .khoa-hop{border:1px solid var(--border);border-left:2px solid var(--gold);
@@ -236,8 +207,6 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
 /* Trước đây không có luật nào cho img ở đây, nên ảnh giữ nguyên cỡ gốc và đẩy
    rộng cả cột chữ — ảnh chụp điện thoại rộng 3000–4000px thì vỡ hẳn bố cục. */
 .fic-body img{max-width:100%;height:auto;display:block;margin:2.5rem auto;}
-.fic-tags{margin-top:0.9rem;display:flex;flex-wrap:wrap;gap:6px;}
-.tag{font-family:var(--font-ui);font-size:0.6rem;letter-spacing:1.5px;color:var(--ink2);border:1px solid var(--gold);padding:3px 10px;text-transform:uppercase;background:rgba(184,151,42,0.06);}
 
 /* READING PAGE */
 .reading-wrap{max-width:720px;margin:0 auto;padding:4rem 2rem;}
@@ -330,14 +299,8 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   --ink:#E8DFC8;--ink2:#C4B090;--ink3:#7A6D58;--border:#332A1A;
   --ui:#A89878;--ui-head:#C9A84C;   /* nền tối: 6.59 và 8.16 */
 }
-/* Cảnh báo nội dung dùng đỏ #993C1D viết cứng — hợp trên nền kem, nhưng đặt lên
-   thẻ truyện nền tối thì chỉ còn 2.55, tức là đúng dòng chữ cần đọc nhất lại mờ
-   nhất. Nền tối đổi sang đỏ nhạt hơn: 6.1. */
-[data-theme="dark"] .fic-warning{color:#DB8055;}
 [data-theme="dark"] nav{background:rgba(22,18,13,0.97);}
 [data-theme="dark"] #music-bar{background:rgba(22,18,13,0.95);}
-[data-theme="dark"] .fic-card{background:rgba(30,24,16,0.9);}
-[data-theme="dark"] .fic-card:hover{background:rgba(38,30,20,0.97);}
 [data-theme="dark"] .stat-box{background:rgba(30,24,16,0.7);}
 [data-theme="dark"] #page-reading,[data-theme="dark"] #page-about{background:var(--cream)!important;}
 [data-theme="dark"] #intro{background:#080604;}
@@ -461,7 +424,11 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .form-actions{margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);}
 .form-actions .ao3-link{margin-top:0;}
 #page-post select{width:100%;background:var(--cream2);border:1px solid var(--border);padding:9px 12px;font-family:Georgia,serif;font-size:0.92rem;color:var(--ink);box-sizing:border-box;}
-.bm-foot{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1rem;padding-top:0.8rem;border-top:1px solid var(--border);font-family:Georgia,serif;font-style:italic;font-size:0.78rem;color:var(--ui);}
+/* Dòng dưới bìa ở trang Bookmark: ngày lưu + nút Bỏ lưu (nằm NGOÀI nút bìa —
+   không được lồng button trong button). */
+.dt-bm-item{display:flex;flex-direction:column;gap:10px;min-width:0;}
+.dt-bm-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding-top:8px;border-top:1px solid var(--hair);font-family:"Lora",Georgia,serif;font-style:italic;font-size:13px;color:var(--ui);}
+.dt-bm-foot .comment-del{min-height:44px;}
 .cmt-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
 .cmt-as{display:flex;align-items:center;gap:0.55rem;font-family:Georgia,serif;font-style:italic;font-size:0.85rem;color:var(--ui);margin-bottom:0.7rem;}
 .cmt-as strong{font-family:var(--font-ui);font-style:normal;font-size:0.72rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-dark);}
@@ -547,24 +514,6 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   .chapter-nav button { padding: 8px 12px; }
   .chapter-nav select { flex: 1 1 130px; min-width: 0; max-width: 100%; }
 
-  /* Thẻ truyện gọn lại trên điện thoại — bản cũ cao ~400px nên một màn hình
-     chỉ chứa được hai thẻ. Tóm tắt cắt còn 2 dòng, ai muốn đọc thì mở truyện. */
-  .fic-card { padding: 1rem 1.1rem; margin-bottom: 1rem; }
-  .fic-title { font-size: 1.05rem; }
-  .fic-meta { font-size: 0.6rem; gap: 1rem; margin-bottom: 0.55rem; }
-  /* Cảnh báo cũng kẹp 2 dòng: có fic khai cảnh báo dài 5 dòng, một mình nó đội
-     thẻ từ ~190 lên 285px, phá hết công gọn của phần còn lại. */
-  .fic-warning {
-    font-size: 0.8rem; margin-bottom: 0.45rem;
-    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
-    overflow: hidden;
-  }
-  .fic-summary {
-    font-size: 0.83rem; line-height: 1.5;
-    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
-    overflow: hidden;
-  }
-  .fic-tags { margin-top: 0.6rem; gap: 5px; }
 }
 
 /* COMMENT SECTION */
@@ -628,9 +577,9 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 
 
 /* =====================================================================
-   GIAO DIỆN ĐĨA THAN — Home / Works / Opus (bản thiết kế Claude Design, 09/2026)
+   GIAO DIỆN ĐĨA THAN — Home / Works / Opus / Bookmark (bản thiết kế Claude Design, 09/2026)
    Mọi class mới mang tiền tố dt- để không đụng các class cũ còn dùng ở trang
-   khác (.fic-card vẫn dùng cho trang Bookmark).
+   khác (form Post, trang đọc…).
    Chữ chức năng dùng var(--font-ui): Playfair cho EN, Nunito cho VI.
    ===================================================================== */
 .dt-main{max-width:1440px;margin:0 auto;padding:64px clamp(20px,7vw,104px) 72px;display:flex;flex-direction:column;gap:64px;}
@@ -1493,13 +1442,11 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
     <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
 
-  <!-- BOOKMARK CỦA TÔI -->
+  <!-- BOOKMARK CỦA TÔI — kệ đĩa riêng, cùng kiểu với trang Works.
+       Module nạp danh sách (loadBookmarks) rồi giao cho dtVeBookmark() dựng. -->
   <div class="page" id="page-bookmarks" style="background:var(--cream);">
-    <div class="auth-wrap" style="max-width:760px;">
-      <div class="section-heading" data-i18n="bm_head">My Bookmarks</div>
-      <div class="auth-msg" id="bm-msg"></div>
-      <div id="bm-list"></div>
-    </div>
+    <div class="auth-msg dt-opus-msg" id="bm-msg"></div>
+    <div id="bm-list"></div>
     <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
 
@@ -1700,85 +1647,8 @@ function oBia(url, lop) {
   return trong;
 }
 
-function makeCardEl(d) {
-  const card = document.createElement('div');
-  card.className = 'fic-card fic-card-bia';
-  card.dataset.fandom = d.fandom;
-  card.addEventListener('click', () => openFic(d.idx));
-
-  // Bìa dọc bên trái, dạng gáy sách. Truyện chưa có bìa thì để ô viền đứt —
-  // 36 truyện cũ đều chưa có, nên trạng thái trống phải trông cố ý, không như lỗi.
-  card.append(oBia(d.cover, 'fic-bia'));
-
-  // Truyện chỉ dành cho thành viên: thẻ vẫn hiện đủ tên, tóm tắt, tag — chỉ nội
-  // dung là khoá. Dải này để người chưa đăng nhập biết trước, khỏi bấm vào rồi
-  // mới hụt hẫng.
-  if (d.restricted) {
-    card.classList.add('fic-card-khoa');
-    const dai = document.createElement('div');
-    dai.className = 'fic-dai-khoa';
-    // data-i18n để applyLang() đổi được chữ khi bấm EN/VI; thiếu nó thì dải
-    // đứng nguyên tiếng Anh dù cả trang đã sang tiếng Việt.
-    dai.dataset.i18n = 'only_member';
-    dai.textContent = t('only_member');
-    card.append(dai);
-  }
-
-  // Mọi thứ còn lại nằm trong cột chữ bên phải.
-  const than = document.createElement('div');
-  than.className = 'fic-than';
-  card.append(than);
-
-  const title = document.createElement('div');
-  title.className = 'fic-title';
-  title.append(document.createTextNode(d.title));
-  if (d.subtitle) {
-    title.append(document.createTextNode(': '));
-    const em = document.createElement('em');
-    em.innerHTML = d.subtitle;
-    title.append(em);
-  }
-  than.append(title);
-
-  const meta = document.createElement('div');
-  meta.className = 'fic-meta';
-  const fd = document.createElement('span');
-  fd.textContent = fandomLabel(d.fandom);
-  meta.append(fd);
-  if (d.kudos !== null || d.comments !== null) {
-    const st = document.createElement('span');
-    st.className = 'fic-stats';
-    st.textContent = `♥ ${d.kudos || 0} · ✎ ${d.comments || 0}`;
-    meta.append(st);
-  }
-  than.append(meta);
-
-  if (d.warning) {
-    const w = document.createElement('div');
-    w.className = 'fic-warning';
-    w.textContent = '⚠ ' + d.warning;
-    than.append(w);
-  }
-
-  const sum = document.createElement('div');
-  sum.className = 'fic-summary';
-  sum.innerHTML = d.summary || '';
-  than.append(sum);
-
-  const tags = document.createElement('div');
-  tags.className = 'fic-tags';
-  (d.ships || []).forEach(s => {
-    const t = document.createElement('span');
-    t.className = 'tag';
-    t.textContent = s;
-    tags.append(t);
-  });
-  than.append(tags);
-
-  return card;
-}
-// makeCardEl() giờ chỉ còn trang Bookmark dùng (window.makeCardEl). Home / Works
-// / Opus dựng bìa đĩa bằng dtThe() bên dưới.
+// Thẻ truyện kiểu cũ (makeCardEl) đã gỡ: Home / Works / Opus / Bookmark đều dựng
+// bìa đĩa bằng dtThe(). oBia() ở trên vẫn giữ — form Post dùng để xem trước ảnh bìa.
 
 // =============================================
 // GIAO DIỆN ĐĨA THAN — Home / Works / Opus
@@ -1870,6 +1740,13 @@ function dtEl(tag, props, ...con) {
     else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
     else el.setAttribute(k, v === true ? '' : v);
   });
+  ganCon(el, ...con);
+  return el;
+}
+// Gắn con vào một phần tử có sẵn, BỎ QUA null/undefined/false.
+// Đừng gọi el.append(a, dieuKien ? b : null) trực tiếp: append() đổi null thành
+// chữ "null" và in thẳng ra trang (đã dính ở hàng lọc Works và khung liner Home).
+function ganCon(el, ...con) {
   con.flat(Infinity).forEach(c => {
     if (c === null || c === undefined || c === false) return;
     el.append(c instanceof Node ? c : document.createTextNode(String(c)));
@@ -2073,7 +1950,7 @@ function renderHome() {
     const w = worksData.find(x => x.idx === homeChon);
     if (!w) return;
     const tom = catNgan(chuTron(w.summary), 260);
-    khungLiner.append(
+    ganCon(khungLiner,
       dtEl('div', { class: 'dt-eyebrow' }, [tenDuNhom(nhomCua(w)), dtNgay(w.date)].filter(Boolean).join('  ·  ')),
       dtEl('div', { class: 'dt-title' }, w.title),
       w.subtitle ? dtEl('div', { class: 'dt-sub' }, chuTron(w.subtitle)) : null,
@@ -2187,7 +2064,7 @@ function renderWorks() {
     const ships = WS.fandom === 'all' ? []
       : [...new Set(worksData.filter(w => w.fandom === WS.fandom).flatMap(w => w.ships || []))].filter(s => s !== 'Others').sort(soTuNhien);
     const daiNgan = laDienThoai();
-    boLoc.append(
+    ganCon(boLoc,
       dtEl('div', { class: 'dt-f-row' }, dtEl('label', { class: 'dt-f-lab', for: 'dt-q' }, t('dt_search')), tim),
       dtEl('div', { class: 'dt-f-row' }, dtEl('div', { class: 'dt-f-lab' }, t('fandom')),
         dtEl('div', { class: 'dt-chips' }, fandoms.map(f => chip(f === 'all' ? t('all') : f, WS.fandom === f,
@@ -2300,7 +2177,7 @@ function renderOpus() {
     if (soCanh) manh.push(t('dt_warn_n').replace('{n}', soCanh));
     const moTa = laVi() ? (g.mo_ta_vi || g.mo_ta) : g.mo_ta;
     ds.textContent = '';
-    ds.append(
+    ganCon(ds,
       dtEl('div', null,
         dtEl('div', { class: 'dt-eyebrow' }, (g.suite ? '' : 'Op. ' + g.num + '  ·  ') + manh.join('  ·  ')),
         // Riêng tổ khúc: tiêu đề đầy đủ "Suite I · Danse Macabre".
@@ -2349,9 +2226,65 @@ function vuaBanXoay() {
   hop.style.setProperty('--dm', Math.max(76, Math.ceil(46 / k)) + 'px');
 }
 
+// =============================================
+// BOOKMARK — kệ đĩa riêng của người đọc, cùng kiểu với Works
+// =============================================
+// Module nạp danh sách rồi gọi hàm này. rows = [{ id, created_at, idx, w }]
+// (w là bản rút gọn từ truy vấn bookmark, dùng khi worksData chưa có truyện đó);
+// thongBao = chữ thay cho kệ khi đang tải / trống / lỗi / chưa đăng nhập.
+// boLuu(idBookmark, nut) do module cấp — nút Bỏ lưu dưới mỗi bìa.
+let bmChon = null;
+let bmLanCuoi = null;   // để dựng lại khi đổi ngôn ngữ / xoay máy mà không nạp lại
+window.dtVeBookmark = function (rows, thongBao, boLuu) {
+  bmLanCuoi = { rows, thongBao, boLuu };
+  const goc = document.getElementById('bm-list');
+  if (!goc) return;
+  // Ưu tiên bản đầy đủ trong worksData (có nhóm Opus, số chữ, nhạc…).
+  const ds = (rows || []).map(r => ({ w: worksData.find(x => x.idx === r.idx) || r.w, bmId: r.id, luuLuc: r.created_at }))
+                         .filter(x => x.w);
+  if (!ds.some(x => x.w.idx === bmChon)) bmChon = ds[0] ? ds[0].w.idx : null;
+
+  const aside = dtEl('aside', { class: 'dt-aside', 'aria-live': 'polite', 'aria-label': t('dt_on_tt') });
+  const veAside = () => {
+    aside.textContent = '';
+    const x = ds.find(y => y.w.idx === bmChon);
+    if (x) aside.append(dtEl('div', { class: 'dt-eyebrow', style: { 'margin-bottom': '22px' } }, t('dt_on_tt')), dtLiner(x.w, 230));
+  };
+  const luoi = dtEl('div', { class: 'dt-grid-shelf' });
+  const chon = (w, el) => { bmChon = w.idx; danhDauChon(luoi, w.idx); veAside(); if (laDienThoai()) moBangTruot(w, el); };
+  ds.forEach(x => luoi.append(dtEl('div', { class: 'dt-bm-item' },
+    dtThe(x.w, chon, true),
+    dtEl('div', { class: 'dt-bm-foot' },
+      dtEl('span', null, t('bm_saved_on') + ' · ' + dtNgay(x.luuLuc)),
+      boLuu ? dtEl('button', { type: 'button', class: 'comment-del', onclick: e => boLuu(x.bmId, e.currentTarget) }, t('bm_remove')) : null))));
+  danhDauChon(luoi, bmChon);
+  veAside();
+
+  goc.textContent = '';
+  goc.append(dtEl('main', { class: 'dt-main' },
+    dtEl('header', { class: 'dt-w-head dt-px' },
+      dtEl('div', null,
+        dtEl('div', { class: 'dt-eyebrow' }, t('dt_bm_eyebrow').replace('{n}', ds.length)),
+        dtEl('h1', null, t('dt_bm_h1'))),
+      dtEl('p', null, t('dt_bm_intro'))),
+    thongBao
+      ? dtEl('p', { class: 'dt-empty dt-px' }, thongBao)
+      : dtEl('div', { class: 'dt-w-body' },
+          dtEl('section', { class: 'dt-shelf', 'aria-label': t('dt_bm_h1') }, luoi), aside)));
+};
+function veLaiBookmark() {
+  if (bmLanCuoi) window.dtVeBookmark(bmLanCuoi.rows, bmLanCuoi.thongBao, bmLanCuoi.boLuu);
+}
+
 // Vẽ lại cả ba trang: đổi ngôn ngữ, đổi theme (màu kim đĩa đọc từ biến CSS),
 // đổi dữ liệu, hoặc xoay máy qua mốc điện thoại/máy tính.
-function veLaiDiaThan() { renderHome(); renderWorks(); renderOpus(); }
+function veLaiDiaThan() {
+  renderHome(); renderWorks(); renderOpus(); veLaiBookmark();
+  // Ô đếm "Works" ở trang About. renderWorks() cũ tự cập nhật ô này; bản đĩa
+  // than viết lại mà quên, nên trang About đứng mãi ở "—".
+  const soTruyen = document.getElementById('stat-works');
+  if (soTruyen) soTruyen.textContent = worksData.length;
+}
 window.veLaiDiaThan = veLaiDiaThan;
 let dangLaDienThoai = laDienThoai();
 window.addEventListener('resize', () => {
@@ -2903,6 +2836,8 @@ const i18n = {
     dt_catalogue:'Catalogue of works', dt_prev:'Previous', dt_next:'Next', dt_suite:'Suite',
     dt_work1:'work', dt_workn:'works', dt_locked_n:'{n} members only', dt_warn_n:'{n} content warning',
     dt_credit:'Instrument icons by Lorc, Delapouite & contributors, game-icons.net, licensed under CC BY 3.0.',
+    dt_bm_h1:'Bookmarks', dt_bm_eyebrow:'Your own shelf · {n} saved',
+    dt_bm_intro:'The records you set aside. Pick one to see its liner notes, or remove it from your shelf.',
     post_lang_vi:'Written in Vietnamese',
     post_lang_vi_hint:'Leave unticked for English. Shown as the Language line in the work’s liner notes.',
     browse:'Browse', all:'All', filter:'Filter', fandom:'Fandom', ship:'Ship',
@@ -3097,6 +3032,8 @@ const i18n = {
     dt_catalogue:'Danh mục tác phẩm', dt_prev:'Trước', dt_next:'Sau', dt_suite:'Tổ khúc',
     dt_work1:'bản', dt_workn:'bản', dt_locked_n:'{n} chỉ thành viên', dt_warn_n:'{n} có cảnh báo',
     dt_credit:'Icon nhạc cụ: Lorc, Delapouite & cộng sự, game-icons.net, giấy phép CC BY 3.0.',
+    dt_bm_h1:'Đã lưu', dt_bm_eyebrow:'Kệ riêng của bạn · {n} truyện',
+    dt_bm_intro:'Những đĩa bạn để dành. Chọn một đĩa để xem lời giới thiệu, hoặc bỏ nó khỏi kệ.',
     post_lang_vi:'Truyện viết bằng tiếng Việt',
     post_lang_vi_hint:'Để trống nếu là tiếng Anh. Hiện ở dòng Ngôn ngữ trong khung giới thiệu truyện.',
     browse:'Duyệt', all:'Tất cả', filter:'Lọc', fandom:'Fandom', ship:'Ship',
@@ -3562,7 +3499,7 @@ window.addEventListener('popstate', (e) => {
      TÀI KHOẢN — Supabase Auth
      Chỉ phụ trách đăng nhập / đăng ký / hồ sơ.
      KHÔNG đụng gì tới phần Browse / danh sách truyện:
-     phần đó vẫn chạy bằng fics.json + thẻ .fic-card cứng như cũ.
+     phần đó dựng ở script cổ điển (giao diện đĩa than, dữ liệu từ fetchWorksFromDB).
      ============================================= -->
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
@@ -4561,7 +4498,8 @@ function opusSay(chu, loi) {
   const el = $('opus-msg');
   if (!chu) { el.className = 'auth-msg dt-opus-msg'; el.textContent = ''; return; }
   el.className = 'auth-msg dt-opus-msg show ' + (loi ? 'err' : 'ok');
-  el.textContent = chu;
+  // Nhận cả chữ trơn lẫn raw(error.message) (object {i18n:false, text}).
+  el.textContent = (chu && chu.i18n === false) ? chu.text : chu;
 }
 
 // napLai = true: vừa sửa/xoá nhóm, phải đọc lại bảng tags dù đã có.
@@ -4809,6 +4747,9 @@ function rqSay(key, isErr, tho) {
   const el = $('rq-msg');
   if (!key) { el.className = 'auth-msg'; delete el.dataset.i18n; el.textContent = ''; return; }
   el.className = 'auth-msg show ' + (isErr ? 'err' : 'ok');
+  // Các chỗ gọi truyền raw(error.message) — một OBJECT {i18n:false, text}. Gán
+  // thẳng object vào textContent là ra chữ "[object Object]" thay cho câu báo lỗi.
+  if (key && key.i18n === false) { key = key.text; tho = true; }
   if (tho) { delete el.dataset.i18n; el.textContent = key; }
   else { el.dataset.i18n = key; el.textContent = tr(key); }
 }
@@ -5025,8 +4966,8 @@ $('rq-gui').addEventListener('click', async () => {
 });
 
 // ---------- trang "Truyện đã lưu" ----------
-// Dựng lại đúng khung .fic-card của Browse để không phải thêm kiểu dáng mới,
-// chỉ gắn thêm nút Bỏ lưu. Bấm vào thẻ vẫn mở truyện như ở Browse.
+// Dựng bằng dtVeBookmark() ở script cổ điển — cùng bìa đĩa + khung liner như Works,
+// thêm dòng ngày lưu + nút Bỏ lưu dưới mỗi bìa.
 function bmSay(key, isErr) {
   const el = $('bm-msg');
   if (!key) { el.className = 'auth-msg'; delete el.dataset.i18n; el.textContent = ''; return; }
@@ -5035,77 +4976,59 @@ function bmSay(key, isErr) {
   el.textContent = tr(key);
 }
 
-function bmNote(list, text) {
-  list.textContent = '';
-  const d = document.createElement('div');
-  d.className = 'comments-empty';
-  d.textContent = text;
-  list.appendChild(d);
-}
-
+// Trang Bookmark dựng ở script cổ điển (window.dtVeBookmark — cùng bìa đĩa và
+// khung liner như Works). Module chỉ lo nạp danh sách và bỏ lưu.
 async function loadBookmarks() {
-  const list = $('bm-list');
   bmSay(null);
-  bmNote(list, tr('bm_loading'));
+  window.dtVeBookmark(null, tr('bm_loading'));
 
   const { data: { session } } = await sb.auth.getSession();
-  if (!session) { bmNote(list, tr('prof_need_signin')); return; }
+  if (!session) { window.dtVeBookmark(null, tr('prof_need_signin')); return; }
 
-  // Chỉ lấy đúng cột cần. work_id nối sang works để dựng thẻ.
+  // Chỉ lấy đúng cột cần. Bản đầy đủ của truyện lấy từ worksData; phần nhúng này
+  // chỉ để dự phòng khi worksData chưa có truyện đó (vd. lúc DB còn chưa trả về).
   const { data, error } = await sb.from('bookmarks')
-    .select('id, created_at, work_id, works!inner(legacy_id, title, subtitle, summary, warning_note,'
-          + ' kudos_count, comment_count, work_fandoms(fandoms(name)), work_ships(ships(name)))')
+    .select('id, created_at, work_id, works!inner(id, legacy_id, title, subtitle, summary, warning_note,'
+          + ' kudos_count, is_restricted, cover_url, language, word_count,'
+          + ' work_fandoms(fandoms(name)), work_ships(ships(name)), work_tags(tags(slug,type)))')
     .eq('user_id', session.user.id)
     .order('created_at', { ascending: false });
 
-  if (error) { bmNote(list, tr('bm_err')); return; }
-  if (!data || !data.length) { bmNote(list, tr('bm_empty')); return; }
+  if (error) { window.dtVeBookmark(null, tr('bm_err')); return; }
+  if (!data || !data.length) { window.dtVeBookmark([], tr('bm_empty')); return; }
 
-  list.textContent = '';
-  const locale = (document.documentElement.getAttribute('data-lang') === 'vi') ? 'vi-VN' : 'en-GB';
-
-  data.forEach(row => {
+  const rows = data.map(row => {
     const w = row.works;
     const idx = parseInt(String(w.legacy_id || '').replace(/\D/g, ''), 10);
-    const card = window.makeCardEl({
-      idx: isNaN(idx) ? -1 : idx,
-      title: w.title || '', subtitle: w.subtitle || '',
-      fandom: (w.work_fandoms || []).map(x => x.fandoms.name)[0] || 'Others',
-      warning: w.warning_note || '', summary: w.summary || '',
-      ships: (w.work_ships || []).map(x => x.ships.name),
-      featured: false, date: row.created_at,
-      kudos: w.kudos_count || 0, comments: w.comment_count || 0
-    });
-
-    // Hàng dưới thẻ: ngày lưu + nút bỏ lưu. Bấm nút không được mở truyện.
-    const foot = document.createElement('div');
-    foot.className = 'bm-foot';
-    const when = document.createElement('span');
-    when.textContent = tr('bm_saved_on') + ' · ' + new Date(row.created_at)
-      .toLocaleDateString(locale, { day:'numeric', month:'short', year:'numeric' });
-    const del = document.createElement('button');
-    del.type = 'button';
-    del.className = 'comment-del';
-    del.dataset.i18n = 'bm_remove';
-    del.textContent = tr('bm_remove');
-    del.addEventListener('click', (e) => { e.stopPropagation(); removeBookmark(row.id, del); });
-    foot.append(when, del);
-    card.appendChild(foot);
-
-    list.appendChild(card);
+    return {
+      id: row.id, created_at: row.created_at, idx,
+      w: isNaN(idx) ? null : {
+        idx, uuid: w.id, title: w.title || '', subtitle: w.subtitle || '', summary: w.summary || '',
+        fandom: (w.work_fandoms || []).map(x => x.fandoms.name)[0] || 'Others',
+        ships: (w.work_ships || []).map(x => x.ships.name),
+        warning: w.warning_note || '', restricted: !!w.is_restricted, cover: w.cover_url || '',
+        lang: w.language || null, words: (typeof w.word_count === 'number') ? w.word_count : null,
+        nch: null, music: [], kudos: w.kudos_count || 0,
+        groupSlug: ((w.work_tags || []).map(x => x.tags).find(t0 => t0 && t0.type === 'category') || {}).slug || null
+      }
+    };
   });
+  window.dtVeBookmark(rows, null, removeBookmark);
 }
 window.loadBookmarks = loadBookmarks;
 
 async function removeBookmark(id, btn) {
   btn.disabled = true;
   btn.textContent = tr('bm_removing');
-  const { error } = await sb.from('bookmarks').delete().eq('id', id);
+  const { data, error } = await sb.from('bookmarks').delete().eq('id', id).select('work_id');
   if (error) {
     btn.disabled = false; btn.textContent = tr('bm_remove');
     bmSay('bm_remove_err', true);
     return;
   }
+  // Nút ✦ trên bìa ở các trang khác phải tắt theo.
+  (data || []).forEach(r => window.skDaLuu.delete(r.work_id));
+  window.dtVeLaiNutLuu();
   // Nạp lại TRƯỚC rồi mới báo: loadBookmarks() xoá trắng ô thông báo,
   // gọi ngược thứ tự là câu báo vừa hiện đã bị xoá ngay.
   await loadBookmarks();
@@ -5413,6 +5336,9 @@ window.dtLuuTruyen = async function (w, btn) {
   if (error && error.code !== '23505') { btn.title = tr('wa_err'); return; }
   if (daLuu) window.skDaLuu.delete(w.uuid); else window.skDaLuu.add(w.uuid);
   window.dtVeLaiNutLuu();
+  // Đang ở trang Bookmark mà bỏ lưu bằng nút ✦ trên khung liner: nạp lại để
+  // đĩa đó rời kệ ngay, đừng để nó nằm lại tới lần mở trang sau.
+  if ($('page-bookmarks').classList.contains('active')) loadBookmarks();
 };
 
 // ---------- bình luận ----------

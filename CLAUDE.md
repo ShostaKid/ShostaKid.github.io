@@ -1178,3 +1178,33 @@ tiếng Việt đăng qua web luôn mang `'en'` (9 truyện đã sửa ở migra
 Migration 26 và 27 chạm `updated_at` của **cả 52 truyện** (trigger `works_touch`).
 Mẹo cũ "`published_at` trùng từng giây với `updated_at` ⇒ bị form ghi đè" không
 còn dùng được cho dữ liệu trước 24/09.
+
+### Sửa sau lần đầu lên web (24/09)
+
+- **Chữ "null" ở hàng lọc Works** (và ẩn cả ở khung liner Home): `el.append(a,
+  dk ? b : null)` — `append()` đổi `null` thành chữ "null". Mọi chỗ gắn con có
+  điều kiện giờ đi qua `ganCon(el, …)`, hàm này bỏ qua null/undefined/false.
+  **Đừng gọi `.append()` với biểu thức có thể ra null.** (`dtEl()` thì an toàn.)
+- **Ô đếm Works ở trang About đứng ở "—"**: `renderWorks()` cũ tự cập nhật
+  `#stat-works`, bản viết lại quên. Giờ nằm trong `veLaiDiaThan()`.
+- **Trang Bookmark theo kiểu đĩa than**: `window.dtVeBookmark(rows, thongBao,
+  boLuu)` ở script cổ điển dựng kệ + khung liner (máy tính) / bảng trượt (điện
+  thoại), dưới mỗi bìa có ngày lưu + nút Bỏ lưu — nút nằm NGOÀI nút bìa (không
+  lồng button trong button). Module `loadBookmarks()` chỉ nạp rồi giao cho hàm đó.
+  Bỏ lưu bằng ✦ trên khung liner khi đang ở trang Bookmark thì nạp lại danh sách.
+  `makeCardEl()` và toàn bộ CSS `.fic-card` đã gỡ (không còn trang nào dùng);
+  `oBia()` + `.fic-bia` / `.bia-trong` giữ lại cho ô xem trước ảnh bìa ở form Post.
+- **`[object Object]` ở ô báo lỗi** (lỗi có từ trước): `raw(text)` trả object
+  `{i18n:false, text}`. `pwSay`/`abSay`/`msg` hiểu object đó, còn `rqSay` và
+  `opusSay` gán thẳng vào `textContent`. Đã cho hai hàm này hiểu `raw()`. Lộ ra
+  khi test trang Request bằng phiên giả (API trả 401) — ngoài đời sẽ lộ khi mất
+  mạng hoặc phiên hết hạn.
+
+**Cách quét toàn trang đã dùng** (làm lại được): bản sao `index.html` chèn đoạn
+chặn lệnh ghi + phiên admin giả (xem "Cách test form mà không ghi DB") + trả sẵn
+danh sách bookmark mẫu; mở trong iframe cùng origin ở 1440 / 390 / 320px, EN/VI,
+sáng/tối; `showPage()` lần lượt mọi trang và `openFic()`; với mỗi trang kiểm
+`innerText` không có `null|undefined|NaN|[object `, không phần tử nào tràn quá bề
+ngang, và bắt `error` / `unhandledrejection`. Kèm kiểm tĩnh: mọi id JS gọi đều có
+trong HTML, mọi `onclick` trỏ tới hàm còn tồn tại, mọi khoá i18n đang dùng đều có
+ở cả EN lẫn VI. Xong nhớ xoá bản sao và key `sb-*` trong localStorage.
