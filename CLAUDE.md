@@ -138,6 +138,17 @@ Migration đã chạy, theo thứ tự:
 16. `create_work_images_bucket`
 17. `fix_chapters_insert_allow_admin`
 18. `create_site_content`
+19. `add_cover_crop`
+20. `restricted_show_card_hide_content`
+21. `create_requests`
+22. `notif_seen_and_status_changed_at`
+23. `tags_add_description_and_order`
+24. `seed_opus_groups_and_assign_works`
+25. `opus_add_symphony_group`
+26. `works_word_count_from_chapters`
+27. `restore_published_at_language_suite_iv`
+
+(Bốn migration `import_*` chạy một lần lúc nhập dữ liệu, đã dọn — không đánh số ở đây.)
 
 ### Ba cái bẫy đã gặp — đừng lặp lại
 
@@ -1023,3 +1034,57 @@ không pill nào sáng dù đang lọc All. Đã cho All sáng lại.
 - **Transition không chạy khi pane bị ẩn.** `getComputedStyle(...).transform` của
   mũi tên trả `matrix(1,0,0,1,0,0)` mãi, dễ tưởng CSS sai. Tắt tạm `transition`
   rồi đo lại thì ra đúng `matrix(-1,0,0,-1,0,0)`.
+
+---
+
+## Bước 0 của đợt đổi giao diện đĩa than (cập nhật 2026-09-24)
+
+Khảo sát bản thiết kế mới (Claude Design) lòi ra bốn lỗi dữ liệu. Đã sửa trước
+khi đụng giao diện, vì giao diện mới dựa vào đúng mấy cột này.
+
+### Form đăng bài từng ghi đè ngày đăng (commit `f9d6e58`)
+
+Mỗi lần bấm Lưu, `published_at` của truyện **và mọi chương** bị ghi bằng giờ hiện
+tại. 26 truyện đã mang ngày 05/09 theo cách đó; mục "mới nhất" gần như vô nghĩa.
+Dấu hiệu nhận ra: `published_at` trùng từng giây với `updated_at`.
+
+Giờ `pwPublishedAt` giữ ngày gốc: chỉ lần đầu đăng mới lấy giờ hiện tại, chuyển
+về nháp cũng giữ ngày. Mỗi chương giữ ngày riêng qua `dataset.chPubAt`.
+Kèm hai lỗi cùng khối: chương vừa chèn nay được ghi ngược `id` vào form (trước
+đó Lưu lần hai là chèn trùng vị trí), và nhóm Opus mới lấy `thu_tu` = lớn nhất + 10
+(trước đó DB điền mặc định 100, trùng Suite III).
+
+**Cách test form mà không ghi DB:** chép `index.html` thành bản tạm, chèn vào đầu
+`<head>` một đoạn bọc `window.fetch` — lệnh ghi tới `/rest/v1/` trả kết quả giả
+(nhớ trả **object** khi header `Accept` có `pgrst.object`, vì `.single()` cần thế),
+lệnh đọc đi thật bằng khoá anon, và một phiên đăng nhập giả trong localStorage.
+supabase-js giữ tham chiếu `fetch` **lúc tạo client**, nên phải bọc trước khi
+module chạy. Xong nhớ xoá bản tạm và key `sb-*` trong localStorage.
+
+### Migration 26 — `works.word_count` do trigger giữ
+
+`chapters_sync_word_count` → `sync_work_word_count()` (SECURITY DEFINER, đã
+revoke PUBLIC) cộng `word_count` các chương **published** mỗi khi chương thêm/
+sửa/xoá/đổi trạng thái. `authenticated` bị revoke `UPDATE (word_count)` — cột này
+giờ như `kudos_count`, client không ghi được.
+
+**Phải ở DB, đừng cộng ở giao diện:** khách chưa đăng nhập không đọc được chương
+của truyện Members only (RLS), nên cộng từ chương là ra 0 cho đúng mấy truyện đó.
+Đã thấy thật khi chụp dữ liệu bằng khoá anon cho bản mẫu.
+
+Đã test bằng khối `DO ... raise exception` (tự huỷ) dưới quyền admin: sửa chương
++100, thêm chương +50, chuyển nháp thì trừ ra, xoá thì giữ — đều đúng.
+
+### Migration 27 — sửa dữ liệu
+
+- `published_at` fic-0 → fic-35 lấy lại từ `fics/*.yaml` (00:00 UTC).
+- fic-36, 37, 42, 43, 50 (đăng qua web, bị ghi đè) lấy `created_at` — chủ repo
+  xác nhận tạo truyện là đăng luôn. Từ 15 ngày khác nhau lên 41.
+- 9 truyện tiếng Việt đăng qua web mang `language='en'` → `'vi'`. Nguyên nhân: form
+  **không có ô chọn ngôn ngữ**, luôn lấy mặc định. Chưa thêm ô đó — lỗi sẽ lặp lại
+  với truyện tiếng Việt mới cho tới khi thêm.
+- Suite IV · Scherzo: `thu_tu` 100 → 110, `name_vi` = tên tiếng Anh.
+
+Còn treo: mô tả EN/VI của Suite IV (chủ repo viết), fic-46 Overture chưa thuộc
+nhóm Opus nào. Slug `suite-iv-scherzo` lệch khuôn `opus-suite-N` — cố ý để nguyên;
+giao diện nhận suite bằng **tên** ("Suite IV · …"), không bằng slug.
