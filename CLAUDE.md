@@ -18,15 +18,41 @@ phải tính đến việc nó cũng sẽ dùng chung backend.
 
 - **Static site thuần**, không build step cho frontend, không framework, không bundler.
 - Host trên **GitHub Pages** (`ShostaKid.github.io`).
-- `index.html` (~1.900 dòng) là **toàn bộ website**: CSS inline (dòng 8–445),
-  HTML của cả 4 "page" (home / works / reading / about) trong cùng một file,
-  JS inline (dòng 884–1876). Điều hướng là SPA thủ công bằng `showPage(id)`.
+- Website tách thành **4 file** (trước 28/09/2026 gộp cả vào một `index.html`
+  ~5.900 dòng; đã tách cơ học, không đổi logic — xem "Tách file" bên dưới):
+  - `index.html` (~620 dòng) — thuần HTML của cả các "page" (home / works /
+    opus / reading / about...) trong cùng một file, và 2 thẻ nạp `app.js` +
+    `accounts.js`. Điều hướng là SPA thủ công bằng `showPage(id)`.
+  - `style.css` (~900 dòng) — toàn bộ CSS, nạp bằng `<link>` trong `<head>`.
+  - `app.js` (~2.000 dòng) — script thường (không `type="module"`): giao diện
+    đĩa than (Home/Works/Opus), trình đọc, i18n, theme, nhạc, filter...
+  - `accounts.js` (~2.400 dòng) — `<script type="module">`: mọi thứ đụng
+    Supabase (tài khoản, comment, kudos, bookmark, form Post...).
+  - Hai file JS giao tiếp qua `window.*` (khoảng 37 chỗ gán) — xem "Tách file".
 - Nội dung truyện: đọc từ **`chapters.content` trong Supabase** (bước 6), vẫn qua
   `txtToHtml()` để dựng HTML. File `.txt` ở gốc repo (63 file) **giữ lại làm dự
   phòng** khi không gọi được DB — chủ repo đã chốt không xoá.
 - Nhạc nền per-chapter: file audio host trên **GitHub Releases** (tag `music-v1`),
   phát bằng `<audio>` với `start`/`end` offset.
 - State phía client: `localStorage` (`sk-continue` = vị trí đọc dở, `sk-fontsize`).
+
+### Tách file (28/09/2026)
+
+Trước đó cả CSS lẫn JS đều nằm inline trong một `index.html` ~5.900 dòng. Đã tách
+**cơ học** sang `style.css` / `app.js` / `accounts.js` — di chuyển nguyên văn, không
+đổi một dòng logic, không đổi tên hàm/biến, không refactor. Đã kiểm chứng bằng
+cách ghép cả 4 file lại và diff/checksum với bản gốc trước khi tách: khớp tuyệt
+đối. `index.html` nạp 3 file kia bằng:
+
+```html
+<link rel="stylesheet" href="style.css?v=1">
+<script src="app.js?v=1"></script>
+<script type="module" src="accounts.js?v=1"></script>
+```
+
+**Sửa `style.css`, `app.js` hay `accounts.js` thì PHẢI tăng số `?v=` trong
+`index.html`** (`?v=1` → `?v=2`...) — GitHub Pages cache các file tĩnh, không
+tăng version thì trình duyệt của người đọc có thể giữ bản cũ.
 
 ### Dữ liệu truyện đang nằm ở đâu
 
@@ -95,7 +121,7 @@ Rebuild sang backend thật trên **Supabase**, **giữ nguyên giao diện hi�
   sang bảng Postgres; nội dung chapter chuyển từ file `.txt` sang cột trong DB
   (hoặc Supabase Storage), bỏ dần `fics.json` + thẻ hard-code.
 - Đa phương tiện (nhạc, ảnh) chuyển dần sang Supabase Storage thay cho GitHub Releases.
-- Frontend dự kiến vẫn dùng `supabase-js` từ CDN trong `index.html`, chưa đổi sang framework.
+- Frontend dự kiến vẫn dùng `supabase-js` từ CDN (import trong `accounts.js`), chưa đổi sang framework.
 
 Project Supabase đích: **`oseddxgmwbeduazbomuf`** ("ShostaKid update web",
 ap-northeast-1, ACTIVE) — schema `public` đã có đủ 12 bảng và toàn bộ dữ liệu truyện.
@@ -230,7 +256,7 @@ dẫn lồng sâu hơn một cấp.
 
 Tên file mang mốc thời gian là **cố ý**: mỗi lần đổi ảnh sinh URL mới nên trình
 duyệt không hiện lại ảnh cũ trong cache. Đổi lại, frontend phải tự dọn file cũ —
-`dropStaleAvatar()` trong `index.html` xoá file cũ **sau khi** `profiles.avatar_url`
+`dropStaleAvatar()` trong `accounts.js` xoá file cũ **sau khi** `profiles.avatar_url`
 đã trỏ sang ảnh mới, và chỉ xoá khi URL cũ đúng là file trong thư mục của chính
 người đó (link dán từ nơi khác thì bỏ qua).
 
@@ -716,7 +742,7 @@ Hỏng giữa chừng thì chỉ là vài chương chưa kịp cập nhật, **k
 đếm nhẹ (`Range: 0-0`) tới `/rest/v1/works`. Gói Free tạm dừng project sau ~7 ngày
 không ai gọi. Chấp nhận cả `200` lẫn `206` (206 vì có header `Range`).
 
-Key trong workflow là publishable key, vốn đã công khai trong `index.html` — không
+Key trong workflow là publishable key, vốn đã công khai trong `accounts.js` — không
 phải bí mật, không cần đưa vào GitHub Secrets.
 
 **Lưu ý:** GitHub tự tắt workflow theo lịch nếu repo **60 ngày không có hoạt động
