@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ShostaKid</title>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Nunito:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=1">
+<link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 <!-- Bộ icon nhạc cụ cho bìa đĩa và bàn xoay Opus. Gọi bằng <svg><use href="#ic-…"></svg>.
@@ -296,50 +296,77 @@
   <!-- SIGN IN / SIGN UP -->
   <div class="page" id="page-auth" style="background:var(--cream);">
     <div class="auth-wrap">
-      <div class="about-ornament" style="font-size:2.8rem;">𝄞</div>
-      <div class="section-heading" style="margin-top:1rem;" data-i18n="auth_head">Account</div>
+      <div class="auth-stage">
+        <!-- Đĩa than thuần trang trí: quay liên tục, tay cần hạ xuống khi ô nhập
+             trong .auth-panel được focus (:focus-within). Không có id/JS nào
+             trỏ vào đây — an toàn khi xoá hoặc đổi mà không đụng accounts.js. -->
+        <div class="auth-disc-wrap" aria-hidden="true">
+          <svg class="auth-disc" viewBox="0 0 220 220">
+            <circle cx="110" cy="110" r="108" style="fill:#120F0B"></circle>
+            <circle cx="110" cy="110" r="94" fill="none" style="stroke:rgba(232,223,200,.06);stroke-width:1"></circle>
+            <circle cx="110" cy="110" r="80" fill="none" style="stroke:rgba(232,223,200,.06);stroke-width:1"></circle>
+            <circle cx="110" cy="110" r="66" fill="none" style="stroke:rgba(232,223,200,.06);stroke-width:1"></circle>
+            <circle cx="110" cy="110" r="52" fill="none" style="stroke:rgba(232,223,200,.06);stroke-width:1"></circle>
+            <circle cx="110" cy="110" r="40" style="fill:var(--gold)"></circle>
+            <text x="110" y="106" text-anchor="middle" style="font-family:'Playfair Display',Georgia,serif;font-size:9px;letter-spacing:2px;fill:#120F0B">SHOSTAKID</text>
+            <text x="110" y="120" text-anchor="middle" style="font-family:Georgia,serif;font-size:7px;letter-spacing:1.5px;fill:#120F0B">SIDE A</text>
+            <circle cx="110" cy="110" r="3" style="fill:#120F0B"></circle>
+          </svg>
+          <svg class="auth-arm" viewBox="0 0 220 220">
+            <circle cx="196" cy="26" r="13" style="fill:var(--cream2);stroke:var(--gold);stroke-width:1.5"></circle>
+            <circle cx="196" cy="26" r="4" style="fill:var(--gold)"></circle>
+            <path d="M196 26 L162 68 L148 76" fill="none" style="stroke:var(--gold-dark);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round"></path>
+            <line x1="150" y1="74" x2="142" y2="84" style="stroke:var(--gold);stroke-width:5;stroke-linecap:round"></line>
+          </svg>
+        </div>
 
-      <div class="auth-tabs">
-        <button type="button" class="auth-tab active" id="tab-signin" data-i18n="auth_signin">Sign In</button>
-        <button type="button" class="auth-tab" id="tab-signup" data-i18n="auth_signup">Sign Up</button>
+        <div class="auth-panel">
+          <div class="about-ornament" style="font-size:2.8rem;">𝄞</div>
+          <div class="section-heading" style="margin-top:1rem;" data-i18n="auth_head">Account</div>
+
+          <div class="auth-tabs">
+            <button type="button" class="auth-tab active" id="tab-signin" data-i18n="auth_signin">Sign In</button>
+            <button type="button" class="auth-tab" id="tab-signup" data-i18n="auth_signup">Sign Up</button>
+          </div>
+
+          <div class="auth-msg" id="auth-msg"></div>
+
+          <form id="form-signin">
+            <div class="field">
+              <label data-i18n="auth_email">Email</label>
+              <input type="email" id="si-email" autocomplete="email" required>
+            </div>
+            <div class="field">
+              <label data-i18n="auth_password">Password</label>
+              <input type="password" id="si-password" autocomplete="current-password" required>
+            </div>
+            <button type="submit" class="ao3-link btn-full" id="si-submit" data-i18n="auth_signin_btn">Sign In →</button>
+            <div class="auth-alt">
+              <span data-i18n="auth_forgot_q">Forgot your password?</span>
+              <button type="button" id="btn-reset" data-i18n="auth_forgot_btn">Send reset link</button>
+            </div>
+          </form>
+
+          <form id="form-signup" style="display:none;">
+            <div class="field">
+              <label data-i18n="auth_username">Username</label>
+              <input type="text" id="su-username" autocomplete="username" required
+                     minlength="3" maxlength="30" pattern="[A-Za-z0-9_]{3,30}">
+              <div class="field-hint" data-i18n="auth_username_hint">3–30 characters. Letters, numbers and underscore only.</div>
+            </div>
+            <div class="field">
+              <label data-i18n="auth_email">Email</label>
+              <input type="email" id="su-email" autocomplete="email" required>
+            </div>
+            <div class="field">
+              <label data-i18n="auth_password">Password</label>
+              <input type="password" id="su-password" autocomplete="new-password" required minlength="6">
+              <div class="field-hint" data-i18n="auth_password_hint">At least 6 characters.</div>
+            </div>
+            <button type="submit" class="ao3-link btn-full" id="su-submit" data-i18n="auth_signup_btn">Create Account →</button>
+          </form>
+        </div>
       </div>
-
-      <div class="auth-msg" id="auth-msg"></div>
-
-      <form id="form-signin">
-        <div class="field">
-          <label data-i18n="auth_email">Email</label>
-          <input type="email" id="si-email" autocomplete="email" required>
-        </div>
-        <div class="field">
-          <label data-i18n="auth_password">Password</label>
-          <input type="password" id="si-password" autocomplete="current-password" required>
-        </div>
-        <button type="submit" class="ao3-link btn-full" id="si-submit" data-i18n="auth_signin_btn">Sign In →</button>
-        <div class="auth-alt">
-          <span data-i18n="auth_forgot_q">Forgot your password?</span>
-          <button type="button" id="btn-reset" data-i18n="auth_forgot_btn">Send reset link</button>
-        </div>
-      </form>
-
-      <form id="form-signup" style="display:none;">
-        <div class="field">
-          <label data-i18n="auth_username">Username</label>
-          <input type="text" id="su-username" autocomplete="username" required
-                 minlength="3" maxlength="30" pattern="[A-Za-z0-9_]{3,30}">
-          <div class="field-hint" data-i18n="auth_username_hint">3–30 characters. Letters, numbers and underscore only.</div>
-        </div>
-        <div class="field">
-          <label data-i18n="auth_email">Email</label>
-          <input type="email" id="su-email" autocomplete="email" required>
-        </div>
-        <div class="field">
-          <label data-i18n="auth_password">Password</label>
-          <input type="password" id="su-password" autocomplete="new-password" required minlength="6">
-          <div class="field-hint" data-i18n="auth_password_hint">At least 6 characters.</div>
-        </div>
-        <button type="submit" class="ao3-link btn-full" id="su-submit" data-i18n="auth_signup_btn">Create Account →</button>
-      </form>
     </div>
     <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
