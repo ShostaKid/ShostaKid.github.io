@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ShostaKid</title>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Nunito:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=2">
+<link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
 <!-- Bộ icon nhạc cụ cho bìa đĩa và bàn xoay Opus. Gọi bằng <svg><use href="#ic-…"></svg>.
@@ -74,9 +74,22 @@
   <div class="intro-title">Shosta<span>Kid</span></div>
   <div class="intro-sub" data-i18n="intro_sub">Don't ask. Just read:)</div>
   <div class="intro-line"></div>
-  <div class="intro-cta">
-    <div class="intro-bars"><span></span><span></span><span></span><span></span><span></span></div>
-    <div class="intro-cta-text" data-i18n="intro_cta">Click anywhere to enter</div>
+  <!-- Cổng hai cửa. Cửa đọc = bấm bất cứ đâu trên màn intro (như cũ); cửa commission
+       là link sang trang riêng commissions.html, app.js không chặn nó. -->
+  <div class="intro-doors">
+    <button type="button" class="intro-door intro-door-r" id="door-read">
+      <span class="intro-door-eyebrow" data-i18n="gate_r_eyebrow">For readers</span>
+      <span class="intro-door-title" data-i18n="gate_r_title">I'm here to read</span>
+      <span class="intro-door-desc" data-i18n="gate_r_desc">Fics, notes, and the music behind them.</span>
+      <span class="intro-door-go" data-i18n="gate_r_go">Enter the reading room →</span>
+    </button>
+    <span class="intro-door-or" aria-hidden="true" data-i18n="gate_or">or</span>
+    <a class="intro-door intro-door-c" id="door-comm" href="commissions.html">
+      <span class="intro-door-eyebrow" data-i18n="gate_c_eyebrow">For commissions</span>
+      <span class="intro-door-title" data-i18n="gate_c_title">I'm here about commissions</span>
+      <span class="intro-door-desc" data-i18n="gate_c_desc">Terms of service, prices and writing samples.</span>
+      <span class="intro-door-go" data-i18n="gate_c_go">Open the commission desk →</span>
+    </a>
   </div>
 </div>
 
@@ -96,6 +109,7 @@
 
     <!-- Khu CÁ NHÂN + tiện ích, nằm phải -->
     <div class="nav-utils">
+      <a id="nav-zone" class="nav-zone" href="commissions.html" data-i18n="nav_zone">Commissions</a>
       <a id="nav-signin" class="nav-signin" data-i18n="nav_signin" onclick="showPage('auth',this)">Sign In</a>
 
       <div class="nav-me" id="nav-me" style="display:none;">
@@ -637,7 +651,7 @@
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
 
 <!-- YouTube player ẩn — tự inject bằng JS -->
-<script src="app.js?v=1"></script>
+<script src="app.js?v=2"></script>
 
 <!-- =============================================
      TÀI KHOẢN — Supabase Auth

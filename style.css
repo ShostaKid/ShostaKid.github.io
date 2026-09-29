@@ -40,6 +40,27 @@ body{background:var(--cream);color:var(--ink);font-family:Georgia,'Times New Rom
 @keyframes bar{0%,100%{transform:scaleY(0.4)}50%{transform:scaleY(1)}}
 .intro-line{width:1px;height:60px;background:linear-gradient(to bottom,transparent,rgba(184,151,42,0.4),transparent);margin-bottom:1rem;}
 
+/* Cổng hai cửa trong màn intro. Intro luôn tối nên dùng màu cố định như phần trên. */
+#intro{overflow-y:auto;justify-content:safe center;}
+.intro-doors{display:flex;align-items:stretch;margin-top:0.5rem;max-width:calc(100vw - 2rem);}
+.intro-door{width:min(400px,42vw);box-sizing:border-box;padding:28px;display:flex;flex-direction:column;gap:10px;text-align:left;text-decoration:none;cursor:pointer;font:inherit;color:#e8dfc8;border:1px solid #3a3220;background:#1a1610;transition:border-color 0.2s;}
+.intro-door-c{border-color:#3a4566;background:#1e2843;}
+.intro-door:hover,.intro-door:focus-visible{border-color:var(--gold);outline:none;}
+.intro-door-eyebrow{font-family:var(--font-ui);font-size:0.62rem;letter-spacing:4px;text-transform:uppercase;color:rgba(201,168,76,0.75);}
+.intro-door-title{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:1.7rem;line-height:1.15;}
+.intro-door-desc{font-family:Georgia,serif;font-style:italic;font-size:0.95rem;color:rgba(232,223,200,0.6);}
+.intro-door-go{margin-top:auto;padding-top:10px;font-family:var(--font-ui);font-size:0.66rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);}
+.intro-door-or{align-self:center;padding:0 1.4rem;font-family:'Playfair Display',Georgia,serif;font-style:italic;color:rgba(232,223,200,0.5);}
+@media (max-width:700px){
+  .intro-ornament{font-size:3rem;margin-bottom:1rem;}
+  .intro-sub{margin-bottom:1.4rem;}
+  .intro-line{height:30px;}
+  .intro-doors{flex-direction:column;gap:12px;width:100%;max-width:420px;padding:0 1rem;box-sizing:border-box;}
+  .intro-door{width:100%;padding:16px 18px;gap:6px;}
+  .intro-door-title{font-size:1.3rem;}
+  .intro-door-desc,.intro-door-or{display:none;}
+}
+
 /* SITE */
 #site{opacity:0;transition:opacity 0.8s ease;}
 #site.visible{opacity:1;}
@@ -57,6 +78,12 @@ nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padd
   text-decoration:none;text-transform:uppercase;cursor:pointer;padding:6px 12px;
   border:1px solid var(--border);border-radius:2px;transition:color 0.2s,border-color 0.2s,background 0.2s;}
 .nav-signin:hover,.nav-signin.active{color:var(--ui-head);border-color:var(--gold);background:var(--cream2);}
+
+/* Nút sang vùng Commission — cùng dáng nút Sign In, nằm cạnh nó. */
+.nav-zone{font-family:var(--font-ui);font-size:0.68rem;letter-spacing:2px;color:var(--ui);
+  text-decoration:none;text-transform:uppercase;cursor:pointer;padding:6px 12px;white-space:nowrap;
+  border:1px solid var(--border);border-radius:2px;transition:color 0.2s,border-color 0.2s,background 0.2s;}
+.nav-zone:hover{color:var(--ui-head);border-color:var(--gold);background:var(--cream2);}
 
 .nav-me{position:relative;display:flex;align-items:center;}
 /* Avatar là nút mở menu. Ảnh đặt bằng background-image chứ không phải <img>,
@@ -502,6 +529,7 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   }
   .nav-links a { font-size: 0.62rem; letter-spacing: 1.6px; white-space: nowrap; padding: 2px 0; }
   .nav-signin { font-size: 0.56rem; letter-spacing: 1.2px; padding: 5px 8px; white-space: nowrap; }
+  .nav-zone { font-size: 0.56rem; letter-spacing: 1.2px; padding: 5px 8px; }
   .nav-avatar { width: 26px; height: 26px; font-size: 0.64rem; }
   .nav-menu { min-width: 170px; }
 

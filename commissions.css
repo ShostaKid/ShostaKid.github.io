@@ -1,0 +1,155 @@
+/* Cùng bộ biến màu với style.css của web chính, để sau này gộp/đổi theme là khớp. */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --cream:#FAF7F0;--cream2:#F2EDE0;--gold:#B8972A;--gold-light:#D4AF5A;--gold-dark:#8A6E1A;
+  --ink:#2C2318;--ink2:#5C4F3A;--ink3:#8C7D66;--border:#D4C49A;
+  --ui:#6B5B42;--ui-head:#836717;--hair:#E6DBBE;--on-head:#FAF7F0;
+  --ph:#7A5F14;            /* chữ placeholder [chưa điền] */
+}
+[data-theme="dark"]{
+  --cream:#16120D;--cream2:#1E1810;--gold:#C9A84C;--gold-light:#D4B86A;--gold-dark:#D4B86A;
+  --ink:#E8DFC8;--ink2:#C4B090;--ink3:#7A6D58;--border:#332A1A;
+  --ui:#A89878;--ui-head:#C9A84C;--hair:#2B2317;--on-head:#16120D;
+  --ph:#E0BB62;
+}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{background:var(--cream);color:var(--ink);font-family:'Lora',Georgia,serif;min-height:100vh;overflow-x:hidden;line-height:1.7}
+a{color:var(--ui-head)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+/* ---------- thanh trên ---------- */
+.cm-top{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--cream) 96%,transparent);border-bottom:1px solid var(--border);backdrop-filter:blur(4px)}
+.cm-top-in{max-width:1280px;margin:0 auto;height:64px;padding:0 3rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem}
+.cm-logo{font-family:'Playfair Display',serif;font-size:1.1rem;letter-spacing:3px;text-transform:uppercase;color:var(--ink);text-decoration:none;white-space:nowrap}
+.cm-logo span{color:var(--gold)}
+.cm-links{display:flex;gap:2.5rem}
+.cm-links a{font-family:'Playfair Display',serif;font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;text-decoration:none;color:var(--ink2);padding:4px 0;border-bottom:1px solid transparent;transition:color .2s}
+.cm-links a:hover,.cm-links a.on{color:var(--ui-head);border-bottom-color:var(--gold)}
+.cm-right{display:flex;align-items:center;gap:12px}
+/* Nút chuyển vùng: hai nửa dính nhau, nửa đang đứng được tô vàng. */
+.cm-zone{display:flex}
+.cm-zone a,.cm-zone span{height:30px;display:flex;align-items:center;padding:0 14px;border:1px solid var(--border);font-family:'Playfair Display',serif;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;text-decoration:none;color:var(--ui)}
+.cm-zone a{border-right:0}
+.cm-zone a:hover{color:var(--ui-head);border-color:var(--gold)}
+.cm-zone span{background:var(--gold);border-color:var(--gold);color:var(--on-head)}
+.cm-icon{background:none;border:1px solid var(--border);color:var(--ui-head);cursor:pointer;width:34px;height:30px;display:flex;align-items:center;justify-content:center;font-size:1rem;line-height:1}
+.cm-icon:hover{border-color:var(--gold)}
+.cm-burger{display:none;width:44px;height:44px}
+
+/* ---------- khung nội dung ---------- */
+.cm-wrap{max-width:1280px;margin:0 auto;padding:3rem 3rem 5rem;display:flex;flex-direction:column;gap:2.75rem}
+.cm-eyebrow{font-family:'Playfair Display',serif;font-size:.68rem;letter-spacing:4px;text-transform:uppercase;color:var(--ui-head)}
+.cm-hero{display:flex;flex-direction:column;gap:.7rem}
+.cm-hero h1{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:clamp(2.6rem,6vw,4rem);line-height:1.05;color:var(--ink)}
+.cm-vi{font-family:'Playfair Display',serif;font-size:1.35rem;color:var(--gold-dark)}
+.cm-lead{font-size:1.1rem;font-style:italic;color:var(--ink2);max-width:720px;line-height:1.6}
+.cm-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:.8rem}
+.cm-btn{display:inline-flex;align-items:center;gap:.5rem;min-height:46px;padding:0 22px;font-family:'Playfair Display',serif;font-size:.74rem;letter-spacing:2.5px;text-transform:uppercase;text-decoration:none;border:1px solid var(--ui-head);color:var(--ui-head);background:transparent;cursor:pointer}
+.cm-btn.solid{background:var(--ui-head);color:var(--on-head)}
+.cm-btn:hover{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+
+.cm-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.cm-fact{border:1px solid var(--border);background:var(--cream2);padding:22px;display:flex;flex-direction:column;gap:10px}
+.cm-fact small{font-family:'Playfair Display',serif;font-size:.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--ui-head)}
+.cm-fact b{font-family:'Playfair Display',serif;font-weight:400;font-size:1.25rem;line-height:1.3;color:var(--ink)}
+
+/* Chỗ chưa điền: luôn nhìn ra được là còn thiếu. */
+.ph{color:var(--ph);font-style:italic;border-bottom:1px dotted var(--gold)}
+
+.cm-body{display:flex;gap:56px;align-items:flex-start}
+.cm-toc{width:240px;flex-shrink:0;position:sticky;top:96px;display:flex;flex-direction:column;gap:12px;padding-top:6px}
+.cm-toc small{font-family:'Playfair Display',serif;font-size:.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--ui-head);margin-bottom:2px}
+.cm-toc a{font-size:.95rem;line-height:1.4;text-decoration:none;color:var(--ink2);border-left:2px solid transparent;padding-left:12px}
+.cm-toc a:hover,.cm-toc a.on{color:var(--ui-head);border-left-color:var(--gold)}
+.cm-main{flex:1;min-width:0;display:flex;flex-direction:column}
+
+/* Mỗi mục là <details>: máy tính luôn mở (JS chặn gập), điện thoại gập được. */
+.cm-sec{border-bottom:1px solid var(--border);padding:0 0 2rem;margin-bottom:2rem}
+.cm-sec:last-of-type{border-bottom:0}
+.cm-sec>summary{list-style:none;cursor:default;display:flex;align-items:center;justify-content:space-between;gap:12px;font-family:'Playfair Display',serif;font-weight:500;font-size:1.5rem;line-height:1.3;color:var(--gold-dark);margin-bottom:1rem}
+.cm-sec>summary::-webkit-details-marker{display:none}
+.cm-sec>summary svg{display:none;flex-shrink:0}
+.cm-sec-body{display:flex;flex-direction:column;gap:.55rem}
+.cm-sub{margin-top:.5rem;font-family:'Playfair Display',serif;font-style:italic;font-size:1.1rem;color:var(--gold-dark)}
+.cm-li{position:relative;padding-left:20px;font-size:1rem;color:var(--ink2)}
+.cm-li::before{content:'';position:absolute;left:0;top:.72em;width:6px;height:6px;background:var(--gold)}
+.cm-li.l2{padding-left:48px}.cm-li.l2::before{left:28px}
+.cm-li.l3{padding-left:76px}.cm-li.l3::before{left:56px}
+.cm-li b,.cm-num b,.cm-li strong{color:var(--ink);font-weight:600}
+.cm-num{display:flex;gap:10px;font-size:1rem;color:var(--ink2)}
+.cm-num i{font-style:normal;font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gold-dark);width:22px;flex-shrink:0}
+
+/* ---------- bảng giá / sample / liên hệ ---------- */
+.cm-block{display:flex;flex-direction:column;gap:1rem;padding-top:.5rem}
+.cm-block h2{font-family:'Playfair Display',serif;font-weight:500;font-size:1.5rem;color:var(--gold-dark)}
+.cm-note{font-style:italic;color:var(--ink3);font-size:.95rem}
+.cm-table{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:1px solid var(--border);background:var(--cream2)}
+.cm-table>div{padding:14px 18px;border-top:1px solid var(--hair);font-size:.95rem}
+.cm-table>div.h{border-top:0;font-family:'Playfair Display',serif;font-size:.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--ui-head)}
+.cm-samples{border:1px solid var(--border);background:var(--cream2);padding:28px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.cm-samples p{max-width:560px;color:var(--ink2)}
+.cm-samples p b{font-family:'Playfair Display',serif;font-weight:400;font-style:italic;font-size:1.35rem;color:var(--ink);display:block;margin-bottom:.3rem}
+.cm-contact{border:1px solid var(--gold);padding:28px;display:flex;align-items:center;justify-content:space-between;gap:24px;background:var(--cream2)}
+.cm-contact p{max-width:560px;color:var(--ink2)}
+.cm-contact p b{font-family:'Playfair Display',serif;font-weight:400;font-style:italic;font-size:1.35rem;color:var(--ink);display:block;margin-bottom:.3rem}
+
+footer.cm-foot{border-top:1px solid var(--border);padding:2rem 1rem 6.5rem;text-align:center;font-family:'Playfair Display',serif;font-size:.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--ui)}
+footer.cm-foot span{color:var(--gold)}
+
+/* ---------- thanh nhạc (cùng kiểu #music-bar của web chính, nhưng dính đáy) ---------- */
+.cm-music{position:fixed;left:0;right:0;bottom:0;z-index:60;background:color-mix(in srgb,var(--cream2) 96%,transparent);border-top:1px solid var(--border);backdrop-filter:blur(4px)}
+.cm-music-in{max-width:1280px;margin:0 auto;padding:8px 3rem;min-height:44px;display:flex;align-items:center;gap:1rem;font-family:'Playfair Display',serif;font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--ui)}
+.cm-bars{display:flex;align-items:flex-end;gap:2px;height:14px}
+.cm-bars span{width:2px;background:var(--gold);border-radius:1px;animation:cmbar .8s ease-in-out infinite}
+.cm-bars span:nth-child(1){height:4px}.cm-bars span:nth-child(2){height:10px;animation-delay:.1s}.cm-bars span:nth-child(3){height:14px;animation-delay:.2s}.cm-bars span:nth-child(4){height:10px;animation-delay:.3s}.cm-bars span:nth-child(5){height:4px;animation-delay:.4s}
+.cm-bars.paused span{animation:none;transform:scaleY(.3)}
+@keyframes cmbar{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
+.cm-mtitle{flex:1;min-width:0;color:var(--ink2);font-style:italic;text-transform:none;letter-spacing:.5px;font-family:'Lora',serif;font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cm-mbtn{background:none;border:1px solid var(--border);padding:4px 12px;font-family:inherit;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ui);cursor:pointer;min-height:32px}
+.cm-mbtn:hover{border-color:var(--ui-head);color:var(--ui-head)}
+
+/* ---------- điện thoại ---------- */
+.cm-menu{display:none}
+@media (max-width:820px){
+  .cm-top-in{height:60px;padding:0 12px 0 20px}
+  .cm-links,.cm-right .cm-zone,.cm-right .cm-theme{display:none}
+  .cm-burger{display:flex}
+  .cm-logo{font-size:.95rem;letter-spacing:2px}
+  .cm-menu{position:absolute;left:0;right:0;top:100%;background:var(--cream);border-bottom:1px solid var(--border);padding:8px 20px 20px;flex-direction:column;gap:2px;box-shadow:0 12px 24px rgba(0,0,0,.18)}
+  .cm-menu.open{display:flex}
+  .cm-menu>a{display:flex;align-items:center;min-height:48px;font-family:'Playfair Display',serif;font-size:.78rem;letter-spacing:3px;text-transform:uppercase;text-decoration:none;color:var(--ink2);border-bottom:1px solid var(--hair)}
+  .cm-menu .cm-zone{margin-top:14px}
+  .cm-menu .cm-zone a,.cm-menu .cm-zone span{flex:1;justify-content:center;height:44px}
+  .cm-menu .cm-zone a{border-right:0}
+  .cm-menu .cm-icon{width:100%;height:44px;margin-top:10px;font-size:.7rem;letter-spacing:2px;font-family:'Playfair Display',serif;text-transform:uppercase}
+
+  .cm-wrap{padding:1.75rem 20px 3rem;gap:1.6rem}
+  .cm-hero h1{font-size:2.6rem}
+  .cm-vi{font-size:1.1rem}
+  .cm-lead{font-size:.95rem}
+  .cm-btn{flex:1;justify-content:center;min-width:0}
+  .cm-facts{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .cm-fact{padding:14px;gap:8px}
+  .cm-fact small{font-size:.56rem;letter-spacing:2px}
+  .cm-fact b{font-size:1rem}
+  .cm-body{display:block}
+  .cm-toc{display:none}
+  .cm-sec{padding:0;margin:0;border-top:1px solid var(--border);border-bottom:0}
+  .cm-sec:last-of-type{border-bottom:1px solid var(--border)}
+  .cm-sec>summary{cursor:pointer;min-height:64px;margin:0;padding:0 4px;font-size:1.05rem;color:var(--ink)}
+  .cm-sec[open]>summary{color:var(--gold-dark)}
+  .cm-sec>summary svg{display:block;color:var(--gold);transition:transform .2s}
+  .cm-sec[open]>summary svg{transform:rotate(180deg)}
+  .cm-sec-body{padding:4px 4px 22px}
+  .cm-li{font-size:.95rem}
+  .cm-li.l2{padding-left:36px}.cm-li.l2::before{left:16px}
+  .cm-li.l3{padding-left:52px}.cm-li.l3::before{left:32px}
+  .cm-num{font-size:.95rem}
+  .cm-block{margin-top:1.4rem}
+  .cm-table>div{padding:10px 16px}
+  .cm-samples,.cm-contact{flex-direction:column;align-items:stretch;padding:20px;gap:16px}
+  .cm-samples .cm-btn,.cm-contact .cm-btn{flex:none}
+  .cm-music-in{padding:6px 12px 6px 16px}
+  .cm-mtitle{font-size:.78rem}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.cm-bars span{animation:none}.cm-sec>summary svg{transition:none}}

@@ -1234,3 +1234,31 @@ sáng/tối; `showPage()` lần lượt mọi trang và `openFic()`; với mỗi
 ngang, và bắt `error` / `unhandledrejection`. Kèm kiểm tĩnh: mọi id JS gọi đều có
 trong HTML, mọi `onclick` trỏ tới hàm còn tồn tại, mọi khoá i18n đang dùng đều có
 ở cả EN lẫn VI. Xong nhớ xoá bản sao và key `sb-*` trong localStorage.
+
+---
+
+## Vùng Commission + cổng hai cửa (cập nhật 2026-09-29)
+
+Trang ToS cho khách đặt viết là **một trang riêng**, không nằm trong SPA:
+`commissions.html` + `commissions.css` + `commissions.js` (nạp bằng `?v=`, sửa thì
+tăng số như các file khác). Không dùng `app.js`/`accounts.js`, không đụng Supabase.
+Nội dung ToS và bảng giá **hard-code trong HTML** — sửa giá là sửa file, không có form.
+Chỗ chưa điền hiện dạng `.ph` (chữ vàng nghiêng, gạch chấm): `[100k]`, `[1 hoặc 2]`,
+`[5% giá trị đơn]`, danh sách thể loại nhận, phụ thu ẩn tên.
+
+- Dùng chung khoá `localStorage` `sk-theme` với web chính; trang chỉ có tiếng Việt.
+- Nhạc: `<audio loop>` nguồn GitHub Releases (Rossini). Trang riêng nên không có
+  intro để mở khoá phát — cú bấm/phím đầu tiên bất kỳ sẽ bật nhạc; bấm Pause thì
+  không tự phát lại.
+- Mục ToS là `<details>`: máy tính luôn mở (JS chặn gập), điện thoại gập được.
+
+**Cổng (gate)** nằm trong màn `#intro` của `index.html`: hai cửa — `#door-read`
+(bấm bất cứ đâu trên intro vẫn vào đọc như cũ) và `#door-comm` (link thật tới
+`commissions.html`, handler intro bỏ qua nó). Phím Tab/Shift/Enter trên cửa commission
+không tính là "vào đọc". Nút `#nav-zone` cạnh Sign In là lối sang commission; ở 320px
+`.nav-utils` tự xuống hàng thứ ba (nav cao 106px) — chấp nhận.
+
+**Link sâu `#works?ship=Ship`**: `moTheoHash()` đặt `WS.ships` rồi mở Works. Ship đang
+lọc mà không có trong danh sách chip (như `Others`, vốn bị ẩn) vẫn hiện thành chip để
+bấm bỏ lọc. Trang Commission dẫn sample tới `#works?ship=Others`. Lưu ý: bấm "Read" từ
+trang Commission quay về `index.html` sẽ hiện lại intro.

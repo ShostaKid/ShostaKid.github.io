@@ -545,6 +545,9 @@ function renderWorks() {
     tim.value = WS.q;
     const ships = WS.fandom === 'all' ? []
       : [...new Set(worksData.filter(w => w.fandom === WS.fandom).flatMap(w => w.ships || []))].filter(s => s !== 'Others').sort(soTuNhien);
+    // Ship đang lọc nhưng không nằm trong danh sách (vd "Others" từ link Commission)
+    // vẫn phải hiện thành chip, không thì người xem không biết vì sao kệ bị lọc, cũng không bỏ lọc được.
+    [...WS.ships].forEach(s => { if (!ships.includes(s)) ships.push(s); });
     const daiNgan = laDienThoai();
     ganCon(boLoc,
       dtEl('div', { class: 'dt-f-row' }, dtEl('label', { class: 'dt-f-lab', for: 'dt-q' }, t('dt_search')), tim),
@@ -1100,8 +1103,16 @@ function enterSite() {
 
 document.addEventListener('DOMContentLoaded', async () => {
   const intro = document.getElementById('intro');
-  intro.addEventListener('click', enterSite);
-  document.addEventListener('keydown', () => { if(intro.style.display !== 'none') enterSite(); }, {once: true});
+  // Cửa commission là link thật: bấm vào đó thì để trình duyệt đi, đừng vào trang đọc.
+  intro.addEventListener('click', (e) => { if (e.target.closest('.intro-door-c')) return; enterSite(); });
+  // Tab/Shift/Enter trên cửa commission không được tính là "vào đọc".
+  const phimVao = (e) => {
+    if (intro.style.display === 'none') { document.removeEventListener('keydown', phimVao); return; }
+    if (e.key === 'Tab' || e.key === 'Shift' || e.target.closest('.intro-door-c')) return;
+    document.removeEventListener('keydown', phimVao);
+    enterSite();
+  };
+  document.addEventListener('keydown', phimVao);
 
   // fics.json vẫn phải tải: trình đọc cần files/chapters/music từ đây.
   await loadFicsData();
@@ -1158,6 +1169,15 @@ function moTheoHash() {
     // Truyện đăng qua form chỉ nằm trong database, fics.json không có.
     if (fics[idx] || worksData.some(w => w.idx === idx)) { openFic(idx); return true; }
     return false;          // chưa thấy -> để lượt gọi sau khi DB trả lời thử lại
+  }
+
+  // Link từ trang Commission: kệ truyện đã lọc sẵn theo ship (vd #works?ship=Others).
+  if (h.startsWith('#works?ship=')) {
+    const ship = decodeURIComponent(h.slice(12));
+    WS.fandom = 'all'; WS.ships = new Set(ship ? [ship] : []); WS.xemHet = false;
+    renderWorks();
+    showPage('works', document.querySelector('.nav-links a[data-page="works"]'));
+    return true;
   }
 
   if (h === '#home' || h === '#works' || h === '#about' || h === '#opus') {
@@ -1293,6 +1313,9 @@ const i18n = {
     opus_da_luu:'Saved ♪', opus_da_xoa:'Group deleted.',
     opus_xoa_hoi:'Delete the group “%s”? The %d works in it are NOT deleted — they just stop being grouped.',
     intro_sub:"Don't ask. Just read:)", intro_cta:'Click anywhere to enter',
+    gate_r_eyebrow:'For readers', gate_r_title:"I'm here to read", gate_r_desc:'Fics, notes, and the music behind them.', gate_r_go:'Enter the reading room →',
+    gate_c_eyebrow:'For commissions', gate_c_title:"I'm here about commissions", gate_c_desc:'Terms of service, prices and writing samples.', gate_c_go:'Open the commission desk →',
+    gate_or:'or', nav_zone:'Commissions',
     hero_sub:'I blend classical music with my thoughts',
     hero_tag:"Take a $ip y'all and enjoy",
     continue:'Continue reading:',
@@ -1489,6 +1512,9 @@ const i18n = {
     opus_da_luu:'Đã lưu ♪', opus_da_xoa:'Đã xoá nhóm.',
     opus_xoa_hoi:'Xoá nhóm “%s”? %d truyện trong đó KHÔNG bị xoá — chúng chỉ mất chỗ xếp.',
     intro_sub:'Viết là tự nhiên', intro_cta:'Bấm vào bất cứ đâu để vào',
+    gate_r_eyebrow:'Dành cho độc giả', gate_r_title:'Mình đến để đọc', gate_r_desc:'Fic, ghi chú và bản nhạc đi cùng chúng.', gate_r_go:'Vào phòng đọc →',
+    gate_c_eyebrow:'Dành cho commission', gate_c_title:'Mình đến vì commission', gate_c_desc:'Điều khoản dịch vụ, bảng giá và bài mẫu.', gate_c_go:'Mở quầy commission →',
+    gate_or:'hoặc', nav_zone:'Commission',
     hero_sub:'Tôi trộn nhạc cổ điển với những suy nghĩ của mình',
     hero_tag:'Take a $ip y\'all',
     continue:'Đang đọc dở:',
