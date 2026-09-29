@@ -1103,16 +1103,28 @@ function enterSite() {
 
 document.addEventListener('DOMContentLoaded', async () => {
   const intro = document.getElementById('intro');
-  // Cửa commission là link thật: bấm vào đó thì để trình duyệt đi, đừng vào trang đọc.
-  intro.addEventListener('click', (e) => { if (e.target.closest('.intro-door-c')) return; enterSite(); });
-  // Tab/Shift/Enter trên cửa commission không được tính là "vào đọc".
-  const phimVao = (e) => {
-    if (intro.style.display === 'none') { document.removeEventListener('keydown', phimVao); return; }
-    if (e.key === 'Tab' || e.key === 'Shift' || e.target.closest('.intro-door-c')) return;
-    document.removeEventListener('keydown', phimVao);
-    enterSite();
-  };
-  document.addEventListener('keydown', phimVao);
+  // Chỉ cửa "đọc" mới vào trang chính. Bấm chỗ khác trên màn chào, hay gõ phím, không làm gì
+  // — cửa commission là link thật và tự đi. (Nút là <button> nên Enter/Space vẫn dùng được.)
+  document.getElementById('door-read').addEventListener('click', enterSite);
+
+  // Từ trang Commission bấm "Read" (?vao=1): bỏ qua màn chào. Không có cú bấm nào trên
+  // trang này nên nhạc chưa được phép phát — giữ daVaoSite=false để yêu cầu nhạc được cất
+  // lại, rồi mở khoá ở cú bấm/phím đầu tiên (pha capture: chạy trước onclick của mục nav).
+  if (new URLSearchParams(location.search).has('vao')) {
+    intro.style.display = 'none';
+    document.getElementById('site').classList.add('visible');
+    history.replaceState(null, '', location.pathname + location.hash);
+    const moKhoa = () => {
+      ['pointerdown', 'keydown'].forEach(k => document.removeEventListener(k, moKhoa, true));
+      daVaoSite = true;
+      if (nhacChoBam) {
+        const cho = nhacChoBam; nhacChoBam = null;
+        if (cho.loai === 'fic') playMusic(cho.ficIdx, cho.chapterIdx);
+        else playMusicDirect.apply(null, cho.thamSo);
+      }
+    };
+    ['pointerdown', 'keydown'].forEach(k => document.addEventListener(k, moKhoa, true));
+  }
 
   // fics.json vẫn phải tải: trình đọc cần files/chapters/music từ đây.
   await loadFicsData();

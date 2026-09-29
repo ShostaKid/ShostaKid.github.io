@@ -20,7 +20,7 @@ body{background:var(--cream);color:var(--ink);font-family:Georgia,'Times New Rom
 
 
 /* INTRO */
-#intro{position:fixed;inset:0;z-index:2147483647;background:#0a0805;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.8s ease;}
+#intro{position:fixed;inset:0;z-index:2147483647;background:#0a0805;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.8s ease;}
 #intro.fade-out{opacity:0;pointer-events:none;}
 .intro-ornament{font-family:var(--font-ui);font-size:5rem;color:rgba(184,151,42,0.15);line-height:1;margin-bottom:2rem;animation:float 3s ease-in-out infinite;}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
