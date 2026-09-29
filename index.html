@@ -5,7 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ShostaKid</title>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Nunito:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="style.css?v=5">
+<!-- Tải sẵn trang Commission trong lúc rảnh để bấm sang là tức thì. -->
+<link rel="prefetch" href="commissions.html">
+<link rel="prefetch" href="commissions.css?v=2">
+<link rel="prefetch" href="commissions.js?v=1">
 </head>
 <body>
 <!-- Bộ icon nhạc cụ cho bìa đĩa và bàn xoay Opus. Gọi bằng <svg><use href="#ic-…"></svg>.
@@ -70,27 +74,16 @@
 
 <!-- INTRO -->
 <div id="intro">
-  <div class="intro-ornament">♩</div>
   <div class="intro-title">Shosta<span>Kid</span></div>
   <div class="intro-sub" data-i18n="intro_sub">Don't ask. Just read:)</div>
-  <div class="intro-line"></div>
-  <!-- Cổng hai cửa. Cửa đọc = bấm bất cứ đâu trên màn intro (như cũ); cửa commission
-       là link sang trang riêng commissions.html, app.js không chặn nó. -->
-  <div class="intro-doors">
-    <button type="button" class="intro-door intro-door-r" id="door-read">
-      <span class="intro-door-eyebrow" data-i18n="gate_r_eyebrow">For readers</span>
-      <span class="intro-door-title" data-i18n="gate_r_title">I'm here to read</span>
-      <span class="intro-door-desc" data-i18n="gate_r_desc">Fics, notes, and the music behind them.</span>
-      <span class="intro-door-go" data-i18n="gate_r_go">Enter the reading room →</span>
-    </button>
-    <span class="intro-door-or" aria-hidden="true" data-i18n="gate_or">or</span>
-    <a class="intro-door intro-door-c" id="door-comm" href="commissions.html">
-      <span class="intro-door-eyebrow" data-i18n="gate_c_eyebrow">For commissions</span>
-      <span class="intro-door-title" data-i18n="gate_c_title">I'm here about commissions</span>
-      <span class="intro-door-desc" data-i18n="gate_c_desc">Terms of service, prices and writing samples.</span>
-      <span class="intro-door-go" data-i18n="gate_c_go">Open the commission desk →</span>
-    </a>
+  <!-- Màn chào bàn phím piano: welcome.js dựng phím vào #wk-board. Bấm một phím là vào. -->
+  <div class="wk-top">
+    <button type="button" class="wk-mini" id="wk-lang" aria-label="Language">VI</button>
+    <button type="button" class="wk-mini" id="wk-theme" aria-label="Theme">☾</button>
   </div>
+  <div class="wk-info" id="wk-info" aria-live="polite"></div>
+  <div class="wk-board" id="wk-board"></div>
+  <div class="wk-hint" id="wk-hint"></div>
 </div>
 
 <!-- MAIN -->
@@ -651,7 +644,8 @@
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
 
 <!-- YouTube player ẩn — tự inject bằng JS -->
-<script src="app.js?v=3"></script>
+<script src="app.js?v=4"></script>
+<script src="welcome.js?v=1"></script>
 
 <!-- =============================================
      TÀI KHOẢN — Supabase Auth

@@ -22,44 +22,64 @@ body{background:var(--cream);color:var(--ink);font-family:Georgia,'Times New Rom
 /* INTRO */
 #intro{position:fixed;inset:0;z-index:2147483647;background:#0a0805;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.8s ease;}
 #intro.fade-out{opacity:0;pointer-events:none;}
-.intro-ornament{font-family:var(--font-ui);font-size:5rem;color:rgba(184,151,42,0.15);line-height:1;margin-bottom:2rem;animation:float 3s ease-in-out infinite;}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 .intro-title{font-family:var(--font-ui);font-size:2.2rem;font-weight:400;letter-spacing:8px;text-transform:uppercase;color:#e8dfc8;margin-bottom:0.8rem;text-align:center;}
 .intro-title span{color:var(--gold);}
 .intro-sub{font-family:Georgia,serif;font-style:italic;font-size:1.1rem;color:rgba(232,223,200,0.5);letter-spacing:2px;margin-bottom:4rem;text-align:center;}
-.intro-cta{display:flex;flex-direction:column;align-items:center;gap:0.8rem;}
-.intro-cta-text{font-family:var(--font-ui);font-size:0.72rem;letter-spacing:4px;text-transform:uppercase;color:rgba(184,151,42,0.7);animation:blink 2s ease-in-out infinite;}
-@keyframes blink{0%,100%{opacity:0.4}50%{opacity:1}}
-.intro-bars{display:flex;align-items:flex-end;gap:4px;height:24px;}
-.intro-bars span{width:3px;background:rgba(184,151,42,0.4);border-radius:2px;animation:bar 1.2s ease-in-out infinite;}
-.intro-bars span:nth-child(1){height:8px;animation-delay:0s;}
-.intro-bars span:nth-child(2){height:16px;animation-delay:0.15s;}
-.intro-bars span:nth-child(3){height:24px;animation-delay:0.3s;}
-.intro-bars span:nth-child(4){height:16px;animation-delay:0.45s;}
-.intro-bars span:nth-child(5){height:8px;animation-delay:0.6s;}
 @keyframes bar{0%,100%{transform:scaleY(0.4)}50%{transform:scaleY(1)}}
-.intro-line{width:1px;height:60px;background:linear-gradient(to bottom,transparent,rgba(184,151,42,0.4),transparent);margin-bottom:1rem;}
 
-/* Cổng hai cửa trong màn intro. Intro luôn tối nên dùng màu cố định như phần trên. */
 #intro{overflow-y:auto;justify-content:safe center;}
-.intro-doors{display:flex;align-items:stretch;margin-top:0.5rem;max-width:calc(100vw - 2rem);}
-.intro-door{width:min(400px,42vw);box-sizing:border-box;padding:28px;display:flex;flex-direction:column;gap:10px;text-align:left;text-decoration:none;cursor:pointer;font:inherit;color:#e8dfc8;border:1px solid #3a3220;background:#1a1610;transition:border-color 0.2s;}
-.intro-door-c{border-color:#3a4566;background:#1e2843;}
-.intro-door:hover,.intro-door:focus-visible{border-color:var(--gold);outline:none;}
-.intro-door-eyebrow{font-family:var(--font-ui);font-size:0.62rem;letter-spacing:4px;text-transform:uppercase;color:rgba(201,168,76,0.75);}
-.intro-door-title{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:1.7rem;line-height:1.15;}
-.intro-door-desc{font-family:Georgia,serif;font-style:italic;font-size:0.95rem;color:rgba(232,223,200,0.6);}
-.intro-door-go{margin-top:auto;padding-top:10px;font-family:var(--font-ui);font-size:0.66rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);}
-.intro-door-or{align-self:center;padding:0 1.4rem;font-family:'Playfair Display',Georgia,serif;font-style:italic;color:rgba(232,223,200,0.5);}
+
+/* ===== Màn chào bàn phím piano (Welcome A) ===== */
+#intro .intro-sub{margin-bottom:0.4rem;}
+.wk-top{position:absolute;top:14px;right:16px;display:flex;gap:8px;}
+.wk-mini{height:38px;min-width:38px;padding:0 10px;background:transparent;border:1px solid #4a4028;color:#b8ae97;font-family:var(--font-ui);font-size:0.65rem;letter-spacing:2px;cursor:pointer;}
+.wk-mini:hover{border-color:var(--gold);color:var(--gold);}
+.wk-info{min-height:76px;margin:0.6rem 0 1rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;padding:0 1rem;}
+.wk-info .n{font-family:'Playfair Display',Georgia,serif;font-size:1.7rem;line-height:1.2;color:#c8a24b;}
+.wk-info .d{font-family:Georgia,serif;font-style:italic;font-size:1rem;color:#d9cfb8;max-width:560px;}
+.wk-info .h{font-family:Georgia,serif;font-style:italic;font-size:1.1rem;color:#a89f8a;}
+.wk-board{--kw:min(128px,calc((100vw - 28px)/7));--bw:calc(var(--kw)*0.594);display:flex;flex-direction:column;align-items:center;}
+.wk-rail{width:calc(var(--kw)*7);height:12px;box-sizing:border-box;background:#1a1610;border-top:2px solid #c8a24b;}
+.wk-keys{position:relative;width:calc(var(--kw)*7);height:clamp(230px,calc(var(--kw)*2.34),300px);}
+.wk-whites{display:flex;height:100%;}
+.wk-white{width:var(--kw);height:100%;flex-shrink:0;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px;
+  padding:0 2px 22px;background:#ece5d0;border:1px solid #b9ad8c;border-radius:0 0 8px 8px;cursor:pointer;font:inherit;transition:background .15s,transform .08s;}
+.wk-white:hover,.wk-white:focus-visible{background:#f7f2e0;outline:none;}
+.wk-white:focus-visible{box-shadow:inset 0 0 0 2px #c8a24b;}
+.wk-white:active{background:#c8a24b;transform:translateY(2px);}
+.wk-note{font-family:var(--font-ui);font-size:11px;letter-spacing:0.22em;color:#4a3e1c;}
+.wk-lbl,.wk-lbl-s{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:clamp(14px,calc(var(--kw)*0.17),22px);line-height:1.1;color:#2b2210;text-align:center;}
+.wk-lbl-s{display:none;}
+.wk-soon{font-family:var(--font-ui);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:#6b5a2a;}
+.wk-black{position:absolute;z-index:2;top:0;left:calc(var(--kw)*var(--at) - var(--bw)/2);width:var(--bw);height:61%;box-sizing:border-box;padding:0 3px 14px;
+  display:flex;flex-direction:column;justify-content:flex-end;align-items:center;background:#1e2843;border:1px solid #3a4566;border-radius:0 0 6px 6px;cursor:pointer;font:inherit;transition:background .15s,transform .08s;}
+.wk-black:hover,.wk-black:focus-visible{background:#2b3557;outline:none;}
+.wk-black:focus-visible{box-shadow:0 0 0 2px #c8a24b;}
+.wk-black:active{background:#c8a24b;transform:translateY(2px);}
+.wk-black .wk-lbl{font-family:var(--font-ui);font-style:normal;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#c8a24b;}
+.wk-black:active .wk-lbl{color:#14110d;}
+.wk-white[aria-disabled="true"],.wk-black[aria-disabled="true"]{opacity:0.42;cursor:not-allowed;}
+.wk-white[aria-disabled="true"]:active,.wk-black[aria-disabled="true"]:active{transform:none;background:#ece5d0;}
+.wk-black[aria-disabled="true"]:active{background:#1e2843;}
+.wk-hint{margin-top:1.4rem;font-family:Georgia,serif;font-style:italic;font-size:0.9rem;color:#8f8670;text-align:center;padding:0 1rem;max-width:640px;}
 @media (max-width:700px){
-  .intro-ornament{font-size:3rem;margin-bottom:1rem;}
-  .intro-sub{margin-bottom:1.4rem;}
-  .intro-line{height:30px;}
-  .intro-doors{flex-direction:column;gap:12px;width:100%;max-width:420px;padding:0 1rem;box-sizing:border-box;}
-  .intro-door{width:100%;padding:16px 18px;gap:6px;}
-  .intro-door-title{font-size:1.3rem;}
-  .intro-door-desc,.intro-door-or{display:none;}
+  .wk-lbl{display:none;}
+  .wk-lbl-s{display:block;font-size:13px;}
+  .wk-black .wk-lbl{display:none;}
+  .wk-note{font-size:10px;}
+  .wk-info{min-height:92px;}
+  .wk-info .n{font-size:1.45rem;}
+  .wk-info .d{font-size:0.92rem;}
+  #intro .intro-title{font-size:1.7rem;letter-spacing:5px;}
 }
+
+/* Phím mờ: đổi màu chứ không giảm độ trong suốt (phím đen sẽ lộ phím trắng phía sau). */
+.wk-white[aria-disabled="true"]{opacity:1;background:#8f8a78;border-color:#7a7565;cursor:not-allowed;}
+.wk-white[aria-disabled="true"]:hover{background:#8f8a78;}
+.wk-white[aria-disabled="true"] .wk-note,.wk-white[aria-disabled="true"] .wk-lbl,.wk-white[aria-disabled="true"] .wk-lbl-s,.wk-white[aria-disabled="true"] .wk-soon{color:#3c3829;}
+.wk-black[aria-disabled="true"]{opacity:1;background:#161a26;border-color:#232a40;cursor:not-allowed;}
+.wk-black[aria-disabled="true"]:hover{background:#161a26;}
+.wk-black[aria-disabled="true"] .wk-lbl{color:#6b6244;}
 
 /* SITE */
 #site{opacity:0;transition:opacity 0.8s ease;}
@@ -951,3 +971,10 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   .auth-disc{animation:none!important;}
   .auth-arm{transition:none!important;}
 }
+
+/* Chuyển trang mượt giữa web chính và trang Commission (chuyển trang thật, cùng origin).
+   Trình duyệt hỗ trợ thì hai trang trộn mờ vào nhau thay vì nháy trắng; không hỗ trợ thì như cũ.
+   commissions.css phải khai báo y hệt, không thì bên kia không tham gia. */
+@view-transition{navigation:auto;}
+::view-transition-old(root),::view-transition-new(root){animation-duration:0.35s;}
+@media (prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important;}}

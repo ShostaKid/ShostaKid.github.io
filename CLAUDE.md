@@ -1252,13 +1252,44 @@ Chỗ chưa điền hiện dạng `.ph` (chữ vàng nghiêng, gạch chấm): `
   không tự phát lại.
 - Mục ToS là `<details>`: máy tính luôn mở (JS chặn gập), điện thoại gập được.
 
-**Cổng (gate)** nằm trong màn `#intro` của `index.html`: hai cửa — `#door-read`
-(bấm bất cứ đâu trên intro vẫn vào đọc như cũ) và `#door-comm` (link thật tới
-`commissions.html`, handler intro bỏ qua nó). Phím Tab/Shift/Enter trên cửa commission
-không tính là "vào đọc". Nút `#nav-zone` cạnh Sign In là lối sang commission; ở 320px
-`.nav-utils` tự xuống hàng thứ ba (nav cao 106px) — chấp nhận.
+**Màn chào = bàn phím piano** (Welcome A) trong `#intro` của `index.html`, dựng bởi
+`welcome.js` (nạp sau `app.js`, dùng lại hàm toàn cục của nó: `enterSite`, `showPage`,
+`openFic`, `resumeReading`, `toggleLang`, `toggleTheme`, `t`, `worksData`). **Bấm MỘT
+lần là vào**; bấm nền hay gõ phím lạ không làm gì. Bảng phím là mảng `TRANG` (7 phím
+trắng) và `DEN` (5 phím đen) đầu file; `at` của phím đen = số ranh giới phím trắng nó
+nằm trên (1,2,4,5,6).
+- Trắng: Home, Works, Opus, **Notes (mờ, "Soon" — chưa có trang; muốn bật thì bỏ `off`
+  của nó và thêm `go`)**, About, Commissions (→ `commissions.html`), Sign in (đã đăng
+  nhập thì thành Profile).
+- Đen: Resume (mờ nếu không có `sk-continue`), Members (mờ nếu chưa đăng nhập), EN/VI và
+  Theme (đổi tại chỗ, không vào), Surprise (fic ngẫu nhiên từ `worksData`). **Điện
+  thoại (≤700px) phím đen chỉ phát nốt.** Trạng thái đăng nhập về muộn (accounts.js
+  async) nên `welcome.js` làm tươi nhãn/trạng thái mờ mỗi 0,8 giây khi intro còn hiện.
+- Phím tắt bàn phím thật: A S D F G H J (trắng), W E T Y U (đen). Nốt là WebAudio
+  (triangle, gain 0.14), chỉ chạy sau cú bấm/phím.
+- Chữ nằm trong bảng i18n (`wk_*`, `wd_*`, `wb_*`, `wbd_*`); `applyLang()` gọi
+  `window.veLaiChao()` để dựng lại nhãn khi đổi ngôn ngữ.
+- Mờ bằng ĐỔI MÀU, không dùng `opacity`: phím đen trong suốt sẽ lộ phím trắng phía sau.
+- `getComputedStyle`/`innerWidth` = 0 khi pane trình duyệt bị ẩn → `dienThoai()` trả
+  đúng và test tưởng "phím đen không chạy". Đặt lại kích thước cửa sổ trước khi đo.
+- Đã bỏ hẳn hai cửa cũ (`#door-read`, `#door-comm`, `.intro-door*`) cùng hoa văn ♩,
+  `.intro-cta`, `.intro-bars` — không còn gì trỏ tới chúng.
+
+Nút `#nav-zone` cạnh Sign In là lối sang commission; ở 320px `.nav-utils` tự xuống hàng
+thứ ba (nav cao 106px) — chấp nhận.
+
+**Chuyển trang mượt web chính ↔ Commission**: hai bên đều khai `@view-transition
+{navigation:auto}` (style.css và commissions.css — **phải khớp nhau**, thiếu một bên là
+không hiệu lực) nên trình duyệt mới trộn mờ hai trang thay vì nháy trắng; trình duyệt
+cũ thì như cũ. Thêm `<link rel="prefetch">` hai chiều để bấm là tức thì. Link "Read" từ
+Commission thêm `?vao=1`: web chính bỏ qua màn chào, hiện `#site` ngay (`transition:none`,
+không mờ dần 0,8s), rồi mở khoá nhạc ở cú bấm/phím đầu tiên.
+Đổi `?v=` của `style.css`/`app.js` thì nhớ sửa cả hai `prefetch` trong `commissions.html`.
 
 **Link sâu `#works?ship=Ship`**: `moTheoHash()` đặt `WS.ships` rồi mở Works. Ship đang
 lọc mà không có trong danh sách chip (như `Others`, vốn bị ẩn) vẫn hiện thành chip để
-bấm bỏ lọc. Trang Commission dẫn sample tới `#works?ship=Others`. Lưu ý: bấm "Read" từ
-trang Commission quay về `index.html` sẽ hiện lại intro.
+bấm bỏ lọc. Trang Commission dẫn sample tới `#works?ship=Others`.
+
+**Chưa làm (treo):** dải tempo Presto/Andante/Largo (Welcome C) thay hàng lọc độ dài ở
+Works — đã dựng thử, chờ chủ repo quyết. Bộ lọc độ dài hiện có (`doDai`, `WS.len`)
+giữ nguyên.

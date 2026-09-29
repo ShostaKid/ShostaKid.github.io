@@ -153,3 +153,8 @@ footer.cm-foot span{color:var(--gold)}
   .cm-mtitle{font-size:.78rem}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.cm-bars span{animation:none}.cm-sec>summary svg{transition:none}}
+
+/* Chuyển trang mượt với web chính — phải khớp khai báo trong style.css. */
+@view-transition{navigation:auto;}
+::view-transition-old(root),::view-transition-new(root){animation-duration:0.35s;}
+@media (prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important;}}

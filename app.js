@@ -1105,14 +1105,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   const intro = document.getElementById('intro');
   // Chỉ cửa "đọc" mới vào trang chính. Bấm chỗ khác trên màn chào, hay gõ phím, không làm gì
   // — cửa commission là link thật và tự đi. (Nút là <button> nên Enter/Space vẫn dùng được.)
-  document.getElementById('door-read').addEventListener('click', enterSite);
 
   // Từ trang Commission bấm "Read" (?vao=1): bỏ qua màn chào. Không có cú bấm nào trên
   // trang này nên nhạc chưa được phép phát — giữ daVaoSite=false để yêu cầu nhạc được cất
   // lại, rồi mở khoá ở cú bấm/phím đầu tiên (pha capture: chạy trước onclick của mục nav).
   if (new URLSearchParams(location.search).has('vao')) {
     intro.style.display = 'none';
-    document.getElementById('site').classList.add('visible');
+    // Không hiệu ứng mờ dần 0.8s như khi vào từ màn chào: người đọc vừa bấm "Read" nên phải thấy ngay.
+    const site = document.getElementById('site');
+    site.style.transition = 'none';
+    site.classList.add('visible');
     history.replaceState(null, '', location.pathname + location.hash);
     const moKhoa = () => {
       ['pointerdown', 'keydown'].forEach(k => document.removeEventListener(k, moKhoa, true));
@@ -1325,9 +1327,17 @@ const i18n = {
     opus_da_luu:'Saved ♪', opus_da_xoa:'Group deleted.',
     opus_xoa_hoi:'Delete the group “%s”? The %d works in it are NOT deleted — they just stop being grouped.',
     intro_sub:"Don't ask. Just read:)", intro_cta:'Click anywhere to enter',
-    gate_r_eyebrow:'For readers', gate_r_title:"I'm here to read", gate_r_desc:'Fics, notes, and the music behind them.', gate_r_go:'Enter the reading room →',
-    gate_c_eyebrow:'For commissions', gate_c_title:"I'm here about commissions", gate_c_desc:'Terms of service, prices and writing samples.', gate_c_go:'Open the commission desk →',
-    gate_or:'or', nav_zone:'Commissions',
+    nav_zone:'Commissions',
+    wk_home:'Home', wk_works:'Works', wk_opus:'Opus', wk_notes:'Notes', wk_about:'About', wk_comm:'Commissions', wk_comm_s:'Desk', wk_signin:'Sign in', wk_profile:'Profile',
+    wd_home:'The programme: new arrivals and where you left off.', wd_works:'The record shelf: every fic, filtered by fandom and length.',
+    wd_opus:'The whole archive, laid out by musical form.', wd_about:'Who is ShostaKid, and what plays here.',
+    wd_comm:'Terms of service, prices and writing samples.', wd_signin:'Kudos, bookmarks, and picking up where you left off.',
+    wd_profile:'Your profile, bookmarks and settings.',
+    wb_resume:'Resume', wb_members:'Members', wb_lang:'EN / VI', wb_theme:'Theme', wb_surprise:'Surprise',
+    wbd_resume:'Jump back into the fic you were reading.', wbd_members:'The other readers on the shelf (sign in first).',
+    wbd_lang:'Switch the language of the site.', wbd_theme:'Light shelf or dark shelf.', wbd_surprise:'A random fic from the shelf.',
+    wk_soon:'Soon', wk_notes_soon:'Notes: the music behind the fics. Coming soon.',
+    wk_press:'Press a key to enter.', wk_hint_m:'White keys open rooms. Black keys just play.', wk_hint:'White keys open rooms. Black keys are shortcuts. Or type A S D F G H J.',
     hero_sub:'I blend classical music with my thoughts',
     hero_tag:"Take a $ip y'all and enjoy",
     continue:'Continue reading:',
@@ -1524,9 +1534,17 @@ const i18n = {
     opus_da_luu:'Đã lưu ♪', opus_da_xoa:'Đã xoá nhóm.',
     opus_xoa_hoi:'Xoá nhóm “%s”? %d truyện trong đó KHÔNG bị xoá — chúng chỉ mất chỗ xếp.',
     intro_sub:'Viết là tự nhiên', intro_cta:'Bấm vào bất cứ đâu để vào',
-    gate_r_eyebrow:'Dành cho độc giả', gate_r_title:'Mình đến để đọc', gate_r_desc:'Fic, ghi chú và bản nhạc đi cùng chúng.', gate_r_go:'Vào phòng đọc →',
-    gate_c_eyebrow:'Dành cho commission', gate_c_title:'Mình đến vì commission', gate_c_desc:'Điều khoản dịch vụ, bảng giá và bài mẫu.', gate_c_go:'Mở quầy commission →',
-    gate_or:'hoặc', nav_zone:'Commission',
+    nav_zone:'Commission',
+    wk_home:'Trang chủ', wk_works:'Truyện', wk_opus:'Opus', wk_notes:'Notes', wk_about:'Giới thiệu', wk_comm:'Commission', wk_comm_s:'Comm', wk_signin:'Đăng nhập', wk_profile:'Hồ sơ',
+    wd_home:'Chương trình: truyện mới và chỗ bạn đọc dở.', wd_works:'Kệ đĩa: mọi fic, lọc theo fandom và độ dài.',
+    wd_opus:'Toàn bộ kho truyện, xếp theo thể nhạc.', wd_about:'ShostaKid là ai, và ở đây đang phát gì.',
+    wd_comm:'Điều khoản dịch vụ, bảng giá và bài mẫu.', wd_signin:'Thả tim, lưu truyện, đọc tiếp chỗ đang dở.',
+    wd_profile:'Hồ sơ, truyện đã lưu và cài đặt của bạn.',
+    wb_resume:'Đọc tiếp', wb_members:'Thành viên', wb_lang:'EN / VI', wb_theme:'Giao diện', wb_surprise:'Bất ngờ',
+    wbd_resume:'Quay lại fic bạn đang đọc.', wbd_members:'Những độc giả khác trên kệ (cần đăng nhập).',
+    wbd_lang:'Đổi ngôn ngữ của web.', wbd_theme:'Kệ sáng hoặc kệ tối.', wbd_surprise:'Một fic ngẫu nhiên trên kệ.',
+    wk_soon:'Sắp có', wk_notes_soon:'Notes: âm nhạc đằng sau các fic. Sắp có.',
+    wk_press:'Bấm một phím để vào.', wk_hint_m:'Phím trắng mở phòng. Phím đen chỉ phát nốt.', wk_hint:'Phím trắng mở phòng. Phím đen là lối tắt. Hoặc gõ A S D F G H J.',
     hero_sub:'Tôi trộn nhạc cổ điển với những suy nghĩ của mình',
     hero_tag:'Take a $ip y\'all',
     continue:'Đang đọc dở:',
@@ -1749,6 +1767,7 @@ function applyLang() {
   // Home / Works / Opus dựng bằng DOM với chữ lấy từ t() lúc dựng, nên đổi
   // ngôn ngữ là phải dựng lại (kể cả name_vi / mo_ta_vi của nhóm Opus).
   veLaiDiaThan();
+  if (window.veLaiChao) window.veLaiChao();
 
   const mt = document.querySelector('.music-toggle');
   if (mt) mt.textContent = musicPlaying ? t('pause') : t('play');
