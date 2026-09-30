@@ -124,7 +124,7 @@ Rebuild sang backend thật trên **Supabase**, **giữ nguyên giao diện hi�
 - Frontend dự kiến vẫn dùng `supabase-js` từ CDN (import trong `accounts.js`), chưa đổi sang framework.
 
 Project Supabase đích: **`oseddxgmwbeduazbomuf`** ("ShostaKid update web",
-ap-northeast-1, ACTIVE) — schema `public` đã có đủ 12 bảng và toàn bộ dữ liệu truyện.
+ap-northeast-1, ACTIVE) — schema `public` hiện có 15 bảng và toàn bộ dữ liệu truyện.
 
 ### Quy tắc bắt buộc
 
@@ -141,8 +141,9 @@ ap-northeast-1, ACTIVE) — schema `public` đã có đủ 12 bảng và toàn b
 
 ## Trạng thái backend (cập nhật 2026-08-30)
 
-Schema đã được **tạo thật** trên project `oseddxgmwbeduazbomuf`. 12 bảng, 36 policy,
-8 function, RLS bật đủ 12/12. Dữ liệu: 36 fic, 63 chương (tất cả published).
+Schema đã được **tạo thật** trên project `oseddxgmwbeduazbomuf`. 15 bảng, 44 policy,
+19 function, RLS bật đủ 15/15, 2 bucket Storage (`avatars`, `work-images`). Dữ liệu (đo 2026-09-30):
+56 truyện, 92 chương (tất cả published), 27 profile.
 
 Migration đã chạy, theo thứ tự:
 
@@ -283,6 +284,8 @@ ngay bên dưới. Việc còn lại xem "Việc tiếp theo" ở cuối file.
 
 ## Trạng thái import (cập nhật 2026-08-30) — ĐÃ XONG
 
+> Bảng dưới là **ảnh chụp lúc import xong (30/08)**. Số hiện tại (30/09) ở cuối mục này.
+
 Dữ liệu truyện cũ **đã nằm hết trong Supabase**:
 
 | Bảng | Số dòng |
@@ -293,13 +296,32 @@ Dữ liệu truyện cũ **đã nằm hết trong Supabase**:
 | `fandoms` / `ships` / `tags` | 6 / 9 / 3 |
 | `work_fandoms` / `work_ships` / `work_tags` | 36 / 39 / 5 |
 
-Tổng 136.952 từ. Tác giả của cả 36 work là tài khoản admin duy nhất
+Tổng 136.952 từ (lúc import). Tác giả của cả 36 work là tài khoản admin duy nhất
 (`select id from public.profiles where is_admin` — repo này public nên không ghi
 UUID ra đây).
 
 Đã đối chiếu sau import: 0 chương lệch byte so với repo, 0 fic lệch thứ tự
 (`legacy_id = 'fic-N'` khớp `fics.json[N]`), 0 chương lệch tên, 0 fic lệch ngày.
 Khách vãng lai (role `anon`) đọc được 36 work + 61 chương, đúng như site cần.
+
+### Số liệu hiện tại (đo 2026-09-30)
+
+Sau import, chủ repo đăng thêm truyện qua form Post và có người đăng ký nên số đã lệch
+so với bảng trên:
+
+| Bảng | Số dòng |
+|---|---|
+| `profiles` | 27 (1 admin) |
+| `works` | 56 (tất cả published, 2 `is_restricted`) |
+| `chapters` | 92 (tất cả published, 0 draft) |
+| `fandoms` / `ships` / `tags` | 6 / 11 / 16 |
+| `work_fandoms` / `work_ships` / `work_tags` | 56 / 63 / 60 |
+| `kudos` / `bookmarks` / `comments` | 44 / 7 / 4 |
+| `requests` / `notif_seen` / `site_content` | 2 / 6 / 1 |
+
+Tổng 199.206 từ. `legacy_id` chạy `fic-0` … `fic-55`, không truyện nào thiếu.
+Chỉ `fic-0`…`fic-35` nằm trong `fics/*.yaml` / `fics.json`; `fic-36` trở đi chỉ có trong
+DB (đăng qua web). Chương 3 của `fic-34` đã có nội dung và `published` (không còn draft).
 
 Vùng staging `import_tmp` và extension `http` (bật tạm để Postgres tự kéo 797 KB
 nội dung từ raw.githubusercontent, khỏi phải chép tay) **đã được xoá sau khi xong** —
