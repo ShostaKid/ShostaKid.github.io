@@ -254,6 +254,8 @@ const dtNgay = d => { if (!d) return ''; const x = new Date(d); if (isNaN(x)) re
   return laVi() ? x.toLocaleDateString('vi-VN') : x.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); };
 const laDienThoai = () => window.matchMedia('(max-width:768px)').matches;
 const doDai = w => w.words == null ? null : w.words < 2000 ? 'Miniature' : w.words <= 5000 ? 'Chamber' : 'Symphonic';
+// Số phút đọc = số chữ ÷ 250 (ngưỡng 2000 / 5000 chữ khớp 8 / 20 phút của ba nhịp Presto/Andante/Largo).
+const phutDoc = w => w.words == null ? null : Math.max(1, Math.round(w.words / 250));
 const soChuong = n => n + ' ' + (n === 1 ? t('dt_mv1') : t('dt_mvn'));
 const nhacText = w => (w.music || []).length > 2
   ? w.music.slice(0, 2).join(' / ') + ' (+' + (w.music.length - 2) + ')' : (w.music || []).join(' / ');
@@ -319,12 +321,22 @@ window.dtVeLaiNutLuu = function () {
   document.querySelectorAll('.dt-bm[data-uuid]').forEach(b =>
     b.setAttribute('aria-pressed', (window.skDaLuu && window.skDaLuu.has(b.dataset.uuid)) ? 'true' : 'false'));
 };
-function dtLiner(w, co) {
+// Dải "Chọn cho bạn ở nhịp X" + nút chọn lại, chỉ hiện trên liner của đúng truyện vừa được chọn hộ.
+function bangVia() {
+  const tp = TEMPO.find(x => x.id === WS.via);
+  if (!tp) return null;
+  return dtEl('div', { class: 'dt-via' },
+    dtEl('span', null, t('dt_tp_via') + '  ·  ' + tp.ten + '  ·  ' + t(tp.m)),
+    dtEl('button', { type: 'button', class: 'dt-via-btn', onclick: () => chonNgauNhien(tp.id, WS.viaIdx) }, t('dt_tp_another')));
+}
+function dtLiner(w, co, tuyChon) {
   const g = nhomCua(w);
   const tt = dtEl('div', { class: 'dt-tt', 'aria-hidden': 'true', style: { '--tt-s': co + 'px' } },
     dtEl('div', { class: 'dt-tt-rec' }), dtBia(w));
   const tom = catNgan(chuTron(w.summary), 260);
+  const via = tuyChon && tuyChon.via && WS.via && WS.viaIdx === w.idx ? bangVia() : null;
   return dtEl('div', { class: 'dt-liner' },
+    via,
     tt,
     dtEl('div', null, dtEl('h2', null, w.title), w.subtitle ? dtEl('div', { class: 'dt-sub big' }, chuTron(w.subtitle)) : null),
     tom ? dtEl('blockquote', null, tom) : null,
@@ -334,7 +346,8 @@ function dtLiner(w, co) {
       (w.ships || []).filter(s => s !== 'Others').length
         ? [dtEl('dt', null, t('dt_pairing')), dtEl('dd', null, w.ships.filter(s => s !== 'Others').join(', '))] : null,
       (w.words != null || w.nch) ? [dtEl('dt', null, t('dt_length')), dtEl('dd', null,
-        [w.words != null ? dtSo(w.words) + ' ' + t('dt_words') : '', w.nch ? soChuong(w.nch) : ''].filter(Boolean).join(' · '))] : null,
+        [w.words != null ? dtSo(w.words) + ' ' + t('dt_words') : '', phutDoc(w) ? t('dt_min').replace('{n}', phutDoc(w)) : '',
+          w.nch ? soChuong(w.nch) : ''].filter(Boolean).join(' · '))] : null,
       w.lang ? [dtEl('dt', null, t('dt_language')), dtEl('dd', null, w.lang === 'vi' ? 'Tiếng Việt' : 'English')] : null,
       (w.music || []).length ? [dtEl('dt', null, t('dt_played')), dtEl('dd', { class: 'music' }, nhacText(w))] : null),
     dtEl('div', { class: 'dt-flags' },
@@ -354,7 +367,7 @@ function moBangTruot(w, tu) {
   bangTruotVe = tu || document.activeElement;
   const than = document.getElementById('dt-sheet-body');
   than.textContent = '';
-  than.append(dtLiner(w, 150));
+  than.append(dtLiner(w, 150, { via: currentPage === 'works' }));
   document.getElementById('dt-sheet-x').setAttribute('aria-label', t('dt_close'));
   sheet.classList.add('on');
   document.getElementById('dt-scrim').classList.add('on');
@@ -489,7 +502,15 @@ function renderHome() {
 // =============================================
 // Thứ tự: 'new' (mới nhất) hoặc 'long' (dài nhất), nhớ ở localStorage. Giá trị
 // 'old' của bản cũ không còn — gặp thì coi như 'new'.
-const WS = { fandom: 'all', len: 'all', sort: 'new', ships: new Set(), q: '', xemHet: false, chon: null };
+// via/viaIdx: truyện vừa được "Chọn giúp tôi" ở nhịp nào (cho dải "Chọn cho bạn" trên liner).
+const WS = { fandom: 'all', len: 'all', sort: 'new', ships: new Set(), q: '', xemHet: false, chon: null, via: null, viaIdx: null };
+// Ba nhịp = ba mức độ dài của doDai(). dur = 60/bpm giây mỗi nhịp; wy = vị trí quả nặng trên cần (viewBox 200×340).
+const TEMPO = [
+  { id: 'presto',  len: 'Miniature', ten: 'Presto',  bpm: 180, dur: 0.33, wy: 190, k: 'dt_tp_k1', m: 'dt_tp_m1' },
+  { id: 'andante', len: 'Chamber',   ten: 'Andante', bpm: 76,  dur: 0.79, wy: 120, k: 'dt_tp_k2', m: 'dt_tp_m2' },
+  { id: 'largo',   len: 'Symphonic', ten: 'Largo',   bpm: 56,  dur: 1.07, wy: 70,  k: 'dt_tp_k3', m: 'dt_tp_m3' }
+];
+let tempoChon = 'andante';
 try { const s0 = localStorage.getItem('sk-sort'); if (s0 === 'long') WS.sort = 'long'; } catch (e) {}
 
 function locWorks() {
@@ -501,6 +522,127 @@ function locWorks() {
       && [...WS.ships].every(s => (w.ships || []).includes(s)))
     .sort(WS.sort === 'long' ? ((a, b) => (b.words || 0) - (a.words || 0) || theoMoiNhat(a, b)) : theoMoiNhat);
 }
+
+// ---- Kệ gỗ: bìa xếp hàng trên tấm ván, chú thích nằm dưới ván (như kệ đĩa trong cửa hàng) ----
+// Số cột phải khớp CSS: ≥1280px 4 cột, ≥1024px 3 cột, còn lại (kể cả điện thoại) 2 cột.
+const soCotKe = () => window.matchMedia('(min-width:1280px)').matches ? 4 : window.matchMedia('(min-width:1024px)').matches ? 3 : 2;
+function soLaMa(n) {
+  const b = [[10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']]; let s = '';
+  b.forEach(([v, k]) => { while (n >= v) { s += k; n -= v; } });
+  return s;
+}
+function dtBiaKe(w, chon) {
+  return dtEl('button', { type: 'button', class: 'dt-card dt-ke-bia', 'aria-pressed': 'false', 'aria-label': w.title, 'data-idx': w.idx,
+      onclick: e => chon(w, e.currentTarget) },
+    dtEl('div', { class: 'dt-slw' }, dtEl('div', { class: 'dt-rec', 'aria-hidden': 'true' }), dtBia(w)));
+}
+// Chú thích chỉ là lối bấm phụ: bìa đã là nút có tên đầy đủ, nên chú thích ra khỏi thứ tự Tab và khỏi trình đọc màn hình.
+function dtCapKe(w, chon, bia) {
+  return dtEl('button', { type: 'button', class: 'dt-ke-cap', tabindex: '-1', 'aria-hidden': 'true', onclick: () => chon(w, bia) },
+    dtEl('span', { class: 't' }, w.title),
+    w.subtitle ? dtEl('span', { class: 's' }, chuTron(w.subtitle)) : null,
+    dtEl('span', { class: 'f' }, [w.fandom === 'Others' ? '' : w.fandom, w.words != null ? dtSo(w.words) + ' ' + t('dt_words') : ''].filter(Boolean).join(' · ')));
+}
+
+// "Chọn giúp tôi": lấy ngẫu nhiên một truyện đúng nhịp, đặt lên bàn xoay. Loại truyện Members only
+// (kể cả khi đã đăng nhập) để "bất ngờ" không dẫn tới trang bị khoá. Trả false nếu không có truyện nào.
+function chonNgauNhien(id, loaiTru) {
+  const tp = TEMPO.find(x => x.id === id);
+  const pool = worksData.filter(w => doDai(w) === tp.len && !w.restricted && w.idx !== loaiTru);
+  if (!pool.length) return false;
+  const w = pool[Math.floor(Math.random() * pool.length)];
+  WS.len = tp.len; WS.fandom = 'all'; WS.ships.clear(); WS.q = '';
+  WS.chon = w.idx; WS.via = id; WS.viaIdx = w.idx;
+  // Truyện nằm ngoài phần kệ đang hiện thì mở hết, không thì bìa không có mà liner vẫn hiện.
+  WS.xemHet = locWorks().findIndex(x => x.idx === w.idx) >= (laDienThoai() ? 10 : 12);
+  dongTempo(true);
+  renderWorks();
+  const bia = document.querySelector('#dt-works .dt-card[data-idx="' + w.idx + '"]');
+  if (bia) {
+    bia.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    if (laDienThoai()) moBangTruot(w, bia);
+  }
+  return true;
+}
+
+// ---- Hộp thoại "Not sure what to read?" ----
+let tempoVe = null, tempoDang = false;
+function dungTempo() {
+  if (document.getElementById('dt-tp')) return;
+  document.body.append(dtEl('div', { id: 'dt-tp-scrim', onclick: () => dongTempo() }),
+    dtEl('div', { id: 'dt-tp', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'dt-tp-h', tabindex: '-1' }));
+}
+function veTempo(giuFocus) {
+  const hop = document.getElementById('dt-tp'); if (!hop) return;
+  const tp = TEMPO.find(x => x.id === tempoChon);
+  hop.textContent = '';
+  // Máy nhịp: cần lắc 10 nhịp rồi dừng, tốc độ và quả nặng theo nhịp đang chọn.
+  const may = dungMay(tp);
+  const chon = TEMPO.map(x => dtEl('button', { type: 'button', class: 'dt-tp-opt', 'data-id': x.id, 'aria-pressed': x.id === tempoChon ? 'true' : 'false',
+      onclick: () => { tempoChon = x.id; veTempo(true); } },
+    dtEl('span', { class: 'l' }, dtEl('span', { class: 'nm' }, x.ten), dtEl('span', { class: 'k' }, x.bpm + ' BPM · ' + t(x.k))),
+    dtEl('span', { class: 'r' }, dtEl('span', { class: 'mn' }, t(x.m)),
+      dtEl('span', { class: 'n' }, t('dt_tp_n').replace('{n}', worksData.filter(w => doDai(w) === x.len && !w.restricted).length)))));
+  const loi = dtEl('div', { class: 'dt-tp-err', role: 'status' });
+  ganCon(hop,
+    dtEl('button', { type: 'button', class: 'dt-tp-x', 'aria-label': t('dt_close'), onclick: () => dongTempo() }, '×'),
+    may,
+    dtEl('div', { class: 'dt-tp-body' },
+      dtEl('div', null, dtEl('div', { class: 'dt-eyebrow' }, t('dt_tp_btn')),
+        dtEl('h2', { id: 'dt-tp-h' }, t('dt_tp_h')), dtEl('p', null, t('dt_tp_p'))),
+      dtEl('div', { class: 'dt-tp-opts' }, chon),
+      dtEl('div', { class: 'dt-tp-acts' },
+        dtEl('button', { type: 'button', class: 'dt-btn', onclick: () => { if (!chonNgauNhien(tempoChon, null)) loi.textContent = t('dt_tp_none'); } }, t('dt_tp_surprise')),
+        dtEl('button', { type: 'button', class: 'dt-btn-line', onclick: () => {
+          WS.len = tp.len; WS.fandom = 'all'; WS.ships.clear(); WS.q = ''; WS.via = null; WS.viaIdx = null; WS.xemHet = false;
+          dongTempo(true); renderWorks(); } }, t('dt_tp_filter'))),
+      loi));
+  if (giuFocus) { const b = hop.querySelector('.dt-tp-opt[aria-pressed="true"]'); if (b) b.focus(); }
+}
+function dungMay(tp) {
+  const NS = SVGNS, svg = document.createElementNS(NS, 'svg');
+  [['class', 'dt-tp-may'], ['viewBox', '0 0 200 340'], ['aria-hidden', 'true'], ['focusable', 'false']].forEach(([k, v]) => svg.setAttribute(k, v));
+  const them = (cha, tag, at) => { const e = document.createElementNS(NS, tag); Object.entries(at).forEach(([k, v]) => e.setAttribute(k, v)); cha.append(e); return e; };
+  them(svg, 'polygon', { points: '72,24 128,24 172,322 28,322', style: 'fill:var(--cream2);stroke:var(--gold);stroke-width:2;stroke-linejoin:round' });
+  them(svg, 'rect', { x: 92, y: 52, width: 16, height: 230, style: 'fill:var(--cream);stroke:var(--border)' });
+  [70, 110, 150, 190, 230, 270].forEach(y => them(svg, 'line', { x1: 114, y1: y, x2: 124, y2: y, style: 'stroke:var(--border);stroke-width:1.5' }));
+  them(svg, 'rect', { x: 16, y: 322, width: 168, height: 14, style: 'fill:var(--gold)' });
+  const arm = them(svg, 'g', { class: 'dt-tp-arm' });
+  arm.style.animation = 'dt-swing ' + tp.dur + 's ease-in-out 10 alternate both';
+  them(arm, 'line', { x1: 100, y1: 300, x2: 100, y2: 34, style: 'stroke:var(--ink);stroke-width:3;stroke-linecap:round' });
+  them(arm, 'rect', { x: 87, y: tp.wy, width: 26, height: 36, style: 'fill:var(--gold);stroke:var(--gold-dark);stroke-width:1.5' });
+  them(arm, 'circle', { cx: 100, cy: 300, r: 8, style: 'fill:var(--cream);stroke:var(--gold);stroke-width:2' });
+  return svg;
+}
+function moTempo(tu) {
+  dungTempo(); veTempo(false);
+  tempoVe = tu || document.activeElement; tempoDang = true;
+  document.getElementById('dt-tp').classList.add('on');
+  document.getElementById('dt-tp-scrim').classList.add('on');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => { const b = document.querySelector('#dt-tp .dt-tp-opt[aria-pressed="true"]'); if (b) b.focus(); }, 50);
+}
+// khongTraFocus: đóng để chuyển sang kệ (renderWorks dựng lại nút mở, nên không còn chỗ trả focus).
+function dongTempo(khongTraFocus) {
+  if (!tempoDang) return;
+  tempoDang = false;
+  document.getElementById('dt-tp').classList.remove('on');
+  document.getElementById('dt-tp-scrim').classList.remove('on');
+  document.body.style.overflow = '';
+  if (!khongTraFocus && tempoVe && tempoVe.focus) tempoVe.focus();
+  tempoVe = null;
+}
+document.addEventListener('keydown', e => {
+  if (!tempoDang) return;
+  if (e.key === 'Escape') { e.preventDefault(); dongTempo(); return; }
+  if (e.key === 'Tab') {   // giữ focus trong hộp thoại
+    const ds = [...document.querySelectorAll('#dt-tp button')];
+    if (!ds.length) return;
+    const dau = ds[0], cuoi = ds[ds.length - 1];
+    if (e.shiftKey && (document.activeElement === dau || document.activeElement.id === 'dt-tp')) { e.preventDefault(); cuoi.focus(); }
+    else if (!e.shiftKey && document.activeElement === cuoi) { e.preventDefault(); dau.focus(); }
+  }
+});
 
 function renderWorks() {
   const goc = document.getElementById('dt-works');
@@ -516,7 +658,7 @@ function renderWorks() {
   const veAside = ds => {
     aside.textContent = '';
     const w = ds.find(x => x.idx === WS.chon);
-    if (w) aside.append(dtEl('div', { class: 'dt-eyebrow', style: { 'margin-bottom': '22px' } }, t('dt_on_tt')), dtLiner(w, 230));
+    if (w) aside.append(dtEl('div', { class: 'dt-eyebrow', style: { 'margin-bottom': '22px' } }, t('dt_on_tt')), dtLiner(w, 230, { via: true }));
   };
   const veKe = () => {
     const ds = locWorks();
@@ -526,11 +668,24 @@ function renderWorks() {
     ke.textContent = '';
     ke.append(dtEl('div', { class: 'dt-eyebrow' }, t('dt_on_shelf').replace('{n}', ds.length) + (laDienThoai() ? ' · ' + t('dt_tap') : '')));
     if (!ds.length) ke.append(dtEl('p', { class: 'dt-empty' }, t('no_results')));
-    const luoi = dtEl('div', { class: 'dt-grid-shelf' });
-    const chon = (w, el) => { WS.chon = w.idx; danhDauChon(luoi, w.idx); veAside(ds); if (laDienThoai()) moBangTruot(w, el); };
-    hien.forEach(w => luoi.append(dtThe(w, chon, true)));
-    danhDauChon(luoi, WS.chon);
-    ke.append(luoi);
+    const cot = soCotKe();
+    const khung = dtEl('div', { class: 'dt-ke', style: { '--cot': cot } });
+    const luoi = dtEl('div', { class: 'dt-ke-luoi' });
+    const chon = (w, el) => {
+      if (WS.viaIdx !== w.idx) WS.via = null;     // tự chọn truyện khác thì hết là "chọn cho bạn"
+      WS.chon = w.idx; danhDauChon(khung, w.idx); veAside(ds); if (laDienThoai()) moBangTruot(w, el);
+    };
+    for (let i = 0; i < hien.length; i += cot) {
+      const hang = hien.slice(i, i + cot), bia = hang.map(w => dtBiaKe(w, chon));
+      luoi.append(...bia,
+        dtEl('div', { class: 'dt-ke-van' }, dtEl('span', { class: 'no' }, t('dt_ke') + ' ' + soLaMa(i / cot + 1)),
+          dtEl('span', { class: 'n' }, hang.length + ' ' + t(hang.length === 1 ? 'dt_work1' : 'dt_workn'))),
+        ...hang.map((w, j) => dtCapKe(w, chon, bia[j])));
+    }
+    khung.append(dtEl('div', { class: 'dt-ke-dau' }, dtEl('span', null, t('dt_ke_top')), dtEl('span', null, t('dt_on_shelf').replace('{n}', ds.length))),
+      luoi, dtEl('div', { class: 'dt-ke-chan', 'aria-hidden': 'true' }, dtEl('span'), dtEl('span')));
+    danhDauChon(khung, WS.chon);
+    if (ds.length) ke.append(khung);
     if (!WS.xemHet && ds.length > gioiHan)
       ke.append(dtEl('button', { type: 'button', class: 'dt-btn-line dt-more', onclick: () => { WS.xemHet = true; veKe(); } },
         t('dt_show_all').replace('{n}', ds.length)));
@@ -560,10 +715,12 @@ function renderWorks() {
       ships.length ? dtEl('div', { class: 'dt-f-row' }, dtEl('div', { class: 'dt-f-lab' }, t('dt_pairing')),
         dtEl('div', { class: 'dt-chips' }, ships.map(s => chip(s, WS.ships.has(s),
           () => { WS.ships.has(s) ? WS.ships.delete(s) : WS.ships.add(s); WS.xemHet = false; ve(); })))) : null,
-      dtEl('div', { class: 'dt-f-row len' }, dtEl('div', { class: 'dt-f-lab' }, t('dt_length')),
+      dtEl('div', { class: 'dt-f-row len' }, dtEl('div', { class: 'dt-f-lab' }, t('dt_tempo')),
         dtEl('div', { class: 'dt-chips' }, [['all', 'dt_any_len'], ['Miniature', daiNgan ? 'dt_mini' : 'dt_mini_l'],
           ['Chamber', daiNgan ? 'dt_chamber' : 'dt_chamber_l'], ['Symphonic', daiNgan ? 'dt_symph' : 'dt_symph_l']]
-          .map(([k, nhan]) => chip(t(nhan), WS.len === k, () => { WS.len = k; WS.xemHet = false; ve(); }))),
+          .map(([k, nhan]) => chip(t(nhan), WS.len === k, () => { WS.len = k; WS.xemHet = false; ve(); })),
+          dtEl('button', { type: 'button', class: 'dt-chip dt-tp-open', onclick: e => moTempo(e.currentTarget) },
+            dtEl('span', { 'aria-hidden': 'true' }, '♩'), t('dt_tp_btn'))),
         dtEl('div', { class: 'dt-order' }, dtEl('span', { class: 'dt-f-lab', style: { 'margin-right': '6px' } }, t('dt_order')),
           chip(t('dt_newest'), WS.sort === 'new', () => doiThuTu('new')),
           chip(t('dt_longest'), WS.sort === 'long', () => doiThuTu('long')))));
@@ -582,6 +739,10 @@ function renderWorks() {
     boLoc,
     dtEl('div', { class: 'dt-w-body' }, ke, aside)));
 }
+
+// Qua mốc số cột của kệ (1280px / 1024px) thì dựng lại để chia hàng lại cho đúng.
+['(min-width:1280px)', '(min-width:1024px)'].forEach(q =>
+  window.matchMedia(q).addEventListener('change', () => { if (document.getElementById('dt-works')) renderWorks(); }));
 
 // =============================================
 // OPUS — bàn xoay
@@ -1350,8 +1511,15 @@ const i18n = {
     dt_works_h1:'Works', dt_shelf_of:'The record shelf · {n} works',
     dt_shelf_intro:'Every work is a record in its own sleeve. Pick one from the shelf and it goes on the turntable, with its liner notes beside it.',
     dt_search:'Search', dt_length:'Length', dt_order:'Order', dt_pairing:'Pairing',
-    dt_any_len:'Any length', dt_mini:'Miniature', dt_chamber:'Chamber', dt_symph:'Symphonic',
-    dt_mini_l:'Miniature · under 2k', dt_chamber_l:'Chamber · 2k–5k', dt_symph_l:'Symphonic · 5k+',
+    dt_any_len:'Any tempo', dt_mini:'Presto', dt_chamber:'Andante', dt_symph:'Largo',
+    dt_mini_l:'Presto · under 8 min', dt_chamber_l:'Andante · 8–20 min', dt_symph_l:'Largo · 20+ min',
+    dt_tempo:'Tempo', dt_ke_top:'The record shelf', dt_ke:'Shelf', dt_min:'about {n} min',
+    dt_tp_btn:'Not sure what to read?', dt_tp_h:'How much time do you have?',
+    dt_tp_p:'The metronome sets the pace. Pick a tempo and a record goes on the turntable for you.',
+    dt_tp_k1:'A quick read', dt_tp_k2:'A steady read', dt_tp_k3:'Settle in',
+    dt_tp_m1:'under 8 min', dt_tp_m2:'8 to 20 min', dt_tp_m3:'over 20 min',
+    dt_tp_n:'{n} works', dt_tp_surprise:'Surprise me at this tempo', dt_tp_filter:'Just filter the shelf',
+    dt_tp_none:'No work at this tempo is open to you yet.', dt_tp_via:'Picked for you', dt_tp_another:'↻ Another',
     dt_newest:'Newest', dt_longest:'Longest',
     dt_on_shelf:'{n} on the shelf', dt_tap:'tap a sleeve', dt_show_all:'Show the whole shelf ({n})',
     dt_on_tt:'On the turntable', dt_form:'Form', dt_language:'Language', dt_played:'Played with',
@@ -1556,8 +1724,15 @@ const i18n = {
     dt_works_h1:'Truyện', dt_shelf_of:'Kệ đĩa · {n} truyện',
     dt_shelf_intro:'Mỗi truyện là một đĩa than trong bìa của nó. Chọn một đĩa trên kệ, đĩa sẽ lên bàn xoay kèm lời giới thiệu bên cạnh.',
     dt_search:'Tìm', dt_length:'Độ dài', dt_order:'Sắp xếp', dt_pairing:'Ship',
-    dt_any_len:'Mọi độ dài', dt_mini:'Miniature', dt_chamber:'Chamber', dt_symph:'Symphonic',
-    dt_mini_l:'Miniature · dưới 2k', dt_chamber_l:'Chamber · 2k–5k', dt_symph_l:'Symphonic · trên 5k',
+    dt_any_len:'Mọi nhịp', dt_mini:'Presto', dt_chamber:'Andante', dt_symph:'Largo',
+    dt_mini_l:'Presto · dưới 8 phút', dt_chamber_l:'Andante · 8–20 phút', dt_symph_l:'Largo · trên 20 phút',
+    dt_tempo:'Nhịp', dt_ke_top:'Kệ đĩa', dt_ke:'Kệ', dt_min:'khoảng {n} phút',
+    dt_tp_btn:'Chưa biết đọc gì?', dt_tp_h:'Bạn có bao nhiêu thời gian?',
+    dt_tp_p:'Máy nhịp đặt tốc độ. Chọn một nhịp, một chiếc đĩa sẽ tự lên bàn xoay cho bạn.',
+    dt_tp_k1:'Đọc nhanh', dt_tp_k2:'Đọc thong thả', dt_tp_k3:'Ngồi hẳn xuống',
+    dt_tp_m1:'dưới 8 phút', dt_tp_m2:'8 đến 20 phút', dt_tp_m3:'trên 20 phút',
+    dt_tp_n:'{n} truyện', dt_tp_surprise:'Chọn giúp tôi ở nhịp này', dt_tp_filter:'Chỉ lọc kệ thôi',
+    dt_tp_none:'Chưa có truyện nào ở nhịp này dành cho bạn.', dt_tp_via:'Chọn cho bạn', dt_tp_another:'↻ Chọn khác',
     dt_newest:'Mới nhất', dt_longest:'Dài nhất',
     dt_on_shelf:'{n} đĩa trên kệ', dt_tap:'chạm vào một bìa', dt_show_all:'Xem cả kệ ({n})',
     dt_on_tt:'Trên bàn xoay', dt_form:'Thể', dt_language:'Ngôn ngữ', dt_played:'Nhạc đi kèm',

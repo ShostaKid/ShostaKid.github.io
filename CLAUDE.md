@@ -1347,3 +1347,36 @@ bấm bỏ lọc. Trang Commission dẫn sample tới `#works?ship=Others`.
 **Chưa làm (treo):** dải tempo Presto/Andante/Largo (Welcome C) thay hàng lọc độ dài ở
 Works — đã dựng thử, chờ chủ repo quyết. Bộ lọc độ dài hiện có (`doDai`, `WS.len`)
 giữ nguyên.
+
+---
+
+## Works: kệ gỗ + chọn nhịp đọc (cập nhật 2026-09-30)
+
+Trang Works dựng theo hai bản thiết kế Claude Design ("record-shop shelves" và "Not sure what
+to read?"). Chỉ frontend (`renderWorks()` trong `app.js` + khối cuối `style.css`), không đụng DB.
+
+**Kệ gỗ.** Bìa xếp hàng trên tấm ván "Shelf I, II…", chú thích (tên, phụ đề, fandom · số chữ)
+nằm DƯỚI ván. `dtBiaKe()` = bìa (nút có `aria-label` là tên truyện, giữ class `dt-card` để dùng chung
+`danhDauChon`/CSS đĩa trượt), `dtCapKe()` = chú thích, **ra khỏi thứ tự Tab và `aria-hidden`** vì
+bìa đã có tên đầy đủ. Trang Home và Bookmark vẫn dùng `dtThe()`/`.dt-grid-shelf` — chưa đổi (Bookmark
+để làm sau nếu Works ổn).
+- Số cột: `soCotKe()` = 4 (≥1280px) / 3 (≥1024px) / 2 (còn lại, kể cả điện thoại), **phải khớp
+  CSS**. JS chia hàng theo số cột này nên qua mốc 1280/1024 thì `renderWorks()` được gọi lại.
+- Gỗ dùng biến `--pl-top/-front/-edge/-back` (sáng/tối). Điện thoại: trụ 8px, hai bìa mỗi ván.
+- Giữ nguyên ô tìm kiếm và hàng ship (bản thiết kế bỏ nhưng chủ repo dặn giữ).
+
+**Nhịp đọc.** Hàng lọc độ dài đổi nhãn: Any tempo / Presto · under 8 min / Andante · 8–20 min /
+Largo · 20+ min. **Không đổi logic lọc**: vẫn `doDai()` (Miniature <2000, Chamber ≤5000, Symphonic
+chữ) — 8 và 20 phút chính là 2000 và 5000 chữ với tốc độ **250 chữ/phút** (`phutDoc()`), dùng cho
+mọi ngôn ngữ. Liner notes có thêm "about N min" (cả trên Home).
+- Nút nét đứt "Not sure what to read?" mở `#dt-tp` (`dungTempo/veTempo/moTempo/dongTempo`): hộp
+  thoại có `role="dialog"`, khoá Tab, Esc đóng, trả focus về nút mở. Máy nhịp SVG lắc 10 nhịp rồi
+  dừng (`TEMPO[].dur` = 60/bpm giây). Điện thoại: bảng trượt từ dưới lên, máy nhịp thu nhỏ.
+- "Surprise me" = `chonNgauNhien(id, loaiTru)`: chọn ngẫu nhiên trong truyện đúng nhịp, **loại truyện
+  Members only kể cả khi đã đăng nhập**, xoá tìm kiếm/ship/fandom, mở hết kệ nếu truyện rơi ngoài
+  12 (10 trên điện thoại) truyện đầu, cuộn tới bìa; điện thoại thì mở luôn bảng trượt.
+- Dải "Picked for you · Andante · 8 to 20 min" + "↻ Another" hiện trên liner của đúng truyện vừa
+  được chọn hộ (`WS.via`/`WS.viaIdx`); tự tắt khi bấm truyện khác. `dtLiner(w, co, {via:true})` chỉ
+  hiện dải khi gọi từ Works (bảng trượt kiểm `currentPage === 'works'`).
+- "Just filter the shelf" chỉ đặt `WS.len` rồi vẽ lại.
+- Bản thiết kế không có bản điện thoại: phần kệ 2 cột và bảng trượt chọn nhịp do mình tự làm.
