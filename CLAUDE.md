@@ -1329,7 +1329,7 @@ không hiệu lực) nên trình duyệt mới trộn mờ hai trang thay vì nh
 cũ thì như cũ. Thêm `<link rel="prefetch">` hai chiều để bấm là tức thì. Link "Read" từ
 Commission thêm `?vao=1`: web chính bỏ qua màn chào, hiện `#site` ngay (`transition:none`,
 không mờ dần 0,8s), rồi mở khoá nhạc ở cú bấm/phím đầu tiên.
-Đổi `?v=` của `style.css`/`app.js` thì nhớ sửa cả hai `prefetch` trong `commissions.html`.
+Đổi `?v=` của `style.css`/`app.js` thì nhớ sửa cả hai `prefetch` trong `commissions.html`; ngược lại đổi `?v=` của `commissions.css`/`.js` thì sửa hai `prefetch` ở đầu `index.html`.
 
 **Link sâu `#works?ship=Ship`**: `moTheoHash()` đặt `WS.ships` rồi mở Works. Ship đang
 lọc mà không có trong danh sách chip (như `Others`, vốn bị ẩn) vẫn hiện thành chip để
