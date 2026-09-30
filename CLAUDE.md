@@ -1380,3 +1380,45 @@ mọi ngôn ngữ. Liner notes có thêm "about N min" (cả trên Home).
   hiện dải khi gọi từ Works (bảng trượt kiểm `currentPage === 'works'`).
 - "Just filter the shelf" chỉ đặt `WS.len` rồi vẽ lại.
 - Bản thiết kế không có bản điện thoại: phần kệ 2 cột và bảng trượt chọn nhịp do mình tự làm.
+
+---
+
+## Trang In rehearsal — bản thảo đang viết (cập nhật 2026-09-30)
+
+Tab công khai liệt kê các tác phẩm **đang viết** (chỉ tên/ý tưởng, không có nội dung), dựng theo bản thiết kế
+"In rehearsal · the composer's desk" (giấy nhạc, khuông 4 ô nhịp = 4 giai đoạn). Chủ repo nhập bằng nút Edit
+ngay trên trang, không phải qua form Post.
+
+**Nơi lưu = `site_content`, khoá `rehearsal`, giá trị `{ items: [...] }`. KHÔNG dùng `works` draft**, và không
+có migration nào. Lý do (đã kiểm DB 30/09/2026: `works` 56 published / 0 draft, `chapters` 92 published / 0 draft,
+không có bảng draft/idea nào):
+- Muốn khách đọc được draft phải sửa policy SELECT của `works` — đúng bất biến `can_read_work()` + policy `works`
+  phải trùng khít (từng rò rỉ một lần), kéo theo `chapters`, `work_tags`, `comments`, `kudos`.
+- Mỗi hàng `works` bị trigger `auto_assign_legacy_id` cấp một số `fic-N`, mà web định tuyến truyện theo vị trí số này.
+- `works` bắt buộc `author_id`/`slug`/`title` và có nhiều bộ đếm, trigger; giai đoạn/ngày ra mắt lại không có cột nào.
+Chuyển sang bảng riêng sau này là dễ (dữ liệu chỉ là một mảng).
+
+Mỗi mục: `{ id, form (slug nhóm Opus), title, working (tên làm việc), hook (một dòng giới thiệu), fandom,
+stage 1–4 (Tuning/Rehearsing/Dress rehearsal/Premiere), premiere ('YYYY-MM-DD' hoặc '') }`. **Chữ do chủ web nhập
+hiển thị nguyên văn (tiếng Anh), không dịch**; chỉ chữ giao diện (tiêu đề, nút…) có EN/VI (`rh_*`).
+- Đọc: `window.fetchRehearsal()` (accounts.js) → mảng, `[]` nếu chưa có hàng, `null` nếu không gọi được DB.
+  Ghi: `window.saveRehearsal(items)` — **UPDATE trước, không có hàng nào mới INSERT**, không dùng `upsert`: ON CONFLICT
+  DO UPDATE ghi cả cột `key`, mà `authenticated` chỉ được UPDATE `(value, updated_by)` (INSERT thì có `key, value, updated_by`).
+  Ghi CẢ MẢNG một lần: hai phiên sửa cùng lúc thì lần sau đè lần trước; không có lịch sử/hoàn tác (chủ repo chốt không cần).
+- Quyền ghi thật do RLS (`site_content: chi admin ghi`). Nút Edit chỉ là lớp giao diện, dựa vào `window.skLaAdmin`
+  (accounts.js đặt trong `paintProfile()` và xoá trong `paintNav()` khi đăng xuất, rồi gọi `veLaiRehearsal()`).
+- `rehearsal.js` (script thường, nạp sau `app.js`): `loadRehearsal()` gọi khi `showPage('rehearsal')`, `renderRehearsal()`,
+  bộ soạn (thêm / sửa / xoá / ↑↓, Save ghi cả mảng). Icon và tên thể loại lấy từ `NHOM`/`ICON_NHOM` như trang Opus; nhóm bị
+  xoá/đổi tên thì lùi về khoá Sol, không vỡ. Khuông nhạc là SVG co giãn (toạ độ gốc 660×80 từ bản thiết kế).
+- Ô "Next premiere": mục giai đoạn IV có ngày sớm nhất từ hôm nay trở đi (không có ngày thì mục IV đầu tiên).
+
+**Lối vào:** mục nav "Rehearsal" (`data-page="rehearsal"`, giữa Opus và About) và bè "In rehearsal" trên màn chào (phím G ở
+dàn nhạc PC; phím trắng thứ 5 ở piano điện thoại/tablet — chọn rồi Enter). **Điện thoại (≤768px) KHÔNG có mục trong nav**
+(ẩn bằng CSS) nhưng vào được từ màn chào; vào thẳng `#rehearsal` cũng được. Bản thiết kế không có bản điện thoại nên phần
+co lại là mình tự làm.
+- Thanh nav máy tính dùng lưới `1fr auto 1fr` để cụm link nằm chính giữa (flex space-between làm nó lệch trái vì cụm phải
+  rộng hơn logo). Khổ 769–1100px có quy tắc co lề/khoảng cách riêng — thêm mục nav nữa là phải kiểm lại khổ này (đã từng tràn 68px ở 800px).
+- Không có ánh vàng (radial-gradient) sau tiêu đề trang; chỉ còn vạch quét mờ.
+
+Test không ghi DB thật: dùng khung chặn lệnh ghi đã ghi ở "Cách test form mà không ghi DB" (chèn shim `fetch` vào `<head>`
+của bản sao `index.html`), sau đó xoá bản sao và khoá `sb-*` trong localStorage.

@@ -52,6 +52,7 @@ function paintNav(session) {
   if (!session) {
     // Nút đăng truyện chỉ hiện với admin; paintProfile() bật lên khi biết chắc.
     $('nav-post').style.display = 'none';
+    if (window.skLaAdmin) { window.skLaAdmin = false; if (window.veLaiRehearsal) window.veLaiRehearsal(); }
     paintNavAvatar(null);
     closeNavMenu();
   }
@@ -146,6 +147,8 @@ function paintProfile(p) {
   $('prof-handle').textContent = '@' + p.username;
   $('nav-post').style.display = p.is_admin ? '' : 'none';
   $('btn-edit-about').style.display = p.is_admin ? '' : 'none';
+  // Trang In rehearsal (script thường) chỉ hiện nút Edit khi biết chắc là admin; quyền ghi thật do RLS chặn.
+  if (!!p.is_admin !== !!window.skLaAdmin) { window.skLaAdmin = !!p.is_admin; if (window.veLaiRehearsal) window.veLaiRehearsal(); }
   $('prof-admin').innerHTML    = p.is_admin
     ? `<span class="admin-badge">${tr('prof_admin')}</span>` : '';
   $('pf-username').value = p.username || '';
@@ -305,6 +308,26 @@ async function loadAbout() {
   abData = data.value;
   paintAbout();
 }
+
+// ---------- Trang In rehearsal: danh sách bản thảo (site_content, khoá 'rehearsal') ----------
+// Đọc: trả mảng (rỗng nếu chưa có hàng), hoặc null khi không gọi được DB. Ghi: cả mảng một lần.
+// Không dùng upsert: ON CONFLICT DO UPDATE ghi cả cột `key`, mà role authenticated chỉ được UPDATE
+// (value, updated_by). Nên UPDATE trước, không có hàng nào thì INSERT (được cấp INSERT key/value/updated_by).
+window.fetchRehearsal = async function () {
+  const { data, error } = await sb.from('site_content').select('value').eq('key', 'rehearsal').maybeSingle();
+  if (error) return null;
+  return data && data.value && Array.isArray(data.value.items) ? data.value.items : [];
+};
+window.saveRehearsal = async function (items) {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return { error: { message: 'signin' } };
+  const value = { items };
+  let r = await sb.from('site_content').update({ value, updated_by: session.user.id }).eq('key', 'rehearsal').select('key');
+  if (!r.error && (!r.data || !r.data.length)) {
+    r = await sb.from('site_content').insert({ key: 'rehearsal', value, updated_by: session.user.id });
+  }
+  return { error: r.error || null };
+};
 
 $('btn-edit-about').addEventListener('click', () => {
   abSay(null);

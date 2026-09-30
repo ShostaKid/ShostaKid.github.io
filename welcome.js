@@ -54,7 +54,7 @@
     { id: 'works',     key: 's', f: 293.66, go: () => vao(() => showPage('works', nav('works'))) },
     { id: 'opus',      key: 'd', f: 329.63, go: () => vao(() => showPage('opus',  nav('opus'))) },
     { id: 'notes',     key: 'f', f: 349.23, soon: true },
-    { id: 'rehearsal', key: 'g', f: 392.00, soon: true },
+    { id: 'rehearsal', key: 'g', f: 392.00, go: () => vao(() => showPage('rehearsal', nav('rehearsal'))) },
     { id: 'about',     key: 'h', f: 440.00, go: () => vao(() => showPage('about', nav('about'))) },
     { id: 'comm',      key: 'j', f: 493.88, go: () => { location.href = 'commissions.html'; } },
     { id: 'profile',   key: 'k', f: 523.25,

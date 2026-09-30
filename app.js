@@ -1355,7 +1355,7 @@ function moTheoHash() {
     return true;
   }
 
-  if (h === '#home' || h === '#works' || h === '#about' || h === '#opus') {
+  if (h === '#home' || h === '#works' || h === '#about' || h === '#opus' || h === '#rehearsal') {
     const ten = h.slice(1);
     showPage(ten, document.querySelector('.nav-links a[data-page="' + ten + '"]'));
     return true;
@@ -1489,6 +1489,17 @@ const i18n = {
     opus_xoa_hoi:'Delete the group “%s”? The %d works in it are NOT deleted — they just stop being grouped.',
     intro_sub:"Don't ask. Just read:)", intro_cta:'Click anywhere to enter',
     nav_zone:'Commissions',
+    nav_rehearsal:'Rehearsal',
+    rh_eyebrow:"The composer's desk · {n} works in progress", rh_h1:'In rehearsal',
+    rh_intro:'Unfinished works, written out bar by bar. Each one fills in as it moves from tuning to premiere, and then it goes on the shelf.',
+    rh_all:'All', rh_s1:'Tuning', rh_s2:'Rehearsing', rh_s3:'Dress rehearsal', rh_s4:'Premiere',
+    rh_d1:'An idea, still being tuned.', rh_d2:'Being drafted.', rh_d3:'Editing, nearly there.', rh_d4:'A date is set.',
+    rh_manu:'Manuscript · in progress', rh_next:'Next premiere', rh_work:'Work', rh_title_teaser:'Title and teaser',
+    rh_none:'Nothing on the desk yet.', rh_none_stage:'Nothing on the desk at this stage. Try another one.', rh_err:'The desk could not be reached. Try again in a moment.',
+    rh_note:'Rehearsal pages are drafts. Titles, keys and even the fandom can still change before the premiere.',
+    rh_edit:'Edit', rh_add:'Add a work', rh_save:'Save', rh_saving:'Saving…', rh_cancel:'Cancel', rh_up:'Move up', rh_down:'Move down', rh_del:'Remove',
+    rh_f_form:'Form', rh_f_title:'Title', rh_f_working:'Working title', rh_f_stage:'Stage', rh_f_hook:'One line that hooks a reader', rh_f_fandom:'Fandom', rh_f_premiere:'Premiere date',
+    rh_need_title:'Every work needs a title.',
     wk_n_home:'Home', wk_n_works:'Works', wk_n_opus:'Opus', wk_n_notes:'Notes', wk_n_rehearsal:'In rehearsal', wk_n_about:'About', wk_n_comm:'Commissions',
     wk_n_profile:'Profile', wk_n_signin:'Sign in', wk_n_resume:'Resume', wk_n_members:'Members', wk_n_surprise:'Surprise', wk_n_lang:'EN / VI', wk_n_theme:'Theme',
     wk_d_home:'Where you left off, and what is new', wk_d_works:'Every fic, on the shelf', wk_d_opus:'Fics by musical form', wk_d_notes:'The music behind the fics',
@@ -1702,6 +1713,17 @@ const i18n = {
     opus_xoa_hoi:'Xoá nhóm “%s”? %d truyện trong đó KHÔNG bị xoá — chúng chỉ mất chỗ xếp.',
     intro_sub:'Viết là tự nhiên', intro_cta:'Bấm vào bất cứ đâu để vào',
     nav_zone:'Commission',
+    nav_rehearsal:'Đang tập',
+    rh_eyebrow:'Bàn của nhà soạn nhạc · {n} tác phẩm đang viết', rh_h1:'Đang tập',
+    rh_intro:'Những tác phẩm chưa xong, viết từng ô nhịp. Mỗi bản dần đầy lên khi đi từ lên dây tới ra mắt, rồi mới lên kệ.',
+    rh_all:'Tất cả', rh_s1:'Lên dây', rh_s2:'Đang tập', rh_s3:'Tổng duyệt', rh_s4:'Ra mắt',
+    rh_d1:'Một ý tưởng, còn đang lên dây.', rh_d2:'Đang viết nháp.', rh_d3:'Đang sửa, gần xong.', rh_d4:'Đã có ngày.',
+    rh_manu:'Bản thảo · đang viết', rh_next:'Buổi ra mắt tới', rh_work:'Tác phẩm', rh_title_teaser:'Tên và lời dẫn',
+    rh_none:'Trên bàn chưa có gì.', rh_none_stage:'Giai đoạn này chưa có gì. Thử giai đoạn khác.', rh_err:'Không tới được bàn soạn nhạc. Thử lại sau chút nhé.',
+    rh_note:'Trang đang tập chỉ là bản nháp. Tên, giọng và cả fandom vẫn có thể đổi trước khi ra mắt.',
+    rh_edit:'Sửa', rh_add:'Thêm một tác phẩm', rh_save:'Lưu', rh_saving:'Đang lưu…', rh_cancel:'Huỷ', rh_up:'Lên', rh_down:'Xuống', rh_del:'Xoá',
+    rh_f_form:'Thể loại', rh_f_title:'Tên', rh_f_working:'Tên làm việc', rh_f_stage:'Giai đoạn', rh_f_hook:'Một dòng để câu độc giả', rh_f_fandom:'Fandom', rh_f_premiere:'Ngày ra mắt',
+    rh_need_title:'Tác phẩm nào cũng cần có tên.',
     wk_n_home:'Trang chủ', wk_n_works:'Truyện', wk_n_opus:'Opus', wk_n_notes:'Notes', wk_n_rehearsal:'Đang tập', wk_n_about:'Giới thiệu', wk_n_comm:'Commission',
     wk_n_profile:'Hồ sơ', wk_n_signin:'Đăng nhập', wk_n_resume:'Đọc tiếp', wk_n_members:'Thành viên', wk_n_surprise:'Bất ngờ', wk_n_lang:'EN / VI', wk_n_theme:'Giao diện',
     wk_d_home:'Chỗ bạn đọc dở, và truyện mới', wk_d_works:'Mọi fic, trên kệ', wk_d_opus:'Fic theo thể nhạc', wk_d_notes:'Âm nhạc đằng sau các fic',
@@ -1941,6 +1963,7 @@ function applyLang() {
   // ngôn ngữ là phải dựng lại (kể cả name_vi / mo_ta_vi của nhóm Opus).
   veLaiDiaThan();
   if (window.veLaiChao) window.veLaiChao();
+  if (window.veLaiRehearsal) window.veLaiRehearsal();
 
   const mt = document.querySelector('.music-toggle');
   if (mt) mt.textContent = musicPlaying ? t('pause') : t('play');
@@ -2152,6 +2175,7 @@ function showPage(id, el) {
   if (id === 'bookmarks' && window.loadBookmarks) window.loadBookmarks();
   if (id === 'requests'  && window.loadRequests)  window.loadRequests();
   if (id === 'opus'      && window.loadOpus)      window.loadOpus();
+  if (id === 'rehearsal' && window.loadRehearsal) window.loadRehearsal();
   if (id === 'members'   && window.loadMembers)   window.loadMembers();
   if (id === 'member'    && window.loadMember)    window.loadMember();
   if (id === 'post' && window.loadPostForm) {
