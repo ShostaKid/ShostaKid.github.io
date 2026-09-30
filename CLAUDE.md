@@ -1272,7 +1272,30 @@ Chỗ chưa điền hiện dạng `.ph` (chữ vàng nghiêng, gạch chấm): `
 - Nhạc: `<audio loop>` nguồn GitHub Releases (Rossini). Trang riêng nên không có
   intro để mở khoá phát — cú bấm/phím đầu tiên bất kỳ sẽ bật nhạc; bấm Pause thì
   không tự phát lại.
-- Mục ToS là `<details>`: máy tính luôn mở (JS chặn gập), điện thoại gập được.
+- **Giao diện "tiệm đĩa" (30/09/2026)**: mái hiên → hero cỡ lớn → tủ kệ gồm 4 kệ (Bảng giá, Quy trình,
+  Điều khoản, Sample) → quầy liên hệ + sàn lát sọc. Theo bản thiết kế Claude Design
+  `Commissions · record-shop shelves`. Mỗi kệ = một hàng **đĩa** (`.cm-disc`) đứng trên **thanh gỗ
+  bảng tên** (`.cm-plank`). Màu gỗ/mái hiên là biến `--plank-*`, `--awn-*`, `--back` (có bản tối).
+- **Điều khoản là 5 đĩa bấm chọn** (`button.cm-disc.term`, `aria-pressed`), đọc từng mục ở "quầy đọc"
+  (`.cm-desk`). **Chữ ToS nằm trong 5 `<div class="cm-panel" id="tos-N">` của HTML** — không hard-code
+  trong JS. `<html>` có class `js` (bật ở `<head>`) thì mới ẩn 4 panel còn lại; **tắt JS thì cả 5 mục
+  hiện nối nhau** (đã test). Mũi tên ←/→ chuyển đĩa; link `#tos-N` chọn đúng đĩa rồi cuộn tới quầy.
+- **Điện thoại (≤820px)**: mỗi kệ là dải cuộn ngang (`scroll-snap`), đĩa nhỏ lại (172/156px; riêng kệ
+  Quy trình 188px vì tấm bảng có 3 dòng chữ). Máy tính vừa/nhỏ: kích thước đĩa và khe co theo bề ngang
+  tủ bằng container query (`cqw`, trong `@supports`) để một kệ luôn nằm trên một hàng.
+- **Mục lục giữ nguyên chức năng** nhưng đổi chỗ theo bề ngang: ≥1700px là cột trôi bên trái, 821–1699px
+  là dải ngang dính dưới thanh trên, ≤820px ẩn (như trước). Scroll-spy đọc 5 mốc `prices / process /
+  terms / samples / contact`; mục `tos-N` chỉ sáng khi đang ở kệ Điều khoản và đúng đĩa đang chọn.
+- **4 sample là hard-code trong HTML** (tên, phụ đề, số chữ) — chủ repo xác nhận dùng thật. Số chữ không
+  tự cập nhật; muốn đổi thì sửa `commissions.html`. Nút "Xem trong kệ truyện" vẫn dẫn `#works?ship=Others`.
+- **Icon**: 10 `<symbol>` (flute, violin, cello, grand-piano, clarinet, triangle, accordion, piano-keys,
+  tuba, harp) **chép từ sprite của `index.html`** vào đầu `<body>` của `commissions.html` — hai trang
+  riêng nên không dùng chung được. **CC BY 3.0: dòng ghi nguồn ở `footer.cm-foot` phải giữ.**
+- Chữ trên bìa đĩa sáng dùng `--cover-ink:#7A5F14` (không phải `#836717` của bản thiết kế — 4.35, dưới
+  ngưỡng); chữ trên nền vàng (huy hiệu SAMPLE, bảng tên sàn) dùng `--badge-ink`, không phải `--on-head`.
+- Bản thiết kế **chỉ có desktop 1440px**; bố cục điện thoại, mục lục, thanh nhạc là phần tự thêm.
+- Mock lặp lại một lỗi có sẵn: hàng giá "Từ 2500W – 4000W" chồng lên "1000W – 3000W". **Chưa sửa** vì
+  đó là bảng giá của chủ repo, không phải việc của giao diện.
 
 **Màn chào = bàn phím piano** (Welcome A) trong `#intro` của `index.html`, dựng bởi
 `welcome.js` (nạp sau `app.js`, dùng lại hàm toàn cục của nó: `enterSite`, `showPage`,

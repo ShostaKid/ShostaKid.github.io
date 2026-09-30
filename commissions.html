@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Commission · Terms of Service · ShostaKid</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Lora:ital,wght@0,400;0,500;1,400&family=Nunito:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="commissions.css?v=2">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="commissions.css?v=3">
 <!-- Tải sẵn web chính (và bản "vào thẳng") để bấm Read là tức thì. -->
 <link rel="prefetch" href="index.html?vao=1">
 <link rel="prefetch" href="style.css?v=5">
@@ -13,16 +13,29 @@
 <script>
 /* Chọn theme trước khi vẽ — cùng khoá localStorage với web chính (sk-theme). */
 try{document.documentElement.setAttribute('data-theme',localStorage.getItem('sk-theme')||'light')}catch(e){}
+document.documentElement.classList.add('js');
 </script>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<symbol id="ic-flute" viewBox="0 0 512 512" fill="currentColor"><path fill="currentColor" d="M449.4 26.29c-5.4 2.56-14.6 7-27.2 14.14c-17.6 9.98-37.7 23.64-45.9 34.27c-1.8 2.33-5 10.39-6.8 17.25c-1.2 4.49-1.4 6.02-1.8 8.25l44 44c2.2-.4 3.8-.6 8.3-1.8c6.9-1.8 15-5 17.3-6.8c10.6-8.2 24.3-28.2 34.2-45.79c7.2-12.62 11.6-21.81 14.2-27.24zM435 54.32l22.7 22.63l-12.8 12.74l-22.7-22.63zm-77.1 61.48L42.49 431.3c7.86 3 15.66 8.3 22.77 15.4c7.09 7.1 12.37 14.9 15.42 22.7L396.1 154zm-8.3 30.7h.1a16 16 0 0 1 11.1 4.7a16 16 0 0 1 0 22.6a16 16 0 0 1-22.7 0a16 16 0 0 1 0-22.6a16 16 0 0 1 11.5-4.7m-45.1 45.3a16 16 0 0 1 11 4.6a16 16 0 0 1 0 22.7a16 16 0 0 1-22.6 0a16 16 0 0 1 0-22.7a16 16 0 0 1 11.6-4.6M259.2 237a16 16 0 0 1 11.1 4.7a16 16 0 0 1 0 22.6a16 16 0 0 1-22.6 0a16 16 0 0 1 0-22.6a16 16 0 0 1 11.5-4.7m-45.3 45.3h.1a16 16 0 0 1 11 4.7a16 16 0 0 1 0 22.6a16 16 0 0 1-22.6 0a16 16 0 0 1 0-22.6a16 16 0 0 1 11.5-4.7m-45.2 45.3a16 16 0 0 1 11.1 4.6a16 16 0 0 1 0 22.7a16 16 0 0 1-22.7 0a16 16 0 0 1 0-22.7a16 16 0 0 1 11.6-4.6M29.04 446.5c-1.44 0-2.13.4-2.25.5c-.21.2-1.2 2.3.43 7.5c1.7 5.2 5.87 12.1 12.02 18.2c6.15 6.2 13.01 10.4 18.24 12.1c5.16 1.6 7.29.6 7.5.4s1.2-2.4-.43-7.5c-1.69-5.2-5.87-12.1-12.02-18.3c-6.15-6.1-13.01-10.3-18.24-12c-1.93-.6-3.44-.8-4.58-.9z"/></symbol>
+<symbol id="ic-violin" viewBox="0 0 512 512" fill="currentColor"><path fill="currentColor" d="m470.9 26l-23 7.69l-.1 12.66l17.8 17.81l12.7-.1l7.7-23.04zm-32.5 37l-227 210.5l27.2 27L449 73.57zm-39.6-19.33L385.7 56.7l15.6 15.5l13.5-12.53zm53.5 53.59l-12.5 13.54l15.5 15.4l13.1-13zm-79.6-27.52l-13 13.02l14.6 14.61l13.5-12.58zm54.5 54.46l-12.5 13.6l14.5 14.5l13.1-13.1zm-124 39.2c-28.7-17.5-72-25.4-116.3 47.8l-7.2-1.4l-7.3 13c3.8 1 13.5 8.2 12.4 12.1c-3.5 11.3-48.2 64.3-70.6 44.5c-2.9-2.6-5.8-5.7-8-9.6l-14.35 7.9c1.23 10-1.95 13.8-6.38 15.8c-82.975 36.6-64.15 78.6-33.01 126.9l3.11-3c22.09-22.2 43.62-54.6 62.73-82.7l6.1-9.3l13 13l10.1-10.1l-10.8-10.9l18.8-7.3l5.1 5.2l33.3-33.4c-2.9-3-5.9-6-8.9-8.9zm45.5 45.5L239 327l-8.9-8.9l-33.3 33.3l5 5.1l-7.1 18.9l-10.9-11l-10.1 10.2l12.8 12.9l-9.2 6.3c-27.6 18.9-60.6 40.6-82.61 62.7l-3.14 3c48.45 31.2 90.45 50 127.05-33c2-4.4 5.7-7.6 15.8-6.4l7.8-14.3c-3.8-2.3-7-5-9.6-8c-19.8-22.4 33.2-67.2 44.5-70.7c3.9-1.1 11 8.6 12.1 12.4l13-7.1l-1.4-7.2c73.2-44.3 65.4-87.7 47.9-116.3M206.9 295l-33.2 33.3l10.1 10.1l33.3-33.3zm-46.3 46.3l-10.2 10.1l10.2 10.1l10.1-10.1zm-33.4 13c-16.4 24.2-34.63 51-54.84 72l2.97 10.3l10.36 3c21.11-20.1 48.01-38.4 72.11-54.8z"/></symbol>
+<symbol id="ic-cello" viewBox="0 0 512 512" fill="currentColor"><g transform="translate(256 0) scale(1.18 1) translate(-256 0)"><path fill-rule="evenodd" d="M256 176c-58 0-88 28-88 70c0 30 18 48 34 60c-26 14-58 42-58 94c0 58 50 86 112 86s112-28 112-86c0-52-32-80-58-94c16-12 34-30 34-60c0-42-30-70-88-70zM214 330c-10 22 10 44-2 70l10 3c12-28-8-50 2-70zM298 330c10 22-10 44 2 70l-10 3c-12-28 8-50-2-70zM222 414h68v10h-68zM249 190h14v200h-14z"/><path d="M244 64h24v118h-24z"/><path fill-rule="evenodd" d="M256 20c-18 0-30 12-30 28s12 26 28 26c10 0 16-6 16-14s-6-12-12-12a6 6 0 0 0 0 12c2 0 3 1 3 2s-2 4-6 4c-9 0-16-7-16-16s8-18 17-18c12 0 20 10 20 22c0 8-3 14-8 18l10 6c7-6 12-14 12-24c0-20-14-34-34-34z"/><path d="M218 84h26v12h-26zM268 84h26v12h-26zM218 112h26v12h-26zM268 112h26v12h-26z"/><path d="M251 484h10v24h-10z"/></g></symbol>
+<symbol id="ic-grand-piano" viewBox="0 0 512 512" fill="currentColor"><path fill="currentColor" d="m376.3 30.6l-63.3 3L61.43 230.9l261.47-51.5c5.8-4.6 10.9-9 15.4-13.1L302 75.6l15.5-6.2l33.7 84.2c55.1-60.2-20.4-71.1 25.1-123M357 168l-13.2 11.9l9.6 24.1c-9.1-.4-19.2-.6-30.5-.7L61.43 254.9s.34 2.2.84 5.5c2.36 15.5-7.73 30.2-23.07 33.6c-8.93 2-16.61 3.7-16.61 3.7l3.95 21.2l334.16 30.5l126-53.9l-.9-43.4c-81.1-8.7-11.4-39.4-114-47zm-16.2 51.3c7.1.1 13.4.4 19 .7l21.5 53.8l-273.6-14.5l209.9-39.9c8.5-.1 16.2-.2 23.2-.1m37.6 2.4c56.8 7.8 14.9 32.1 65 36.5l-44.9 13.5zM83.78 284.8L358.4 307l-18.1 16.1l-280.68-25.9zm-1.35 53.6l13.65 97.1l-3.47 6.2l.36 15.8l17.13 1.6l17.1-6.2v-13.2l-4.8-3.9l9.1-93zM184 350.5V426l105.2 9v-75.2l-16.7-1.5V417l-71.8-6v-59zm209.8 2.7l-29.4 10.9l-24.8-2l15.6 99.4l-3.9 5.1l.8 18l17.1 1.7l15.9-7.4l.3-13.2l-3.9-3.9zm-208.7 89.6l-28.4 9.5l3.1 14.4l102.3 10.1l21-7.4l1.1-18.3z"/></symbol>
+<symbol id="ic-clarinet" viewBox="0 0 512 512" fill="currentColor"><path fill="currentColor" d="M37.1 28.45c-.27 29.1 9.07 46.67 25.07 67.1l9.66-9.6l14.73 14.75l-11.46 11.4l9.81 12.6l31.19-31.25l-12.2-10.1l-7.83 7.8l-14.74-14.7l6.37-6.4zm92.2 78.25L98.11 138l14.09 14.1l31.3-31.2zm25.7 25.7l-31 31l10 10c10-4 22-1 30 7c15 14 37 37 37 37l29-11zm12 20c3 2 3 7 0 10s-7 3-10 0s-3-8 0-10c3.2-2.8 7.3-2.6 10 0m22 21c3 3 3 8 0 11c-3 2-8 2-11 0c-3-3-3-8 0-11c3.4-2.8 8.1-2.8 11 0M141.3 184c-2.9 0-5.5.5-7.9 1.3l76.8 76.7l53.2-17.2s28.4 27.6 44 42.7c6 5.9 14.9 7.7 22.8 4.8c-27.1-26.8-55.3-54-82.8-80.9l-53 17.1s-24.2-24.2-38.2-38.1c-4-4.1-9.3-6.3-14.9-6.4m68.7 10.4c3 3 3 8 0 11s-8 3-11 0c-2-3-2-8 0-11c3.4-2.8 8.1-2.8 11 0m34.2 31.3l9.5 9.3l-40.2 12.6l-9.3-9.3zm14.8 31.7l-30 11l9 9l73 79l38-37l-18-16l-1 1c-11 3-22 0-31-7c-15-16-40-40-40-40m3 13c3 3 3 8 0 11s-8 3-11 0s-3-8 0-11c4.3-2.7 7.1-2 11 0m22 22c3 3 3 8 0 11s-7 3-10 0s-3-8 0-11c3.3-1.9 7.1-1.9 10 0m23 23c3 3 3 8 0 11c-3 2-8 2-11 0c-3-3-3-8 0-11c3.4-2.8 8.1-2.8 11 0m52.7 15.5l-37.3 37.3l14.1 14.1l37.3-37.2zm26.2 26.3l-37.3 37.3c19.2 19.2 14.6 55.7 14.6 55.7s11.6-17.5 35.7-41.5l.5-.6c24.5-24.5 42.2-36.2 42.2-36.2s-36.5 4.5-55.7-14.7m85.5 14.5c-9.4 0-35.6 19.4-62.3 46.1c-30.4 30.4-50.7 59.5-45.2 64.9c5.4 5.5 34.5-14.8 64.9-45.2s50.7-59.5 45.2-64.9c-.6-.6-1.4-.9-2.6-.9"/></symbol>
+<symbol id="ic-triangle" viewBox="0 0 512 512" fill="currentColor"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M226 164L90 410h332L270 136" stroke-width="28"/><path d="M256 118V40" stroke-width="10"/><circle cx="256" cy="34" r="14" stroke-width="10"/><path d="M320 486L482 324" stroke-width="16"/></g><circle cx="482" cy="324" r="16" fill="currentColor"/></symbol>
+<symbol id="ic-accordion" viewBox="0 0 512 512" fill="currentColor"><path fill="currentColor" d="M343.8 87.8L340.3 403c3.5-1 7.1-1 10.7-2l20.6-310.4c-9.1-.95-19.1-2.31-27.8-2.8m48.6 4.2l-20.5 309h9L419 95.9s-9.8-1.9-26.6-3.9m-101.1.3L306.4 412c4.1-1 8.4-3 13-4l3.5-313.7zm-110.9 7.6c-8.8 2-17.7 4.2-26.6 6.7l88.2 7.8L269.5 430s6.1-4 16.4-9l-14.8-315.7zm262.4 1.5l-42.5 300.1s17.8-6.6 30.1-11.2c7.3-2.8 12.6-9 14.1-16.7c8.5-42.4 36.6-183.7 47.1-236.4c2.4-11.3-4.4-22.5-15.5-25.9c-15-4.5-33.3-9.9-33.3-9.9m-325.6 24.5s-56.64 18.6-84.95 28c-8.87 2.9-14.03 12.1-11.86 21.2C32.62 226.5 70.73 386.6 83.5 440c1.12 5 4.06 9 8.17 11c4.11 3 9.03 4 13.63 2c14-3 31.1-7 31.1-7s26.6 6 47.4 10c15.7 4 32.1 2 46.4-6c8.4-4 16-8 16-8l-30.6-308.5zm-4.8 43.3l51.6 4.4L196.1 419l-45.2-8c18.1-23.2 20.6-74.6 13.1-124.4c-7.9-53.2-27.4-104.5-51.5-116.9zm-23.2.5c4.84.2 9.09 3.7 9.96 8.7L140.6 414c1 6-2.8 11-8.5 12c-5.6 1-11-2-12-8l-.2-1l-18.4 5l-3.36-16l18.86-5l-1.7-10.4l-19.27 5.2l-3.43-16.3l19.8-5.4l-6.3-35.4l-20.87 5.7l-3.44-16.3l21.51-5.9l-1.9-10.3l-21.75 6l-3.44-16.3l22.37-6.2l-1.86-10.5l-22.71 6.2l-3.44-16.3l23.26-6.4l-6.27-35.7l-24.42 6.7l-3.44-16.3l24.97-6.9l-2.13-12l-25.36 6.9l-3.43-16.3l25.89-7.1l-1-5.7c-1-5.7 2.79-11.1 8.46-12.1c.71-.1 1.41-.2 2.1-.2"/></symbol>
+<symbol id="ic-piano-keys" viewBox="0 0 512 512" fill="currentColor"><path fill="currentColor" d="M24 80v352h64V288H72V80zm96 0v208h-16v144h64V288h-16V80zm80 0v208h-16v144h64V288h-16V80zm80 0v208h-16v144h64V80zm64 0v352h64V288h-16V80zm96 0v208h-16v144h64V80z"/></symbol>
+<symbol id="ic-tuba" viewBox="0 0 512 512" fill="currentColor"><path fill="currentColor" d="M207.1 35.3c-6.5 0-12 5-12.5 11.5s4 12.3 10.4 13.4c32.2 5.3 52.9 35.2 67.7 72.9c10 25.3 17.1 54.2 22.1 83.2c24.7-5.7 47.1-5.7 64.5-4c4.9-27.6 11.8-55.1 21.4-79.2c14.8-37.7 35.5-67.6 67.7-72.9c6.4-1.1 10.9-6.9 10.4-13.4s-6-11.5-12.5-11.5zm-6 68.5c-54.3.4-109.52 32.8-109.52 99.5v159.6C91.58 443 155.2 484 219.6 484c58.3 0 116.1-34 126.3-99.7c.5-1.4.7-2.7.6-4.2v-.1c.7-5.5 1-11.2 1-17.1v-41.7c.9-17.5 2.3-37.9 4.7-59.4c-13.5-1.1-31.1-.8-50.5 4.4c2.1 20.2 3.4 39.3 4.2 55.8v40.9c0 53.1-43.5 79.1-86.3 79.1s-86.3-26-86.3-79.1V203.3c0-47.9 48.6-63.4 86.3-56.2c20.4 3.9 39.1 14.5 42.8 33.4V227c6.2-2.7 12.4-5 18.5-6.9c-2.5-13.1-5.4-26.3-8.8-39.1c-7-26.2-16-50.9-28.2-70.5c-5.3-1.8-10.8-3.2-16.5-4.3c-8.6-1.6-17.4-2.4-26.3-2.4m-20.4 87.1c-4.5 0-8.3 3.7-8.3 8.3v4.2c0 4.6 3.8 8.4 8.3 8.4c4.6 0 8.4-3.8 8.4-8.4v-4.2c0-4.6-3.8-8.3-8.4-8.3m25.5 0c-4.5 0-8.3 3.7-8.3 8.3v4.2c0 4.6 3.8 8.4 8.3 8.4c4.6 0 8.4-3.8 8.4-8.4v-4.2c0-4.6-3.8-8.3-8.4-8.3m25.6 0c-4.5 0-8.3 3.7-8.3 8.3v4.2c0 4.6 3.8 8.4 8.3 8.4c4.6 0 8.4-3.8 8.4-8.4v-4.2c0-4.6-3.8-8.3-8.4-8.3M180.7 224c-4.5 0-8.3 3.7-8.3 8.2v41.2c0 4.6 3.8 8.3 8.3 8.3c4.6 0 8.4-3.7 8.4-8.3v-41.2c0-4.5-3.8-8.2-8.4-8.2m25.5 0c-4.5 0-8.3 3.7-8.3 8.2v41.2c0 4.6 3.8 8.3 8.3 8.3c4.6 0 8.4-3.7 8.4-8.3v-41.2c0-4.5-3.8-8.2-8.4-8.2m25.6 0c-4.5 0-8.3 3.7-8.3 8.2v41.2c0 4.6 3.8 8.3 8.3 8.3c4.6 0 8.4-3.7 8.4-8.3v-41.2c0-4.5-3.8-8.2-8.4-8.2m108.5 4c-23.3-.1-52.8 4.2-83.4 20v19c52-30 101.8-22 119.9-18l4.7-16c-8.5-2.2-23-4.9-41.2-5m56.5 8l-5.2 19l20.5 9.1l8.5-24.4zm-241 6.1c-4 8-6.4 18.8-6.4 33.9v84.1c0 40.9 34.2 62.9 69 62.9s69-22 69-62.9v-89.3c-8.2 3.2-16.6 7.2-25 12.4v76.9c0 25.6-22.4 37.6-44 37.6s-44-12-44-37.6v-62.6c-10.7-2.8-18.6-12.6-18.6-24.2zm95.9 48.3c-.9.7-1.8 1.4-2.8 2.1c-2.3 1.8-4.9 3.1-7.6 4l-1.2.4l-.9.3v53.4c0 10.9-8.7 16.2-17.2 16.2c-11.8 0-25.3-.1-25.3-.1c5.5 8.3 15.4 12.6 25.3 12.6c14.9 0 29.7-9.7 29.7-28.7zm-64.8 7.9v33.6c0 5.2 2.1 10.3 5.9 14.1c3.7 3.7 8.8 5.8 14.1 5.8s10.3-2.1 14.1-5.8c3.7-3.8 5.8-8.9 5.8-14.1v-33.6h-12.5v33.6c0 1.9-.8 3.8-2.2 5.2s-3.2 2.2-5.2 2.2s-3.9-.8-5.3-2.2s-2.2-3.3-2.2-5.2v-33.6z"/></symbol>
+<symbol id="ic-harp" viewBox="0 0 512 512" fill="currentColor"><path fill="currentColor" d="m120.7 27.53l-28.93 8.56C112.1 187.8 125.6 321.9 183.9 455H228c-40-140.6-84.2-280.4-107.3-427.47m19.9 10.36c2.6 16.05 5.5 32.03 8.7 47.95c9.8 2.67 19.9 6.9 30.1 11.85c18.3 8.71 37.3 19.81 56.1 29.51s37.3 17.9 53.6 21.1c16.4 3.2 29.8 1.7 41.6-7c22.2-16.4 38.4-26.2 51.3-31.4c12.8-5.2 23.3-5.9 31.6-1.8c7.8 4 11.5 11.1 14.2 17.1l5.1-11.3c-7.3-12.9-18.1-21.38-32.9-23.26c-16.2-2.05-38.4 4.06-66 25.66c-14.4 11.3-33 9.7-50.6 2.8c-17.5-6.9-35.7-18.9-54.2-31.64c-18.6-12.74-37.3-26.21-54.8-35.98c-12.3-6.86-23.8-11.66-33.8-13.59m12.8 68.31q7.2 34.5 15.6 68.7v-62.2c-5.4-2.6-10.6-4.8-15.6-6.5M404.8 124c-27 110.6-55.1 223.8-97.7 331h38.6c34.5-94.4 51-203.5 70.3-311.3c-1.8-3.8-3-7.4-4.3-10.4c-2.3-5.3-4.3-8.1-6.3-9.1c-.2-.1-.4-.2-.6-.2M199 128.1v160.4c5.9 21.1 11.9 42.1 18 63.1V137.8c-6.1-3.2-12.1-6.5-18-9.7M361 142q-8.1 5.4-18 12.6V288h1c5.9-20.9 11.5-41.8 17-62.8zm-114 10.8V455h18V160.2c-6-2.2-12-4.7-18-7.4m66 14.3c-5.9.7-11.9.8-18 .2v269.8c6.3-16.4 12.3-32.9 18-49.6zM163.9 473l-15.1 16h214.4l-15.1-16z"/></symbol>
+</svg>
 
 <header class="cm-top">
   <div class="cm-top-in">
     <a class="cm-logo" href="#top">Shosta<span>Kid</span></a>
     <nav class="cm-links" aria-label="Commission">
-      <a href="#tos-1" class="on" data-spy>Terms</a>
       <a href="#prices" data-spy>Prices</a>
+      <a href="#terms" data-spy>Terms</a>
       <a href="#samples" data-spy>Samples</a>
     </nav>
     <div class="cm-right">
@@ -36,18 +49,33 @@ try{document.documentElement.setAttribute('data-theme',localStorage.getItem('sk-
     </div>
   </div>
   <nav class="cm-menu" id="menu" aria-label="Menu">
-    <a href="#tos-1">Terms</a>
     <a href="#prices">Prices</a>
+    <a href="#terms">Terms</a>
     <a href="#samples">Samples</a>
     <div class="cm-zone"><a href="index.html?vao=1">Read</a><span aria-current="page">Commissions</span></div>
     <button type="button" class="cm-icon" id="themeBtnM">Đổi sáng / tối</button>
   </nav>
 </header>
 
+<div class="cm-awning" aria-hidden="true"></div>
+
 <main class="cm-wrap" id="top">
+  <nav class="cm-toc" aria-label="Mục lục">
+    <small>Mục lục</small>
+    <a href="#tos-1" data-spy>1. Nhận &amp; không nhận</a>
+    <a href="#tos-2" data-spy>2. Bản quyền &amp; mục đích</a>
+    <a href="#tos-3" data-spy>3. Quy trình &amp; sửa đổi</a>
+    <a href="#tos-4" data-spy>4. Bảng giá &amp; thanh toán</a>
+    <a href="#tos-5" data-spy>5. Deadline &amp; hoàn tiền</a>
+    <a href="#prices" data-spy>Bảng giá</a>
+    <a href="#process" data-spy>Quy trình</a>
+    <a href="#samples" data-spy>Sample</a>
+    <a href="#contact" data-spy>Liên hệ</a>
+  </nav>
+
   <section class="cm-hero">
     <div class="cm-eyebrow">Writing commission</div>
-    <h1>Terms of Service</h1>
+    <h1>Commissions</h1>
     <div class="cm-vi">Điều khoản dịch vụ</div>
     <p class="cm-lead">Khi bạn gửi yêu cầu và chốt đơn, đồng nghĩa với việc bạn đã đọc và đồng ý với các điều khoản dưới đây.</p>
     <div class="cm-cta">
@@ -56,56 +84,105 @@ try{document.documentElement.setAttribute('data-theme',localStorage.getItem('sk-
     </div>
   </section>
 
-  <section class="cm-facts" aria-label="Tóm tắt">
-    <div class="cm-fact"><small>Thanh toán</small><b>Chỉ bank chuyển khoản online</b></div>
-    <div class="cm-fact"><small>Cọc</small><b>50% với đơn trên <span class="ph">[100k]</span></b></div>
-    <div class="cm-fact"><small>Sửa miễn phí</small><b><span class="ph">[1 hoặc 2]</span> lần</b></div>
-    <div class="cm-fact"><small>Trả bài</small><b>Dưới 3–4 ngày, bài dưới 3000 chữ</b></div>
-  </section>
+  <div class="cm-store">
+    <div class="cm-facts" aria-label="Tóm tắt">
+      <div class="cm-fact"><small>Thanh toán</small><b>Chỉ bank chuyển khoản online</b></div>
+      <div class="cm-fact"><small>Cọc</small><b>50% với đơn trên <span class="ph">[100k]</span></b></div>
+      <div class="cm-fact"><small>Sửa miễn phí</small><b><span class="ph">[1 hoặc 2]</span> lần</b></div>
+      <div class="cm-fact"><small>Trả bài</small><b>Dưới 3–4 ngày, bài dưới 3000 chữ</b></div>
+    </div>
 
-  <div class="cm-body">
-    <nav class="cm-toc" aria-label="Mục lục">
-      <small>Mục lục</small>
-      <a href="#tos-1" data-spy>1. Nhận &amp; không nhận</a>
-      <a href="#tos-2" data-spy>2. Bản quyền &amp; mục đích sử dụng</a>
-      <a href="#tos-3" data-spy>3. Quy trình &amp; sửa đổi</a>
-      <a href="#tos-4" data-spy>4. Bảng giá &amp; thanh toán</a>
-      <a href="#tos-5" data-spy>5. Deadline &amp; hoàn tiền</a>
-      <a href="#prices" data-spy>Bảng giá</a>
-      <a href="#samples" data-spy>Sample</a>
-      <a href="#contact" data-spy>Liên hệ</a>
-    </nav>
+    <section class="cm-shelf" id="prices" aria-labelledby="prices-h">
+      <div class="cm-row">
+        <div class="cm-disc" style="--cv:#1F2A3A">
+          <div class="cm-cover"><i class="cm-ring"></i><span class="cm-no">I.</span><svg class="ic" aria-hidden="true"><use href="#ic-flute"/></svg></div>
+          <div class="cm-plateb"><span class="cm-pw">500W – 1000W</span><span class="cm-price">70 – 130K</span></div>
+        </div>
+        <div class="cm-disc" style="--cv:#5A2320">
+          <div class="cm-cover"><i class="cm-ring"></i><span class="cm-no">II.</span><svg class="ic" aria-hidden="true"><use href="#ic-violin"/></svg></div>
+          <div class="cm-plateb"><span class="cm-pw">1000W – 3000W</span><span class="cm-price">130K – 300K</span></div>
+        </div>
+        <div class="cm-disc" style="--cv:#23352F">
+          <div class="cm-cover"><i class="cm-ring"></i><span class="cm-no">III.</span><svg class="ic" aria-hidden="true"><use href="#ic-cello"/></svg></div>
+          <div class="cm-plateb"><span class="cm-pw">Từ 2500W – 4000W</span><span class="cm-price">300K – 650K</span></div>
+        </div>
+        <div class="cm-disc" style="--cv:#2B3350">
+          <div class="cm-cover"><i class="cm-ring"></i><span class="cm-no">IV.</span><svg class="ic" aria-hidden="true"><use href="#ic-grand-piano"/></svg></div>
+          <div class="cm-plateb"><span class="cm-pw">Trên 4000W</span><span class="cm-price neg">Thỏa thuận</span></div>
+        </div>
+      </div>
+      <div class="cm-plank"><span class="cm-plate"><h2 id="prices-h">Bảng giá</h2></span><span class="cm-pr">Lưu ý: giá có thể dao động tùy độ phức tạp của request</span></div>
+    </section>
 
-    <div class="cm-main">
-      <details class="cm-sec" id="tos-1" open>
-        <summary>1. Nhận &amp; không nhận (DOs &amp; DONTs)<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
-        <div class="cm-sec-body">
-          <div class="cm-sub">Nhận:</div>
+    <section class="cm-shelf" id="process" aria-labelledby="process-h">
+      <div class="cm-row">
+        <div class="cm-disc" style="--cv:#1F2A3A">
+          <div class="cm-cover"><i class="cm-ring"></i><span class="cm-no">I.</span><svg class="ic" aria-hidden="true"><use href="#ic-clarinet"/></svg></div>
+          <div class="cm-plateb"><span class="cm-pt">Trao đổi</span><span class="cm-pd">Bạn gửi plot, bối cảnh, nhân vật, tông giọng, số từ.</span></div>
+        </div>
+        <div class="cm-disc" style="--cv:#5A2320">
+          <div class="cm-cover"><i class="cm-ring"></i><span class="cm-no">II.</span><svg class="ic" aria-hidden="true"><use href="#ic-triangle"/></svg></div>
+          <div class="cm-plateb"><span class="cm-pt">Báo giá &amp; chốt</span><span class="cm-pd">Thống nhất giá, cọc tiền và hẹn ngày trả.</span></div>
+        </div>
+        <div class="cm-disc" style="--cv:#23352F">
+          <div class="cm-cover"><i class="cm-ring"></i><span class="cm-no">III.</span><svg class="ic" aria-hidden="true"><use href="#ic-violin"/></svg></div>
+          <div class="cm-plateb"><span class="cm-pt">Viết</span><span class="cm-pd">Có dàn ý hoặc bản nháp đầu để check vibe.</span></div>
+        </div>
+        <div class="cm-disc" style="--cv:#2B3350">
+          <div class="cm-cover"><i class="cm-ring"></i><span class="cm-no">IV.</span><svg class="ic" aria-hidden="true"><use href="#ic-accordion"/></svg></div>
+          <div class="cm-plateb"><span class="cm-pt">Chỉnh sửa</span><span class="cm-pd">Sửa miễn phí <span class="ph">[1 hoặc 2]</span> lần cho lỗi nhỏ.</span></div>
+        </div>
+      </div>
+      <div class="cm-plank"><span class="cm-plate"><h2 id="process-h">Quy trình</h2></span><span class="cm-pr">Bốn movement của một đơn</span></div>
+    </section>
+
+    <section class="cm-shelf" id="terms" aria-labelledby="terms-h">
+      <div class="cm-row cm-row-terms" role="group" aria-label="Chọn mục điều khoản">
+        <button type="button" class="cm-disc term" data-term="0" aria-pressed="true" aria-controls="tos-1">
+          <span class="cm-cover"><i class="cm-ring"></i><span class="cm-no">Điều khoản</span><span class="cm-roman">I.</span><span class="cm-tt">Nhận &amp; không nhận (DOs &amp; DONTs)</span></span>
+        </button>
+        <button type="button" class="cm-disc term" data-term="1" aria-pressed="false" aria-controls="tos-2">
+          <span class="cm-cover"><i class="cm-ring"></i><span class="cm-no">Điều khoản</span><span class="cm-roman">II.</span><span class="cm-tt">Bản quyền &amp; mục đích sử dụng (rất quan trọng)</span></span>
+        </button>
+        <button type="button" class="cm-disc term" data-term="2" aria-pressed="false" aria-controls="tos-3">
+          <span class="cm-cover"><i class="cm-ring"></i><span class="cm-no">Điều khoản</span><span class="cm-roman">III.</span><span class="cm-tt">Quy trình làm việc &amp; sửa đổi</span></span>
+        </button>
+        <button type="button" class="cm-disc term" data-term="3" aria-pressed="false" aria-controls="tos-4">
+          <span class="cm-cover"><i class="cm-ring"></i><span class="cm-no">Điều khoản</span><span class="cm-roman">IV.</span><span class="cm-tt">Bảng giá &amp; thanh toán</span></span>
+        </button>
+        <button type="button" class="cm-disc term" data-term="4" aria-pressed="false" aria-controls="tos-5">
+          <span class="cm-cover"><i class="cm-ring"></i><span class="cm-no">Điều khoản</span><span class="cm-roman">V.</span><span class="cm-tt">Deadline &amp; hoàn tiền (refund)</span></span>
+        </button>
+      </div>
+      <div class="cm-plank"><span class="cm-plate"><h2 id="terms-h">Điều khoản</h2></span><span class="cm-pr">Chọn một mục để đọc tại quầy</span></div>
+      <div class="cm-desk">
+        <div class="cm-panel" id="tos-1" role="region" aria-labelledby="tos-1-h">
+          <div class="cm-panel-head"><h3 id="tos-1-h"><i>I.</i>Nhận &amp; không nhận (DOs &amp; DONTs)</h3><span class="cm-counter">Quầy đọc · mục 1 / 5</span></div>
+          <div class="cm-sec-body">
+<div class="cm-sub">Nhận:</div>
           <div class="cm-li l2">Thể loại: <span class="ph">[Fanfic / OC / Original / GL / BG / Đời thường / Fantasy...]</span></div>
           <div class="cm-li l2">Fandom: Không có cụ thể.</div>
           <div class="cm-li l2">Có thể nhận R18/NSFW nhưng không có quá nặng đô</div>
           <div class="cm-sub">Không nhận:</div>
           <div class="cm-li l2">Các plot/thể loại mà mình cảm thấy không phù hợp và sẽ thông báo rõ trong quá trình làm việc sơ lược ban đầu (trước khi nhận chính thức)</div>
+          </div>
         </div>
-      </details>
-
-      <details class="cm-sec" id="tos-2" open>
-        <summary>2. Bản quyền &amp; mục đích sử dụng (rất quan trọng)<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
-        <div class="cm-sec-body">
-          <div class="cm-sub">Đối với khách:</div>
+        <div class="cm-panel" id="tos-2" role="region" aria-labelledby="tos-2-h">
+          <div class="cm-panel-head"><h3 id="tos-2-h"><i>II.</i>Bản quyền &amp; mục đích sử dụng (rất quan trọng)</h3><span class="cm-counter">Quầy đọc · mục 2 / 5</span></div>
+          <div class="cm-sec-body">
+<div class="cm-sub">Đối với khách:</div>
           <div class="cm-li l2">Bài viết chỉ dành cho <strong>MỤC ĐÍCH CÁ NHÂN</strong> (đọc, in ấn lưu niệm phi thương mại, tặng bạn bè...).</div>
           <div class="cm-li l2"><strong>TUYỆT ĐỐI KHÔNG:</strong> Dùng cho mục đích thương mại (bán lại kiếm tiền), không đem đi dự thi, không nạp/train dữ liệu vào các công cụ AI.</div>
           <div class="cm-li l2">Nếu đăng tải lại lên MXH, vui lòng <strong>ghi rõ credit/tên tác giả</strong> (Link Web của mình).</div>
           <div class="cm-sub">Đối với tác giả (mình):</div>
           <div class="cm-li l2">Mình giữ tác quyền (quyền tác giả) đối với bài viết.</div>
           <div class="cm-li l2">Mình có quyền trích đoạn ngắn hoặc làm mờ thông tin để đăng portfolio / show sample (Nếu bạn muốn giữ bí mật hoàn toàn không công khai, vui lòng báo trước <span class="ph">[có thể phụ thu nhẹ hoặc không tùy bạn]</span>).</div>
+          </div>
         </div>
-      </details>
-
-      <details class="cm-sec" id="tos-3" open>
-        <summary>3. Quy trình làm việc &amp; sửa đổi<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
-        <div class="cm-sec-body">
-          <div class="cm-num"><i>1.</i><div><b>Trao đổi:</b> Khách gửi thông tin (Plot, brief của plot, bối cảnh, thiết lập nhân vật, tông giọng, số từ dự kiến, deadline nếu có).</div></div>
+        <div class="cm-panel" id="tos-3" role="region" aria-labelledby="tos-3-h">
+          <div class="cm-panel-head"><h3 id="tos-3-h"><i>III.</i>Quy trình làm việc &amp; sửa đổi</h3><span class="cm-counter">Quầy đọc · mục 3 / 5</span></div>
+          <div class="cm-sec-body">
+<div class="cm-num"><i>1.</i><div><b>Trao đổi:</b> Khách gửi thông tin (Plot, brief của plot, bối cảnh, thiết lập nhân vật, tông giọng, số từ dự kiến, deadline nếu có).</div></div>
           <div class="cm-num"><i>2.</i><div><b>Báo giá &amp; Chốt:</b> Thống nhất giá, cọc tiền và hẹn ngày trả.</div></div>
           <div class="cm-num"><i>3.</i><div><b>Tiến hành viết:</b></div></div>
           <div class="cm-li l2">Có thể gửi dàn ý chi tiết / bản nháp đoạn đầu để check vibe (nếu comm dài).</div>
@@ -114,64 +191,74 @@ try{document.documentElement.setAttribute('data-theme',localStorage.getItem('sk-
           <div class="cm-num"><i>4.</i><div><b>Chỉnh sửa:</b></div></div>
           <div class="cm-li l2">Được yêu cầu sửa miễn phí <b><span class="ph">[1 hoặc 2]</span></b> lần (chỉ áp dụng cho lỗi chính tả, OOC nhẹ, tinh chỉnh chi tiết nhỏ, diễn đạt).</div>
           <div class="cm-li l2"><b>Không hỗ trợ:</b> Đập đi viết lại toàn bộ, thay đổi hoàn toàn cốt truyện/thiết lập ban đầu đã chốt. Nếu muốn thay đổi lớn, tính phí phát sinh <b><span class="ph">[5% giá trị đơn]</span></b>.</div>
+          </div>
         </div>
-      </details>
-
-      <details class="cm-sec" id="tos-4" open>
-        <summary>4. Bảng giá &amp; thanh toán<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
-        <div class="cm-sec-body">
-          <div class="cm-li"><b>Cách tính giá:</b> Tham khảo <a href="#prices">bảng giá</a> đi kèm.</div>
+        <div class="cm-panel" id="tos-4" role="region" aria-labelledby="tos-4-h">
+          <div class="cm-panel-head"><h3 id="tos-4-h"><i>IV.</i>Bảng giá &amp; thanh toán</h3><span class="cm-counter">Quầy đọc · mục 4 / 5</span></div>
+          <div class="cm-sec-body">
+<div class="cm-li"><b>Cách tính giá:</b> Tham khảo <a href="#prices">bảng giá</a> đi kèm.</div>
           <div class="cm-li"><b>Phương thức:</b> Chỉ nhận bank chuyển khoản online. Không nhận bất cứ hình thức thanh toán nào khác.</div>
           <div class="cm-li"><b>Quy định cọc:</b></div>
           <div class="cm-li l2">Dưới <span class="ph">[100k]</span>: Thanh toán <b>100%</b> trước khi viết.</div>
           <div class="cm-li l2">Đơn lớn hơn: Cọc trước <b>50%</b>, thanh toán 50% còn lại sau khi mình gửi bản final (có watermark/chụp màn hình) để nhận file text hoàn chỉnh.</div>
+          </div>
         </div>
-      </details>
-
-      <details class="cm-sec" id="tos-5" open>
-        <summary>5. Deadline &amp; hoàn tiền (refund)<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
-        <div class="cm-sec-body">
-          <div class="cm-li"><b>Thời gian trả bài:</b> Tùy vào độ dài và lịch cá nhân, thường sẽ dưới 3-4 ngày với các bài dưới 3000 chữ, cộng thêm 1-2 ngày với mỗi 1000 chữ dài hơn. Mình cũng sẽ thông báo/ước lượng trước deadline trả bài cho bạn để bạn chủ động. Nếu có việc bận đột xuất làm trễ hẹn, mình sẽ chủ động thông báo trước, và sẽ cân nhắc giảm giá tiền final theo 10% giá trị đơn (hoặc các khuyến mãi khác tùy theo trao đổi) nếu lịch bị trễ hơn 3 ngày.</div>
+        <div class="cm-panel" id="tos-5" role="region" aria-labelledby="tos-5-h">
+          <div class="cm-panel-head"><h3 id="tos-5-h"><i>V.</i>Deadline &amp; hoàn tiền (refund)</h3><span class="cm-counter">Quầy đọc · mục 5 / 5</span></div>
+          <div class="cm-sec-body">
+<div class="cm-li"><b>Thời gian trả bài:</b> Tùy vào độ dài và lịch cá nhân, thường sẽ dưới 3-4 ngày với các bài dưới 3000 chữ, cộng thêm 1-2 ngày với mỗi 1000 chữ dài hơn. Mình cũng sẽ thông báo/ước lượng trước deadline trả bài cho bạn để bạn chủ động. Nếu có việc bận đột xuất làm trễ hẹn, mình sẽ chủ động thông báo trước, và sẽ cân nhắc giảm giá tiền final theo 10% giá trị đơn (hoặc các khuyến mãi khác tùy theo trao đổi) nếu lịch bị trễ hơn 3 ngày.</div>
           <div class="cm-li"><b>Không nhận đơn quá gấp (ví dụ: Yêu cầu hoàn thành dưới 1-2 ngày)</b></div>
           <div class="cm-li"><b>Chính sách hoàn tiền:</b></div>
           <div class="cm-li l2"><b>Nếu mình hủy đơn:</b> Hoàn trả <b>100%</b> số tiền bạn đã cọc/thanh toán, nếu quá sát DL mới hủy sẽ đền bù thêm 5% giá trị đơn (dưới 2 ngày tính đến ngày DL đã hẹn)</div>
           <div class="cm-li l2"><b>Nếu khách tự ý hủy đơn:</b></div>
           <div class="cm-li l3">Chưa viết: Hoàn 100% giá trị đơn</div>
           <div class="cm-li l3">Đang viết dở: <b>Không hoàn lại cọc</b> (mình sẽ gửi lại phần đã viết cho bạn)</div>
+          </div>
         </div>
-      </details>
+      </div>
+    </section>
 
-      <section class="cm-block" id="prices">
-        <h2>Bảng giá</h2>
-        <p class="cm-note">Mục 4 phía trên tham chiếu tới bảng này. Lưu ý: giá có thể sẽ dao động tùy thuộc vào độ phức tạp của request.</p>
-        <div class="cm-table" role="table">
-          <div class="h">Số chữ</div><div class="h">Giá</div>
-          <div>500W – 1000W</div><div>70 – 130K</div>
-          <div>1000W – 3000W</div><div>130K – 300K</div>
-          <div>Từ 2500W – 4000W</div><div>300K – 650K</div>
-          <div>Trên 4000W</div><div>Thỏa thuận</div>
+    <section class="cm-shelf" id="samples" aria-labelledby="samples-h">
+      <div class="cm-row">
+        <div class="cm-disc light">
+          <div class="cm-cover"><i class="cm-ring"></i><span class="cm-no">Op. 3</span><svg class="ic" aria-hidden="true"><use href="#ic-flute"/></svg></div>
+          <span class="cm-badge">SAMPLE</span>
+          <div class="cm-plateb"><span class="cm-st">Sonata for Violin and Flute in G major</span><span class="cm-ss">Mưa sao băng</span><span class="cm-sw">2,748 words</span></div>
         </div>
-      </section>
-
-      <section class="cm-block" id="samples" style="margin-top:2.5rem">
-        <h2>Sample</h2>
-        <div class="cm-samples">
-          <p><b>Những bài mình đã viết theo yêu cầu</b>Các request của khách trước đây nằm trong kệ truyện, gắn nhãn ship <em>Others</em>. Theo mục 2, bài đã được làm mờ hoặc trích đoạn nếu khách yêu cầu.</p>
-          <a class="cm-btn" href="index.html?vao=1#works?ship=Others">Xem trong kệ truyện →</a>
+        <div class="cm-disc light">
+          <div class="cm-cover"><i class="cm-ring"></i><span class="cm-no">Op. 2</span><svg class="ic" aria-hidden="true"><use href="#ic-piano-keys"/></svg></div>
+          <span class="cm-badge">SAMPLE</span>
+          <div class="cm-plateb"><span class="cm-st">Prelude and Fugue no.11 in B major</span><span class="cm-ss">Câu hỏi</span><span class="cm-sw">2,308 words</span></div>
         </div>
-      </section>
-
-      <section class="cm-block" id="contact" style="margin-top:2.5rem">
-        <div class="cm-contact">
-          <p><b>Sẵn sàng đặt đơn?</b>Nhắn mình qua Facebook kèm plot, bối cảnh, số chữ và deadline dự kiến. Mình sẽ báo giá và hẹn ngày trả.</p>
-          <a class="cm-btn solid" href="https://www.facebook.com/naamsclone" target="_blank" rel="noopener">Nhắn qua Facebook →</a>
+        <div class="cm-disc light">
+          <div class="cm-cover"><i class="cm-ring"></i><span class="cm-no">Suite II</span><svg class="ic" aria-hidden="true"><use href="#ic-tuba"/></svg></div>
+          <span class="cm-badge">SAMPLE</span>
+          <div class="cm-plateb"><span class="cm-st">Canone for Oboe and French Horn</span><span class="cm-ss">Pas de deux</span><span class="cm-sw">2,459 words</span></div>
         </div>
-      </section>
-    </div>
+        <div class="cm-disc light">
+          <div class="cm-cover"><i class="cm-ring"></i><span class="cm-no">Suite III</span><svg class="ic" aria-hidden="true"><use href="#ic-harp"/></svg></div>
+          <span class="cm-badge">SAMPLE</span>
+          <div class="cm-plateb"><span class="cm-st">Sonata for Harp and Clarinet</span><span class="cm-ss">Passacaglia</span><span class="cm-sw">2,597 words</span></div>
+        </div>
+      </div>
+      <div class="cm-plank"><span class="cm-plate"><h2 id="samples-h">Sample</h2></span><a class="cm-pr" href="index.html?vao=1#works?ship=Others">Xem trong kệ truyện →</a></div>
+      <p class="cm-sample-note">Theo mục 2, bài đã được làm mờ hoặc trích đoạn nếu khách yêu cầu.</p>
+    </section>
+    <div class="cm-feet" aria-hidden="true"><span></span><span></span></div>
   </div>
+
+  <section class="cm-contact" id="contact">
+    <div class="cm-contact-in">
+      <svg class="cm-bell" aria-hidden="true" width="104" height="70" viewBox="0 0 104 70"><path d="M12 56 C12 28 30 14 52 14 C74 14 92 28 92 56 Z" fill="var(--gold)"/><path d="M24 50 C25 34 34 24 46 21" fill="none" stroke="var(--on-head)" stroke-width="3" stroke-linecap="round" opacity="0.5"/><rect x="4" y="56" width="96" height="9" rx="4" fill="var(--gold-dark)"/><circle cx="52" cy="9" r="6" fill="var(--gold-dark)"/></svg>
+      <div class="cm-contact-t"><b>Sẵn sàng đặt đơn?</b><span>Nhắn mình qua Facebook kèm plot, bối cảnh, số chữ và deadline dự kiến. Mình sẽ báo giá và hẹn ngày trả.</span></div>
+      <a class="cm-btn solid" href="https://www.facebook.com/naamsclone" target="_blank" rel="noopener">Nhắn qua Facebook →</a>
+    </div>
+    <div class="cm-counter-plank" aria-hidden="true"></div>
+    <div class="cm-floor"><span class="cm-plaque">✦ ShostaKid · Have a great day :) ✦</span></div>
+  </section>
 </main>
 
-<footer class="cm-foot"><span>✦</span> &nbsp; ShostaKid · Have a great day:) &nbsp; <span>✦</span></footer>
+<footer class="cm-foot">Icon nhạc cụ: Lorc, Delapouite &amp; cộng sự, <a href="https://game-icons.net" target="_blank" rel="noopener">game-icons.net</a>, giấy phép <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>.</footer>
 
 <div class="cm-music" id="music" role="region" aria-label="Nhạc nền">
   <div class="cm-music-in">
@@ -182,6 +269,6 @@ try{document.documentElement.setAttribute('data-theme',localStorage.getItem('sk-
 </div>
 <audio id="audio" preload="none" loop src="https://github.com/ShostaKid/ShostaKid.github.io/releases/download/music-v1/Rossini.La.gazza.mp3"></audio>
 
-<script src="commissions.js?v=1"></script>
+<script src="commissions.js?v=2"></script>
 </body>
 </html>

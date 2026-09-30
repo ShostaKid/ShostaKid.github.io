@@ -14,27 +14,55 @@
   burger.addEventListener('click',function(){var o=menu.classList.toggle('open');burger.setAttribute('aria-expanded',o?'true':'false')});
   menu.addEventListener('click',function(e){if(e.target.closest('a'))closeMenu()});
 
-  /* mục ToS: máy tính luôn mở, điện thoại gập được */
-  var mq=window.matchMedia('(max-width:820px)');
-  var secs=[].slice.call(document.querySelectorAll('.cm-sec'));
-  secs.forEach(function(d){d.querySelector('summary').addEventListener('click',function(e){if(!mq.matches)e.preventDefault()})});
-  function sync(){secs.forEach(function(d,i){ if(!mq.matches) d.open=true; else if(!sync.done) d.open=(i===0) }); sync.done=true}
-  mq.addEventListener('change',sync);sync();
-  /* bấm mục lục / link #tos-N trên điện thoại thì mở đúng mục đó */
-  window.addEventListener('hashchange',function(){var d=document.querySelector(location.hash+'.cm-sec');if(d)d.open=true});
-  document.querySelectorAll('a[href^="#tos-"]').forEach(function(a){a.addEventListener('click',function(){var d=document.querySelector(a.getAttribute('href'));if(d&&d.classList.contains('cm-sec'))d.open=true})});
+  /* điều khoản: bấm đĩa để đọc mục đó tại quầy. Không có JS thì cả 5 mục hiện nối nhau. */
+  var discs=[].slice.call(document.querySelectorAll('.cm-disc.term'));
+  var panels=[].slice.call(document.querySelectorAll('.cm-panel'));
+  var cur=0;
+  function pick(i){
+    if(i<0||i>=panels.length)return;
+    cur=i;
+    discs.forEach(function(d,k){d.setAttribute('aria-pressed',k===i?'true':'false')});
+    panels.forEach(function(p,k){p.classList.toggle('on',k===i)});
+    onScroll();
+  }
+  discs.forEach(function(d,i){d.addEventListener('click',function(){pick(i)})});
+  /* mũi tên trái/phải chuyển đĩa và giữ tiêu điểm trên đĩa mới */
+  document.querySelector('.cm-row-terms').addEventListener('keydown',function(e){
+    var n=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;
+    if(!n)return;
+    var i=Math.max(0,Math.min(discs.length-1,cur+n));
+    e.preventDefault();pick(i);discs[i].focus();
+  });
+  /* link #tos-N (mục lục, link sâu) chọn đúng đĩa rồi cuộn tới quầy đọc */
+  function fromHash(){
+    var m=/^#tos-([1-5])$/.exec(location.hash);
+    if(!m)return false;
+    pick(+m[1]-1);
+    var desk=document.querySelector('.cm-desk');if(desk)desk.scrollIntoView();
+    return true;
+  }
+  window.addEventListener('hashchange',fromHash);
+  document.querySelectorAll('a[href^="#tos-"]').forEach(function(a){
+    a.addEventListener('click',function(e){e.preventDefault();var h=a.getAttribute('href');
+      if(location.hash===h)fromHash();else location.hash=h;if(menu)closeMenu()});
+  });
 
   /* đánh dấu mục đang xem */
   var spy=[].slice.call(document.querySelectorAll('[data-spy]'));
-  var ids=['tos-1','tos-2','tos-3','tos-4','tos-5','prices','samples','contact'];
+  var ids=['prices','process','terms','samples','contact'];
   function onScroll(){
-    var cur=ids[0],y=window.scrollY+140;
-    ids.forEach(function(id){var el=$(id);if(el&&el.offsetTop<=y)cur=id});
-    var top=(cur.indexOf('tos-')===0)?'tos-1':cur;
-    spy.forEach(function(a){var h=a.getAttribute('href').slice(1);
-      var on=a.closest('.cm-links')?h===top:h===cur;a.classList.toggle('on',on)});
+    var at=ids[0],y=window.scrollY+160;
+    ids.forEach(function(id){var el=$(id);if(el&&el.getBoundingClientRect().top+window.scrollY<=y)at=id});
+    spy.forEach(function(a){
+      var h=a.getAttribute('href').slice(1),on;
+      if(a.closest('.cm-links'))on=(h===at);
+      else if(h.indexOf('tos-')===0)on=(at==='terms'&&h==='tos-'+(cur+1));
+      else on=(h===at);
+      a.classList.toggle('on',on);
+    });
   }
-  window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+  window.addEventListener('scroll',onScroll,{passive:true});
+  pick(0);fromHash();
 
   /* nhạc: cùng cách web chính làm — source github, <audio> loop, chỉ phát sau một cú bấm.
      Trang này là trang riêng nên không có màn intro; cú bấm đầu tiên vào bất cứ đâu trên trang
