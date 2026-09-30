@@ -1297,28 +1297,37 @@ Chỗ chưa điền hiện dạng `.ph` (chữ vàng nghiêng, gạch chấm): `
 - Mock lặp lại một lỗi có sẵn: hàng giá "Từ 2500W – 4000W" chồng lên "1000W – 3000W". **Chưa sửa** vì
   đó là bảng giá của chủ repo, không phải việc của giao diện.
 
-**Màn chào = bàn phím piano** (Welcome A) trong `#intro` của `index.html`, dựng bởi
-`welcome.js` (nạp sau `app.js`, dùng lại hàm toàn cục của nó: `enterSite`, `showPage`,
-`openFic`, `resumeReading`, `toggleLang`, `toggleTheme`, `t`, `worksData`). **Bấm MỘT
-lần là vào**; bấm nền hay gõ phím lạ không làm gì. Bảng phím là mảng `TRANG` (7 phím
-trắng) và `DEN` (5 phím đen) đầu file; `at` của phím đen = số ranh giới phím trắng nó
-nằm trên (1,2,4,5,6).
-- Trắng: Home, Works, Opus, **Notes (mờ, "Soon" — chưa có trang; muốn bật thì bỏ `off`
-  của nó và thêm `go`)**, About, Commissions (→ `commissions.html`), Sign in (đã đăng
-  nhập thì thành Profile).
-- Đen: Resume (mờ nếu không có `sk-continue`), Members (mờ nếu chưa đăng nhập), EN/VI và
-  Theme (đổi tại chỗ, không vào), Surprise (fic ngẫu nhiên từ `worksData`). **Điện
-  thoại (≤700px) phím đen chỉ phát nốt.** Trạng thái đăng nhập về muộn (accounts.js
-  async) nên `welcome.js` làm tươi nhãn/trạng thái mờ mỗi 0,8 giây khi intro còn hiện.
-- Phím tắt bàn phím thật: A S D F G H J (trắng), W E T Y U (đen). Nốt là WebAudio
-  (triangle, gain 0.14), chỉ chạy sau cú bấm/phím.
-- Chữ nằm trong bảng i18n (`wk_*`, `wd_*`, `wb_*`, `wbd_*`); `applyLang()` gọi
-  `window.veLaiChao()` để dựng lại nhãn khi đổi ngôn ngữ.
-- Mờ bằng ĐỔI MÀU, không dùng `opacity`: phím đen trong suốt sẽ lộ phím trắng phía sau.
-- `getComputedStyle`/`innerWidth` = 0 khi pane trình duyệt bị ẩn → `dienThoai()` trả
-  đúng và test tưởng "phím đen không chạy". Đặt lại kích thước cửa sổ trước khi đo.
-- Đã bỏ hẳn hai cửa cũ (`#door-read`, `#door-comm`, `.intro-door*`) cùng hoa văn ♩,
-  `.intro-cta`, `.intro-bars` — không còn gì trỏ tới chúng.
+**Màn chào** trong `#intro` của `index.html`: chỉ có `<div id="wk-root">`, mọi thứ do
+`welcome.js` dựng (nạp sau `app.js`, dùng lại hàm toàn cục: `enterSite`, `showPage`,
+`openFic`, `resumeReading`, `toggleLang`, `toggleTheme`, `t`, `worksData`). **Một bảng mục
+`ITEMS`, hai bộ vẽ**, chọn bằng `matchMedia('(hover:hover) and (pointer:fine) and
+(min-width:1024px)')` và dựng lại khi điều kiện đổi (xoay máy, kéo cửa sổ):
+- **A — dàn nhạc (PC).** Sân khấu cố định 1440×900 (bảng toạ độ `LA`, lấy từ bản thiết kế
+  Claude Design), JS thu phóng cả sân khấu theo cửa sổ (`fitA`, biến `--s`); chữ mô tả có
+  sàn `max(13px, 10.5px/--s)` để laptop nhỏ (~1366×650, scale 0,72) vẫn đọc được. Rê chuột
+  vào một bè thì bè sáng, các bè khác mờ, hiện mô tả; **bấm MỘT lần là vào**. Ghế (elip mờ)
+  sinh tự động từ cỡ icon (rộng 0,84×, thấp hơn icon 0,9×).
+- **B — cây đàn piano (điện thoại, tablet, máy cảm ứng).** Co giãn theo bề ngang, không
+  thu phóng. **Hai bước:** chạm phím = chọn (kêu nốt, hiện mô tả trên giá nhạc), rồi bấm
+  Enter (hoặc chạm lại đúng phím). Phím đen dùng được ở đây (Resume, Members, EN/VI,
+  Theme, Surprise); dưới 640px phím chỉ hiện icon, tên hiện trên giá nhạc.
+- Màn chào **theo theme của web** (sáng/tối, biến `--o-*` trong `#wk-root`), không còn luôn tối.
+- Mục: Home, Works, Opus, Notes, In rehearsal, About, Commissions, Profile (đã đăng nhập;
+  khách thì nhãn "Sign in" và đi trang đăng nhập), Resume, Members, Surprise. **Notes và
+  In rehearsal chưa có trang: `soon:true` → mờ, "Coming soon".** Muốn bật thì bỏ `soon` và
+  thêm `go` vào mục đó trong `ITEMS` — không phải sửa gì ở hai bộ vẽ.
+- Resume mờ nếu không có `sk-continue`; Members mờ nếu chưa đăng nhập. Trạng thái đăng
+  nhập về muộn (accounts.js async) nên `capNhat()` chạy lại mỗi 0,8s khi intro còn hiện;
+  panel của B chỉ dựng lại khi nội dung đổi (không thì nút Enter bị thay giữa lúc bấm).
+- Phím gõ: A S D F G H J K (Home…Profile), Q Resume, W Members, L Surprise. Dàn nhạc = vào
+  luôn; piano = chọn phím. Nốt WebAudio (triangle, gain 0,14) chỉ ở piano.
+- Resume và Members không có trong bản thiết kế A; đã đặt viola ×2 (góc dưới trái) và tuba
+  ×2 (góc dưới phải). Bục Home dời lên (top 670) vì bản thiết kế để nhãn tràn khỏi khung.
+- Icon `ic-drum` (trống định âm) thêm vào sprite từ bản thiết kế, cùng nguồn game-icons.
+- Chữ trong bảng i18n `wk_n_*` (tên), `wk_d_*` (mô tả) và vài khoá `wk_*`; `applyLang()`
+  gọi `window.veLaiChao()`.
+- Bẫy khi test: `innerWidth` = 0 khi pane trình duyệt bị ẩn → nhận nhầm là điện thoại.
+  Đặt kích thước cửa sổ trước khi đo.
 
 Nút `#nav-zone` cạnh Sign In là lối sang commission; ở 320px `.nav-utils` tự xuống hàng
 thứ ba (nav cao 106px) — chấp nhận.
