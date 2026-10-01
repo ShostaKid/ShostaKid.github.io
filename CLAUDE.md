@@ -20,7 +20,7 @@ phải tính đến việc nó cũng sẽ dùng chung backend.
 - Host trên **GitHub Pages** (`ShostaKid.github.io`).
 - Website tách thành **4 file** (trước 28/09/2026 gộp cả vào một `index.html`
   ~5.900 dòng; đã tách cơ học, không đổi logic — xem "Tách file" bên dưới):
-  - `index.html` (~620 dòng) — thuần HTML của cả các "page" (home / works /
+  - `index.html` (~660 dòng) — thuần HTML của cả các "page" (home / works /
     opus / reading / about...) trong cùng một file, và 2 thẻ nạp `app.js` +
     `accounts.js`. Điều hướng là SPA thủ công bằng `showPage(id)`.
   - `style.css` (~900 dòng) — toàn bộ CSS, nạp bằng `<link>` trong `<head>`.
@@ -124,7 +124,7 @@ Rebuild sang backend thật trên **Supabase**, **giữ nguyên giao diện hi�
 - Frontend dự kiến vẫn dùng `supabase-js` từ CDN (import trong `accounts.js`), chưa đổi sang framework.
 
 Project Supabase đích: **`oseddxgmwbeduazbomuf`** ("ShostaKid update web",
-ap-northeast-1, ACTIVE) — schema `public` hiện có 15 bảng và toàn bộ dữ liệu truyện.
+ap-northeast-1, ACTIVE) — schema `public` hiện có 17 bảng và toàn bộ dữ liệu truyện.
 
 ### Quy tắc bắt buộc
 
@@ -141,8 +141,8 @@ ap-northeast-1, ACTIVE) — schema `public` hiện có 15 bảng và toàn bộ 
 
 ## Trạng thái backend (cập nhật 2026-08-30)
 
-Schema đã được **tạo thật** trên project `oseddxgmwbeduazbomuf`. 15 bảng, 44 policy,
-19 function, RLS bật đủ 15/15, 2 bucket Storage (`avatars`, `work-images`). Dữ liệu (đo 2026-09-30):
+Schema đã được **tạo thật** trên project `oseddxgmwbeduazbomuf`. 17 bảng, 48 policy,
+20 function, RLS bật đủ 17/17, 2 bucket Storage (`avatars`, `work-images`). Dữ liệu (đo 2026-09-30):
 56 truyện, 92 chương (tất cả published), 27 profile.
 
 Migration đã chạy, theo thứ tự:
@@ -175,6 +175,7 @@ Migration đã chạy, theo thứ tự:
 26. `works_word_count_from_chapters`
 27. `restore_published_at_language_suite_iv`
 28. `suite_iv_description`
+29. `create_notes_listening_room`
 
 (Bốn migration `import_*` chạy một lần lúc nhập dữ liệu, đã dọn — không đánh số ở đây.)
 
@@ -1338,3 +1339,77 @@ bấm bỏ lọc. Trang Commission dẫn sample tới `#works?ship=Others`.
 **Chưa làm (treo):** dải tempo Presto/Andante/Largo (Welcome C) thay hàng lọc độ dài ở
 Works — đã dựng thử, chờ chủ repo quyết. Bộ lọc độ dài hiện có (`doDai`, `WS.len`)
 giữ nguyên.
+
+---
+
+## Notes · The Listening Room (cập nhật 2026-10-01)
+
+Tab mới `#page-notes`, nav nằm giữa Opus và About, phím F (Notes) trên bàn phím piano của màn chào đã bật.
+Theo bản thiết kế Claude Design `Notes & Listening Room · the chamber` (desktop) và `· phone (tap a note)`.
+Mỗi note là một bài viết ngắn về **một bản nhạc**, gắn với 0..n truyện dùng nó (hoặc không gắn, nếu chỉ là nhạc hay
+muốn chia sẻ). **Chỉ lên bàn 4 note một lúc**, xoay tua thủ công.
+
+**Phạm vi đã chốt (30/09):** làm Pha 1 (backend) + Pha 2 (giao diện desktop + điện thoại). **Chưa có công cụ viết note** (Pha 3)
+— nhập note bằng SQL cho tới khi làm. **Không có Kudos / Comments** trên note (bảng hiện có gắn cứng `work_id`; gắn thêm
+`note_id` sẽ đụng trigger đếm, giới hạn tần suất và policy — không đáng cho v1). **Note rời khỏi bàn không có chỗ lưu trữ
+nào** — để dành cho một đợt nâng cấp khác.
+
+### Backend (migration 29)
+
+- `notes(id, slug, title, piece, composer, opus, short_name, source, url, start_s, icon, sleeve, body, quote, cues jsonb,
+  language, status, programme_slot, published_at, created_at, updated_at)`.
+  - `source` chỉ nhận `github | musopen | archive | soundcloud`; `url` phải `https://`; `sleeve` là mã màu `#RRGGBB`;
+    `icon` là tên symbol trong sprite (`ic-<icon>` của `index.html`).
+  - **`programme_slot` 1..4 + unique index một phần** → DB tự giữ tối đa 4 note trên bàn. Check `notes_slot_needs_published`:
+    muốn lên bàn thì phải `status='published'`.
+  - `body` là văn bản thường, đoạn cách nhau bằng dòng trống; `cues` là `[{"t": giây, "text": "..."}]`, tối đa 12.
+    Frontend dựng bằng `textContent` và tự kiểm lại hình dạng `cues` (jsonb do người viết, đừng tin kiểu).
+  - `published_at` do trigger `notes_set_published_at` điền lần đầu thành published; `updated_at` do `touch_updated_at`.
+- `note_works(note_id, work_id)` — "Plays in" lấy tên + phụ đề fic từ `works` (nên không lưu nhãn riêng).
+- RLS: ai cũng đọc được note đã `published` (admin đọc cả nháp), chỉ admin ghi. GRANT **theo cột** cho `authenticated`
+  (không cấp `published_at` / `created_at` / `updated_at`). `note_works` chỉ đọc được khi note đọc được.
+- Dữ liệu: **4 note mẫu ở trạng thái `draft`, KHÔNG lên bàn** (`placeholder-libertango`, `-clair-de-lune`, `-symphony-14`,
+  `-mendelssohn-violin-concerto`; chữ là placeholder trong ngoặc vuông như bản thiết kế). Khách thấy trang trống ("The room
+  is being set up"); **admin đăng nhập vào Notes thấy chúng ở chế độ xem trước** khi bàn đang trống. Đưa một note lên bàn:
+
+  ```sql
+  update public.notes set status = 'published', programme_slot = 1 where slug = '...';
+  ```
+  Đổi chỗ / thay note thì gỡ slot cũ (`programme_slot = null`) rồi gán lại — unique index sẽ báo lỗi nếu slot đang có người.
+
+### Frontend
+
+- `notes.js` (script cổ điển, nạp sau `welcome.js`; dùng lại `dtEl/ganCon/dtIcon/t/laVi/laDienThoai/openFic/stopMusic`).
+  Dữ liệu qua `window.fetchNotesFromDB()` trong `accounts.js` (trả `{rows, preview}` hoặc `null`). Hook trong `showPage()`:
+  `ntVao()` / `ntRoi()`; `applyLang()` gọi `veLaiNotes()`; `paintProfile()` gọi `ntLamMoi()` vì vai admin về muộn.
+- CSS cuối `style.css`, tiền tố `nt-`, biến `--nt-*` (có bản tối) lấy đúng bảng PAL của thiết kế. Chữ i18n là `nt_*` ở cả EN và VI.
+- **Âm thanh: một `<audio>` riêng của phòng nghe**, tách khỏi trình phát toàn cục của `app.js`. Vào phòng thì `showPage` đã
+  `stopMusic()`; bấm phát thì gọi `stopMusic()` lần nữa; rời trang thì `ntRoi()` tạm dừng. Hai bên không bao giờ chồng tiếng.
+- **Chỉ nguồn mp3 trực tiếp (github / musopen / archive) có thanh thời gian + cue.** SoundCloud là iframe, không seek / không
+  lấy được độ dài → hiện link "Listen on SoundCloud ↗", nút phát bị khoá, cue không bấm được. Độ dài lấy từ
+  `audio.duration` lúc `loadedmetadata` (DB không lưu); nhạc bắt đầu ở `start_s`.
+- **Điện thoại (≤768px):** danh sách → chạm một note thì tờ note (`.nt-paper`, `position:fixed`) trượt vào từ phải; thanh phát
+  nhỏ `.nt-mini` gắn vào **`<body>`** (không nằm trong `.page`: `.page` có animation `transform`, làm `position:fixed` lệch
+  trong 0,5s đầu). Tờ note đóng thì `inert` + `visibility:hidden` để không focus được. Esc / nút ‹ đóng; `html.nt-lock` khoá cuộn nền.
+- "Read the fic with this playing →" mở **fic liên kết đầu tiên** (`openFic`) và để nhạc của chính fic đó phát; phòng nghe tạm dừng.
+- Nút Kudos / Comments và câu "New notes go up from the Post form…" trong bản thiết kế **không đưa vào** (xem phạm vi trên).
+
+### Bẫy đã gặp
+
+- **`position:fixed` vẫn bị kẹt trong ngữ cảnh xếp chồng của cha.** `.nt-lower` (`position:relative; z-index:2`) khiến tờ note
+  `z-index:120` không vượt được thanh nav (`z-index:100`) — nút ‹ bị nav che. Trên điện thoại `.nt-lower` phải là `position:static;z-index:auto`.
+- **Thêm mục nav thứ năm làm nav một hàng tràn ngang ở 769–899px** (đo được 74px ở 769px). Đã thêm media query
+  `769–940px` thu padding/gap/letter-spacing của nav. Thêm mục nav nào nữa cũng phải đo lại các khổ này.
+- **Server thử không hỗ trợ `Range` thì `audio.currentTime = x` bị đặt lại 0** — test tua cue ra "hỏng" dù code đúng. GitHub
+  Releases có Range (nhạc fic đã dùng `start` tới 1248 giây). Test cục bộ phải dùng server có Range.
+- Sprite `ic-*` đã đủ cho các icon của thiết kế (accordion, grand-piano, trombone, violin).
+- `fetchNotesFromDB` không đọc được khi module Supabase không tải (CDN bị chặn) → trang hiện "The room could not be reached",
+  không trắng, không lỗi console.
+
+### Việc tiếp theo (chưa làm)
+
+- **Pha 3 — công cụ viết note** (khu riêng trong form Post, chỉ admin): tên bản, nhạc sĩ, opus, nhạc (link + giây bắt đầu), màu bìa,
+  icon, fic liên quan, đoạn văn, câu trích, danh sách cue lặp được, và nút đưa lên bàn / gỡ khỏi bàn. Nên có ô "chọn từ nhạc đã
+  dùng ở fic" (`chapters.music` có 52 URL khác nhau).
+- Nội dung song ngữ cho note (hiện mỗi note một ngôn ngữ, cột `language`; giao diện thì đổi EN/VI bình thường).
+- Lưu trữ note cũ (không có ở v1).

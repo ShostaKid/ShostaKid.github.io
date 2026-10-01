@@ -33,7 +33,7 @@
     { id: 'home',  note: 'C', f: 261.63, key: 'a', go: () => vao(() => showPage('home',  nav('home'))) },
     { id: 'works', note: 'D', f: 293.66, key: 's', go: () => vao(() => showPage('works', nav('works'))) },
     { id: 'opus',  note: 'E', f: 329.63, key: 'd', go: () => vao(() => showPage('opus',  nav('opus'))) },
-    { id: 'notes', note: 'F', f: 349.23, key: 'f', off: () => true },
+    { id: 'notes', note: 'F', f: 349.23, key: 'f', go: () => vao(() => showPage('notes', nav('notes'))) },
     { id: 'about', note: 'G', f: 392.00, key: 'g', go: () => vao(() => showPage('about', nav('about'))) },
     { id: 'comm',  note: 'A', f: 440.00, key: 'h', go: () => { location.href = 'commissions.html'; } },
     { id: 'auth',  note: 'B', f: 493.88, key: 'j',
@@ -60,8 +60,7 @@
     ? (it.id === 'auth' ? (daDangNhap() ? t('wk_profile') : t('wk_signin')) : t('wk_' + it.id))
     : t('wb_' + it.id);
   const tenNgan = it => it.id === 'comm' ? t('wk_comm_s') : ten(it);
-  const mota = it => it.id === 'notes' ? t('wk_notes_soon')
-    : it.at === undefined ? t('wd_' + (it.id === 'auth' && daDangNhap() ? 'profile' : it.id)) : t('wbd_' + it.id);
+  const mota = it => it.at === undefined ? t('wd_' + (it.id === 'auth' && daDangNhap() ? 'profile' : it.id)) : t('wbd_' + it.id);
   const tat = it => !!(it.off && it.off());
 
   const btn = new Map();          // id -> <button>
@@ -72,7 +71,7 @@
     box.textContent = '';
     const mk = (cls, txt) => { const d = document.createElement('div'); d.className = cls; d.textContent = txt; return d; };
     if (!it) { box.append(mk('h', t('wk_press'))); return; }
-    box.append(mk('n', tat(it) && it.id === 'notes' ? ten(it) : ten(it)), mk('d', mota(it)));
+    box.append(mk('n', ten(it)), mk('d', mota(it)));
   }
 
   function bam(it) {
@@ -95,10 +94,8 @@
       const n = document.createElement('span'); n.className = 'wk-note'; n.textContent = it.note;
       const l = document.createElement('span'); l.className = 'wk-lbl';
       const s = document.createElement('span'); s.className = 'wk-lbl-s';
-      const soon = it.id === 'notes' ? document.createElement('span') : null;
-      if (soon) soon.className = 'wk-soon';
-      b.append(n, l, s); if (soon) b.append(soon);
-      wire(b, it); whites.append(b); btn.set(it.id, b); nhan.set(it.id, { l, s, soon });
+      b.append(n, l, s);
+      wire(b, it); whites.append(b); btn.set(it.id, b); nhan.set(it.id, { l, s });
     });
     keys.append(whites);
     DEN.forEach(it => {
@@ -127,10 +124,9 @@
       const nm = ten(it);
       n.l.textContent = nm;
       if (n.s) n.s.textContent = tenNgan(it);
-      if (n.soon) n.soon.textContent = t('wk_soon');
       const t2 = tat(it);
       b.setAttribute('aria-disabled', t2 ? 'true' : 'false');
-      b.setAttribute('aria-label', nm + (t2 && it.id === 'notes' ? ' — ' + t('wk_soon') : ''));
+      b.setAttribute('aria-label', nm);
     });
     const h = $('wk-hint'); if (h) h.textContent = t(dienThoai() ? 'wk_hint_m' : 'wk_hint');
     veNut();

@@ -137,6 +137,7 @@ function paintProfile(p) {
   const laAdminTruoc = !!(currentProfile && currentProfile.is_admin);
   currentProfile = p;
   veLaiOpusNeuDoiVai(laAdminTruoc);
+  if (window.ntLamMoi) window.ntLamMoi();   // vai admin đổi: trang Notes nạp lại (bản nháp xem trước)
   // Phép đếm cho chấm báo khác nhau giữa admin và bạn đọc, mà chỉ tới đây mới
   // biết chắc vai — nên tính chấm ở đây chứ không phải trong paintNav().
   if (window.tinhChamBao) window.tinhChamBao();
@@ -2379,6 +2380,7 @@ sb.auth.onAuthStateChange((event, session) => {
     const laAdminTruoc = !!(currentProfile && currentProfile.is_admin);
     currentProfile = null;
     veLaiOpusNeuDoiVai(laAdminTruoc);
+    if (window.ntLamMoi) window.ntLamMoi();   // vai admin đổi: trang Notes nạp lại (bản nháp xem trước)
     // Đang đứng ở trang hồ sơ mà mất session thì đẩy về trang đăng nhập.
     // (currentPage của site khai báo bằng `let` nên không nằm trên window —
     //  đọc trạng thái từ DOM thay vì đoán.)
@@ -2401,3 +2403,24 @@ async function guardProfile() {
 }
 loadAbout();
 guardProfile();
+
+// ---------- Notes · Listening Room ----------
+// Trả về { rows, preview } hoặc null nếu không gọi được DB.
+// Khách chỉ nhận note đã published (policy SELECT) và chỉ những note đang nằm trên bàn
+// (programme_slot 1..4). Nếu bàn trống mà người xem là admin thì trả cả bản nháp
+// (policy cho admin đọc) với cờ preview — để chủ repo xem placeholder mà không phải đăng.
+// Cột cues là jsonb do admin ghi nên frontend phải tự kiểm lại hình dạng, đừng tin kiểu dữ liệu.
+const NOTE_COLS = 'id, slug, title, piece, composer, opus, short_name, source, url, start_s, icon, sleeve,'
+  + ' body, quote, cues, language, status, programme_slot, published_at,'
+  + ' note_works(works(legacy_id, title, subtitle))';
+window.fetchNotesFromDB = async function () {
+  try {
+    const { data, error } = await sb.from('notes').select(NOTE_COLS)
+      .not('programme_slot', 'is', null).order('programme_slot');
+    if (error || !data) return null;
+    if (data.length || !(currentProfile && currentProfile.is_admin)) return { rows: data, preview: false };
+    const r2 = await sb.from('notes').select(NOTE_COLS).order('created_at');
+    if (r2.error || !r2.data) return null;
+    return { rows: r2.data, preview: true };
+  } catch (_) { return null; }
+};

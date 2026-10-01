@@ -1194,7 +1194,7 @@ function moTheoHash() {
     return true;
   }
 
-  if (h === '#home' || h === '#works' || h === '#about' || h === '#opus') {
+  if (h === '#home' || h === '#works' || h === '#about' || h === '#opus' || h === '#notes') {
     const ten = h.slice(1);
     showPage(ten, document.querySelector('.nav-links a[data-page="' + ten + '"]'));
     return true;
@@ -1315,6 +1315,19 @@ const i18n = {
   en: {
     nav_home:'Home', nav_works:'Works', nav_about:'About',
     nav_opus:'Opus',
+    nav_notes:'Notes', wd_notes:'The music behind the fics: a small listening room.',
+    nt_eyebrow:'Notes · the music behind the fics', nt_title:'The Listening Room',
+    nt_lead:'A small chamber for the pieces I wrote to. Pick a note, put the record on, and read why it plays where it plays.',
+    nt_programme:"Tonight's programme", nt_count:'{n} notes', nt_for:'for', nt_n_fics:'{n} fics', nt_no_fic:'no fic yet',
+    nt_turntable:'Turntable', nt_playing_state_on:'Now playing', nt_playing_state_off:'On the turntable',
+    nt_plays_in:'Plays in', nt_source:'Source:', nt_cue_legend:'◆ = a listening cue from the note',
+    nt_play:'Play', nt_pause:'Pause', nt_prev:'Previous note', nt_next:'Next note', nt_seek:'Seek in the track', nt_jump:'Jump to',
+    nt_note_no:'Programme note', nt_on:'on', nt_cues:'Listening cues', nt_cues_hint:'click one to drop the needle there',
+    nt_read_fic:'Read the fic with this playing →', nt_back:'Back to programme',
+    nt_listen_ext:'Listen on SoundCloud ↗', nt_err_track:'This track will not play right now.',
+    nt_loading:'Setting up the room…', nt_failed:'The room could not be reached right now. Try again in a moment.',
+    nt_empty:'The room is being set up. Notes about the music behind the fics will appear here soon.',
+    nt_preview:'Preview: these notes are drafts, only you can see them',
     opus_head:'Opus', opus_ban:'works', opus_the_loai:'forms', opus_truyen:'works',
     opus_dan:'Every work here is named after a musical form, and the name is not decorative. This is the whole archive laid out by form — a catalogue of works.',
     opus_mo_het:'Open all', opus_dong_het:'Close all',
@@ -1336,7 +1349,6 @@ const i18n = {
     wb_resume:'Resume', wb_members:'Members', wb_lang:'EN / VI', wb_theme:'Theme', wb_surprise:'Surprise',
     wbd_resume:'Jump back into the fic you were reading.', wbd_members:'The other readers on the shelf (sign in first).',
     wbd_lang:'Switch the language of the site.', wbd_theme:'Light shelf or dark shelf.', wbd_surprise:'A random fic from the shelf.',
-    wk_soon:'Soon', wk_notes_soon:'Notes: the music behind the fics. Coming soon.',
     wk_press:'Press a key to enter.', wk_hint_m:'White keys open rooms. Black keys just play.', wk_hint:'White keys open rooms. Black keys are shortcuts. Or type A S D F G H J.',
     hero_sub:'I blend classical music with my thoughts',
     hero_tag:"Take a $ip y'all and enjoy",
@@ -1522,6 +1534,19 @@ const i18n = {
   vi: {
     nav_home:'Trang chủ', nav_works:'Các đầu truyện', nav_about:'Về Web',
     nav_opus:'Opus',
+    nav_notes:'Notes', wd_notes:'Âm nhạc đằng sau các fic: một phòng nghe nhỏ.',
+    nt_eyebrow:'Notes · âm nhạc đằng sau các fic', nt_title:'Phòng nghe',
+    nt_lead:'Một căn phòng nhỏ cho những bản nhạc tôi đã viết cùng. Chọn một note, đặt đĩa lên, rồi đọc xem vì sao nó vang lên đúng chỗ đó.',
+    nt_programme:'Chương trình tối nay', nt_count:'{n} note', nt_for:'cho', nt_n_fics:'{n} fic', nt_no_fic:'chưa gắn fic nào',
+    nt_turntable:'Bàn xoay', nt_playing_state_on:'Đang phát', nt_playing_state_off:'Trên bàn xoay',
+    nt_plays_in:'Có trong', nt_source:'Nguồn:', nt_cue_legend:'◆ = một điểm nghe trong note',
+    nt_play:'Phát', nt_pause:'Tạm dừng', nt_prev:'Note trước', nt_next:'Note sau', nt_seek:'Tua trong bản nhạc', nt_jump:'Nhảy tới',
+    nt_note_no:'Note số', nt_on:'về', nt_cues:'Điểm nghe', nt_cues_hint:'bấm một dòng để đặt kim xuống đúng chỗ đó',
+    nt_read_fic:'Đọc fic với bản nhạc này →', nt_back:'Về chương trình',
+    nt_listen_ext:'Nghe trên SoundCloud ↗', nt_err_track:'Bản nhạc này chưa phát được lúc này.',
+    nt_loading:'Đang dọn phòng…', nt_failed:'Chưa vào được phòng nghe lúc này. Thử lại sau một lát nhé.',
+    nt_empty:'Phòng nghe đang được dọn. Các note về âm nhạc đằng sau fic sẽ sớm xuất hiện ở đây.',
+    nt_preview:'Xem trước: các note này là bản nháp, chỉ bạn thấy',
     opus_head:'Opus', opus_ban:'bản', opus_the_loai:'thể loại', opus_truyen:'truyện',
     opus_dan:'Mỗi truyện ở đây mang tên một thể nhạc, và tên đó không phải đặt cho vui. Dưới đây là toàn bộ kho truyện xếp lại theo đúng thể của chúng — như một danh mục tác phẩm.',
     opus_mo_het:'Mở tất cả', opus_dong_het:'Đóng tất cả',
@@ -1543,7 +1568,6 @@ const i18n = {
     wb_resume:'Đọc tiếp', wb_members:'Thành viên', wb_lang:'EN / VI', wb_theme:'Giao diện', wb_surprise:'Bất ngờ',
     wbd_resume:'Quay lại fic bạn đang đọc.', wbd_members:'Những độc giả khác trên kệ (cần đăng nhập).',
     wbd_lang:'Đổi ngôn ngữ của web.', wbd_theme:'Kệ sáng hoặc kệ tối.', wbd_surprise:'Một fic ngẫu nhiên trên kệ.',
-    wk_soon:'Sắp có', wk_notes_soon:'Notes: âm nhạc đằng sau các fic. Sắp có.',
     wk_press:'Bấm một phím để vào.', wk_hint_m:'Phím trắng mở phòng. Phím đen chỉ phát nốt.', wk_hint:'Phím trắng mở phòng. Phím đen là lối tắt. Hoặc gõ A S D F G H J.',
     hero_sub:'Tôi trộn nhạc cổ điển với những suy nghĩ của mình',
     hero_tag:'Take a $ip y\'all',
@@ -1768,6 +1792,7 @@ function applyLang() {
   // ngôn ngữ là phải dựng lại (kể cả name_vi / mo_ta_vi của nhóm Opus).
   veLaiDiaThan();
   if (window.veLaiChao) window.veLaiChao();
+  if (window.veLaiNotes) window.veLaiNotes();
 
   const mt = document.querySelector('.music-toggle');
   if (mt) mt.textContent = musicPlaying ? t('pause') : t('play');
@@ -1974,6 +1999,9 @@ function showPage(id, el) {
   if (id === 'home') renderHome();
   // Bàn xoay đo bề ngang lúc dựng; trang đang ẩn thì đo ra 0, nên đo lại khi hiện.
   if (id === 'opus') vuaBanXoay();
+  // Notes · phòng nghe: vào thì nạp + dựng; rời thì tạm dừng nhạc của phòng. Lớp nt-on bật thanh phát nhỏ (điện thoại).
+  if (id === 'notes' && window.ntVao) window.ntVao();
+  if (id !== 'notes' && window.ntRoi) window.ntRoi();
   // Trang "Truyện đã lưu" nạp lại mỗi lần mở, vì người dùng có thể vừa bỏ lưu
   // ở trang đọc xong quay lại đây.
   if (id === 'bookmarks' && window.loadBookmarks) window.loadBookmarks();
