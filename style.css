@@ -1256,7 +1256,6 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   html.nt-lock,html.nt-lock body{overflow:hidden;}
 }
 @media (prefers-reduced-motion:reduce){.nt-rec,.nt-mini-rec,.nt-w-glow{animation:none!important;}.nt-arm,.nt-paper{transition:none!important;}}
-=======
 /* ===== Works: kệ gỗ kiểu cửa hàng đĩa + hộp thoại chọn nhịp đọc ===== */
 :root{--pl-top:#EADFC1;--pl-front:#D8C89B;--pl-edge:#B39B54;--pl-back:#F0E9D6;}
 [data-theme="dark"]{--pl-top:#3B3020;--pl-front:#2A2116;--pl-edge:#6A5630;--pl-back:#1B150E;}
