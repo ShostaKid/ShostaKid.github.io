@@ -1421,20 +1421,31 @@ nào** — để dành cho một đợt nâng cấp khác.
 
 ---
 
-## Works: kệ gỗ + chọn nhịp đọc (cập nhật 2026-09-30)
+## Works: bìa trên khuông nhạc + chọn nhịp đọc (kệ gỗ 30/09 → khuông nhạc 01/10/2026)
 
-Trang Works dựng theo hai bản thiết kế Claude Design ("record-shop shelves" và "Not sure what
+Trang Works dựng theo hai bản thiết kế Claude Design (ban đầu "record-shop shelves", từ 01/10 là "sleeves on a staff"; và "Not sure what
 to read?"). Chỉ frontend (`renderWorks()` trong `app.js` + khối cuối `style.css`), không đụng DB.
 
-**Kệ gỗ.** Bìa xếp hàng trên tấm ván "Shelf I, II…", chú thích (tên, phụ đề, fandom · số chữ)
-nằm DƯỚI ván. `dtBiaKe()` = bìa (nút có `aria-label` là tên truyện, giữ class `dt-card` để dùng chung
-`danhDauChon`/CSS đĩa trượt), `dtCapKe()` = chú thích, **ra khỏi thứ tự Tab và `aria-hidden`** vì
-bìa đã có tên đầy đủ. Trang Home và Bookmark vẫn dùng `dtThe()`/`.dt-grid-shelf` — chưa đổi (Bookmark
-để làm sau nếu Works ổn).
-- Số cột: `soCotKe()` = 4 (≥1280px) / 3 (≥1024px) / 2 (còn lại, kể cả điện thoại), **phải khớp
-  CSS**. JS chia hàng theo số cột này nên qua mốc 1280/1024 thì `renderWorks()` được gọi lại.
-- Gỗ dùng biến `--pl-top/-front/-edge/-back` (sáng/tối). Điện thoại: trụ 8px, hai bìa mỗi ván.
-- Giữ nguyên ô tìm kiếm và hàng ship (bản thiết kế bỏ nhưng chủ repo dặn giữ).
+**Bìa trưng trên khuông nhạc (01/10/2026, thay kệ gỗ).** Theo bản thiết kế "Works · sleeves on a staff, no shelf".
+Mỗi hàng bìa là một **dòng nhạc** (`.dt-sys`): 5 dòng kẻ chạy SAU các bìa (chỉ lộ ở khe giữa và quanh khoá Sol), khoá Sol
+(`ic-g-clef`) bên trái, vạch đầu, vạch kép cuối, và **vạch giữa chỉ khi 4 cột** (2 ô | 2 ô; 3 và 2 cột không có vạch giữa).
+Chú thích (tên, phụ đề, fandom · số chữ) nằm dưới từng bìa. Không còn ván/trụ/"Shelf I" — các khoá i18n `dt_ke*`
+còn nằm trong bảng chữ nhưng không ai dùng nữa (chủ repo dặn giữ nguyên mọi chữ "shelf", kể cả `dt_on_shelf`, `dt_show_all`).
+Bản thiết kế có biến thể "strings" (4 dây G/D/A/E): **đã bỏ**, chỉ làm khuông.
+- `dtBiaKe()` = bìa (nút, `aria-label` = tên truyện, giữ class `dt-card` + `data-idx` để `danhDauChon`, `chonNgauNhien` và CSS đĩa
+  trượt dùng chung), `dtCapKe()` = chú thích (ra khỏi thứ tự Tab, `aria-hidden`). Khuông là trang trí thuần (`aria-hidden`).
+- **Cỡ bìa `--sz` tính bằng container query** (`.dt-pt{container-type:inline-size}`; `--sz` đặt trên `.dt-sys`, KHÔNG đặt trên chính
+  `.dt-pt`: `cqw` luôn quy về container tổ tiên, đặt trên container thì ra sai). `--sz = (100cqw − lp − rp − (cot−1)·gap)/cot`; 5 dòng kẻ
+  ở 0/25/50/75/100% chiều cao bìa; khoá Sol, vị trí 3 loại vạch đều tính theo `--sz`. `--cot` do JS đặt (`soCotKe()`: ≥1280px 4 cột,
+  ≥1024px 3, còn lại 2) nên CSS không cần khớp mốc; qua mốc thì `renderWorks()` dựng lại.
+- **Khoá Sol:** svg trong suốt rộng `1,1667·sz`, lệch trái `−0,3667·sz` (lòng khoá rơi vào vùng `--lp`, phần trong suốt thò ra lề trái và bị
+  `.dt-sys{overflow-x:clip}` cắt — vô hại). Đặt dương là khoá nằm lọt sau bìa đầu, chỉ lộ hai mẩu ở trên/dưới. Điện thoại: `--ck:.78 --cl:-.23`.
+- Đĩa trượt ra khi chọn thò ~25% bìa: cột cuối bị cắt ở mép dòng nhạc. Chọn bìa không còn nhấc lên 8px (bản thiết kế không có).
+- Cỡ chữ trên bìa theo bản thiết kế (nhãn 9px, tên thể 11,5px, icon 37%) **chỉ ≥769px, chỉ trong `.dt-pt`**; Home/Bookmark không đổi.
+- Điện thoại (bản thiết kế không có, tự làm): 2 cột, `--lp:46px --rp:12px --gap:14px`, khoá Sol nhỏ lại, vạch cuối mảnh hơn; bảng trượt giữ nguyên.
+- Giữ nguyên ô tìm kiếm và hàng ship (bản thiết kế bỏ nhưng chủ repo dặn giữ). Home (`dt-grid3/4`) và Bookmark (`dt-grid-shelf`) vẫn dùng lưới thẻ.
+- Test: dữ liệu dự phòng `fics.json` **không có số chữ** nên `doDai()` ra null — "Surprise me" báo hết truyện. Muốn test máy nhịp phải gán
+  `worksData[i].words` rồi `renderWorks()`. Khi đếm bìa đang chọn phải giới hạn `#dt-works .dt-card.dt-on` (Home ẩn cũng có `.dt-card.dt-on`).
 
 **Nhịp đọc.** Hàng lọc độ dài đổi nhãn: Any tempo / Presto · under 8 min / Andante · 8–20 min /
 Largo · 20+ min. **Không đổi logic lọc**: vẫn `doDai()` (Miniature <2000, Chamber ≤5000, Symphonic

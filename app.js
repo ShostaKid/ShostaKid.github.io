@@ -523,22 +523,18 @@ function locWorks() {
     .sort(WS.sort === 'long' ? ((a, b) => (b.words || 0) - (a.words || 0) || theoMoiNhat(a, b)) : theoMoiNhat);
 }
 
-// ---- Kệ gỗ: bìa xếp hàng trên tấm ván, chú thích nằm dưới ván (như kệ đĩa trong cửa hàng) ----
-// Số cột phải khớp CSS: ≥1280px 4 cột, ≥1024px 3 cột, còn lại (kể cả điện thoại) 2 cột.
+// ---- Bìa trưng trên khuông nhạc: mỗi hàng bìa là một "dòng nhạc", chú thích nằm dưới bìa ----
+// Số cột: ≥1280px 4 cột, ≥1024px 3 cột, còn lại (kể cả điện thoại) 2 cột. Số cột chỉ do JS đặt (biến --cot);
+// CSS tính cỡ bìa từ bề ngang vùng chứa nên không cần khớp mốc nào.
 const soCotKe = () => window.matchMedia('(min-width:1280px)').matches ? 4 : window.matchMedia('(min-width:1024px)').matches ? 3 : 2;
-function soLaMa(n) {
-  const b = [[10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']]; let s = '';
-  b.forEach(([v, k]) => { while (n >= v) { s += k; n -= v; } });
-  return s;
-}
 function dtBiaKe(w, chon) {
-  return dtEl('button', { type: 'button', class: 'dt-card dt-ke-bia', 'aria-pressed': 'false', 'aria-label': w.title, 'data-idx': w.idx,
+  return dtEl('button', { type: 'button', class: 'dt-card dt-pt-bia', 'aria-pressed': 'false', 'aria-label': w.title, 'data-idx': w.idx,
       onclick: e => chon(w, e.currentTarget) },
     dtEl('div', { class: 'dt-slw' }, dtEl('div', { class: 'dt-rec', 'aria-hidden': 'true' }), dtBia(w)));
 }
 // Chú thích chỉ là lối bấm phụ: bìa đã là nút có tên đầy đủ, nên chú thích ra khỏi thứ tự Tab và khỏi trình đọc màn hình.
 function dtCapKe(w, chon, bia) {
-  return dtEl('button', { type: 'button', class: 'dt-ke-cap', tabindex: '-1', 'aria-hidden': 'true', onclick: () => chon(w, bia) },
+  return dtEl('button', { type: 'button', class: 'dt-pt-cap', tabindex: '-1', 'aria-hidden': 'true', onclick: () => chon(w, bia) },
     dtEl('span', { class: 't' }, w.title),
     w.subtitle ? dtEl('span', { class: 's' }, chuTron(w.subtitle)) : null,
     dtEl('span', { class: 'f' }, [w.fandom === 'Others' ? '' : w.fandom, w.words != null ? dtSo(w.words) + ' ' + t('dt_words') : ''].filter(Boolean).join(' · ')));
@@ -669,21 +665,23 @@ function renderWorks() {
     ke.append(dtEl('div', { class: 'dt-eyebrow' }, t('dt_on_shelf').replace('{n}', ds.length) + (laDienThoai() ? ' · ' + t('dt_tap') : '')));
     if (!ds.length) ke.append(dtEl('p', { class: 'dt-empty' }, t('no_results')));
     const cot = soCotKe();
-    const khung = dtEl('div', { class: 'dt-ke', style: { '--cot': cot } });
-    const luoi = dtEl('div', { class: 'dt-ke-luoi' });
+    const khung = dtEl('div', { class: 'dt-pt', style: { '--cot': cot } });
     const chon = (w, el) => {
       if (WS.viaIdx !== w.idx) WS.via = null;     // tự chọn truyện khác thì hết là "chọn cho bạn"
       WS.chon = w.idx; danhDauChon(khung, w.idx); veAside(ds); if (laDienThoai()) moBangTruot(w, el);
     };
     for (let i = 0; i < hien.length; i += cot) {
-      const hang = hien.slice(i, i + cot), bia = hang.map(w => dtBiaKe(w, chon));
-      luoi.append(...bia,
-        dtEl('div', { class: 'dt-ke-van' }, dtEl('span', { class: 'no' }, t('dt_ke') + ' ' + soLaMa(i / cot + 1)),
-          dtEl('span', { class: 'n' }, hang.length + ' ' + t(hang.length === 1 ? 'dt_work1' : 'dt_workn'))),
-        ...hang.map((w, j) => dtCapKe(w, chon, bia[j])));
+      const hang = hien.slice(i, i + cot);
+      const khoa = dtIcon('g-clef'); khoa.classList.add('dt-sys-clef');
+      // Khuông chỉ để trang trí (aria-hidden); thứ tự Tab và tên đọc màn hình do các bìa quyết định.
+      // Vạch giữa chỉ có khi 4 cột (2 ô | 2 ô); 3 và 2 cột chỉ có vạch đầu và vạch kép cuối.
+      const khuong = dtEl('div', { class: 'dt-sys-staff', 'aria-hidden': 'true' },
+        dtEl('div', { class: 'dt-sys-lines' }), khoa, dtEl('div', { class: 'dt-bar b-s' }),
+        cot === 4 ? dtEl('div', { class: 'dt-bar b-m' }) : null,
+        dtEl('div', { class: 'dt-bar b-e' }), dtEl('div', { class: 'dt-bar b-e2' }));
+      const o = hang.map(w => { const bia = dtBiaKe(w, chon); return dtEl('div', { class: 'dt-cell' }, bia, dtCapKe(w, chon, bia)); });
+      khung.append(dtEl('div', { class: 'dt-sys' }, khuong, dtEl('div', { class: 'dt-sys-row' }, ...o)));
     }
-    khung.append(dtEl('div', { class: 'dt-ke-dau' }, dtEl('span', null, t('dt_ke_top')), dtEl('span', null, t('dt_on_shelf').replace('{n}', ds.length))),
-      luoi, dtEl('div', { class: 'dt-ke-chan', 'aria-hidden': 'true' }, dtEl('span'), dtEl('span')));
     danhDauChon(khung, WS.chon);
     if (ds.length) ke.append(khung);
     if (!WS.xemHet && ds.length > gioiHan)
