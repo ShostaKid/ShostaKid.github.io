@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ShostaKid</title>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Nunito:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=11">
+<link rel="stylesheet" href="style.css?v=12">
 <!-- Tải sẵn trang Commission trong lúc rảnh để bấm sang là tức thì. -->
 <link rel="prefetch" href="commissions.html">
 <link rel="prefetch" href="commissions.css?v=3">
@@ -551,6 +551,15 @@
     <footer><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
   </div>
 
+  <!-- NOTES · công cụ viết note (chỉ admin) — dựng trong notes-admin.js; DB do module Supabase cấp. -->
+  <div class="page" id="page-notes-admin" style="background:var(--cream);">
+    <div class="form-wrap nta-wrap">
+      <div class="section-heading" data-i18n="nta_head">Notes desk</div>
+      <div class="auth-msg" id="nta-msg" role="status"></div>
+      <div id="nta-root"></div>
+    </div>
+  </div>
+
   <!-- DANH SÁCH THÀNH VIÊN -->
   <div class="page" id="page-members" style="background:var(--cream);">
     <div class="form-wrap">
@@ -652,10 +661,11 @@
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
 
 <!-- YouTube player ẩn — tự inject bằng JS -->
-<script src="app.js?v=9"></script>
+<script src="app.js?v=10"></script>
 <script src="welcome.js?v=5"></script>
 <script src="rehearsal.js?v=1"></script>
-<script src="notes.js?v=1"></script>
+<script src="notes.js?v=2"></script>
+<script src="notes-admin.js?v=1"></script>
 
 <!-- =============================================
      TÀI KHOẢN — Supabase Auth
@@ -663,6 +673,6 @@
      KHÔNG đụng gì tới phần Browse / danh sách truyện:
      phần đó dựng ở script cổ điển (giao diện đĩa than, dữ liệu từ fetchWorksFromDB).
      ============================================= -->
-<script type="module" src="accounts.js?v=3"></script>
+<script type="module" src="accounts.js?v=4"></script>
 </body>
 </html>

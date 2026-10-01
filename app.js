@@ -1489,6 +1489,26 @@ const i18n = {
     nt_loading:'Setting up the room…', nt_failed:'The room could not be reached right now. Try again in a moment.',
     nt_empty:'The room is being set up. Notes about the music behind the fics will appear here soon.',
     nt_preview:'Preview: these notes are drafts, only you can see them',
+    nta_head:'Notes desk', nta_new:'+ New note', nta_manage:'✎ Manage notes', nta_edit_this:'✎ Edit this note', nta_back_room:'← The Listening Room',
+    nta_on_table:'{n} of 4 on the table', nta_slot:'Slot', nta_off_table:'Off the table', nta_published:'Published', nta_draft:'Draft', nta_edit:'Edit',
+    nta_none:'No notes yet. Write the first one.', nta_hint_slot:'Only published notes can go on the table (4 at most). Pick a slot to swap it in; the note that was there goes back off the table.',
+    nta_not_admin:'Only the author can write notes.', nta_load_err:'The desk could not be reached. Try again in a moment.',
+    nta_back_desk:'Back to the desk', nta_editing:'Editing a note',
+    nta_s_piece:'The piece', nta_piece:'Piece', nta_composer:'Composer', nta_opus:'Opus (optional)', nta_short:'Label on the disc (optional)',
+    nta_title:'Headline of the note', nta_title_hint:'The big title on the paper, e.g. what this piece means to the fic.', nta_lang:'Language of the note text',
+    nta_s_track:'The track', nta_pick_track:'Pick a track already used in a fic', nta_url:'Audio link', nta_url_hint:'GitHub Releases, musopen.org, archive.org or soundcloud.com (https). SoundCloud plays outside the room and cannot have cues.',
+    nta_source:'Source (detected from the link)', nta_start:'Start at', nta_start_hint:'m:ss or seconds. Where the music begins in the file.',
+    nta_s_sleeve:'The sleeve', nta_icon:'Icon', nta_color:'Sleeve colour',
+    nta_s_text:'The note', nta_body:'Text', nta_body_hint:'Plain text. Leave a blank line between paragraphs.', nta_quote:'One line to carry into the fic (optional)',
+    nta_s_cues:'Listening cues', nta_cues_hint:'Moments in the track to jump to (up to 12). Time as m:ss, then what is happening in the fic.', nta_cue_time:'Time', nta_cue_text:'What is happening here', nta_add_cue:'+ Add a cue',
+    nta_s_works:'Plays in', nta_works_hint:'The fics that use this piece. Leave empty for a piece you only want to share.', nta_filter_works:'Filter fics…',
+    nta_s_publish:'On the table', nta_status:'Status', nta_slot_hint:'A draft is only visible to you. Put a published note in a slot to show it in the room.',
+    nta_save:'Save note →', nta_saving:'Saving…', nta_delete:'Delete this note', nta_saved:'Saved ♪', nta_deleted:'Note deleted.',
+    nta_delete_ask:'Delete the note about “{a}”? This cannot be undone.', nta_swap_ask:'Slot {n} already holds “{a}”. Put it back off the table and use the slot here?',
+    nta_need_core:'Piece, composer and headline are required.', nta_bad_url:'The audio link must be https and from GitHub, musopen.org, archive.org or soundcloud.com.',
+    nta_bad_start:'Start time must look like 1:36 or 96.', nta_bad_cue:'Each cue needs a time (like 1:36) and some text.', nta_too_many_cues:'At most 12 cues.',
+    nta_err_slot:'That slot is taken. Take the other note off the table first.', nta_err_dup:'A note with this slug already exists.', nta_err_check:'The database refused one of the values',
+    nta_err_forbidden:'Only the author can do this. Sign in again.', nta_err_generic:'Could not save. Try again in a moment',
     opus_head:'Opus', opus_ban:'works', opus_the_loai:'forms', opus_truyen:'works',
     opus_dan:'Every work here is named after a musical form, and the name is not decorative. This is the whole archive laid out by form — a catalogue of works.',
     opus_mo_het:'Open all', opus_dong_het:'Close all',
@@ -1726,6 +1746,26 @@ const i18n = {
     nt_loading:'Đang dọn phòng…', nt_failed:'Chưa vào được phòng nghe lúc này. Thử lại sau một lát nhé.',
     nt_empty:'Phòng nghe đang được dọn. Các note về âm nhạc đằng sau fic sẽ sớm xuất hiện ở đây.',
     nt_preview:'Xem trước: các note này là bản nháp, chỉ bạn thấy',
+    nta_head:'Bàn viết note', nta_new:'+ Note mới', nta_manage:'✎ Quản lý note', nta_edit_this:'✎ Sửa note này', nta_back_room:'← Phòng nghe',
+    nta_on_table:'{n}/4 note trên bàn', nta_slot:'Vị trí', nta_off_table:'Không trên bàn', nta_published:'Đã đăng', nta_draft:'Nháp', nta_edit:'Sửa',
+    nta_none:'Chưa có note nào. Viết note đầu tiên đi.', nta_hint_slot:'Chỉ note đã đăng mới lên bàn được (tối đa 4). Chọn một vị trí để đổi vào; note đang ở đó sẽ xuống khỏi bàn.',
+    nta_not_admin:'Chỉ tác giả mới viết được note.', nta_load_err:'Chưa vào được bàn viết note. Thử lại sau một lát nhé.',
+    nta_back_desk:'Về bàn viết', nta_editing:'Đang sửa một note',
+    nta_s_piece:'Bản nhạc', nta_piece:'Tên bản', nta_composer:'Nhạc sĩ', nta_opus:'Opus (không bắt buộc)', nta_short:'Chữ trên nhãn đĩa (không bắt buộc)',
+    nta_title:'Tiêu đề của note', nta_title_hint:'Dòng tiêu đề lớn trên tờ giấy, ví dụ bản nhạc này có ý nghĩa gì với fic.', nta_lang:'Ngôn ngữ của chữ trong note',
+    nta_s_track:'Bản thu', nta_pick_track:'Chọn bản nhạc đã dùng ở một fic', nta_url:'Link nhạc', nta_url_hint:'GitHub Releases, musopen.org, archive.org hoặc soundcloud.com (https). SoundCloud phát ngoài phòng nghe và không có cue.',
+    nta_source:'Nguồn (tự nhận từ link)', nta_start:'Bắt đầu từ', nta_start_hint:'m:ss hoặc số giây. Chỗ nhạc bắt đầu trong file.',
+    nta_s_sleeve:'Bìa đĩa', nta_icon:'Icon', nta_color:'Màu bìa',
+    nta_s_text:'Nội dung note', nta_body:'Chữ', nta_body_hint:'Chữ thường. Cách một dòng trống giữa các đoạn.', nta_quote:'Một câu để mang vào fic (không bắt buộc)',
+    nta_s_cues:'Điểm nghe', nta_cues_hint:'Những chỗ trong bản nhạc để nhảy tới (tối đa 12). Giờ dạng m:ss, rồi ghi chỗ đó trong fic đang diễn ra gì.', nta_cue_time:'Giờ', nta_cue_text:'Chỗ này đang diễn ra gì', nta_add_cue:'+ Thêm điểm nghe',
+    nta_s_works:'Có trong', nta_works_hint:'Các fic dùng bản nhạc này. Để trống nếu chỉ là bản bạn muốn chia sẻ.', nta_filter_works:'Lọc fic…',
+    nta_s_publish:'Lên bàn', nta_status:'Trạng thái', nta_slot_hint:'Nháp chỉ mình bạn thấy. Đặt một note đã đăng vào một vị trí để nó hiện trong phòng nghe.',
+    nta_save:'Lưu note →', nta_saving:'Đang lưu…', nta_delete:'Xoá note này', nta_saved:'Đã lưu ♪', nta_deleted:'Đã xoá note.',
+    nta_delete_ask:'Xoá note về “{a}”? Không hoàn tác được.', nta_swap_ask:'Vị trí {n} đang có “{a}”. Cho nó xuống khỏi bàn và dùng vị trí này?',
+    nta_need_core:'Cần có tên bản, nhạc sĩ và tiêu đề.', nta_bad_url:'Link nhạc phải là https và từ GitHub, musopen.org, archive.org hoặc soundcloud.com.',
+    nta_bad_start:'Giờ bắt đầu phải dạng 1:36 hoặc 96.', nta_bad_cue:'Mỗi điểm nghe cần có giờ (như 1:36) và vài chữ.', nta_too_many_cues:'Tối đa 12 điểm nghe.',
+    nta_err_slot:'Vị trí đó đã có note khác. Gỡ note kia xuống trước.', nta_err_dup:'Đã có note trùng đường dẫn.', nta_err_check:'Cơ sở dữ liệu từ chối một giá trị',
+    nta_err_forbidden:'Chỉ tác giả làm được việc này. Đăng nhập lại nhé.', nta_err_generic:'Chưa lưu được. Thử lại sau một lát',
     opus_head:'Opus', opus_ban:'bản', opus_the_loai:'thể loại', opus_truyen:'truyện',
     opus_dan:'Mỗi truyện ở đây mang tên một thể nhạc, và tên đó không phải đặt cho vui. Dưới đây là toàn bộ kho truyện xếp lại theo đúng thể của chúng — như một danh mục tác phẩm.',
     opus_mo_het:'Mở tất cả', opus_dong_het:'Đóng tất cả',
@@ -1990,6 +2030,7 @@ function applyLang() {
   veLaiDiaThan();
   if (window.veLaiChao) window.veLaiChao();
   if (window.veLaiNotes) window.veLaiNotes();
+  if (window.veLaiNotesAdmin) window.veLaiNotesAdmin();
   if (window.veLaiRehearsal) window.veLaiRehearsal();
 
   const mt = document.querySelector('.music-toggle');
@@ -2199,6 +2240,7 @@ function showPage(id, el) {
   if (id === 'opus') vuaBanXoay();
   // Notes · phòng nghe: vào thì nạp + dựng; rời thì tạm dừng nhạc của phòng. Lớp nt-on bật thanh phát nhỏ (điện thoại).
   if (id === 'notes' && window.ntVao) window.ntVao();
+  if (id === 'notes-admin' && window.ntAdminVao) window.ntAdminVao();
   if (id !== 'notes' && window.ntRoi) window.ntRoi();
   // Trang "Truyện đã lưu" nạp lại mỗi lần mở, vì người dùng có thể vừa bỏ lưu
   // ở trang đọc xong quay lại đây.

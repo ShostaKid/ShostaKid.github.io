@@ -1459,3 +1459,42 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   .nav-utils{gap:6px;}
   .nav-signin,.nav-zone{padding:6px 9px;}
 }
+
+/* ---- Notes · công cụ viết note (admin) ---- */
+.nt-adm{position:relative;z-index:3;max-width:1200px;margin:0 auto;padding:14px 24px 0;display:flex;gap:10px;justify-content:flex-end;}
+.nta-wrap{max-width:820px;}
+.nta-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.6rem;}
+.nta-bar .ao3-link{margin-top:0;}
+.nta-count{margin-left:auto;font-family:var(--font-ui);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--ui);}
+.nta-hint{font-family:Georgia,serif;font-style:italic;font-size:.85rem;line-height:1.6;color:var(--ui);margin:1rem 0;}
+.nta-list{display:flex;flex-direction:column;border-top:1px solid var(--border);}
+.nta-row{display:flex;align-items:center;gap:14px;padding:14px 8px;border-bottom:1px solid var(--border);}
+.nta-row.on{background:var(--cream2);}
+.nta-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+.nta-t b{font-weight:400;font-style:italic;font-size:1.1rem;color:var(--ink);}
+.nta-t small{font-family:Georgia,serif;font-size:.78rem;color:var(--ui);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.nta-st{font-family:var(--font-ui);font-size:.55rem;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;border:1px solid var(--border);color:var(--ui);}
+.nta-st.pub{color:var(--ui-head);border-color:var(--gold);}
+.nta-row select{background:var(--cream2);border:1px solid var(--border);color:var(--ink);padding:6px 8px;font-family:Georgia,serif;font-size:.85rem;}
+.nta-row select:disabled{opacity:.5;}
+.nta-sub{font-family:var(--font-ui);font-size:.7rem;letter-spacing:3px;text-transform:uppercase;color:var(--ui-head);margin:2rem 0 1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border);}
+.nta-two{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.field select{width:100%;background:var(--cream2);border:1px solid var(--border);padding:10px 12px;font-family:Georgia,serif;font-size:.95rem;color:var(--ink);box-sizing:border-box;}
+.field input[type=color]{padding:2px;height:42px;}
+.nta-prev{margin:-.4rem 0 1rem;}
+.nta-sleeve{display:inline-flex;width:64px;height:64px;align-items:center;justify-content:center;color:#D4B86A;box-shadow:0 4px 10px rgba(0,0,0,.3);}
+.nta-sleeve .dt-ic{width:36px;height:36px;}
+.nta-cues{display:flex;flex-direction:column;gap:8px;margin:.6rem 0;}
+.nta-cue{display:grid;grid-template-columns:84px 1fr auto;gap:8px;align-items:center;}
+.nta-cue input{width:100%;background:var(--cream2);border:1px solid var(--border);padding:9px 11px;font-family:Georgia,serif;font-size:.9rem;color:var(--ink);box-sizing:border-box;}
+.nta-works{max-height:220px;overflow-y:auto;border:1px solid var(--border);background:var(--cream2);padding:8px 12px;}
+.nta-works label{display:block;font-family:Georgia,serif;font-size:.85rem;letter-spacing:0;text-transform:none;color:var(--ink2);padding:3px 0;margin:0;cursor:pointer;}
+.nta-works input{width:auto;margin-right:6px;}
+.nta-filter{width:100%;margin:.5rem 0;background:var(--cream2);border:1px solid var(--border);padding:8px 11px;font-family:Georgia,serif;font-size:.9rem;color:var(--ink);box-sizing:border-box;}
+.nta-del{margin-top:1rem;}
+@media (max-width:600px){
+  .nta-two{grid-template-columns:1fr;}
+  .nta-row{flex-wrap:wrap;}
+  .nta-t{flex-basis:100%;}
+  .nt-adm{justify-content:center;padding:10px 12px 0;}
+}

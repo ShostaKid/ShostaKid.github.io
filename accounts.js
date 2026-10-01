@@ -52,7 +52,7 @@ function paintNav(session) {
   if (!session) {
     // Nút đăng truyện chỉ hiện với admin; paintProfile() bật lên khi biết chắc.
     $('nav-post').style.display = 'none';
-    if (window.skLaAdmin) { window.skLaAdmin = false; if (window.veLaiRehearsal) window.veLaiRehearsal(); }
+    if (window.skLaAdmin) { window.skLaAdmin = false; if (window.veLaiRehearsal) window.veLaiRehearsal(); if (window.veLaiNotes) window.veLaiNotes(); }
     paintNavAvatar(null);
     closeNavMenu();
   }
@@ -149,7 +149,7 @@ function paintProfile(p) {
   $('nav-post').style.display = p.is_admin ? '' : 'none';
   $('btn-edit-about').style.display = p.is_admin ? '' : 'none';
   // Trang In rehearsal (script thường) chỉ hiện nút Edit khi biết chắc là admin; quyền ghi thật do RLS chặn.
-  if (!!p.is_admin !== !!window.skLaAdmin) { window.skLaAdmin = !!p.is_admin; if (window.veLaiRehearsal) window.veLaiRehearsal(); }
+  if (!!p.is_admin !== !!window.skLaAdmin) { window.skLaAdmin = !!p.is_admin; if (window.veLaiRehearsal) window.veLaiRehearsal(); if (window.veLaiNotes) window.veLaiNotes(); }
   $('prof-admin').innerHTML    = p.is_admin
     ? `<span class="admin-badge">${tr('prof_admin')}</span>` : '';
   $('pf-username').value = p.username || '';
@@ -2446,4 +2446,77 @@ window.fetchNotesFromDB = async function () {
     if (r2.error || !r2.data) return null;
     return { rows: r2.data, preview: true };
   } catch (_) { return null; }
+};
+
+// ---------- Notes: công cụ viết note (chỉ admin; quyền ghi thật do RLS giữ) ----------
+// Phần giao diện nằm ở notes-admin.js (script thường); ở đây chỉ có các hàm chạm DB.
+const NOTE_ROW_COLS = ['slug', 'title', 'piece', 'composer', 'opus', 'short_name', 'source', 'url', 'start_s', 'icon', 'sleeve',
+  'body', 'quote', 'cues', 'language', 'status', 'programme_slot'];
+window.fetchNotesAdmin = async function () {
+  try {
+    const { data, error } = await sb.from('notes')
+      .select('id, ' + NOTE_ROW_COLS.join(', ') + ', published_at, updated_at, note_works(work_id)')
+      .order('programme_slot', { ascending: true, nullsFirst: false })
+      .order('updated_at', { ascending: false });
+    return error ? null : data;
+  } catch (_) { return null; }
+};
+// Các bản nhạc đã dùng ở fic (chapters.music), bỏ trùng theo URL — để chọn lại khỏi phải dán link.
+window.fetchTrackChoices = async function () {
+  try {
+    const { data, error } = await sb.from('chapters').select('music').not('music', 'is', null);
+    if (error || !data) return [];
+    const m = new Map();
+    data.forEach(r => {
+      const x = r.music; if (!x || !x.url || m.has(x.url)) return;
+      m.set(x.url, { source: x.source, url: x.url, name: x.name || '', start: Number(x.start) || 0 });
+    });
+    return [...m.values()].sort((a, b) => (a.name || a.url).localeCompare(b.name || b.url));
+  } catch (_) { return []; }
+};
+window.noteSlug = (piece) => {
+  // pwSlug() cắt 60 ký tự; thêm 6 số cuối của mốc thời gian cho khỏi trùng (slug là UNIQUE).
+  const base = pwSlug(piece) || 'note';
+  return base + '-' + String(Date.now()).slice(-6);
+};
+// Lưu note rồi đồng bộ liên kết fic bằng cách so khớp (xoá cái bị gỡ, chèn cái mới) — không xoá-rồi-chèn.
+// Trả { id, error }. Hỏng giữa chừng thì note đã lưu nhưng liên kết có thể chưa kịp cập nhật: không mất nội dung.
+window.saveNote = async function (n, workIds) {
+  if (!(currentProfile && currentProfile.is_admin)) return { error: { message: 'forbidden' } };
+  const row = {}; NOTE_ROW_COLS.forEach(k => { row[k] = n[k]; });
+  let id = n.id || null;
+  if (id) {
+    const r = await sb.from('notes').update(row).eq('id', id).select('id');
+    if (r.error) return { error: r.error };
+    if (!r.data || !r.data.length) return { error: { message: 'not-found' } };
+  } else {
+    const r = await sb.from('notes').insert(row).select('id').single();
+    if (r.error) return { error: r.error };
+    id = r.data.id;
+  }
+  const cur = await sb.from('note_works').select('work_id').eq('note_id', id);
+  if (cur.error) return { id, error: cur.error };
+  const have = new Set(cur.data.map(x => x.work_id)), want = new Set(workIds);
+  const bo = [...have].filter(x => !want.has(x)), them = [...want].filter(x => !have.has(x));
+  if (bo.length) { const r = await sb.from('note_works').delete().eq('note_id', id).in('work_id', bo); if (r.error) return { id, error: r.error }; }
+  if (them.length) { const r = await sb.from('note_works').insert(them.map(w => ({ note_id: id, work_id: w }))); if (r.error) return { id, error: r.error }; }
+  return { id, error: null };
+};
+window.deleteNote = async function (id) {
+  const r = await sb.from('notes').delete().eq('id', id).select('id');
+  return { error: r.error || ((!r.data || !r.data.length) ? { message: 'not-found' } : null) };
+};
+// Đưa note lên bàn ở slot (1..4) hoặc gỡ xuống (slot = null). Slot đang có note khác thì gỡ note đó trước
+// (unique index không cho hai note chung slot); nếu bước gán hỏng thì trả note kia về chỗ cũ.
+window.setNoteSlot = async function (id, slot, occupantId) {
+  if (occupantId && occupantId !== id) {
+    const a = await sb.from('notes').update({ programme_slot: null }).eq('id', occupantId).select('id');
+    if (a.error) return { error: a.error };
+  }
+  const b = await sb.from('notes').update({ programme_slot: slot }).eq('id', id).select('id');
+  if (b.error || !b.data || !b.data.length) {
+    if (occupantId && occupantId !== id) await sb.from('notes').update({ programme_slot: slot }).eq('id', occupantId);
+    return { error: b.error || { message: 'not-found' } };
+  }
+  return { error: null };
 };

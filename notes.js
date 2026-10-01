@@ -186,10 +186,13 @@
     R = {};
     const n = cur();
     if (mini) mini.hidden = true;
+    const adm = window.skLaAdmin ? E('div', 'nt-adm',
+      dtEl('button', { type: 'button', class: 'mini-btn', onclick: () => window.ntAdminMo && window.ntAdminMo(null) }, t('nta_new')),
+      dtEl('button', { type: 'button', class: 'mini-btn', onclick: () => showPage('notes-admin', null) }, t('nta_manage'))) : null;
 
     if (!NT.loaded || (NT.loading && !n)) { root.append(E('p', 'nt-empty', t('nt_loading'))); return; }
-    if (NT.failed) { root.append(E('p', 'nt-empty', t('nt_failed'))); return; }
-    if (!n) { root.append(E('p', 'nt-empty', t('nt_empty'))); return; }
+    if (NT.failed) { root.append(adm, E('p', 'nt-empty', t('nt_failed'))); return; }
+    if (!n) { root.append(adm, E('p', 'nt-empty', t('nt_empty'))); return; }
 
     // -- bàn xoay --
     const arm = E('div', 'nt-arm'); arm.setAttribute('aria-hidden', 'true');
@@ -279,7 +282,9 @@
       E('div', 'nt-body', ...dong),
       n.quote ? E('blockquote', null, n.quote) : null,
       n.cues.length ? E('div', 'nt-cues', E('div', 'nt-cues-h', E('h3', null, t('nt_cues')), E('span', null, t('nt_cues_hint'))), ...cueRows) : null,
-      dauTien ? E('div', 'nt-acts', dtEl('a', { class: 'nt-readfic', href: '#fic-' + dauTien.idx, onclick: moFic(dauTien.idx) }, t('nt_read_fic'))) : null);
+      (dauTien || window.skLaAdmin) ? E('div', 'nt-acts',
+        dauTien ? dtEl('a', { class: 'nt-readfic', href: '#fic-' + dauTien.idx, onclick: moFic(dauTien.idx) }, t('nt_read_fic')) : null,
+        window.skLaAdmin ? dtEl('button', { type: 'button', class: 'mini-btn', onclick: () => window.ntAdminMo && window.ntAdminMo(n.id) }, t('nta_edit_this')) : null) : null);
     const paper = E('article', 'nt-paper' + (NT.open ? ' open' : ''),
       E('div', 'nt-paper-ring'),
       E('div', 'nt-sheet-top', back, E('span', null, t('nt_note_no') + ' ' + (NT.sel + 1))),
@@ -291,6 +296,7 @@
     const stage = E('div', 'nt-stage',
       E('div', 'nt-wall', ...['panels', 'lines', 'rail', 'fade', 'glow', 'cord', 'shade'].map(c => { const d = E('div', 'nt-w-' + c); return d; })),
       E('div', 'nt-hero', E('div', 'nt-eyebrow', t('nt_eyebrow')), E('h1', null, t('nt_title')), E('p', 'nt-lead', t('nt_lead'))),
+      adm,
       NT.preview ? E('div', 'nt-preview', t('nt_preview')) : null,
       deck,
       E('div', 'nt-lower', prog, paper));
@@ -357,5 +363,6 @@
     if (p && p.classList.contains('active') && (!NT.notes.length || NT.preview)) nap(true);
   };
   // Đổi ngôn ngữ: chữ lấy từ t() lúc dựng nên phải dựng lại.
+  window.ntInvalidar = function () { NT.loaded = false; };   // admin vừa lưu/xoá: lần vào sau nạp lại
   window.veLaiNotes = function () { if ($('nt-root') && NT.loaded) ve(); };
 })();

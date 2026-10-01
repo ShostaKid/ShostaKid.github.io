@@ -1358,8 +1358,7 @@ Theo bản thiết kế Claude Design `Notes & Listening Room · the chamber` (d
 Mỗi note là một bài viết ngắn về **một bản nhạc**, gắn với 0..n truyện dùng nó (hoặc không gắn, nếu chỉ là nhạc hay
 muốn chia sẻ). **Chỉ lên bàn 4 note một lúc**, xoay tua thủ công.
 
-**Phạm vi đã chốt (30/09):** làm Pha 1 (backend) + Pha 2 (giao diện desktop + điện thoại). **Chưa có công cụ viết note** (Pha 3)
-— nhập note bằng SQL cho tới khi làm. **Không có Kudos / Comments** trên note (bảng hiện có gắn cứng `work_id`; gắn thêm
+**Phạm vi đã chốt (30/09):** làm Pha 1 (backend) + Pha 2 (giao diện desktop + điện thoại). Pha 3 (công cụ viết note, 01/10) cũng đã làm — xem mục "Công cụ viết note" bên dưới. **Không có Kudos / Comments** trên note (bảng hiện có gắn cứng `work_id`; gắn thêm
 `note_id` sẽ đụng trigger đếm, giới hạn tần suất và policy — không đáng cho v1). **Note rời khỏi bàn không có chỗ lưu trữ
 nào** — để dành cho một đợt nâng cấp khác.
 
@@ -1417,9 +1416,6 @@ nào** — để dành cho một đợt nâng cấp khác.
 
 ### Việc tiếp theo (chưa làm)
 
-- **Pha 3 — công cụ viết note** (khu riêng trong form Post, chỉ admin): tên bản, nhạc sĩ, opus, nhạc (link + giây bắt đầu), màu bìa,
-  icon, fic liên quan, đoạn văn, câu trích, danh sách cue lặp được, và nút đưa lên bàn / gỡ khỏi bàn. Nên có ô "chọn từ nhạc đã
-  dùng ở fic" (`chapters.music` có 52 URL khác nhau).
 - Nội dung song ngữ cho note (hiện mỗi note một ngôn ngữ, cột `language`; giao diện thì đổi EN/VI bình thường).
 - Lưu trữ note cũ (không có ở v1).
 
@@ -1497,3 +1493,31 @@ co lại là mình tự làm.
 
 Test không ghi DB thật: dùng khung chặn lệnh ghi đã ghi ở "Cách test form mà không ghi DB" (chèn shim `fetch` vào `<head>`
 của bản sao `index.html`), sau đó xoá bản sao và khoá `sb-*` trong localStorage.
+
+### Công cụ viết note (Pha 3, 01/10)
+
+Trang riêng `#page-notes-admin` ("Notes desk"), **chỉ admin**. Vào từ trang Notes: nút **+ New note** / **✎ Manage notes**
+trên đầu trang, và **✎ Edit this note** cạnh nút "Read the fic" (các nút này chỉ hiện khi `window.skLaAdmin`). Không có mục nav riêng.
+Không đổi backend (không migration): mọi thứ dựa trên bảng + quyền của migration 29.
+
+- **`notes-admin.js`** (script cổ điển, giao diện) + **các hàm DB ở cuối `accounts.js`**: `fetchNotesAdmin`, `fetchTrackChoices`,
+  `saveNote`, `deleteNote`, `setNoteSlot`, `noteSlug`. Cùng khuôn với Rehearsal: giao diện ở script thường, chạm DB ở module.
+- **Bàn làm việc** liệt kê mọi note (nháp lẫn đã đăng); mỗi dòng có ô chọn vị trí trên bàn (1–4 / không trên bàn) và nút Sửa.
+  Nháp thì ô vị trí bị khoá (DB cũng chặn: `notes_slot_needs_published`).
+- **Form soạn**: tên bản, nhạc sĩ, opus, nhãn đĩa, tiêu đề note, ngôn ngữ; link nhạc (+ chọn lại từ nhạc đã dùng ở fic — lấy từ
+  `chapters.music`, bỏ trùng theo URL) và giờ bắt đầu; icon (lấy từ sprite `ic-*` đang có) + màu bìa kèm ô xem trước; chữ,
+  câu trích; danh sách cue (tối đa 12, giờ `m:ss`/giây); fic liên quan (hộp tick có ô lọc); trạng thái + vị trí trên bàn.
+- **Nguồn nhạc tự suy ra từ link** (`doiNguon`): github.com / *.githubusercontent.com, musopen.org, archive.org, soundcloud.com;
+  link không phải https hoặc host lạ thì không lưu. Ô "Source" chỉ hiển thị, không tự chọn.
+- **Đổi chỗ trên bàn**: slot đang có note khác thì hỏi xác nhận, rồi **gỡ note kia xuống trước** (unique index không cho trùng) rồi mới
+  gán; nếu bước gán hỏng thì trả note kia về chỗ cũ. Hai bước này không nguyên tử (hai request) — hỏng giữa chừng tệ nhất là một note
+  tạm rời bàn, không mất nội dung.
+- **Liên kết fic lưu bằng so khớp** (xoá cái bị gỡ, chèn cái mới), không xoá-rồi-chèn — cùng bài học với chương truyện.
+- `slug` sinh một lần lúc tạo (`noteSlug` = `pwSlug(piece)` + 6 số cuối timestamp), sửa note thì giữ nguyên.
+- Lưu/xoá xong gọi `ntInvalidar()` để trang Notes nạp lại lần sau; form đang soạn dở **không bị dựng lại** khi đổi ngôn ngữ (khỏi mất chữ).
+- Dựng 100% bằng `createElement` / `.value` / `textContent`; chữ giao diện là `nta_*` (EN + VI).
+
+**Đã kiểm:** luồng giao diện đầy đủ (tạo, báo lỗi từng ô, sửa, đổi chỗ, xoá, sửa từ trang Notes) với DB giả trong bộ nhớ; và 11 thao tác thật
+trên DB bằng role `authenticated` giả admin trong giao dịch tự huỷ (chèn đúng các cột được cấp, `published_at` tự điền, slot trùng bị chặn,
+nháp không lên bàn được, url http bị chặn, không ghi được `published_at`, xoá kéo theo `note_works`, 13 cue bị chặn, người thường bị chặn).
+**Chưa kiểm được qua supabase-js thật** (sandbox chặn CDN và Supabase) — lần đầu dùng trên bản deploy nên lưu thử một note nháp.
