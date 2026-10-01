@@ -1298,28 +1298,37 @@ Chỗ chưa điền hiện dạng `.ph` (chữ vàng nghiêng, gạch chấm): `
 - Mock lặp lại một lỗi có sẵn: hàng giá "Từ 2500W – 4000W" chồng lên "1000W – 3000W". **Chưa sửa** vì
   đó là bảng giá của chủ repo, không phải việc của giao diện.
 
-**Màn chào = bàn phím piano** (Welcome A) trong `#intro` của `index.html`, dựng bởi
-`welcome.js` (nạp sau `app.js`, dùng lại hàm toàn cục của nó: `enterSite`, `showPage`,
-`openFic`, `resumeReading`, `toggleLang`, `toggleTheme`, `t`, `worksData`). **Bấm MỘT
-lần là vào**; bấm nền hay gõ phím lạ không làm gì. Bảng phím là mảng `TRANG` (7 phím
-trắng) và `DEN` (5 phím đen) đầu file; `at` của phím đen = số ranh giới phím trắng nó
-nằm trên (1,2,4,5,6).
-- Trắng: Home, Works, Opus, **Notes (mờ, "Soon" — chưa có trang; muốn bật thì bỏ `off`
-  của nó và thêm `go`)**, About, Commissions (→ `commissions.html`), Sign in (đã đăng
-  nhập thì thành Profile).
-- Đen: Resume (mờ nếu không có `sk-continue`), Members (mờ nếu chưa đăng nhập), EN/VI và
-  Theme (đổi tại chỗ, không vào), Surprise (fic ngẫu nhiên từ `worksData`). **Điện
-  thoại (≤700px) phím đen chỉ phát nốt.** Trạng thái đăng nhập về muộn (accounts.js
-  async) nên `welcome.js` làm tươi nhãn/trạng thái mờ mỗi 0,8 giây khi intro còn hiện.
-- Phím tắt bàn phím thật: A S D F G H J (trắng), W E T Y U (đen). Nốt là WebAudio
-  (triangle, gain 0.14), chỉ chạy sau cú bấm/phím.
-- Chữ nằm trong bảng i18n (`wk_*`, `wd_*`, `wb_*`, `wbd_*`); `applyLang()` gọi
-  `window.veLaiChao()` để dựng lại nhãn khi đổi ngôn ngữ.
-- Mờ bằng ĐỔI MÀU, không dùng `opacity`: phím đen trong suốt sẽ lộ phím trắng phía sau.
-- `getComputedStyle`/`innerWidth` = 0 khi pane trình duyệt bị ẩn → `dienThoai()` trả
-  đúng và test tưởng "phím đen không chạy". Đặt lại kích thước cửa sổ trước khi đo.
-- Đã bỏ hẳn hai cửa cũ (`#door-read`, `#door-comm`, `.intro-door*`) cùng hoa văn ♩,
-  `.intro-cta`, `.intro-bars` — không còn gì trỏ tới chúng.
+**Màn chào** trong `#intro` của `index.html`: chỉ có `<div id="wk-root">`, mọi thứ do
+`welcome.js` dựng (nạp sau `app.js`, dùng lại hàm toàn cục: `enterSite`, `showPage`,
+`openFic`, `resumeReading`, `toggleLang`, `toggleTheme`, `t`, `worksData`). **Một bảng mục
+`ITEMS`, hai bộ vẽ**, chọn bằng `matchMedia('(hover:hover) and (pointer:fine) and
+(min-width:1024px)')` và dựng lại khi điều kiện đổi (xoay máy, kéo cửa sổ):
+- **A — dàn nhạc (PC).** Sân khấu cố định 1440×900 (bảng toạ độ `LA`, lấy từ bản thiết kế
+  Claude Design), JS thu phóng cả sân khấu theo cửa sổ (`fitA`, biến `--s`); chữ mô tả có
+  sàn `max(13px, 10.5px/--s)` để laptop nhỏ (~1366×650, scale 0,72) vẫn đọc được. Rê chuột
+  vào một bè thì bè sáng, các bè khác mờ, hiện mô tả; **bấm MỘT lần là vào**. Ghế (elip mờ)
+  sinh tự động từ cỡ icon (rộng 0,84×, thấp hơn icon 0,9×).
+- **B — cây đàn piano (điện thoại, tablet, máy cảm ứng).** Co giãn theo bề ngang, không
+  thu phóng. **Hai bước:** chạm phím = chọn (kêu nốt, hiện mô tả trên giá nhạc), rồi bấm
+  Enter (hoặc chạm lại đúng phím). Phím đen dùng được ở đây (Resume, Members, EN/VI,
+  Theme, Surprise); dưới 640px phím chỉ hiện icon, tên hiện trên giá nhạc.
+- Màn chào **theo theme của web** (sáng/tối, biến `--o-*` trong `#wk-root`), không còn luôn tối.
+- Mục: Home, Works, Opus, Notes, In rehearsal, About, Commissions, Profile (đã đăng nhập;
+  khách thì nhãn "Sign in" và đi trang đăng nhập), Resume, Members, Surprise. **Notes và
+  In rehearsal chưa có trang: `soon:true` → mờ, "Coming soon".** Muốn bật thì bỏ `soon` và
+  thêm `go` vào mục đó trong `ITEMS` — không phải sửa gì ở hai bộ vẽ.
+- Resume mờ nếu không có `sk-continue`; Members mờ nếu chưa đăng nhập. Trạng thái đăng
+  nhập về muộn (accounts.js async) nên `capNhat()` chạy lại mỗi 0,8s khi intro còn hiện;
+  panel của B chỉ dựng lại khi nội dung đổi (không thì nút Enter bị thay giữa lúc bấm).
+- Phím gõ: A S D F G H J K (Home…Profile), Q Resume, W Members, L Surprise. Dàn nhạc = vào
+  luôn; piano = chọn phím. Nốt WebAudio (triangle, gain 0,14) chỉ ở piano.
+- Resume và Members không có trong bản thiết kế A; đã đặt viola ×2 (góc dưới trái) và tuba
+  ×2 (góc dưới phải). Bục Home dời lên (top 670) vì bản thiết kế để nhãn tràn khỏi khung.
+- Icon `ic-drum` (trống định âm) thêm vào sprite từ bản thiết kế, cùng nguồn game-icons.
+- Chữ trong bảng i18n `wk_n_*` (tên), `wk_d_*` (mô tả) và vài khoá `wk_*`; `applyLang()`
+  gọi `window.veLaiChao()`.
+- Bẫy khi test: `innerWidth` = 0 khi pane trình duyệt bị ẩn → nhận nhầm là điện thoại.
+  Đặt kích thước cửa sổ trước khi đo.
 
 Nút `#nav-zone` cạnh Sign In là lối sang commission; ở 320px `.nav-utils` tự xuống hàng
 thứ ba (nav cao 106px) — chấp nhận.
@@ -1344,7 +1353,7 @@ giữ nguyên.
 
 ## Notes · The Listening Room (cập nhật 2026-10-01)
 
-Tab mới `#page-notes`, nav nằm giữa Opus và About, phím F (Notes) trên bàn phím piano của màn chào đã bật.
+Tab mới `#page-notes`, nav nằm sau Opus (trước Rehearsal / About). Mục `notes` trong bảng `ITEMS` của `welcome.js` (màn chào: dàn nhạc trên PC, piano trên điện thoại) đã bỏ `soon` và có `go`; trên điện thoại bấm phím rồi bấm "Enter →".
 Theo bản thiết kế Claude Design `Notes & Listening Room · the chamber` (desktop) và `· phone (tap a note)`.
 Mỗi note là một bài viết ngắn về **một bản nhạc**, gắn với 0..n truyện dùng nó (hoặc không gắn, nếu chỉ là nhạc hay
 muốn chia sẻ). **Chỉ lên bàn 4 note một lúc**, xoay tua thủ công.
@@ -1398,8 +1407,8 @@ nào** — để dành cho một đợt nâng cấp khác.
 
 - **`position:fixed` vẫn bị kẹt trong ngữ cảnh xếp chồng của cha.** `.nt-lower` (`position:relative; z-index:2`) khiến tờ note
   `z-index:120` không vượt được thanh nav (`z-index:100`) — nút ‹ bị nav che. Trên điện thoại `.nt-lower` phải là `position:static;z-index:auto`.
-- **Thêm mục nav thứ năm làm nav một hàng tràn ngang ở 769–899px** (đo được 74px ở 769px). Đã thêm media query
-  `769–940px` thu padding/gap/letter-spacing của nav. Thêm mục nav nào nữa cũng phải đo lại các khổ này.
+- **Thêm mục nav làm nav một hàng tràn ngang ở 769–899px** (năm mục: 74px; sáu mục khi có Rehearsal: 58px ở 769px). Media query
+  `769–940px` thu padding/gap/letter-spacing/cỡ chữ của nav. Thêm mục nav nào nữa cũng phải đo lại các khổ này (đo từ 769px).
 - **Server thử không hỗ trợ `Range` thì `audio.currentTime = x` bị đặt lại 0** — test tua cue ra "hỏng" dù code đúng. GitHub
   Releases có Range (nhạc fic đã dùng `start` tới 1248 giây). Test cục bộ phải dùng server có Range.
 - Sprite `ic-*` đã đủ cho các icon của thiết kế (accordion, grand-piano, trombone, violin).
@@ -1413,3 +1422,78 @@ nào** — để dành cho một đợt nâng cấp khác.
   dùng ở fic" (`chapters.music` có 52 URL khác nhau).
 - Nội dung song ngữ cho note (hiện mỗi note một ngôn ngữ, cột `language`; giao diện thì đổi EN/VI bình thường).
 - Lưu trữ note cũ (không có ở v1).
+
+---
+
+## Works: kệ gỗ + chọn nhịp đọc (cập nhật 2026-09-30)
+
+Trang Works dựng theo hai bản thiết kế Claude Design ("record-shop shelves" và "Not sure what
+to read?"). Chỉ frontend (`renderWorks()` trong `app.js` + khối cuối `style.css`), không đụng DB.
+
+**Kệ gỗ.** Bìa xếp hàng trên tấm ván "Shelf I, II…", chú thích (tên, phụ đề, fandom · số chữ)
+nằm DƯỚI ván. `dtBiaKe()` = bìa (nút có `aria-label` là tên truyện, giữ class `dt-card` để dùng chung
+`danhDauChon`/CSS đĩa trượt), `dtCapKe()` = chú thích, **ra khỏi thứ tự Tab và `aria-hidden`** vì
+bìa đã có tên đầy đủ. Trang Home và Bookmark vẫn dùng `dtThe()`/`.dt-grid-shelf` — chưa đổi (Bookmark
+để làm sau nếu Works ổn).
+- Số cột: `soCotKe()` = 4 (≥1280px) / 3 (≥1024px) / 2 (còn lại, kể cả điện thoại), **phải khớp
+  CSS**. JS chia hàng theo số cột này nên qua mốc 1280/1024 thì `renderWorks()` được gọi lại.
+- Gỗ dùng biến `--pl-top/-front/-edge/-back` (sáng/tối). Điện thoại: trụ 8px, hai bìa mỗi ván.
+- Giữ nguyên ô tìm kiếm và hàng ship (bản thiết kế bỏ nhưng chủ repo dặn giữ).
+
+**Nhịp đọc.** Hàng lọc độ dài đổi nhãn: Any tempo / Presto · under 8 min / Andante · 8–20 min /
+Largo · 20+ min. **Không đổi logic lọc**: vẫn `doDai()` (Miniature <2000, Chamber ≤5000, Symphonic
+chữ) — 8 và 20 phút chính là 2000 và 5000 chữ với tốc độ **250 chữ/phút** (`phutDoc()`), dùng cho
+mọi ngôn ngữ. Liner notes có thêm "about N min" (cả trên Home).
+- Nút nét đứt "Not sure what to read?" mở `#dt-tp` (`dungTempo/veTempo/moTempo/dongTempo`): hộp
+  thoại có `role="dialog"`, khoá Tab, Esc đóng, trả focus về nút mở. Máy nhịp SVG lắc 10 nhịp rồi
+  dừng (`TEMPO[].dur` = 60/bpm giây). Điện thoại: bảng trượt từ dưới lên, máy nhịp thu nhỏ.
+- "Surprise me" = `chonNgauNhien(id, loaiTru)`: chọn ngẫu nhiên trong truyện đúng nhịp, **loại truyện
+  Members only kể cả khi đã đăng nhập**, xoá tìm kiếm/ship/fandom, mở hết kệ nếu truyện rơi ngoài
+  12 (10 trên điện thoại) truyện đầu, cuộn tới bìa; điện thoại thì mở luôn bảng trượt.
+- Dải "Picked for you · Andante · 8 to 20 min" + "↻ Another" hiện trên liner của đúng truyện vừa
+  được chọn hộ (`WS.via`/`WS.viaIdx`); tự tắt khi bấm truyện khác. `dtLiner(w, co, {via:true})` chỉ
+  hiện dải khi gọi từ Works (bảng trượt kiểm `currentPage === 'works'`).
+- "Just filter the shelf" chỉ đặt `WS.len` rồi vẽ lại.
+- Bản thiết kế không có bản điện thoại: phần kệ 2 cột và bảng trượt chọn nhịp do mình tự làm.
+
+---
+
+## Trang In rehearsal — bản thảo đang viết (cập nhật 2026-09-30)
+
+Tab công khai liệt kê các tác phẩm **đang viết** (chỉ tên/ý tưởng, không có nội dung), dựng theo bản thiết kế
+"In rehearsal · the composer's desk" (giấy nhạc, khuông 4 ô nhịp = 4 giai đoạn). Chủ repo nhập bằng nút Edit
+ngay trên trang, không phải qua form Post.
+
+**Nơi lưu = `site_content`, khoá `rehearsal`, giá trị `{ items: [...] }`. KHÔNG dùng `works` draft**, và không
+có migration nào. Lý do (đã kiểm DB 30/09/2026: `works` 56 published / 0 draft, `chapters` 92 published / 0 draft,
+không có bảng draft/idea nào):
+- Muốn khách đọc được draft phải sửa policy SELECT của `works` — đúng bất biến `can_read_work()` + policy `works`
+  phải trùng khít (từng rò rỉ một lần), kéo theo `chapters`, `work_tags`, `comments`, `kudos`.
+- Mỗi hàng `works` bị trigger `auto_assign_legacy_id` cấp một số `fic-N`, mà web định tuyến truyện theo vị trí số này.
+- `works` bắt buộc `author_id`/`slug`/`title` và có nhiều bộ đếm, trigger; giai đoạn/ngày ra mắt lại không có cột nào.
+Chuyển sang bảng riêng sau này là dễ (dữ liệu chỉ là một mảng).
+
+Mỗi mục: `{ id, form (slug nhóm Opus), title, working (tên làm việc), hook (một dòng giới thiệu), fandom,
+stage 1–4 (Tuning/Rehearsing/Dress rehearsal/Premiere), premiere ('YYYY-MM-DD' hoặc '') }`. **Chữ do chủ web nhập
+hiển thị nguyên văn (tiếng Anh), không dịch**; chỉ chữ giao diện (tiêu đề, nút…) có EN/VI (`rh_*`).
+- Đọc: `window.fetchRehearsal()` (accounts.js) → mảng, `[]` nếu chưa có hàng, `null` nếu không gọi được DB.
+  Ghi: `window.saveRehearsal(items)` — **UPDATE trước, không có hàng nào mới INSERT**, không dùng `upsert`: ON CONFLICT
+  DO UPDATE ghi cả cột `key`, mà `authenticated` chỉ được UPDATE `(value, updated_by)` (INSERT thì có `key, value, updated_by`).
+  Ghi CẢ MẢNG một lần: hai phiên sửa cùng lúc thì lần sau đè lần trước; không có lịch sử/hoàn tác (chủ repo chốt không cần).
+- Quyền ghi thật do RLS (`site_content: chi admin ghi`). Nút Edit chỉ là lớp giao diện, dựa vào `window.skLaAdmin`
+  (accounts.js đặt trong `paintProfile()` và xoá trong `paintNav()` khi đăng xuất, rồi gọi `veLaiRehearsal()`).
+- `rehearsal.js` (script thường, nạp sau `app.js`): `loadRehearsal()` gọi khi `showPage('rehearsal')`, `renderRehearsal()`,
+  bộ soạn (thêm / sửa / xoá / ↑↓, Save ghi cả mảng). Icon và tên thể loại lấy từ `NHOM`/`ICON_NHOM` như trang Opus; nhóm bị
+  xoá/đổi tên thì lùi về khoá Sol, không vỡ. Khuông nhạc là SVG co giãn (toạ độ gốc 660×80 từ bản thiết kế).
+- Ô "Next premiere": mục giai đoạn IV có ngày sớm nhất từ hôm nay trở đi (không có ngày thì mục IV đầu tiên).
+
+**Lối vào:** mục nav "Rehearsal" (`data-page="rehearsal"`, giữa Opus và About) và bè "In rehearsal" trên màn chào (phím G ở
+dàn nhạc PC; phím trắng thứ 5 ở piano điện thoại/tablet — chọn rồi Enter). **Điện thoại (≤768px) KHÔNG có mục trong nav**
+(ẩn bằng CSS) nhưng vào được từ màn chào; vào thẳng `#rehearsal` cũng được. Bản thiết kế không có bản điện thoại nên phần
+co lại là mình tự làm.
+- Thanh nav máy tính dùng lưới `1fr auto 1fr` để cụm link nằm chính giữa (flex space-between làm nó lệch trái vì cụm phải
+  rộng hơn logo). Khổ 769–1100px có quy tắc co lề/khoảng cách riêng — thêm mục nav nữa là phải kiểm lại khổ này (đã từng tràn 68px ở 800px).
+- Không có ánh vàng (radial-gradient) sau tiêu đề trang; chỉ còn vạch quét mờ.
+
+Test không ghi DB thật: dùng khung chặn lệnh ghi đã ghi ở "Cách test form mà không ghi DB" (chèn shim `fetch` vào `<head>`
+của bản sao `index.html`), sau đó xoá bản sao và khoá `sb-*` trong localStorage.
