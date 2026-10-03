@@ -133,6 +133,9 @@ body{background:var(--cream);color:var(--ink);font-family:Georgia,'Times New Rom
 
 nav{background:rgba(250,247,240,0.97);border-bottom:1px solid var(--border);padding:0 3rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(4px);}
 .nav-logo{font-family:var(--font-ui);font-size:1.1rem;letter-spacing:3px;color:var(--ink);padding:1.2rem 0;text-transform:uppercase;}
+.nav-logo{text-decoration:none;cursor:pointer;}
+.nav-panel{display:contents;}
+.nav-burger{display:none;}
 .nav-logo span{color:var(--gold);}
 .nav-links{display:flex;gap:2.5rem;}
 .nav-links a{font-family:var(--font-ui);font-size:0.72rem;letter-spacing:2.5px;color:var(--ink2);text-decoration:none;text-transform:uppercase;cursor:pointer;transition:color 0.2s;}
@@ -582,38 +585,38 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
   .nav-utils{gap:5px;}
 }
 @media (max-width: 768px) {
-  /* Nav trên điện thoại xuống HAI HÀNG.
-     Ba cụm (logo — link — cá nhân) cộng lại rộng hơn màn hình 360–390px, nên khi
-     ép chung một hàng thì space-between hết chỗ chia: các cụm dính sát nhau,
-     chữ SHOSTAKID chạm luôn vào HOME và avatar đè lên ABOUT. Cách cũ là cho dải
-     link cuộn ngang, nhưng cuộn ngang trong thanh nav thì không ai nhìn ra là
-     cuộn được — thành ra trông như vỡ bố cục.
-     Hàng trên: logo bên trái, cụm cá nhân bên phải. Hàng dưới: ba mục nội dung
-     căn giữa, đủ chỗ thở và đủ to để bấm. */
-  nav { padding: 0 1rem 0.55rem; flex-wrap: wrap; }
-  .nav-logo { font-size: 0.85rem; letter-spacing: 2px; padding: 0.85rem 0 0.5rem; order: 1; }
-  .nav-utils { order: 2; margin-left: auto; flex-shrink: 0; gap: 6px; }
-  .nav-links {
-    order: 3; flex-basis: 100%; width: 100%;
-    /* gap 1.5rem chứ không phải 2.2rem: từ khi có mục Opus là bốn mục, ở 320px
-       thì 2.2rem chỉ còn chừa 16px lề mỗi bên — chật. 1.5rem cho lại ~30px. */
-    justify-content: center; gap: 1.5rem;
-    padding-top: 0.5rem; border-top: 1px solid var(--border);
+  /* Nav điện thoại: kiểu hamburger như trang Commission.
+     Thanh trên chỉ còn logo + nút ☰; links và tiện ích (Commissions, đăng nhập/tài khoản,
+     ngôn ngữ, giao diện) nằm trong .nav-panel, thả xuống đè lên nội dung. Trước đây xuống
+     hai hàng (cao ~106px) và mục thứ năm là không còn chỗ. Mục Rehearsal vẫn không có ở đây
+     (vào từ màn chào). Trên máy tính .nav-panel là display:contents nên lưới nav không đổi. */
+  nav { padding: 0 0.6rem 0 1rem; flex-wrap: nowrap; }
+  .nav-logo { font-size: 0.85rem; letter-spacing: 2px; padding: 1rem 0; }
+  .nav-burger { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin-left: auto; padding: 0; background: none; border: 0; color: var(--ui-head); cursor: pointer; }
+  .nav-panel {
+    display: none; position: absolute; left: 0; right: 0; top: 100%; z-index: 110;
+    flex-direction: column; padding: 6px 1rem 18px; background: var(--cream);
+    border-bottom: 1px solid var(--border); box-shadow: 0 12px 24px rgba(0,0,0,.18);
+    max-height: calc(100vh - 56px); max-height: calc(100dvh - 56px); overflow-y: auto;
   }
-  .nav-links a { font-size: 0.62rem; letter-spacing: 1.6px; white-space: nowrap; padding: 2px 0; }
-  .nav-signin { font-size: 0.56rem; letter-spacing: 1.2px; padding: 5px 8px; white-space: nowrap; }
-  .nav-zone { font-size: 0.56rem; letter-spacing: 1.2px; padding: 5px 8px; }
-  .nav-avatar { width: 26px; height: 26px; font-size: 0.64rem; }
-  .nav-menu { min-width: 170px; }
+  nav.open .nav-panel { display: flex; }
+  .nav-links { flex-direction: column; gap: 0; }
+  .nav-links a, .nav-menu a {
+    display: flex; align-items: center; min-height: 48px; padding: 0; white-space: nowrap;
+    font-size: 0.78rem; letter-spacing: 3px; border-bottom: 1px solid var(--border);
+  }
+  .nav-utils { flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .nav-zone, .nav-signin { flex: 1 1 100%; justify-content: center; text-align: center; min-height: 44px; padding: 0 8px; font-size: 0.72rem; letter-spacing: 2.5px; display: flex; align-items: center; box-sizing: border-box; }
+  /* Menu tài khoản: bỏ khung thả xuống, trải thành danh sách ngay trong panel. */
+  .nav-me { flex: 1 1 100%; display: block; }
+  .nav-me.co-cham::after { display: none; }
+  .nav-avatar { display: none; }
+  .nav-menu { position: static; opacity: 1; visibility: visible; transform: none; min-width: 0; padding: 0; background: transparent; border: 0; box-shadow: none; }
+  .nav-menu::before { display: none; }
+  .nav-menu a { padding: 0; }
+  .nav-menu-out { margin-top: 0; padding-top: 0 !important; border-top: 0; }
+  #lang-btn, #theme-btn { flex: 1 1 calc(50% - 4px); height: 44px; box-sizing: border-box; padding: 0; border: 1px solid var(--border); border-radius: 0; color: var(--ui-head); font-size: 0.8rem; letter-spacing: 2px; }
 
-  #theme-btn {
-    font-size: 1.1rem;
-    padding: 6px 10px;
-    border: 1px solid var(--border) !important;
-    border-radius: 50%;
-    color: var(--ui-head) !important;
-    flex-shrink: 0;
-  }
 
   .about-wrap,
   .auth-wrap,

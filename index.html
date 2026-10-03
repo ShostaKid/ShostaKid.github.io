@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ShostaKid</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Nunito:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=14">
+<link rel="stylesheet" href="style.css?v=15">
 <!-- Tải sẵn trang Commission trong lúc rảnh để bấm sang là tức thì. -->
 <link rel="prefetch" href="commissions.html">
 <link rel="prefetch" href="commissions.css?v=3">
@@ -83,15 +85,16 @@
 <!-- MAIN -->
 <div id="site">
   <nav>
-    <div class="nav-logo">Shosta<span>Kid</span></div>
+    <a class="nav-logo" href="#home" onclick="showPage('home', document.querySelector('.nav-links [data-page=home]')); return false;">Shosta<span>Kid</span></a>
     <!-- Điều hướng NỘI DUNG: chỉ ba mục này, nằm giữa.
          data-page là cách chọn ổn định — trước đây code trỏ nth-child(2) để lấy
          mục Works, thêm bớt một mục là gãy. -->
+    <div class="nav-panel" id="nav-panel">
     <div class="nav-links">
       <a class="active" data-page="home"  data-i18n="nav_home"  onclick="showPage('home',this)">Home</a>
       <a data-page="works" data-i18n="nav_works" onclick="showPage('works',this)">Works</a>
       <a data-page="opus"  data-i18n="nav_opus"  onclick="showPage('opus',this)">Opus</a>
-      <a data-page="notes" data-i18n="nav_notes" onclick="showPage('notes',this)">Notes</a>
+      <a data-page="notes" data-i18n="nav_notes" onclick="showPage('notes',this)">Chamber</a>
       <a data-page="rehearsal" data-i18n="nav_rehearsal" onclick="showPage('rehearsal',this)">Rehearsal</a>
       <a data-page="about" data-i18n="nav_about" onclick="showPage('about',this)">About</a>
     </div>
@@ -116,6 +119,11 @@
       <button id="lang-btn" onclick="toggleLang()" title="Đổi ngôn ngữ / Switch language">VI</button>
       <button id="theme-btn" onclick="toggleTheme()" title="Toggle theme">☾</button>
     </div>
+    </div>
+    <!-- Chỉ hiện ở ≤768px: mở/đóng .nav-panel (links + tiện ích) như menu của trang Commission. -->
+    <button type="button" class="nav-burger" id="nav-burger" aria-label="Menu" aria-expanded="false" aria-controls="nav-panel">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
   </nav>
 
   <div id="music-bar" class="hidden">
@@ -661,10 +669,10 @@
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
 
 <!-- YouTube player ẩn — tự inject bằng JS -->
-<script src="app.js?v=11"></script>
+<script src="app.js?v=12"></script>
 <script src="welcome.js?v=5"></script>
 <script src="rehearsal.js?v=1"></script>
-<script src="notes.js?v=2"></script>
+<script src="notes.js?v=3"></script>
 <script src="notes-admin.js?v=1"></script>
 
 <!-- =============================================

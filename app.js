@@ -1260,6 +1260,15 @@ function enterSite() {
   setTimeout(()=>{intro.style.display='none';document.getElementById('site').classList.add('visible');},800);
 }
 
+// Màn chào chỉ dành cho người vào cửa chính: link gốc (không hash), #home hoặc #works.
+// Link sâu (#fic-N, #about, #notes, #works?ship=…) hay ?vao=1 thì vào thẳng web.
+function boQuaChao() {
+  if (new URLSearchParams(location.search).has('vao')) return true;
+  const h = location.hash.replace(/^#/, '');
+  if (!h) return false;
+  return h.includes('?') || (h !== 'home' && h !== 'works');
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   const intro = document.getElementById('intro');
   // Chỉ cửa "đọc" mới vào trang chính. Bấm chỗ khác trên màn chào, hay gõ phím, không làm gì
@@ -1268,7 +1277,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Từ trang Commission bấm "Read" (?vao=1): bỏ qua màn chào. Không có cú bấm nào trên
   // trang này nên nhạc chưa được phép phát — giữ daVaoSite=false để yêu cầu nhạc được cất
   // lại, rồi mở khoá ở cú bấm/phím đầu tiên (pha capture: chạy trước onclick của mục nav).
-  if (new URLSearchParams(location.search).has('vao')) {
+  if (boQuaChao()) {
     intro.style.display = 'none';
     // Không hiệu ứng mờ dần 0.8s như khi vào từ màn chào: người đọc vừa bấm "Read" nên phải thấy ngay.
     const site = document.getElementById('site');
@@ -1276,7 +1285,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     site.classList.add('visible');
     history.replaceState(null, '', location.pathname + location.hash);
     const moKhoa = () => {
-      ['pointerdown', 'keydown'].forEach(k => document.removeEventListener(k, moKhoa, true));
+      ['click', 'keydown'].forEach(k => document.removeEventListener(k, moKhoa, true));
       daVaoSite = true;
       if (nhacChoBam) {
         const cho = nhacChoBam; nhacChoBam = null;
@@ -1284,7 +1293,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         else playMusicDirect.apply(null, cho.thamSo);
       }
     };
-    ['pointerdown', 'keydown'].forEach(k => document.addEventListener(k, moKhoa, true));
+    ['click', 'keydown'].forEach(k => document.addEventListener(k, moKhoa, true));
   }
 
   // fics.json vẫn phải tải: trình đọc cần files/chapters/music từ đây.
@@ -1474,8 +1483,8 @@ const i18n = {
   en: {
     nav_home:'Home', nav_works:'Works', nav_about:'About',
     nav_opus:'Opus',
-    nav_notes:'Notes', wd_notes:'The music behind the fics: a small listening room.',
-    nt_eyebrow:'Notes · the music behind the fics', nt_title:'The Listening Room',
+    nav_notes:'Chamber', wd_notes:'The music behind the fics: a small listening room.',
+    nt_eyebrow:'Chamber · the music behind the fics', nt_title:'The Listening Room',
     nt_lead:'A small chamber for the pieces I wrote to. Pick a note, put the record on, and read why it plays where it plays.',
     nt_programme:"Tonight's programme", nt_count:'{n} notes', nt_for:'for', nt_n_fics:'{n} fics', nt_no_fic:'no fic yet',
     nt_turntable:'Turntable', nt_playing_state_on:'Now playing', nt_playing_state_off:'On the turntable',
@@ -1531,7 +1540,7 @@ const i18n = {
     rh_edit:'Edit', rh_add:'Add a work', rh_save:'Save', rh_saving:'Saving…', rh_cancel:'Cancel', rh_up:'Move up', rh_down:'Move down', rh_del:'Remove',
     rh_f_form:'Form', rh_f_title:'Title', rh_f_working:'Working title', rh_f_stage:'Stage', rh_f_hook:'One line that hooks a reader', rh_f_fandom:'Fandom', rh_f_premiere:'Premiere date',
     rh_need_title:'Every work needs a title.',
-    wk_n_home:'Home', wk_n_works:'Works', wk_n_opus:'Opus', wk_n_notes:'Notes', wk_n_rehearsal:'In rehearsal', wk_n_about:'About', wk_n_comm:'Commissions',
+    wk_n_home:'Home', wk_n_works:'Works', wk_n_opus:'Opus', wk_n_notes:'Chamber', wk_n_rehearsal:'In rehearsal', wk_n_about:'About', wk_n_comm:'Commissions',
     wk_n_profile:'Profile', wk_n_signin:'Sign in', wk_n_resume:'Resume', wk_n_members:'Members', wk_n_surprise:'Surprise', wk_n_lang:'EN / VI', wk_n_theme:'Theme',
     wk_d_home:'Where you left off, and what is new', wk_d_works:'Every fic, on the shelf', wk_d_opus:'Fics by musical form', wk_d_notes:'The music behind the fics',
     wk_d_rehearsal:'Works still being written', wk_d_about:'Programme notes on the author', wk_d_comm:'Writing, made to order', wk_d_profile:'Your bookmarks and kudos',
@@ -1731,8 +1740,8 @@ const i18n = {
   vi: {
     nav_home:'Trang chủ', nav_works:'Các đầu truyện', nav_about:'Về Web',
     nav_opus:'Opus',
-    nav_notes:'Notes', wd_notes:'Âm nhạc đằng sau các fic: một phòng nghe nhỏ.',
-    nt_eyebrow:'Notes · âm nhạc đằng sau các fic', nt_title:'Phòng nghe',
+    nav_notes:'Chamber', wd_notes:'Âm nhạc đằng sau các fic: một phòng nghe nhỏ.',
+    nt_eyebrow:'Chamber · âm nhạc đằng sau các fic', nt_title:'Phòng nghe',
     nt_lead:'Một căn phòng nhỏ cho những bản nhạc tôi đã viết cùng. Chọn một note, đặt đĩa lên, rồi đọc xem vì sao nó vang lên đúng chỗ đó.',
     nt_programme:'Chương trình tối nay', nt_count:'{n} note', nt_for:'cho', nt_n_fics:'{n} fic', nt_no_fic:'chưa gắn fic nào',
     nt_turntable:'Bàn xoay', nt_playing_state_on:'Đang phát', nt_playing_state_off:'Trên bàn xoay',
@@ -1788,7 +1797,7 @@ const i18n = {
     rh_edit:'Sửa', rh_add:'Thêm một tác phẩm', rh_save:'Lưu', rh_saving:'Đang lưu…', rh_cancel:'Huỷ', rh_up:'Lên', rh_down:'Xuống', rh_del:'Xoá',
     rh_f_form:'Thể loại', rh_f_title:'Tên', rh_f_working:'Tên làm việc', rh_f_stage:'Giai đoạn', rh_f_hook:'Một dòng để câu độc giả', rh_f_fandom:'Fandom', rh_f_premiere:'Ngày ra mắt',
     rh_need_title:'Tác phẩm nào cũng cần có tên.',
-    wk_n_home:'Trang chủ', wk_n_works:'Truyện', wk_n_opus:'Opus', wk_n_notes:'Notes', wk_n_rehearsal:'Đang tập', wk_n_about:'Giới thiệu', wk_n_comm:'Commission',
+    wk_n_home:'Trang chủ', wk_n_works:'Truyện', wk_n_opus:'Opus', wk_n_notes:'Chamber', wk_n_rehearsal:'Đang tập', wk_n_about:'Giới thiệu', wk_n_comm:'Commission',
     wk_n_profile:'Hồ sơ', wk_n_signin:'Đăng nhập', wk_n_resume:'Đọc tiếp', wk_n_members:'Thành viên', wk_n_surprise:'Bất ngờ', wk_n_lang:'EN / VI', wk_n_theme:'Giao diện',
     wk_d_home:'Chỗ bạn đọc dở, và truyện mới', wk_d_works:'Mọi fic, trên kệ', wk_d_opus:'Fic theo thể nhạc', wk_d_notes:'Âm nhạc đằng sau các fic',
     wk_d_rehearsal:'Những truyện còn đang viết', wk_d_about:'Ghi chú chương trình về tác giả', wk_d_comm:'Viết theo yêu cầu', wk_d_profile:'Truyện đã lưu và kudos của bạn',
@@ -2066,6 +2075,42 @@ function toggleTheme() {
 // =============================================
 // MUSIC — hỗ trợ 3 nguồn: musopen / soundcloud / youtube
 // =============================================
+// Dựng thẻ <audio> kèm gợi ý loại file. GitHub Releases phục vụ mọi file dạng
+// application/octet-stream, đường dẫn lại không có đuôi, nên iOS (WebKit) không chịu phát nếu
+// chỉ có audio.src — Chrome/Android tự dò nội dung nên vẫn êm. Khai type ở <source> thì iOS phát được
+// (đã thử trên iPad với trang Commission). Đuôi file lấy từ URL, mặc định mp3.
+const LOAI_AM = { mp3:'audio/mpeg', m4a:'audio/mp4', mp4:'audio/mp4', aac:'audio/aac', ogg:'audio/ogg', oga:'audio/ogg', wav:'audio/wav' };
+// Gắn (hoặc gỡ, khi url rỗng) nguồn cho một <audio> bằng thẻ <source type>. Phòng nghe (notes.js) dùng chung.
+function datNguonAm(audio, url) {
+  audio.removeAttribute('src');
+  audio.querySelectorAll('source').forEach(s => s.remove());
+  if (!url) return;
+  const m = /\.(mp3|m4a|mp4|aac|ogg|oga|wav)(?:[?#]|$)/i.exec(url);
+  const nguon = document.createElement('source');
+  nguon.src = url;
+  nguon.type = LOAI_AM[m ? m[1].toLowerCase() : 'mp3'];
+  audio.appendChild(nguon);
+}
+function taoAudio(url) {
+  const audio = document.createElement('audio');
+  audio.id = 'audio-player';
+  audio.loop = true;
+  audio.style.display = 'none';
+  datNguonAm(audio, url);
+  document.body.appendChild(audio);
+  return audio;
+}
+// play() bị trình duyệt chặn thì đừng để thanh nhạc cứ hiện "Pause" như đang phát.
+function phatAudio(audio) {
+  const p = audio.play();
+  if (p && p.catch) p.catch(() => {
+    if (document.getElementById('audio-player') !== audio) return;   // bị thay bài/dừng chủ động, không phải bị chặn
+    musicPlaying = false;
+    document.getElementById('musicBars').classList.add('paused');
+    document.querySelector('.music-toggle').textContent = t('play');
+  });
+}
+
 function playMusicDirect(source, url, id, start, end, name) {
   // Chưa bấm intro thì hoãn lại, đừng dựng player để rồi bị chặn im lặng.
   if (!daVaoSite) { nhacChoBam = { loai: 'truc', thamSo: [source, url, id, start, end, name] }; return; }
@@ -2073,14 +2118,8 @@ function playMusicDirect(source, url, id, start, end, name) {
   const m = { source, url, id, start, end };
 
   if (source === 'musopen' || source === 'archive' || source === 'github') {
-    const audio = document.createElement('audio');
-    audio.id = 'audio-player';
-    audio.loop = true;
-    audio.style.display = 'none';
-    audio.src = url;
-    audio.volume = 1;
-    document.body.appendChild(audio);
-    audio.play().catch(()=>{});  // ← gọi NGAY, vẫn trong user gesture
+    const audio = taoAudio(url);
+    phatAudio(audio);  // ← gọi NGAY, vẫn trong user gesture
     audio.addEventListener('canplay', () => {
   if (m.start) audio.currentTime = m.start;  // ← chỉ seek sau khi ready
       }, { once: true });
@@ -2148,14 +2187,8 @@ function playMusicDirect(source, url, id, start, end, name) {
 
   if (source === 'musopen' || source === 'archive' || source === 'github') {
     // HTML5 audio — direct MP3 link từ musopen.org hoặc archive.org
-    const audio = document.createElement('audio');
-    audio.id = 'audio-player';
-    audio.loop = true;
-    audio.style.display = 'none';
-    audio.src = m.url;
-    audio.volume = 1;
-    document.body.appendChild(audio);
-    audio.play().catch(()=>{});  // ← gọi NGAY, vẫn trong user gesture
+    const audio = taoAudio(m.url);
+    phatAudio(audio);  // ← gọi NGAY, vẫn trong user gesture
     audio.addEventListener('canplay', () => {
       if (m.start) audio.currentTime = m.start;  // ← chỉ seek sau khi ready
     }, { once: true });
@@ -2208,7 +2241,7 @@ function toggleMusic() {
   const sc    = document.getElementById('sc-player');
 
   if (audio) {
-    if (musicPlaying) { audio.pause(); } else { audio.play().catch(()=>{}); }
+    if (musicPlaying) { audio.pause(); } else { phatAudio(audio); }
   } else if (yt) {
     yt.src = yt.src.replace(musicPlaying ? 'autoplay=1' : 'autoplay=0',
                             musicPlaying ? 'autoplay=0' : 'autoplay=1');
@@ -2221,6 +2254,19 @@ function toggleMusic() {
   document.querySelector('.music-toggle').textContent = musicPlaying ? t('pause') : t('play');
 }
 
+// ---- Nav điện thoại: nút ☰ mở/đóng .nav-panel (≤768px; trên máy tính nút bị ẩn) ----
+(function () {
+  const nav = document.querySelector('nav');
+  const nut = document.getElementById('nav-burger');
+  if (!nav || !nut) return;
+  const dat = mo => { nav.classList.toggle('open', mo); nut.setAttribute('aria-expanded', mo ? 'true' : 'false'); };
+  window.dongNavDt = () => dat(false);   // showPage() gọi để menu không nằm lại sau khi chuyển trang
+  nut.addEventListener('click', e => { e.stopPropagation(); dat(!nav.classList.contains('open')); });
+  document.addEventListener('click', e => { if (nav.classList.contains('open') && !e.target.closest('nav')) dat(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') dat(false); });
+  matchMedia('(min-width:769px)').addEventListener('change', e => { if (e.matches) dat(false); });
+})();
+
 function showPage(id, el) {
   history.pushState({page: id}, '', '#' + id);
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -2230,6 +2276,7 @@ function showPage(id, el) {
   document.querySelectorAll('.nav-links a, .nav-signin').forEach(a=>a.classList.remove('active'));
   if (el) el.classList.add('active');
   if (window.closeNavMenu) window.closeNavMenu();
+  if (window.dongNavDt) window.dongNavDt();
   dongBangTruot(true);
   prevPage = currentPage; currentPage = id;
   // Về trang chủ thì dựng lại để thẻ "Where you left off" lấy đúng chỗ vừa đọc.

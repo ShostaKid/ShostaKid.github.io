@@ -95,7 +95,8 @@
     a.pause();
     NT.dur = 0;
     if (R.loi) R.loi.textContent = '';
-    if (coAmThanh(n)) { a.src = n.url; a.load(); } else { a.removeAttribute('src'); a.load(); }
+    datNguonAm(a, coAmThanh(n) ? n.url : null);   // <source type=…>: iOS không phát file Release nếu chỉ có a.src (xem app.js)
+    a.load();
     datDangPhat(false);
   }
   function batTat() {

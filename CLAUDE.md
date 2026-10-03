@@ -1532,3 +1532,31 @@ Không đổi backend (không migration): mọi thứ dựa trên bảng + quy�
 trên DB bằng role `authenticated` giả admin trong giao dịch tự huỷ (chèn đúng các cột được cấp, `published_at` tự điền, slot trùng bị chặn,
 nháp không lên bàn được, url http bị chặn, không ghi được `published_at`, xoá kéo theo `note_works`, 13 cue bị chặn, người thường bị chặn).
 **Chưa kiểm được qua supabase-js thật** (sandbox chặn CDN và Supabase) — lần đầu dùng trên bản deploy nên lưu thử một note nháp.
+
+---
+
+## Nav hamburger, Chamber, icon, vào thẳng web, nhạc trên iOS (cập nhật 2026-10-03)
+
+- **Tab "Notes" đổi tên thành "Chamber"** (chỉ chữ hiển thị: `nav_notes`, `wk_n_notes`, `nt_eyebrow` ở cả EN lẫn VI). Id trang vẫn là `notes`
+  (`#notes`, `showPage('notes')`, `notes.js`, bảng `notes`) — đừng đổi, nhiều chỗ bám vào.
+- **Nav điện thoại (≤768px) là hamburger**, như trang Commission: thanh trên chỉ còn logo + nút ☰ (`#nav-burger`); `.nav-links` và
+  `.nav-utils` nằm trong `<div class="nav-panel" id="nav-panel">`, thả xuống đè lên nội dung khi `nav.open`. Trên máy tính `.nav-panel{display:contents}`
+  nên lưới `1fr auto 1fr` của nav không đổi (ba con của lưới vẫn là logo / links / utils). Menu tài khoản (avatar) trải thành danh sách ngay trong panel
+  (avatar bị ẩn, dấu chấm `co-cham` của avatar cũng ẩn — dấu chấm trên từng mục menu vẫn còn). Mục Rehearsal vẫn KHÔNG có trong nav điện thoại.
+  Đóng panel: bấm mục (qua `showPage()` → `dongNavDt()`), bấm ra ngoài, Esc, hoặc qua 769px. **Không còn nav hai hàng / 106px** — các ghi chú cũ ở trên
+  về chuyện đó hết hiệu lực. Thêm mục nav nữa thì điện thoại không phải lo chỗ, chỉ cần đo lại khổ 769–1100px.
+- **Logo "ShostaKid" là link về Home**: trên web chính là `<a class="nav-logo" href="#home">` gọi `showPage('home')`; trên trang Commission là
+  `index.html?vao=1#home` (vào thẳng, không qua màn chào).
+- **Icon web**: `favicon.svg` (chữ S nét liền, đầu trên là nốt tròn, vàng trên nền nâu đen) + `apple-touch-icon.png` (180px, vẽ bằng System.Drawing từ cùng
+  đường cong — iOS không nhận SVG cho icon màn hình chính, và bo góc để iOS tự cắt nên nền phủ kín). Khai ở `<head>` của cả `index.html` và `commissions.html`.
+- **Màn chào chỉ dành cho cửa chính** (`boQuaChao()` trong `app.js`): chỉ link gốc không hash, `#home` và `#works` mới thấy màn chào. Mọi link sâu — `#fic-N`, `#about`,
+  `#notes`, `#rehearsal`…, hay có tham số như `#works?ship=Others` — và `?vao=1` bỏ qua màn chào, vào thẳng. Nhạc của link sâu được cất lại (`nhacChoBam`) và phát ở
+  cú **click** hoặc phím đầu tiên (trước đây là `pointerdown`: iOS không coi `pointerdown`/`touchstart` là thao tác người dùng cho âm thanh).
+- **Nhạc trên iOS** — nguyên nhân: GitHub Releases phục vụ file dưới dạng `Content-Type: application/octet-stream` + `Content-Disposition: attachment`,
+  đường dẫn sau chuyển hướng không có đuôi `.mp3`, và **không có header CORS**. Chrome/Android tự dò nội dung nên phát được; WebKit (mọi trình duyệt iOS) thì không
+  phát được nếu chỉ có `audio.src`. Cách sửa không cần dời nhạc: khai `<source src type="audio/mpeg">` (đã thử trên iPad với trang Commission, chạy).
+  Dùng chung ở `datNguonAm(audio, url)` / `taoAudio(url)` trong `app.js` (loại file suy từ đuôi URL, mặc định mp3) — trình phát chính, About, và `nap1()` của phòng nghe (`notes.js`).
+  **Đừng quay lại `audio.src = url` cho nguồn github.** Không dùng được `fetch → blob` vì thiếu CORS.
+  `phatAudio()` bắt `play()` bị chặn và đặt lại nhãn Play (trước đây `.catch(()=>{})` nuốt lỗi, thanh nhạc vẫn hiện "Pause").
+  **Còn một lỗ trên iOS chưa vá:** nhạc của truyện đăng qua web / fic khai nhạc dạng mảng được `loadChapter()` gọi **sau `await` mạng**, ngoài thao tác bấm — iOS có thể chặn.
+  Muốn vá triệt để thì dùng một `<audio>` cố định, mở khoá ở cú bấm đầu và chỉ đổi nguồn.
