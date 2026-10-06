@@ -23,6 +23,36 @@ body{background:var(--cream);color:var(--ink);font-family:Georgia,'Times New Rom
 #intro{position:fixed;inset:0;z-index:2147483647;background:#F3ECDA;transition:opacity 0.8s ease;overflow:hidden;}
 [data-theme="dark"] #intro{background:#060504;}
 #intro.fade-out{opacity:0;pointer-events:none;}
+
+/* Tấm rèm cho link dẫn thẳng (app.js: dungRem). Nhung đỏ ở cả hai theme — rèm sân khấu là rèm sân khấu. */
+html.man-khoa{overflow:hidden;}
+#man{position:fixed;inset:0;z-index:2147483646;display:flex;align-items:center;justify-content:center;outline:none;cursor:progress;}
+#man.san{cursor:pointer;}
+#man::before{content:'';position:absolute;top:0;left:0;right:0;height:48px;z-index:2;background:linear-gradient(#5A1018,#36080D);
+  border-bottom:3px solid #B8972A;box-shadow:0 6px 16px rgba(0,0,0,.45);transition:transform .8s cubic-bezier(.7,0,.3,1);}
+#man .man-l,#man .man-r{position:absolute;top:0;bottom:0;width:50.5%;
+  background:linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(0,0,0,.35)),
+    repeating-linear-gradient(90deg,#4E0C14 0,#7A1A25 16px,#8C2430 22px,#5E111A 36px,#3B0910 50px);
+  transition:transform 1s cubic-bezier(.7,0,.3,1);}
+#man .man-l{left:0;box-shadow:inset -18px 0 30px rgba(0,0,0,.35);}
+#man .man-r{right:0;box-shadow:inset 18px 0 30px rgba(0,0,0,.35);}
+#man.mo .man-l{transform:translateX(-102%);}
+#man.mo .man-r{transform:translateX(102%);}
+#man.mo::before{transform:translateY(-110%);}
+#man .man-c{position:relative;z-index:3;max-width:680px;padding:0 24px;text-align:center;color:#F3E6C4;transition:opacity .35s;
+  text-shadow:0 2px 12px rgba(0,0,0,.55);}
+#man.mo .man-c{opacity:0;}
+#man .man-k{font-family:var(--font-ui);font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#E3C772;}
+#man .man-t{margin:14px 0 8px;font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:clamp(28px,5.2vw,54px);line-height:1.1;overflow-wrap:anywhere;}
+#man .man-s{min-height:1.2em;font-family:'Lora',Georgia,serif;font-style:italic;font-size:16px;color:rgba(243,230,196,.82);}
+#man .man-h{margin-top:30px;font-family:var(--font-ui);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#E3C772;opacity:.6;}
+#man.san .man-h{opacity:1;animation:man-tho 2.4s ease-in-out infinite;}
+#man:focus-visible .man-h{text-decoration:underline;text-underline-offset:6px;}
+@keyframes man-tho{50%{opacity:.5;}}
+@media (prefers-reduced-motion:reduce){
+  #man::before,#man .man-l,#man .man-r{transition:none;}
+  #man.san .man-h{animation:none;}
+}
 @keyframes bar{0%,100%{transform:scaleY(0.4)}50%{transform:scaleY(1)}}
 
 #wk-root{
@@ -738,6 +768,12 @@ footer{border-top:1px solid var(--border);padding:2rem 3rem;text-align:center;fo
 .dt-sl img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
 .dt-sl-lock{position:absolute;top:10px;right:10px;z-index:2;font-family:var(--font-ui);font-size:9px;letter-spacing:1.5px;
   text-transform:uppercase;padding:3px 6px;background:var(--gold);color:#16120D;}
+/* Băng rôn chéo góc trái trên: movement mới trong 14 ngày (góc phải trên là nhãn Members only). */
+.dt-sl-new{position:absolute;top:11px;left:-30px;width:100px;z-index:3;transform:rotate(-45deg);text-align:center;
+  font-family:var(--font-ui);font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:3px 0;
+  background:var(--gold);color:#16120D;box-shadow:0 2px 6px rgba(0,0,0,.3);pointer-events:none;}
+.dt-tt .dt-sl-new{top:18px;left:-32px;width:120px;font-size:11px;padding:4px 0;}
+.dt-flag.new{border-color:var(--gold);background:var(--gold);color:#16120D;}
 .dt-card-meta{display:flex;flex-direction:column;gap:4px;min-width:0;}
 .dt-card-meta .dt-title{font-size:15px;}
 .dt-card-meta .dt-sub{font-size:14px;line-height:1.35;}

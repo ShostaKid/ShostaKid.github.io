@@ -1559,4 +1559,46 @@ nháp không lên bàn được, url http bị chặn, không ghi được `publ
   **Đừng quay lại `audio.src = url` cho nguồn github.** Không dùng được `fetch → blob` vì thiếu CORS.
   `phatAudio()` bắt `play()` bị chặn và đặt lại nhãn Play (trước đây `.catch(()=>{})` nuốt lỗi, thanh nhạc vẫn hiện "Pause").
   **Còn một lỗ trên iOS chưa vá:** nhạc của truyện đăng qua web / fic khai nhạc dạng mảng được `loadChapter()` gọi **sau `await` mạng**, ngoài thao tác bấm — iOS có thể chặn.
-  Muốn vá triệt để thì dùng một `<audio>` cố định, mở khoá ở cú bấm đầu và chỉ đổi nguồn.
+  Muốn vá triệt để thì dùng một `<audio>` cố định, mở khoá ở cú bấm đầu và chỉ đổi nguồn. (Với link dẫn thẳng, tấm rèm bên dưới đã lo việc này.)
+
+---
+
+## Tấm rèm cho link dẫn thẳng + chương mới đẩy truyện lên + trạng thái hoàn thành (cập nhật 2026-10-07)
+
+### Tấm rèm (`dungRem()` trong `app.js`, CSS `#man` đầu `style.css`)
+
+Link sâu (`boQuaChao()`: mọi hash trừ gốc/`#home`/`#works`) không thấy màn podium, nhưng trình duyệt chỉ cho phát nhạc sau một thao tác —
+trước đây link fic im lặng tới khi người đọc tình cờ bấm đâu đó. Giờ link sâu hiện **tấm rèm nhung** ("ShostaKid presents" + tên truyện/trang +
+tên chương nếu truyện nhiều chương). Chạm / Enter / Space = kéo rèm **và** phát nhạc ngay trong cú chạm đó.
+- Rèm ghi "Tuning…" và **không nhận chạm** cho tới khi sẵn sàng: đã có `nhacChoBam`, hoặc (link fic) chương đã vẽ xong mà không có nhạc,
+  hoặc (link khác) đã định tuyến xong, hoặc quá 4 giây. Lý do: truyện đăng qua web chỉ biết nhạc sau khi tải chương — chạm sớm thì lệnh phát
+  về sau nằm ngoài thao tác, iOS chặn.
+- `?vao=1` (nút Read của trang Commission, về Home không nhạc) **không có rèm**, giữ cách mở khoá ở cú click/phím đầu tiên như cũ.
+- Truyện Members only mở bằng link khi chưa đăng nhập: không có chương → rèm sẵn sàng ngay, kéo rèm thấy thông báo khoá (đúng).
+
+### Chương mới đẩy truyện lên (không migration)
+
+- `fetchWorksFromDB()` lấy thêm `is_complete` và `chapters.published_at`. Với mỗi truyện tính `newMv = {pos, at}` = chương published có
+  `position > 1` ra **muộn hơn ngày ra mắt quá 12 giờ**, lấy cái muộn nhất; `updated` = `newMv.at` hoặc ngày ra mắt.
+- `theoMoiNhat` (New arrivals ở Home + thứ tự "Newest" ở Works) xếp theo `updated || date`. Form Post vốn giữ ngày gốc của chương cũ và
+  đóng dấu giờ hiện tại cho chương mới chèn → thêm chương là truyện tự lên đầu, sửa chữ thì không.
+- **Băng rôn chéo "New"** (góc trái trên bìa; góc phải là Members only) khi `newMv` trong **14 ngày** (`NGAY_MOI`). Liner notes thêm flag
+  "New movement", dòng "Updated · 3 Oct 2026 · Mvt. III"; khung liner ở Home ghi "New movement · ngày" thay cho ngày ra mắt.
+- Hạn chế đã biết: khách chưa đăng nhập nhận mảng chương rỗng với truyện Members only → truyện đó với họ chỉ xếp theo ngày ra mắt, không có băng rôn.
+  Muốn sửa phải thêm cột do trigger giữ (migration) — chưa làm vì chỉ 2–3 truyện.
+- Nhánh dự phòng `fics.json` không có `updated`/`newMv`/`complete` → không băng rôn, không trạng thái, xếp theo ngày ra mắt như cũ.
+
+**Dữ liệu cần sửa một lần (chủ repo tự chạy — lệnh ghi DB của Claude bị chặn ở tầng quyền):** 57 chương của 33 truyện mang `published_at` =
+05/09/2026 (dấu vết lỗi form cũ ghi đè ngày). Chưa sửa thì các truyện đó bị coi là "cập nhật 05/09" và xếp sai trong Newest:
+
+```sql
+update public.chapters c set published_at = w.published_at
+from public.works w
+where w.id = c.work_id and c.published_at::date = '2026-09-05' and w.published_at < '2026-09-05';
+```
+
+### Trạng thái Complete / In progress
+
+Cột `works.is_complete` có sẵn từ migration 2 (mặc định `false`, `authenticated` đã có quyền UPDATE) — chỉ thiếu ô trên form. Nay form Post có
+ô **"Complete — no more movements planned"** (`pw-complete`). Hiển thị: dòng "Status" trong liner notes và đuôi chú thích dưới bìa ở Works.
+**Chủ repo chốt: mọi truyện mặc định In progress (kể cả truyện 1 chương), tự tick dần trong form.**

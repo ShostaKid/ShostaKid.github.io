@@ -7,7 +7,7 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Nunito:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=15">
+<link rel="stylesheet" href="style.css?v=16">
 <!-- Tải sẵn trang Commission trong lúc rảnh để bấm sang là tức thì. -->
 <link rel="prefetch" href="commissions.html">
 <link rel="prefetch" href="commissions.css?v=3">
@@ -450,6 +450,11 @@
           <label><input type="checkbox" id="pw-lang-vi" style="width:auto;margin-right:0.5rem;"><span data-i18n="post_lang_vi">Written in Vietnamese</span></label>
           <div class="field-hint" data-i18n="post_lang_vi_hint">Leave unticked for English. Shown as the Language line in the work’s liner notes.</div>
         </div>
+        <div class="field">
+          <!-- works.is_complete (cột có sẵn từ đầu, trước đây form không có ô). -->
+          <label><input type="checkbox" id="pw-complete" style="width:auto;margin-right:0.5rem;"><span data-i18n="post_complete">Complete — no more movements planned</span></label>
+          <div class="field-hint" data-i18n="post_complete_hint">Leave unticked while the work is still being written: its liner notes say “In progress”.</div>
+        </div>
 
         <div class="sub-heading" data-i18n="post_cover">Cover image</div>
         <div class="field-hint" style="margin-bottom:0.9rem;" data-i18n="post_cover_hint">One image for the whole work. Shown as a book spine on the Works page, and above the text when the work is opened.</div>
@@ -669,7 +674,7 @@
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
 
 <!-- YouTube player ẩn — tự inject bằng JS -->
-<script src="app.js?v=12"></script>
+<script src="app.js?v=13"></script>
 <script src="welcome.js?v=5"></script>
 <script src="rehearsal.js?v=1"></script>
 <script src="notes.js?v=3"></script>
@@ -681,6 +686,6 @@
      KHÔNG đụng gì tới phần Browse / danh sách truyện:
      phần đó dựng ở script cổ điển (giao diện đĩa than, dữ liệu từ fetchWorksFromDB).
      ============================================= -->
-<script type="module" src="accounts.js?v=4"></script>
+<script type="module" src="accounts.js?v=5"></script>
 </body>
 </html>

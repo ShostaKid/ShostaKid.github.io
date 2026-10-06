@@ -259,10 +259,18 @@ const phutDoc = w => w.words == null ? null : Math.max(1, Math.round(w.words / 2
 const soChuong = n => n + ' ' + (n === 1 ? t('dt_mv1') : t('dt_mvn'));
 const nhacText = w => (w.music || []).length > 2
   ? w.music.slice(0, 2).join(' / ') + ' (+' + (w.music.length - 2) + ')' : (w.music || []).join(' / ');
+// "Mới nhất" = lần cập nhật gần nhất (ngày ra mắt, hoặc ngày đăng movement mới sau đó — accounts.js tính `updated`).
+// Nhánh dự phòng fics.json không có `updated` → lùi về ngày ra mắt.
 const theoMoiNhat = (a, b) => {
-  const x = a.date ? new Date(a.date).getTime() : 0, y = b.date ? new Date(b.date).getTime() : 0;
-  return (y - x) || (b.idx - a.idx);
+  const ngay = w => { const d = w.updated || w.date; return d ? new Date(d).getTime() : 0; };
+  return (ngay(b) - ngay(a)) || (b.idx - a.idx);
 };
+// Movement mới đăng trong 14 ngày gần đây → băng rôn trên bìa.
+const NGAY_MOI = 14;
+const coChuongMoi = w => !!(w.newMv && (Date.now() - new Date(w.newMv.at).getTime()) < NGAY_MOI * 864e5);
+const soLaMaCh = n => { const r = [[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']]; let s = ''; r.forEach(([v, k]) => { while (n >= v) { s += k; n -= v; } }); return s; };
+// Trạng thái chỉ có khi dữ liệu đến từ DB (`complete` là boolean); fics.json không có → không hiện gì.
+const trangThai = w => typeof w.complete !== 'boolean' ? '' : t(w.complete ? 'dt_complete' : 'dt_in_progress');
 function mauBia(w) {
   const nen = MAU_BIA[w.fandom] || '#2A2522', kem = nen === BIA_KEM;
   // #7A5F14 thay cho #836717 của bản thiết kế: #836717 trên nền kem chỉ đạt 4.35.
@@ -286,6 +294,8 @@ function dtBia(w) {
     s.append(img);
   } else ve();
   if (w.restricted) s.append(dtEl('span', { class: 'dt-sl-lock' }, t('only_member')));
+  // Bìa nhỏ (90–150px) không đủ chỗ cho cả chữ "New movement" trên dải chéo → nhãn ngắn; liner ghi đủ.
+  if (coChuongMoi(w)) s.append(dtEl('span', { class: 'dt-sl-new', title: t('dt_rb_new') }, t('dt_rb_short')));
   return s;
 }
 function dtThe(w, chon, coDongNho) {
@@ -349,8 +359,12 @@ function dtLiner(w, co, tuyChon) {
         [w.words != null ? dtSo(w.words) + ' ' + t('dt_words') : '', phutDoc(w) ? t('dt_min').replace('{n}', phutDoc(w)) : '',
           w.nch ? soChuong(w.nch) : ''].filter(Boolean).join(' · '))] : null,
       w.lang ? [dtEl('dt', null, t('dt_language')), dtEl('dd', null, w.lang === 'vi' ? 'Tiếng Việt' : 'English')] : null,
+      trangThai(w) ? [dtEl('dt', null, t('dt_status')), dtEl('dd', null, trangThai(w))] : null,
+      w.newMv ? [dtEl('dt', null, t('dt_updated')), dtEl('dd', null,
+        dtNgay(w.newMv.at) + ' · ' + t('dt_mv_short') + ' ' + soLaMaCh(w.newMv.pos))] : null,
       (w.music || []).length ? [dtEl('dt', null, t('dt_played')), dtEl('dd', { class: 'music' }, nhacText(w))] : null),
     dtEl('div', { class: 'dt-flags' },
+      coChuongMoi(w) ? dtEl('span', { class: 'dt-flag new' }, t('dt_rb_new')) : null,
       w.restricted ? dtEl('span', { class: 'dt-flag lock' }, t('only_member')) : null,
       w.warning ? dtEl('span', { class: 'dt-flag warn', title: w.warning }, t('dt_cw')) : null,
       w.kudos > 0 ? dtEl('span', { class: 'dt-flag' }, '♥ ' + w.kudos + ' kudos') : null),
@@ -446,7 +460,8 @@ function renderHome() {
     if (!w) return;
     const tom = catNgan(chuTron(w.summary), 260);
     ganCon(khungLiner,
-      dtEl('div', { class: 'dt-eyebrow' }, [tenDuNhom(nhomCua(w)), dtNgay(w.date)].filter(Boolean).join('  ·  ')),
+      dtEl('div', { class: 'dt-eyebrow' }, [tenDuNhom(nhomCua(w)),
+        coChuongMoi(w) ? t('dt_rb_new') + ' · ' + dtNgay(w.newMv.at) : dtNgay(w.date)].filter(Boolean).join('  ·  ')),
       dtEl('div', { class: 'dt-title' }, w.title),
       w.subtitle ? dtEl('div', { class: 'dt-sub' }, chuTron(w.subtitle)) : null,
       tom ? dtEl('p', null, tom) : null,
@@ -537,7 +552,8 @@ function dtCapKe(w, chon, bia) {
   return dtEl('button', { type: 'button', class: 'dt-pt-cap', tabindex: '-1', 'aria-hidden': 'true', onclick: () => chon(w, bia) },
     dtEl('span', { class: 't' }, w.title),
     w.subtitle ? dtEl('span', { class: 's' }, chuTron(w.subtitle)) : null,
-    dtEl('span', { class: 'f' }, [w.fandom === 'Others' ? '' : w.fandom, w.words != null ? dtSo(w.words) + ' ' + t('dt_words') : ''].filter(Boolean).join(' · ')));
+    dtEl('span', { class: 'f' }, [w.fandom === 'Others' ? '' : w.fandom, w.words != null ? dtSo(w.words) + ' ' + t('dt_words') : '',
+      trangThai(w)].filter(Boolean).join(' · ')));
 }
 
 // "Chọn giúp tôi": lấy ngẫu nhiên một truyện đúng nhịp, đặt lên bàn xoay. Loại truyện Members only
@@ -1269,6 +1285,61 @@ function boQuaChao() {
   return h.includes('?') || (h !== 'home' && h !== 'works');
 }
 
+// ---- Tấm rèm cho link dẫn thẳng ----
+// Link sâu bỏ qua màn podium, nhưng trình duyệt chỉ cho phát nhạc sau một thao tác của người đọc —
+// trước đây link fic im lặng tới khi người ta tình cờ bấm vào đâu đó. Tấm rèm chính là cú chạm đó.
+// Rèm chờ tới khi biết bài nhạc (nhacChoBam được cất), tối đa 4 giây: truyện đăng qua web chỉ biết nhạc
+// sau khi tải xong chương, chạm sớm hơn thì nhạc gọi sau đó nằm ngoài thao tác và iOS sẽ chặn.
+function dungRem(moKhoa) {
+  const rem = document.createElement('div');
+  rem.id = 'man';
+  rem.tabIndex = 0;
+  rem.setAttribute('role', 'button');
+  ['man-l', 'man-r'].forEach(c => rem.append(dtEl('div', { class: c, 'aria-hidden': 'true' })));
+  const k = dtEl('div', { class: 'man-k' }), ten = dtEl('div', { class: 'man-t' }),
+        phu = dtEl('div', { class: 'man-s' }), goi = dtEl('div', { class: 'man-h' });
+  rem.append(dtEl('div', { class: 'man-c' }, k, ten, phu, goi));
+  document.body.append(rem);
+  document.documentElement.classList.add('man-khoa');
+  rem.focus({ preventScroll: true });
+
+  const laFic = location.hash.startsWith('#fic-');
+  const batDau = Date.now();
+  const tenTrang = { about: 'nav_about', notes: 'nav_notes', rehearsal: 'nav_rehearsal', opus: 'nav_opus', works: 'nav_works' };
+  const ve = () => {
+    let a = 'ShostaKid', b = '';
+    if (currentPage === 'reading') {
+      const f = ficInfo(currentFic);
+      if (f && f.title) a = f.title;
+      const ds = chapterNames(currentFic);
+      b = ds.length > 1 ? (ds[currentChapter] || '') : '';
+    } else if (tenTrang[currentPage]) a = t(tenTrang[currentPage]);
+    const san = !!nhacChoBam || Date.now() - batDau > 4000
+      || (laFic ? (currentPage === 'reading' && !document.querySelector('#reading-body .loading'))
+                : !!hashBanDau);
+    rem.classList.toggle('san', san);
+    k.textContent = t('cur_presents');
+    ten.textContent = a;
+    phu.textContent = b;
+    goi.textContent = t(san ? 'cur_tap' : 'cur_tuning');
+    rem.setAttribute('aria-label', a + ' — ' + goi.textContent);
+  };
+  ve();
+  const nhip = setInterval(ve, 150);
+
+  const mo = e => {
+    if (!rem.classList.contains('san') || rem.classList.contains('mo')) return;
+    if (e) e.preventDefault();
+    clearInterval(nhip);
+    moKhoa();                         // NGAY trong cú chạm — đây là thao tác người dùng trình duyệt đòi
+    rem.classList.add('mo');
+    document.documentElement.classList.remove('man-khoa');
+    setTimeout(() => rem.remove(), 1100);
+  };
+  rem.addEventListener('click', mo);
+  rem.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') mo(e); });
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   const intro = document.getElementById('intro');
   // Chỉ cửa "đọc" mới vào trang chính. Bấm chỗ khác trên màn chào, hay gõ phím, không làm gì
@@ -1278,6 +1349,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // trang này nên nhạc chưa được phép phát — giữ daVaoSite=false để yêu cầu nhạc được cất
   // lại, rồi mở khoá ở cú bấm/phím đầu tiên (pha capture: chạy trước onclick của mục nav).
   if (boQuaChao()) {
+    const tuCommission = new URLSearchParams(location.search).has('vao');
     intro.style.display = 'none';
     // Không hiệu ứng mờ dần 0.8s như khi vào từ màn chào: người đọc vừa bấm "Read" nên phải thấy ngay.
     const site = document.getElementById('site');
@@ -1285,7 +1357,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     site.classList.add('visible');
     history.replaceState(null, '', location.pathname + location.hash);
     const moKhoa = () => {
-      ['click', 'keydown'].forEach(k => document.removeEventListener(k, moKhoa, true));
       daVaoSite = true;
       if (nhacChoBam) {
         const cho = nhacChoBam; nhacChoBam = null;
@@ -1293,7 +1364,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         else playMusicDirect.apply(null, cho.thamSo);
       }
     };
-    ['click', 'keydown'].forEach(k => document.addEventListener(k, moKhoa, true));
+    if (tuCommission) {
+      // Link "Read" của trang Commission dẫn về Home (không có nhạc): mở khoá ở cú bấm/phím đầu tiên như cũ.
+      const moKhoa1 = () => { ['click', 'keydown'].forEach(k => document.removeEventListener(k, moKhoa1, true)); moKhoa(); };
+      ['click', 'keydown'].forEach(k => document.addEventListener(k, moKhoa1, true));
+    } else {
+      dungRem(moKhoa);   // link dẫn thẳng (#fic-N, #about…): tấm rèm = cú chạm mở khoá nhạc
+    }
   }
 
   // fics.json vẫn phải tải: trình đọc cần files/chapters/music từ đây.
@@ -1575,6 +1652,11 @@ const i18n = {
     dt_on_shelf:'{n} on the shelf', dt_tap:'tap a sleeve', dt_show_all:'Show the whole shelf ({n})',
     dt_on_tt:'On the turntable', dt_form:'Form', dt_language:'Language', dt_played:'Played with',
     dt_words:'words', dt_mv1:'movement', dt_mvn:'movements', dt_cw:'Content warning',
+    dt_rb_new:'New movement', dt_rb_short:'New', dt_status:'Status', dt_complete:'Complete', dt_in_progress:'In progress',
+    dt_updated:'Updated', dt_mv_short:'Mvt.',
+    post_complete:'Complete — no more movements planned',
+    post_complete_hint:'Leave unticked while the work is still being written: its liner notes say “In progress”.',
+    cur_presents:'ShostaKid presents', cur_tuning:'Tuning…', cur_tap:'Tap to raise the curtain',
     dt_play:'Play · Read', dt_play_first:'Play · Read from the first movement',
     dt_bookmark:'Bookmark', dt_close:'Close',
     dt_overture:'Overture', dt_no_opus:'No Opus yet', dt_overture_long:'Overture · not yet in an Opus',
@@ -1832,6 +1914,11 @@ const i18n = {
     dt_on_shelf:'{n} đĩa trên kệ', dt_tap:'chạm vào một bìa', dt_show_all:'Xem cả kệ ({n})',
     dt_on_tt:'Trên bàn xoay', dt_form:'Thể', dt_language:'Ngôn ngữ', dt_played:'Nhạc đi kèm',
     dt_words:'chữ', dt_mv1:'chương', dt_mvn:'chương', dt_cw:'Có cảnh báo',
+    dt_rb_new:'Chương mới', dt_rb_short:'Mới', dt_status:'Tình trạng', dt_complete:'Đã hoàn thành', dt_in_progress:'Đang viết',
+    dt_updated:'Cập nhật', dt_mv_short:'Chương',
+    post_complete:'Đã hoàn thành — không viết thêm chương',
+    post_complete_hint:'Để trống khi truyện còn đang viết: liner notes sẽ ghi “Đang viết”.',
+    cur_presents:'ShostaKid giới thiệu', cur_tuning:'Đang lên dây…', cur_tap:'Chạm để kéo rèm',
     dt_play:'Phát · Đọc', dt_play_first:'Phát · Đọc từ chương đầu',
     dt_bookmark:'Lưu truyện', dt_close:'Đóng',
     dt_overture:'Overture', dt_no_opus:'Chưa vào Opus', dt_overture_long:'Overture · chưa thuộc Opus nào',

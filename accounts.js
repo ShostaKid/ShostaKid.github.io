@@ -784,6 +784,7 @@ async function loadPostForm(idx) {
     $('pw-featured').checked = false;
     $('pw-restricted').checked = false;
     $('pw-lang-vi').checked = false;
+    $('pw-complete').checked = false;
     $('pw-bia-url').value = ''; $('pw-bia-cat-o').checked = false; veBia();
     $('pw-opus').value = '';
     pwAddChapter();
@@ -792,7 +793,7 @@ async function loadPostForm(idx) {
 
   head.dataset.i18n = 'post_edit_head'; head.textContent = tr('post_edit_head');
   const { data: w } = await sb.from('works')
-    .select('id,title,subtitle,summary,warning_note,status,featured,is_restricted,cover_url,cover_crop,published_at,language,'
+    .select('id,title,subtitle,summary,warning_note,status,featured,is_restricted,cover_url,cover_crop,published_at,language,is_complete,'
           + 'work_fandoms(fandom_id), work_ships(ship_id), work_tags(tag_id),'
           + 'chapters(id,position,title,content,music,published_at)')
     .eq('legacy_id', 'fic-' + idx).maybeSingle();
@@ -808,6 +809,7 @@ async function loadPostForm(idx) {
   $('pw-featured').checked = !!w.featured;
   $('pw-restricted').checked = !!w.is_restricted;
   $('pw-lang-vi').checked = w.language === 'vi';
+  $('pw-complete').checked = !!w.is_complete;
   $('pw-bia-url').value = w.cover_url || '';
   $('pw-bia-cat-o').checked = !!w.cover_crop;
   veBia();
@@ -874,6 +876,7 @@ $('pw-save').addEventListener('click', async () => {
     // khỏi API với khách chưa đăng nhập, không phải chỉ ẩn trên giao diện.
     is_restricted: $('pw-restricted').checked,
     language: $('pw-lang-vi').checked ? 'vi' : 'en',
+    is_complete: $('pw-complete').checked,
     cover_url:  biaHienTai() || null,
     cover_crop: !!$('pw-bia-cat-o').checked,
     // Giữ ngày đăng gốc; chỉ lần ĐẦU TIÊN truyện được đăng mới lấy giờ hiện tại.
@@ -1596,9 +1599,9 @@ window.fetchWorksFromDB = async function () {
     const [res, tRes] = await Promise.all([
       sb.from('works')
         .select('id, legacy_id, title, subtitle, summary, warning_note, featured, published_at,'
-              + ' kudos_count, comment_count, cover_url, cover_crop, is_restricted, language, word_count,'
+              + ' kudos_count, comment_count, cover_url, cover_crop, is_restricted, language, word_count, is_complete,'
               + ' work_fandoms(fandoms(name)), work_ships(ships(name)),'
-              + ' work_tags(tags(slug,type)), chapters(position,status,music)')
+              + ' work_tags(tags(slug,type)), chapters(position,status,music,published_at)')
         .eq('status', 'published'),
       sb.from('tags').select('id,slug,name,name_vi,mo_ta,mo_ta_vi,thu_tu')
         .eq('type', 'category').order('thu_tu').order('name')
@@ -1615,9 +1618,27 @@ window.fetchWorksFromDB = async function () {
         .filter(s => { const k = s.toLowerCase(); if (da.has(k)) return false; da.add(k); return true; });
     };
 
+    // Chương mới nhất ra SAU ngày ra mắt truyện (hơn nửa ngày) = "movement mới". Mốc này đẩy truyện lên
+    // New arrivals / Newest. Truyện Members only: khách nhận mảng chương rỗng → chỉ còn ngày ra mắt.
+    const chuongMoi = w => {
+      const goc = w.published_at ? new Date(w.published_at).getTime() : 0;
+      let m = null;
+      (w.chapters || []).forEach(c => {
+        if (c.status !== 'published' || !c.published_at || c.position <= 1) return;
+        const x = new Date(c.published_at).getTime();
+        if (isNaN(x) || x <= goc + 12 * 3600e3) return;
+        if (!m || x > m.x) m = { x, pos: c.position, at: c.published_at };
+      });
+      return m;
+    };
+
     return data
-      .map(w => ({
+      .map(w => ({ w, moi: chuongMoi(w) }))
+      .map(({ w, moi }) => ({
         uuid: w.id,
+        complete: !!w.is_complete,
+        newMv: moi ? { pos: moi.pos, at: moi.at } : null,
+        updated: moi ? moi.at : (w.published_at || ''),
         lang: w.language || null,
         words: (typeof w.word_count === 'number') ? w.word_count : null,
         nch: (w.chapters || []).filter(c => c.status === 'published').length || null,
