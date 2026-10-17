@@ -268,7 +268,6 @@ const theoMoiNhat = (a, b) => {
 // Movement mới đăng trong 14 ngày gần đây → băng rôn trên bìa.
 const NGAY_MOI = 14;
 const coChuongMoi = w => !!(w.newMv && (Date.now() - new Date(w.newMv.at).getTime()) < NGAY_MOI * 864e5);
-const soLaMaCh = n => { const r = [[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']]; let s = ''; r.forEach(([v, k]) => { while (n >= v) { s += k; n -= v; } }); return s; };
 // Trạng thái chỉ có khi dữ liệu đến từ DB (`complete` là boolean); fics.json không có → không hiện gì.
 const trangThai = w => typeof w.complete !== 'boolean' ? '' : t(w.complete ? 'dt_complete' : 'dt_in_progress');
 function mauBia(w) {
@@ -361,7 +360,7 @@ function dtLiner(w, co, tuyChon) {
       w.lang ? [dtEl('dt', null, t('dt_language')), dtEl('dd', null, w.lang === 'vi' ? 'Tiếng Việt' : 'English')] : null,
       trangThai(w) ? [dtEl('dt', null, t('dt_status')), dtEl('dd', null, trangThai(w))] : null,
       w.newMv ? [dtEl('dt', null, t('dt_updated')), dtEl('dd', null,
-        dtNgay(w.newMv.at) + ' · ' + t('dt_mv_short') + ' ' + soLaMaCh(w.newMv.pos))] : null,
+        dtNgay(w.newMv.at) + ' · ' + t('dt_mv_short') + ' ' + LA_MA(w.newMv.pos))] : null,
       (w.music || []).length ? [dtEl('dt', null, t('dt_played')), dtEl('dd', { class: 'music' }, nhacText(w))] : null),
     dtEl('div', { class: 'dt-flags' },
       coChuongMoi(w) ? dtEl('span', { class: 'dt-flag new' }, t('dt_rb_new')) : null,
@@ -518,7 +517,8 @@ function renderHome() {
 // Thứ tự: 'new' (mới nhất) hoặc 'long' (dài nhất), nhớ ở localStorage. Giá trị
 // 'old' của bản cũ không còn — gặp thì coi như 'new'.
 // via/viaIdx: truyện vừa được "Chọn giúp tôi" ở nhịp nào (cho dải "Chọn cho bạn" trên liner).
-const WS = { fandom: 'all', len: 'all', sort: 'new', ships: new Set(), q: '', xemHet: false, chon: null, via: null, viaIdx: null };
+// mv: movement (fandom) đang mở ở bản "Score" trên máy tính (score.js); null = movement đầu tiên.
+const WS = { fandom: 'all', len: 'all', sort: 'new', ships: new Set(), q: '', xemHet: false, chon: null, via: null, viaIdx: null, mv: null };
 // Ba nhịp = ba mức độ dài của doDai(). dur = 60/bpm giây mỗi nhịp; wy = vị trí quả nặng trên cần (viewBox 200×340).
 const TEMPO = [
   { id: 'presto',  len: 'Miniature', ten: 'Presto',  bpm: 180, dur: 0.33, wy: 190, k: 'dt_tp_k1', m: 'dt_tp_m1' },
@@ -528,14 +528,17 @@ const TEMPO = [
 let tempoChon = 'andante';
 try { const s0 = localStorage.getItem('sk-sort'); if (s0 === 'long') WS.sort = 'long'; } catch (e) {}
 
-function locWorks() {
+// Khớp các bộ lọc chung (nhịp, tìm kiếm, ship) — KHÔNG gồm fandom: kệ điện thoại lọc theo WS.fandom,
+// bản "Score" trên máy tính (score.js) lọc theo movement WS.mv. Cả hai dùng chung hàm này và sapXepWorks().
+function khopLoc(w) {
   const q = WS.q.trim().toLowerCase();
-  return worksData.filter(w =>
-      (WS.fandom === 'all' || w.fandom === WS.fandom)
-      && (WS.len === 'all' || doDai(w) === WS.len)
-      && (!q || (w.title + ' ' + chuTron(w.subtitle)).toLowerCase().includes(q))
-      && [...WS.ships].every(s => (w.ships || []).includes(s)))
-    .sort(WS.sort === 'long' ? ((a, b) => (b.words || 0) - (a.words || 0) || theoMoiNhat(a, b)) : theoMoiNhat);
+  return (WS.len === 'all' || doDai(w) === WS.len)
+    && (!q || (w.title + ' ' + chuTron(w.subtitle)).toLowerCase().includes(q))
+    && [...WS.ships].every(s => (w.ships || []).includes(s));
+}
+const sapXepWorks = ds => ds.sort(WS.sort === 'long' ? ((a, b) => (b.words || 0) - (a.words || 0) || theoMoiNhat(a, b)) : theoMoiNhat);
+function locWorks() {
+  return sapXepWorks(worksData.filter(w => (WS.fandom === 'all' || w.fandom === WS.fandom) && khopLoc(w)));
 }
 
 // ---- Bìa trưng trên khuông nhạc: mỗi hàng bìa là một "dòng nhạc", chú thích nằm dưới bìa ----
@@ -565,6 +568,15 @@ function chonNgauNhien(id, loaiTru) {
   const w = pool[Math.floor(Math.random() * pool.length)];
   WS.len = tp.len; WS.fandom = 'all'; WS.ships.clear(); WS.q = '';
   WS.chon = w.idx; WS.via = id; WS.viaIdx = w.idx;
+  // Máy tính: bản "Score" — chuyển sang đúng movement (fandom) của truyện rồi cuộn tới thẻ.
+  if (window.laScorePC && window.laScorePC()) {
+    WS.mv = w.fandom; window.scoreDenChon();
+    dongTempo(true);
+    renderWorks();
+    const the = document.querySelector('#dt-works .sc-card[data-idx="' + w.idx + '"]');
+    if (the) the.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    return true;
+  }
   // Truyện nằm ngoài phần kệ đang hiện thì mở hết, không thì bìa không có mà liner vẫn hiện.
   WS.xemHet = locWorks().findIndex(x => x.idx === w.idx) >= (laDienThoai() ? 10 : 12);
   dongTempo(true);
@@ -659,6 +671,8 @@ document.addEventListener('keydown', e => {
 function renderWorks() {
   const goc = document.getElementById('dt-works');
   if (!goc) return;
+  // Máy tính (≥1280px): giao diện "Score" trong score.js. Dưới 1280px vẫn là kệ khuông nhạc bên dưới.
+  if (window.laScorePC && window.laScorePC()) { window.renderScore(goc); return; }
   const fandoms = ['all', ...Object.keys(MAU_BIA).filter(f => worksData.some(w => w.fandom === f)),
                    ...[...new Set(worksData.map(w => w.fandom))].filter(f => !(f in MAU_BIA))];
   const aside = dtEl('aside', { class: 'dt-aside', 'aria-live': 'polite', 'aria-label': t('dt_on_tt') });
@@ -1434,6 +1448,11 @@ function moTheoHash() {
   if (h.startsWith('#works?ship=')) {
     const ship = decodeURIComponent(h.slice(12));
     WS.fandom = 'all'; WS.ships = new Set(ship ? [ship] : []); WS.xemHet = false;
+    // Bản "Score" (máy tính): mở movement chứa ship đó. Ship "Others" gần như trùng fandom Others,
+    // nên chỉ mở movement Others, không lọc thêm (lọc thì rơi mất truyện Others không gắn ship).
+    const w0 = worksData.find(w => (w.ships || []).includes(ship));
+    if (w0) WS.mv = w0.fandom;
+    if (window.laScorePC && window.laScorePC() && ship === 'Others') WS.ships = new Set();
     renderWorks();
     showPage('works', document.querySelector('.nav-links a[data-page="works"]'));
     return true;
@@ -1657,6 +1676,12 @@ const i18n = {
     post_complete:'Complete — no more movements planned',
     post_complete_hint:'Leave unticked while the work is still being written: its liner notes say “In progress”.',
     cur_presents:'ShostaKid presents', cur_tuning:'Tuning…', cur_tap:'Tap to raise the curtain',
+    sc_crumb:'ShostaKid / Works', sc_h1:'Score', sc_subh:'Movements', sc_mov:'movements', sc_movement:'Movement',
+    sc_work:'work', sc_works:'works', sc_of:'{a} of {b} works', sc_mostly:'Mostly', sc_legend:'Tempo',
+    sc_empty_mv:'No work in this movement matches the filters.', sc_min:'min', sc_mvt:'mvt', sc_mvts:'mvts', sc_others:'Others',
+    sc_edit_tag:'Edit this tagline', sc_tag_hint:'One line per language. Leave both empty to hide it.',
+    sc_save:'Save', sc_cancel:'Cancel', sc_saving:'Saving…', sc_save_err:'Could not save. Are you signed in as admin?',
+    sc_pages:'Pages', sc_prev:'Previous page', sc_next:'Next page', sc_page_of:'Page {a} of {b}', sc_page_n:'Page {n}',
     dt_play:'Play · Read', dt_play_first:'Play · Read from the first movement',
     dt_bookmark:'Bookmark', dt_close:'Close',
     dt_overture:'Overture', dt_no_opus:'No Opus yet', dt_overture_long:'Overture · not yet in an Opus',
@@ -1919,6 +1944,12 @@ const i18n = {
     post_complete:'Đã hoàn thành — không viết thêm chương',
     post_complete_hint:'Để trống khi truyện còn đang viết: liner notes sẽ ghi “Đang viết”.',
     cur_presents:'ShostaKid giới thiệu', cur_tuning:'Đang lên dây…', cur_tap:'Chạm để kéo rèm',
+    sc_crumb:'ShostaKid / Truyện', sc_h1:'Tổng phổ', sc_subh:'Các phần', sc_mov:'phần', sc_movement:'Phần',
+    sc_work:'truyện', sc_works:'truyện', sc_of:'{a}/{b} truyện', sc_mostly:'Chủ yếu', sc_legend:'Nhịp',
+    sc_empty_mv:'Không có truyện nào trong phần này khớp bộ lọc.', sc_min:'phút', sc_mvt:'chương', sc_mvts:'chương', sc_others:'Khác',
+    sc_edit_tag:'Sửa dòng giới thiệu', sc_tag_hint:'Mỗi ngôn ngữ một dòng. Để trống cả hai thì ẩn đi.',
+    sc_save:'Lưu', sc_cancel:'Huỷ', sc_saving:'Đang lưu…', sc_save_err:'Không lưu được. Bạn đã đăng nhập bằng tài khoản admin chưa?',
+    sc_pages:'Trang', sc_prev:'Trang trước', sc_next:'Trang sau', sc_page_of:'Trang {a}/{b}', sc_page_n:'Trang {n}',
     dt_play:'Phát · Đọc', dt_play_first:'Phát · Đọc từ chương đầu',
     dt_bookmark:'Lưu truyện', dt_close:'Đóng',
     dt_overture:'Overture', dt_no_opus:'Chưa vào Opus', dt_overture_long:'Overture · chưa thuộc Opus nào',

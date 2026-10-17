@@ -52,7 +52,7 @@ function paintNav(session) {
   if (!session) {
     // Nút đăng truyện chỉ hiện với admin; paintProfile() bật lên khi biết chắc.
     $('nav-post').style.display = 'none';
-    if (window.skLaAdmin) { window.skLaAdmin = false; if (window.veLaiRehearsal) window.veLaiRehearsal(); if (window.veLaiNotes) window.veLaiNotes(); }
+    if (window.skLaAdmin) { window.skLaAdmin = false; if (window.veLaiRehearsal) window.veLaiRehearsal(); if (window.veLaiNotes) window.veLaiNotes(); if (window.veLaiScore) window.veLaiScore(); }
     paintNavAvatar(null);
     closeNavMenu();
   }
@@ -149,7 +149,7 @@ function paintProfile(p) {
   $('nav-post').style.display = p.is_admin ? '' : 'none';
   $('btn-edit-about').style.display = p.is_admin ? '' : 'none';
   // Trang In rehearsal (script thường) chỉ hiện nút Edit khi biết chắc là admin; quyền ghi thật do RLS chặn.
-  if (!!p.is_admin !== !!window.skLaAdmin) { window.skLaAdmin = !!p.is_admin; if (window.veLaiRehearsal) window.veLaiRehearsal(); if (window.veLaiNotes) window.veLaiNotes(); }
+  if (!!p.is_admin !== !!window.skLaAdmin) { window.skLaAdmin = !!p.is_admin; if (window.veLaiRehearsal) window.veLaiRehearsal(); if (window.veLaiNotes) window.veLaiNotes(); if (window.veLaiScore) window.veLaiScore(); }
   $('prof-admin').innerHTML    = p.is_admin
     ? `<span class="admin-badge">${tr('prof_admin')}</span>` : '';
   $('pf-username').value = p.username || '';
@@ -318,6 +318,24 @@ window.fetchRehearsal = async function () {
   const { data, error } = await sb.from('site_content').select('value').eq('key', 'rehearsal').maybeSingle();
   if (error) return null;
   return data && data.value && Array.isArray(data.value.items) ? data.value.items : [];
+};
+// Dòng giới thiệu (tagline) của từng "movement" = fandom ở trang Works bản máy tính (score.js).
+// site_content khoá 'works_movements', giá trị { taglines: { "<tên fandom>": { en, vi } } }.
+// Cùng cách ghi với Rehearsal: UPDATE trước, chưa có hàng thì INSERT (không upsert — xem saveRehearsal).
+window.fetchMovementNotes = async function () {
+  const { data, error } = await sb.from('site_content').select('value').eq('key', 'works_movements').maybeSingle();
+  if (error) return null;
+  return data && data.value && data.value.taglines && typeof data.value.taglines === 'object' ? data.value.taglines : {};
+};
+window.saveMovementNotes = async function (taglines) {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return { error: { message: 'signin' } };
+  const value = { taglines };
+  let r = await sb.from('site_content').update({ value, updated_by: session.user.id }).eq('key', 'works_movements').select('key');
+  if (!r.error && (!r.data || !r.data.length)) {
+    r = await sb.from('site_content').insert({ key: 'works_movements', value, updated_by: session.user.id });
+  }
+  return { error: r.error || null };
 };
 window.saveRehearsal = async function (items) {
   const { data: { session } } = await sb.auth.getSession();
@@ -1596,7 +1614,8 @@ window.fetchWorksFromDB = async function () {
     // chapters(...) chỉ lấy trạng thái + nhạc để đếm số chương và tên bản nhạc —
     // KHÔNG lấy content. Với truyện Members only, khách nhận mảng rỗng (RLS), nên
     // số chữ phải lấy từ works.word_count (trigger giữ), đừng cộng từ chương.
-    const [res, tRes] = await Promise.all([
+    // Thứ ba: thứ tự fandom (fandoms.sort_order) — số La Mã "Movement I, II…" của trang Works bản máy tính.
+    const [res, tRes, fRes] = await Promise.all([
       sb.from('works')
         .select('id, legacy_id, title, subtitle, summary, warning_note, featured, published_at,'
               + ' kudos_count, comment_count, cover_url, cover_crop, is_restricted, language, word_count, is_complete,'
@@ -1604,11 +1623,13 @@ window.fetchWorksFromDB = async function () {
               + ' work_tags(tags(slug,type)), chapters(position,status,music,published_at)')
         .eq('status', 'published'),
       sb.from('tags').select('id,slug,name,name_vi,mo_ta,mo_ta_vi,thu_tu')
-        .eq('type', 'category').order('thu_tu').order('name')
+        .eq('type', 'category').order('thu_tu').order('name'),
+      sb.from('fandoms').select('name,sort_order')
     ]);
     const { data, error } = res;
     if (error || !data) return null;
     if (!tRes.error && window.datNhomOpus) window.datNhomOpus(tRes.data || []);
+    if (!fRes.error && window.datThuTuFandom) window.datThuTuFandom(fRes.data || []);
 
     // Tên nhạc: bỏ trùng (không phân biệt hoa thường), đổi " - " thành " — ".
     const tenNhac = ds => {

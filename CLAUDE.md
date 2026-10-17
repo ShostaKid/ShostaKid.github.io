@@ -1602,3 +1602,31 @@ where w.id = c.work_id and c.published_at::date = '2026-09-05' and w.published_a
 Cột `works.is_complete` có sẵn từ migration 2 (mặc định `false`, `authenticated` đã có quyền UPDATE) — chỉ thiếu ô trên form. Nay form Post có
 ô **"Complete — no more movements planned"** (`pw-complete`). Hiển thị: dòng "Status" trong liner notes và đuôi chú thích dưới bìa ở Works.
 **Chủ repo chốt: mọi truyện mặc định In progress (kể cả truyện 1 chương), tự tick dần trong form.**
+
+---
+
+## Works trên máy tính: "the Score terminal" (cập nhật 2026-10-18)
+
+Theo bản thiết kế Claude Design "Works · the Score terminal (cards cover style, status, faint instrument)". **Chỉ cho máy tính
+(≥1280px, `laScorePC()`)** — dưới 1280px `renderWorks()` vẫn dựng kệ khuông nhạc ở mục trên (chủ repo chốt: chưa làm bản tablet/điện thoại).
+Qua mốc 1280px thì listener `matchMedia` có sẵn gọi lại `renderWorks()`.
+
+- **`score.js`** (script cổ điển, nạp ngay sau `app.js`): `renderScore(goc)`; `renderWorks()` đầu hàm chuyển sang đây khi là PC.
+  Dùng chung với kệ cũ: `WS` (thêm `WS.mv`), `khopLoc()` (lọc nhịp/tìm/ship, không gồm fandom) và `sapXepWorks()` — tách từ `locWorks()`.
+- **Mỗi fandom là một "movement"** (Movement I…VI). Số La Mã **cố định theo `fandoms.sort_order`** (`fetchWorksFromDB` nạp thêm bảng
+  `fandoms` rồi gọi `datThuTuFandom`), không theo số truyện; dự phòng là thứ tự khoá của `MAU_BIA`, Others luôn cuối. Bản tiếng Việt gọi là
+  **"Phần"**, không dùng "Chương" (đã là chương truyện).
+- Ba cột: movement (tên, "Mostly Andante · N works", thanh tỉ lệ Presto/Andante/Largo) · movement đang mở (số La Mã viền mờ, dòng giới thiệu,
+  thống kê, chip ship, thẻ truyện) · "On the turntable" = `dtLiner()` thêm dòng "Movement N · fandom". **Không có mục "Tutti" và không có dòng
+  thời gian No. 01…** (chủ repo bỏ). Thứ tự chỉ Newest / Longest.
+- **Chia trang 6 thẻ** (`MOI_TRANG`), nút ‹ 1 2 … ›; đổi movement / bộ lọc / thứ tự về trang 1; "Surprise me" lật tới trang có truyện được chọn
+  (`scoreDenChon()`). **Cột movement và bàn xoay `position:sticky`** dưới thanh nav (`--sc-top`), tự cuộn bên trong nếu cao hơn màn hình
+  (bàn xoay ~920–990px: màn 900px có thanh cuộn nhỏ). Cả hai do chủ repo chọn sau khi so trên server cục bộ (bản thiết kế để mọi thẻ nối nhau).
+- Đổi bộ lọc (tìm, nhịp) mà movement đang mở hết truyện khớp → tự chuyển sang movement đầu tiên còn khớp; bấm thẳng một movement thì không tự nhảy.
+- Link `#works?ship=Others` (trang Commission): mở movement chứa ship đó; riêng "Others" chỉ mở movement Others, không lọc thêm.
+- **Icon nhạc cụ mờ làm nền thẻ chỉ nghiêng −14° với violin, viola, flute, clarinet, trombone, tuba** (`NGHIENG`); các icon khác để thẳng.
+- **Dòng giới thiệu từng movement**: bản mặc định viết sẵn trong `TAG_MAC_DINH` (EN/VI). Admin (`skLaAdmin`) có nút ✎ sửa EN + VI ngay trên trang,
+  lưu vào `site_content` khoá **`works_movements`** = `{ taglines: { "<tên fandom>": {en, vi} } }` qua `fetchMovementNotes` / `saveMovementNotes`
+  (accounts.js; UPDATE trước rồi INSERT như Rehearsal). Mục nào có trong DB thì đè bản mặc định; để trống cả hai là ẩn dòng. Không migration.
+- Lệch khỏi bản thiết kế có chủ ý: chữ nhỏ trên nền vàng dùng `#16120D`; "Movements"/"Movement II" dùng `--ui-head`; nhãn Members only trên bìa ở
+  bàn xoay bị ẩn (đè chữ "Op. N"; vẫn có ở hàng cờ). Ngày trên thẻ là ngày ra mắt; nhãn New theo quy tắc 14 ngày (`coChuongMoi`).
