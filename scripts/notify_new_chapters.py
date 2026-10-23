@@ -31,7 +31,7 @@ import time
 import urllib.error
 import urllib.request
 from email.message import EmailMessage
-from email.utils import formataddr, make_msgid
+from email.utils import formataddr
 from html import escape
 from pathlib import Path
 
@@ -139,8 +139,9 @@ def main():
                 m['From'] = formataddr(('ShostaKid', gmail))
                 m['To'] = r['email']
                 m['Subject'] = dien(tieu_de_mau, gia_tri)
-                m['Message-ID'] = make_msgid(domain='shostakid.github.io')
-                m['List-Unsubscribe'] = '<' + huy + '>'
+                # Cố ý KHÔNG đặt List-Unsubscribe / Message-ID riêng: List-Unsubscribe là dấu hiệu "thư hàng loạt" mạnh
+                # nhất, làm Gmail xếp mail vào tab Quảng cáo (đã gặp 23/10/2026). Lượng gửi nhỏ nên Gmail không bắt buộc
+                # header này; link huỷ vẫn nằm trong thân mail. Message-ID để Gmail tự sinh.
                 m.set_content(than)
                 if html_mau:
                     m.add_alternative(dien(html_mau, gia_tri, la_html=True), subtype='html')

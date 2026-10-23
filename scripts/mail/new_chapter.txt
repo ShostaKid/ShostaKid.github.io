@@ -1,9 +1,7 @@
-Subject: New movement — {{title}}
-A new movement of {{title}} is up: {{chapter}}.
-
-Read it here: {{url}}
+Subject: {{title}}: {{chapter}} is up
+Hi! The new movement of {{title}}, "{{chapter}}", is up now:
+{{url}}
 
 — ShostaKid
 
-You are getting this email because you asked to be notified about new movements of this work.
-Unsubscribe: {{unsubscribe}}
+(Don't want emails about this work any more? {{unsubscribe}})

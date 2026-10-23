@@ -1659,7 +1659,7 @@ Qua mốc 1280px thì listener `matchMedia` có sẵn gọi lại `renderWorks()
   `unsubscribe_by_token(token)` (anon gọi được, trả tên truyện). Hai hàm đầu cấp cho anon nhưng đòi mã bí mật — **GitHub không giữ khoá service_role**.
 - **Gửi**: `.github/workflows/notify-new-chapters.yml` (15 phút/lần + chạy tay, có tuỳ chọn dry run) → `scripts/notify_new_chapters.py`
   (chỉ thư viện chuẩn Python; Gmail SMTP cổng 465). Gom theo truyện: mỗi người một mail, dẫn tới chương mới sớm nhất (`#fic-N/M`),
-  header `List-Unsubscribe`. Đánh dấu đã báo sau khi gửi xong một truyện; lỗi đăng nhập Gmail / mất mạng thì chưa đánh dấu → lần sau gửi bù.
+  KHÔNG có header `List-Unsubscribe` (làm Gmail xếp vào tab Quảng cáo — bỏ 23/10); mẫu mail viết giọng thư cá nhân. Đánh dấu đã báo sau khi gửi xong một truyện; lỗi đăng nhập Gmail / mất mạng thì chưa đánh dấu → lần sau gửi bù.
   Chưa cài Secrets thì thoát êm. **Log Action là công khai → script không in địa chỉ mail.**
 - Chỉ gửi khi chương được đăng **lần đầu** (insert published hoặc draft → published). Sửa chữ chương cũ không đổi `notified_at`.
 - Mẫu mail (chỉ tiếng Anh — chủ repo bỏ phần tiếng Việt): `scripts/mail/new_chapter.txt` (dòng đầu `Subject: …`; thay `{{url}}`, `{{unsubscribe}}`,
