@@ -1,0 +1,44 @@
+name: Báo chương mới qua mail
+
+# Gửi mail cho thành viên đã bấm "Email me new movements" khi truyện có chương mới.
+# Logic nằm ở scripts/notify_new_chapters.py; mẫu mail ở scripts/mail/new_chapter.txt.
+# Cần 3 GitHub Secrets (Settings → Secrets and variables → Actions): NOTIFY_SECRET, GMAIL_USER, GMAIL_APP_PASSWORD.
+# Chưa cài đủ thì script báo "bỏ qua lượt này" và kết thúc êm — workflow không đỏ.
+#
+# GitHub có thể trễ lịch vài phút tới vài chục phút lúc đông; chủ repo chấp nhận (không cần gửi ngay).
+# Lưu ý chung với keep-supabase-awake: repo 60 ngày không có hoạt động thì GitHub tự tắt lịch chạy.
+on:
+  schedule:
+    - cron: '7,22,37,52 * * * *'   # 15 phút một lần, lệch khỏi đầu giờ cho đỡ đông
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Chỉ in ra sẽ gửi gì (không gửi, không đánh dấu)'
+        type: boolean
+        default: false
+
+# Hai lượt không chạy chồng nhau (tránh gửi trùng).
+concurrency:
+  group: notify-new-chapters
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Gửi mail chương mới
+        env:
+          # Publishable key — công khai sẵn trong accounts.js, không phải bí mật.
+          SUPABASE_URL: https://oseddxgmwbeduazbomuf.supabase.co
+          SUPABASE_KEY: sb_publishable_aOYL383Vt2fI561c0VJqbg_VDcuKqUe
+          SITE_URL: https://shostakid.github.io/
+          NOTIFY_SECRET: ${{ secrets.NOTIFY_SECRET }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
+        run: python3 scripts/notify_new_chapters.py

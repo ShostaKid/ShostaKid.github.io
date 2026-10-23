@@ -1121,6 +1121,13 @@ async function loadChapter(ficIdx, chapterIdx, giuCho) {
   // Đợi xong mà người đọc đã lật sang truyện khác thì bỏ, đừng vẽ đè nội dung cũ.
   if (chapterFic !== ficIdx) return;
 
+  // Link #fic-N/M trỏ quá số chương (gõ tay, chương đã gỡ) → mở chương 1 và sửa luôn URL.
+  const soChuongCo = Array.isArray(rows) ? rows.length : (fic && fic.files ? fic.files.length : 0);
+  if (chapterIdx > 0 && soChuongCo && chapterIdx >= soChuongCo) {
+    chapterIdx = 0; currentChapter = 0;
+    datUrlChuong(ficIdx, 0, 'replace');
+  }
+
   if (rows === null) {
     // Không gọi được database -> lùi về file .txt như site cũ.
     if (!fic.files || !fic.files[chapterIdx]) {
@@ -1190,24 +1197,41 @@ function updateChapterNav(ficIdx, chapterIdx) {
   }
 }
 
+// ---- URL theo chương: #fic-N là chương 1, #fic-N/M là chương M (đếm từ 1) ----
+// Chuyển chương trong lúc đọc thì ĐẨY một mục lịch sử mới → nút Back quay về chương trước.
+// Mở thẳng bằng link (#fic-N/M) thì THAY mục hiện có → Back quay về trang trước khi mở truyện.
+// Mail báo chương mới (scripts/notify_new_chapters.py) dẫn tới đúng dạng link này.
+const urlChuong = (ficIdx, ch) => '#fic-' + ficIdx + (ch > 0 ? '/' + (ch + 1) : '');
+function datUrlChuong(ficIdx, ch, cach) {
+  const st = { page: 'reading', fic: ficIdx, ch };
+  if (cach === 'replace') history.replaceState(st, '', urlChuong(ficIdx, ch));
+  else if (cach !== 'none') history.pushState(st, '', urlChuong(ficIdx, ch));
+}
+function denChuong(ch) {
+  currentChapter = ch;
+  datUrlChuong(currentFic, ch, 'push');
+  loadChapter(currentFic, ch);
+}
+
 function prevChapter() {
-  if (currentChapter > 0) { currentChapter--; loadChapter(currentFic, currentChapter); }
+  if (currentChapter > 0) denChuong(currentChapter - 1);
 }
 function nextChapter() {
-  if (currentChapter < chapterNames(currentFic).length - 1) { currentChapter++; loadChapter(currentFic, currentChapter); }
+  if (currentChapter < chapterNames(currentFic).length - 1) denChuong(currentChapter + 1);
 }
 
 function jumpChapter(idx) {
-  currentChapter = parseInt(idx);
-  loadChapter(currentFic, currentChapter);
+  denChuong(parseInt(idx));
   playMusic(currentFic, currentChapter);
 }
 
-function openFic(i) {
-  history.pushState({page: 'reading', fic: i}, '', '#fic-' + i);
+// ch: chương mở ra (0 = chương 1). cach: 'push' (mặc định — bấm mở truyện trong web), 'replace' (vào bằng
+// link #fic-N/M), 'none' (nút Back/Forward: trình duyệt đã tự đổi URL, đừng ghi thêm lịch sử).
+function openFic(i, ch = 0, cach = 'push') {
+  datUrlChuong(i, ch, cach);
   prevPage = currentPage;
   currentFic = i;
-  currentChapter = 0;
+  currentChapter = ch;
   const f = ficInfo(i);
   // Chốt sớm để loadComments() bên dưới quyết đúng ngay từ đầu; loadChapter()
   // sẽ sửa lại sau khi biết chắc (dữ liệu database có thể về muộn hơn).
@@ -1219,7 +1243,7 @@ function openFic(i) {
   const chapterNavHtml = ten.length > 1 ? `
     <div class="chapter-nav" id="chapter-nav-top">
       <button id="ch-prev-top" onclick="prevChapter()">${t('prev')}</button>
-      <span class="chapter-label" id="ch-label-top">${ten[0]}</span>
+      <span class="chapter-label" id="ch-label-top">${ten[ch] || ten[0]}</span>
       <button id="ch-next-top" onclick="nextChapter()">${t('next')}</button>
     </div>`
     // Nhánh này chạy khi chưa biết số chương — truyện đăng qua form chưa có
@@ -1255,8 +1279,8 @@ function openFic(i) {
   document.getElementById('font-controls').classList.add('visible');
   document.getElementById('float-toggle').classList.add('visible');
   window.scrollTo(0,0);
-  loadChapter(i, 0);
-  playMusic(i, 0);
+  loadChapter(i, ch);
+  playMusic(i, ch);
   // Kudos / bookmark / comment — module Supabase ở cuối file gắn các hàm này lên window.
   if (window.loadWorkActions) window.loadWorkActions(i);
   if (window.loadComments)    window.loadComments(i);
@@ -1363,7 +1387,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   // trang này nên nhạc chưa được phép phát — giữ daVaoSite=false để yêu cầu nhạc được cất
   // lại, rồi mở khoá ở cú bấm/phím đầu tiên (pha capture: chạy trước onclick của mục nav).
   if (boQuaChao()) {
-    const tuCommission = new URLSearchParams(location.search).has('vao');
+    // Không dựng rèm cho: nút "Read" của trang Commission (?vao=1, về Home không nhạc) và link huỷ nhận mail (#unsub=…).
+    const tuCommission = new URLSearchParams(location.search).has('vao') || location.hash.startsWith('#unsub=');
     intro.style.display = 'none';
     // Không hiệu ứng mờ dần 0.8s như khi vào từ màn chào: người đọc vừa bấm "Read" nên phải thấy ngay.
     const site = document.getElementById('site');
@@ -1437,11 +1462,21 @@ function moTheoHash() {
   const h = window.location.hash;
 
   if (h.startsWith('#fic-')) {
-    const idx = parseInt(h.slice(5), 10);
-    if (isNaN(idx)) return false;
+    const m = /^#fic-(\d+)(?:\/(\d+))?$/.exec(h);
+    if (!m) return false;
+    const idx = parseInt(m[1], 10), ch = m[2] ? Math.max(0, parseInt(m[2], 10) - 1) : 0;
     // Truyện đăng qua form chỉ nằm trong database, fics.json không có.
-    if (fics[idx] || worksData.some(w => w.idx === idx)) { openFic(idx); return true; }
+    // 'replace': vào bằng link thì nút Back quay về trang trước khi mở truyện.
+    if (fics[idx] || worksData.some(w => w.idx === idx)) { openFic(idx, ch, 'replace'); return true; }
     return false;          // chưa thấy -> để lượt gọi sau khi DB trả lời thử lại
+  }
+
+  // Link "huỷ nhận mail" trong mail báo chương mới: #unsub=<mã>. Xử lý xong về trang chủ.
+  if (h.startsWith('#unsub=')) {
+    const ma = decodeURIComponent(h.slice(7));
+    showPage('home', document.querySelector('.nav-links a[data-page="home"]'), 'replace');   // mã không nằm lại trên URL
+    if (window.huyNhanMail) window.huyNhanMail(ma);
+    return true;
   }
 
   // Link từ trang Commission: kệ truyện đã lọc sẵn theo ship (vd #works?ship=Others).
@@ -1454,18 +1489,27 @@ function moTheoHash() {
     if (w0) WS.mv = w0.fandom;
     if (window.laScorePC && window.laScorePC() && ship === 'Others') WS.ships = new Set();
     renderWorks();
-    showPage('works', document.querySelector('.nav-links a[data-page="works"]'));
+    showPage('works', document.querySelector('.nav-links a[data-page="works"]'), 'replace');
     return true;
   }
 
   if (h === '#home' || h === '#works' || h === '#about' || h === '#opus' || h === '#notes' || h === '#rehearsal') {
     const ten = h.slice(1);
-    showPage(ten, document.querySelector('.nav-links a[data-page="' + ten + '"]'));
+    showPage(ten, document.querySelector('.nav-links a[data-page="' + ten + '"]'), 'replace');
     return true;
   }
 
   return false;
 }
+
+// Dải thông báo ngắn trên đầu trang (dùng chung khung #link-hong). accounts.js gọi khi huỷ nhận mail.
+window.baoTrenDau = function (chu) {
+  const o = document.getElementById('link-hong');
+  if (!o) return;
+  o.textContent = chu;
+  o.style.display = 'block';
+  setTimeout(() => { o.style.display = 'none'; }, 12000);
+};
 
 // Báo cho người mở link hỏng biết, thay vì lẳng lặng thả họ về trang chủ.
 function baoLinkHong() {
@@ -1501,11 +1545,7 @@ function resumeReading() {
   if (!raw) return;
   try {
     const data = JSON.parse(raw);
-    openFic(data.ficIdx);
-    if (data.chapter > 0) {
-      currentChapter = data.chapter;
-      loadChapter(data.ficIdx, data.chapter);
-    }
+    openFic(data.ficIdx, data.chapter > 0 ? data.chapter : 0);
     // Restore scroll position after content loads
     setTimeout(() => window.scrollTo(0, data.scrollY || 0), 600);
   } catch(e) {}
@@ -1841,6 +1881,12 @@ const i18n = {
     wa_kudos_removed:'Kudos withdrawn.',
     wa_bm_added:'Saved to your bookmarks ♪', wa_bm_removed:'Removed from your bookmarks.',
     wa_bm_signin:'Please sign in to bookmark this work.',
+    wa_notify:'Email me new movements', wa_notify_on:'Emailing you new movements',
+    wa_notify_added:'Done. You will get an email when a new movement of this work goes up.',
+    wa_notify_removed:'You will no longer get emails about this work.',
+    wa_notify_signin:'Please sign in to get an email when a new movement goes up.',
+    unsub_ok:'Unsubscribed: you will no longer get emails about {t}.',
+    unsub_fail:'This unsubscribe link has already been used or is no longer valid.',
     wa_edit:'Edit work',
     wa_err:'Something went wrong. Please try again.'
   },
@@ -2109,6 +2155,12 @@ const i18n = {
     wa_kudos_removed:'Đã rút lại tim.',
     wa_bm_added:'Đã lưu vào danh sách của bạn ♪', wa_bm_removed:'Đã bỏ khỏi danh sách đã lưu.',
     wa_bm_signin:'Vui lòng đăng nhập để lưu truyện này.',
+    wa_notify:'Báo tôi qua mail khi có chương mới', wa_notify_on:'Đang nhận mail chương mới',
+    wa_notify_added:'Xong. Bạn sẽ nhận mail khi truyện này có chương mới.',
+    wa_notify_removed:'Bạn sẽ không nhận mail về truyện này nữa.',
+    wa_notify_signin:'Vui lòng đăng nhập để nhận mail khi có chương mới.',
+    unsub_ok:'Đã huỷ: bạn sẽ không nhận mail về {t} nữa.',
+    unsub_fail:'Link huỷ này đã được dùng rồi hoặc không còn hiệu lực.',
     wa_edit:'Sửa truyện',
     wa_err:'Có lỗi xảy ra. Bạn thử lại nhé.'
   }
@@ -2385,8 +2437,11 @@ function toggleMusic() {
   matchMedia('(min-width:769px)').addEventListener('change', e => { if (e.matches) dat(false); });
 })();
 
-function showPage(id, el) {
-  history.pushState({page: id}, '', '#' + id);
+// cach: lịch sử trình duyệt — mặc định ĐẨY mục mới (bấm chuyển trang); 'replace' khi vào bằng link (moTheoHash);
+// 'none' khi đang xử lý Back/Forward (popstate): trình duyệt đã tự đổi URL, đẩy thêm là cắt mất đường Forward.
+function showPage(id, el, cach) {
+  if (cach === 'replace') history.replaceState({page: id}, '', '#' + id);
+  else if (cach !== 'none') history.pushState({page: id}, '', '#' + id);
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   // .nav-signin nằm ngoài .nav-links nhưng cũng nhận .active, nên phải xoá cùng
@@ -2453,13 +2508,23 @@ function goBack() {
 }
 
 window.addEventListener('popstate', (e) => {
-  if (!e.state) { showPage('home', document.querySelector('.nav-links a[data-page="home"]')); return; }
-  if (e.state.page === 'reading') { openFic(e.state.fic); return; }
+  // Không có state: người đọc tự sửa URL (vd đổi #fic-48/2 thành /3) — thử mở theo hash trước.
+  if (!e.state) { if (!moTheoHash()) showPage('home', document.querySelector('.nav-links a[data-page="home"]'), 'replace'); return; }
+  if (e.state.page === 'reading') {
+    const ch = e.state.ch || 0;
+    // Back/Forward giữa các chương của cùng truyện: chỉ đổi chương, không dựng lại cả trang đọc.
+    if (currentPage === 'reading' && currentFic === e.state.fic) {
+      if (ch !== currentChapter) { currentChapter = ch; loadChapter(currentFic, ch); }
+      return;
+    }
+    openFic(e.state.fic, ch, 'none');
+    return;
+  }
   // Các trang cá nhân (profile/bookmarks/post) không còn mục nào trên thanh nav
   // để làm sáng — el = null là đúng, chỉ riêng auth thì sáng nút Sign In.
   const el = document.querySelector(`.nav-links a[data-page="${e.state.page}"]`)
           || (e.state.page === 'auth' ? document.querySelector('.nav-signin') : null);
-  showPage(e.state.page, el);
+  showPage(e.state.page, el, 'none');
 });
 
 // (Xử lý mở fic từ #fic-N đã gộp vào DOMContentLoaded ở trên,

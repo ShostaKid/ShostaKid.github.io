@@ -1694,7 +1694,8 @@ window.fetchWorksFromDB = async function () {
 // truyện. Thêm fic mới thì luôn đánh số tiếp, đừng chèn vào giữa.
 let waWork  = null;                            // { id, kudos_count }
 let waFic   = null;                            // index đang đọc
-let waMine  = { kudos:false, bookmark:false };
+let waMine  = { kudos:false, bookmark:false, notify:false };
+let waNotifyOk = true;                         // bảng work_subscriptions đọc được (false: ẩn nút nhận mail)
 let waGuest = false;                           // khách này đã thả tim chưa
 let waSeq   = 0;                               // chống chạy đua khi lật truyện nhanh
 
@@ -1742,13 +1743,22 @@ function paintActions(session) {
   const bKey = waMine.bookmark ? 'wa_bookmarked' : 'wa_bookmark';
   $('bookmark-label').dataset.i18n = bKey;
   $('bookmark-label').textContent  = tr(bKey);
+
+  // Nhận mail chương mới. Khách vẫn thấy nút (bấm thì sang đăng nhập), như Bookmark.
+  const nb = $('btn-notify');
+  nb.style.display = waNotifyOk ? '' : 'none';
+  nb.classList.toggle('on', waMine.notify);
+  nb.setAttribute('aria-pressed', waMine.notify ? 'true' : 'false');
+  const nKey = waMine.notify ? 'wa_notify_on' : 'wa_notify';
+  $('notify-label').dataset.i18n = nKey;
+  $('notify-label').textContent  = tr(nKey);
 }
 
 async function loadWorkActions(ficIdx) {
   const seq = ++waSeq;
   $('work-actions-wrap').style.display = 'none';
   waSay(null);
-  waWork = null; waFic = ficIdx; waMine = { kudos:false, bookmark:false }; waGuest = false;
+  waWork = null; waFic = ficIdx; waMine = { kudos:false, bookmark:false, notify:false }; waGuest = false; waNotifyOk = true;
 
   const { data: work, error } = await sb.from('works')
     .select('id, kudos_count').eq('legacy_id', 'fic-' + ficIdx).maybeSingle();
@@ -1761,13 +1771,17 @@ async function loadWorkActions(ficIdx) {
 
   if (session) {
     const uid = session.user.id;
-    const [k, b] = await Promise.all([
+    const [k, b, n] = await Promise.all([
       sb.from('kudos').select('id').eq('work_id', work.id).eq('user_id', uid).maybeSingle(),
-      sb.from('bookmarks').select('id').eq('work_id', work.id).eq('user_id', uid).maybeSingle()
+      sb.from('bookmarks').select('id').eq('work_id', work.id).eq('user_id', uid).maybeSingle(),
+      // Chỉ chọn work_id: unsub_token không nằm trong quyền đọc của authenticated.
+      sb.from('work_subscriptions').select('work_id').eq('work_id', work.id).eq('user_id', uid).maybeSingle()
     ]);
     if (seq !== waSeq) return;
     waMine.kudos    = !!k.data;
     waMine.bookmark = !!b.data;
+    waMine.notify   = !!n.data;
+    waNotifyOk      = !n.error;       // bảng chưa có (chưa chạy migration) hoặc lỗi → ẩn nút, đừng hiện nút hỏng
   } else {
     // Khách không tra được hash IP của mình, nên nhớ tạm ở máy.
     waGuest = guestGave(work.id);
@@ -1867,6 +1881,39 @@ $('btn-bookmark').addEventListener('click', async () => {
   waMine.bookmark = true; paintActions(session); waSay('wa_bm_added');
   window.skDaLuu.add(waWork.id); window.dtVeLaiNutLuu();
 });
+
+// ---------- nhận mail khi có chương mới ----------
+// Bảng work_subscriptions (migration 30). Mail do GitHub Action gửi (scripts/notify_new_chapters.py),
+// không phải trình duyệt. Chỉ thành viên: email lấy từ tài khoản đã xác minh, không có ô nhập email.
+$('btn-notify').addEventListener('click', async () => {
+  if (!waWork) return;
+  waSay(null);
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) {
+    try { sessionStorage.setItem('sk-return-fic', String(waFic)); } catch (_) {}
+    window.showPage('auth', $('nav-signin'));
+    msg($('auth-msg'), 'wa_notify_signin', 'err');
+    return;
+  }
+  const btn = $('btn-notify');
+  btn.disabled = true;
+  const { error } = waMine.notify
+    ? await sb.from('work_subscriptions').delete().eq('work_id', waWork.id).eq('user_id', session.user.id)
+    : await sb.from('work_subscriptions').insert({ work_id: waWork.id, user_id: session.user.id });
+  btn.disabled = false;
+  if (error && error.code !== '23505') { waSay('wa_err'); return; }   // 23505: đã đăng ký từ tab khác
+  waMine.notify = error ? true : !waMine.notify;
+  paintActions(session);
+  waSay(waMine.notify ? 'wa_notify_added' : 'wa_notify_removed');
+});
+
+// Link "huỷ nhận mail" trong mail (#unsub=<mã>): hàm SECURITY DEFINER xoá đúng một đăng ký theo mã,
+// trả về tên truyện (hoặc null nếu mã đã dùng / không đúng). Không cần đăng nhập.
+window.huyNhanMail = async function (ma) {
+  if (!/^[0-9a-f-]{36}$/i.test(ma || '')) { window.baoTrenDau(tr('unsub_fail')); return; }
+  const { data, error } = await sb.rpc('unsubscribe_by_token', { p_token: ma });
+  window.baoTrenDau(!error && data ? tr('unsub_ok').replace('{t}', data) : tr('unsub_fail'));
+};
 
 // ---------- nút ✦ trên khung liner notes (giao diện đĩa than) ----------
 // Tập work_id người đang đăng nhập đã lưu, để nút ✦ hiện đúng trạng thái mà

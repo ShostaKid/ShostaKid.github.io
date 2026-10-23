@@ -179,6 +179,12 @@
             <span class="wa-icon" id="bookmark-icon">☆</span>
             <span id="bookmark-label" data-i18n="wa_bookmark">Bookmark</span>
           </button>
+          <!-- Nhận mail khi có chương mới — chỉ thành viên (khách bấm thì sang trang đăng nhập).
+               Mail do GitHub Action notify-new-chapters gửi; xem CLAUDE.md. -->
+          <button type="button" class="wa-btn" id="btn-notify" aria-pressed="false">
+            <span class="wa-icon" id="notify-icon">✉</span>
+            <span id="notify-label" data-i18n="wa_notify">Email me new movements</span>
+          </button>
           <!-- Chỉ admin thấy. Đây là lối vào duy nhất của chế độ sửa truyện. -->
           <button type="button" class="wa-btn" id="btn-edit-work" style="display:none;">
             <span class="wa-icon">✎</span>
@@ -674,7 +680,7 @@
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
 
 <!-- YouTube player ẩn — tự inject bằng JS -->
-<script src="app.js?v=14"></script>
+<script src="app.js?v=15"></script>
 <script src="score.js?v=1"></script>
 <script src="welcome.js?v=5"></script>
 <script src="rehearsal.js?v=1"></script>
@@ -687,6 +693,6 @@
      KHÔNG đụng gì tới phần Browse / danh sách truyện:
      phần đó dựng ở script cổ điển (giao diện đĩa than, dữ liệu từ fetchWorksFromDB).
      ============================================= -->
-<script type="module" src="accounts.js?v=6"></script>
+<script type="module" src="accounts.js?v=7"></script>
 </body>
 </html>

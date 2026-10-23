@@ -176,6 +176,7 @@ Migration đã chạy, theo thứ tự:
 27. `restore_published_at_language_suite_iv`
 28. `suite_iv_description`
 29. `create_notes_listening_room`
+30. `work_subscriptions_and_chapter_notify`
 
 (Bốn migration `import_*` chạy một lần lúc nhập dữ liệu, đã dọn — không đánh số ở đây.)
 
@@ -1630,3 +1631,39 @@ Qua mốc 1280px thì listener `matchMedia` có sẵn gọi lại `renderWorks()
   (accounts.js; UPDATE trước rồi INSERT như Rehearsal). Mục nào có trong DB thì đè bản mặc định; để trống cả hai là ẩn dòng. Không migration.
 - Lệch khỏi bản thiết kế có chủ ý: chữ nhỏ trên nền vàng dùng `#16120D`; "Movements"/"Movement II" dùng `--ui-head`; nhãn Members only trên bìa ở
   bàn xoay bị ẩn (đè chữ "Op. N"; vẫn có ở hàng cờ). Ngày trên thẻ là ngày ra mắt; nhãn New theo quy tắc 14 ngày (`coChuongMoi`).
+
+---
+
+## URL theo chương + mail báo chương mới (cập nhật 2026-10-20)
+
+### URL theo chương (chỉ frontend)
+
+- `#fic-N` = chương 1, `#fic-N/M` = chương M (đếm từ 1). `urlChuong()` / `datUrlChuong(fic, ch, cach)` trong `app.js`.
+- **Chuyển chương trong lúc đọc** (Prev/Next/ô chọn → `denChuong()`) ĐẨY mục lịch sử mới → nút Back quay về chương trước.
+- **Vào bằng link** (`moTheoHash`) dùng `openFic(idx, ch, 'replace')` → Back quay về trang trước khi mở truyện.
+- `openFic(i, ch = 0, cach = 'push')`; popstate gọi `openFic(…, 'none')`, và nếu đang ở đúng truyện đó thì chỉ đổi chương.
+- **`showPage(id, el, cach)`** có thêm tham số lịch sử: mặc định push; `'replace'` khi vào bằng link; **`'none'` trong popstate**. Trước đây
+  popstate gọi `showPage()` → pushState → cắt mất đường Forward và Back có thể lặp mãi ở một tab. Đừng gọi `showPage` không có `'none'` từ popstate.
+- Link vượt số chương (`#fic-48/9`) → mở chương 1 và sửa URL (`loadChapter`). `resumeReading()` giờ gọi thẳng `openFic(idx, ch)`.
+- Không có nút "Copy link chương" (chủ repo không cần). Ô xem trước khi dán link vào Messenger/Facebook vẫn là thẻ chung của web —
+  trình đọc link không thấy phần sau `#`; muốn khác phải sinh trang tĩnh cho từng truyện.
+
+### Mail báo chương mới (chỉ thành viên)
+
+- Nút **✉ Email me new movements** cạnh Kudos/Bookmark (`#btn-notify`, accounts.js). Khách bấm → sang trang đăng nhập
+  (`sk-return-fic`, như Bookmark). Bảng chưa đọc được (chưa có migration / lỗi) thì nút tự ẩn với thành viên.
+- **Migration 30** (đã chạy 23/10/2026; file gốc `scripts/notify/migration_30_work_subscriptions.sql`): bảng `work_subscriptions(user_id, work_id, unsub_token, created_at)`
+  (RLS chỉ thấy/đăng ký/huỷ của mình, đăng ký đòi `can_read_work`; GRANT theo cột — client không đọc được `unsub_token`); cột
+  `chapters.notified_at` (mọi chương cũ đặt sẵn = đã báo); `app_private.secrets` thêm `notify_secret`; ba hàm SECURITY DEFINER:
+  `notify_pending(secret)` → JSON các chương đã đăng mà `notified_at` null (kèm email + token người nhận), `notify_mark_sent(secret, ids)`,
+  `unsubscribe_by_token(token)` (anon gọi được, trả tên truyện). Hai hàm đầu cấp cho anon nhưng đòi mã bí mật — **GitHub không giữ khoá service_role**.
+- **Gửi**: `.github/workflows/notify-new-chapters.yml` (15 phút/lần + chạy tay, có tuỳ chọn dry run) → `scripts/notify_new_chapters.py`
+  (chỉ thư viện chuẩn Python; Gmail SMTP cổng 465). Gom theo truyện: mỗi người một mail, dẫn tới chương mới sớm nhất (`#fic-N/M`),
+  header `List-Unsubscribe`. Đánh dấu đã báo sau khi gửi xong một truyện; lỗi đăng nhập Gmail / mất mạng thì chưa đánh dấu → lần sau gửi bù.
+  Chưa cài Secrets thì thoát êm. **Log Action là công khai → script không in địa chỉ mail.**
+- Chỉ gửi khi chương được đăng **lần đầu** (insert published hoặc draft → published). Sửa chữ chương cũ không đổi `notified_at`.
+- Mẫu mail (chỉ tiếng Anh — chủ repo bỏ phần tiếng Việt): `scripts/mail/new_chapter.txt` (dòng đầu `Subject: …`; thay `{{url}}`, `{{unsubscribe}}`,
+  `{{title}}`, `{{chapter}}`), tuỳ chọn `new_chapter.html`. Mẫu thiếu `{{unsubscribe}}` thì script tự thêm dòng huỷ.
+- Link huỷ: `#unsub=<token>` → `moTheoHash` về Home (không dựng rèm) → `huyNhanMail()` → dải báo `baoTrenDau()`.
+- GitHub Secrets cần có: `NOTIFY_SECRET` (= `select encode(value,'hex') from app_private.secrets where name='notify_secret'`),
+  `GMAIL_USER`, `GMAIL_APP_PASSWORD` (App Password của Gmail, cần bật xác minh 2 bước). Gmail cá nhân giới hạn ~500 mail/ngày.
