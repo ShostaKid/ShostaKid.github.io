@@ -1618,9 +1618,9 @@ window.fetchWorksFromDB = async function () {
     const [res, tRes, fRes] = await Promise.all([
       sb.from('works')
         .select('id, legacy_id, title, subtitle, summary, warning_note, featured, published_at,'
-              + ' kudos_count, comment_count, cover_url, cover_crop, is_restricted, language, word_count, is_complete,'
+              + ' kudos_count, comment_count, bookmark_count, cover_url, cover_crop, is_restricted, language, word_count, is_complete,'
               + ' work_fandoms(fandoms(name)), work_ships(ships(name)),'
-              + ' work_tags(tags(slug,type)), chapters(position,status,music,published_at)')
+              + ' work_tags(tags(slug,type,name)), chapters(position,status,music,published_at)')
         .eq('status', 'published'),
       sb.from('tags').select('id,slug,name,name_vi,mo_ta,mo_ta_vi,thu_tu')
         .eq('type', 'category').order('thu_tu').order('name'),
@@ -1676,6 +1676,9 @@ window.fetchWorksFromDB = async function () {
         date: w.published_at || '',
         kudos: w.kudos_count || 0,
         comments: w.comment_count || 0,
+        bookmarks: w.bookmark_count || 0,
+        warnTags: (w.work_tags || []).map(x => x.tags).filter(t0 => t0 && t0.type === 'warning').map(t0 => t0.name),
+        tags: (w.work_tags || []).map(x => x.tags).filter(t0 => t0 && t0.type === 'freeform').map(t0 => t0.name),
         restricted: !!w.is_restricted,
         cover: w.cover_url || '',
         coverCrop: !!w.cover_crop
@@ -2608,4 +2611,20 @@ window.setNoteSlot = async function (id, slot, occupantId) {
     return { error: b.error || { message: 'not-found' } };
   }
   return { error: null };
+};
+
+// ---------- Trang hồ sơ (giao diện mới, redesign.js) ----------
+// Chỉ đọc: hồ sơ, lượt lưu và kudos của CHÍNH người đang đăng nhập (RLS cũng chỉ cho thế).
+// kudos: chỉ chọn cột được cấp (id, work_id, user_id, created_at) — không bao giờ select('*').
+window.fetchProfileData = async function () {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return null;
+  const uid = session.user.id;
+  const [p, b, k] = await Promise.all([
+    sb.from('profiles').select('username, display_name, avatar_url, is_admin').eq('id', uid).single(),
+    sb.from('bookmarks').select('id, work_id, created_at').eq('user_id', uid).order('created_at', { ascending: false }),
+    sb.from('kudos').select('work_id, created_at').eq('user_id', uid).order('created_at', { ascending: false })
+  ]);
+  return { since: session.user.created_at, profile: p.data || null,
+    bookmarks: b.data || [], kudos: k.data || [], loi: !!(p.error || b.error || k.error) };
 };

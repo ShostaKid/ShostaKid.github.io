@@ -1667,3 +1667,32 @@ Qua mốc 1280px thì listener `matchMedia` có sẵn gọi lại `renderWorks()
 - Link huỷ: `#unsub=<token>` → `moTheoHash` về Home (không dựng rèm) → `huyNhanMail()` → dải báo `baoTrenDau()`.
 - GitHub Secrets cần có: `NOTIFY_SECRET` (= `select encode(value,'hex') from app_private.secrets where name='notify_secret'`),
   `GMAIL_USER`, `GMAIL_APP_PASSWORD` (App Password của Gmail, cần bật xác minh 2 bước). Gmail cá nhân giới hạn ~500 mail/ngày.
+
+---
+
+## Giao diện mới theo tinh thần wienerphilharmoniker.at (cập nhật 2026-10-31)
+
+Đổi toàn bộ giao diện; **logic tải dữ liệu, nhạc, tài khoản không đổi** (chỉ thêm một hàm đọc `fetchProfileData` ở `accounts.js`).
+
+- **`redesign.css`** (nạp SAU `style.css`): gán lại các biến màu cũ (`--cream`, `--gold`, `--ink`…, cả `--nt-*` của Chamber và `--rh-*`
+  của Rehearsal) sang bảng màu mới — giấy ngà `#F3F2EE`, chữ than `#232323`, một màu vàng đồng `#A38037`; bản tối `#151513`. Font:
+  **Noto Serif Display** (tiêu đề), **Noto Sans** (chữ giao diện, trục `wdth` cho nhãn hẹp), **Noto Serif** (thân truyện) — cả ba đủ dấu
+  tiếng Việt. Mọi `font-family` cũ trong `style.css` đã đổi sang `var(--f-display|--f-serif|--f-sans)`; Playfair/Lora/Nunito đã bỏ.
+- **`redesign.js`** (nạp ngay sau `app.js`): định nghĩa lại `renderHome` / `renderWorks` / `chonNgauNhien` / `toggleFloatingButtons`,
+  và **bọc** `openFic`, `updateChapterNav`, `showPage`, `applyLang`, `saveReadingProgress` bằng `window.X = function(){ gốc(); thêm(); }`.
+  Tên mới đều có tiền tố `rd`. Đừng khai báo trùng tên `let/const` với `app.js` (chung phạm vi toàn cục).
+- **Màn chào podium/piano đã bỏ** (`welcome.js` và `score.js` không còn được nạp, file vẫn để lại). **Mọi lối vào, kể cả link gốc, đi qua
+  tấm rèm `dungRem()`** — rèm chính là cú chạm mở khoá nhạc. Trừ `?vao=1` và `#unsub=` như cũ. Rèm của trang không phải truyện chờ cờ `daDinhTuyen`.
+- **Home**: phần đầu tối có khuông nhạc, đang đọc dở, Latest works, **Favorite Children = mọi truyện `featured`, hiện hết một lượt**, dải Opus,
+  Most loved, khung Commission.
+- **Works**: thẻ truyện kiểu AO3 (đủ thông tin) + dáng Ficbook (nhãn trái, vạch màu fandom); bấm fandom / cặp đôi trên thẻ là lọc. Ô lọc là
+  danh sách tự dựng `rdChon()` — `<select>` gốc không theo nền tối. Bỏ giao diện "Score terminal" (kéo theo nút sửa tagline movement).
+- **Trang đọc**: đầu trang mới (vụn bánh mì, thông tin, thẻ chọn movement), thẻ "Next movement" cuối chương, nút "Aa" cỡ chữ.
+- **Profile**: thẻ đầu + 3 ô số + 3 tab (Continue reading / Bookmarks / Kudos given); form sửa hồ sơ cũ gập sau nút "Account settings".
+  "Continue reading" và "Works read" đọc `localStorage['sk-history']` (máy người đọc, giống `sk-continue`), không theo tài khoản.
+- **Chamber Radio** (`notes.js`, chỉ thay hàm `ve()`): mỗi note là một "đài" FM (tần số giả rải đều 88.1–105.9); nhóm "Programme notes"
+  (có gắn fic) / "Off the record" (chưa gắn fic). Âm thanh, cue, nút admin giữ nguyên.
+- Đầu trang: Home ẩn trên máy tính (logo về Home), "In rehearsal", menu More (Commissions, Request a fic), kính lúp, "Sign In" thành biểu tượng.
+  Chân trang dựng lại bằng JS (`rdKhung()`), gọi lại mỗi lần đổi ngôn ngữ.
+- **Bẫy đã gặp**: phần tử `<nav>` mới nhận nguyên kiểu của thanh điều hướng chính (`nav{…sticky…}` trong `style.css`) — vụn bánh mì, dải
+  movement phải dùng `div role="navigation"`. Nút `<button>` cao hơn nội dung thì tự căn giữa dọc → thẻ bìa phải `display:flex;flex-direction:column`.

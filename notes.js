@@ -181,38 +181,35 @@
     if (typeof openFic === 'function') openFic(idx);
   };
 
+  // ---- "Chamber Radio" (giao diện mới, 10/2026) ----
+  // Mỗi note là một "đài" trên núm dò: tần số giả rải đều 88.1–105.9 MHz theo thứ tự trên bàn.
+  // Note có gắn fic = "Programme notes"; note không gắn fic = "Off the record".
+  const tanSo = k => (88.1 + (NT.notes.length > 1 ? k * 17.8 / (NT.notes.length - 1) : 0)).toFixed(1);
+  const viTriDial = f => ((f - 87) / 22) * 100;   // thang hiện 87–109
+
   function ve() {
     const root = $('nt-root'); if (!root) return;
     root.textContent = '';
     R = {};
     const n = cur();
     if (mini) mini.hidden = true;
-    const adm = window.skLaAdmin ? E('div', 'nt-adm',
+    const adm = window.skLaAdmin ? E('div', 'nt-adm rd-wrap',
       dtEl('button', { type: 'button', class: 'mini-btn', onclick: () => window.ntAdminMo && window.ntAdminMo(null) }, t('nta_new')),
       dtEl('button', { type: 'button', class: 'mini-btn', onclick: () => showPage('notes-admin', null) }, t('nta_manage'))) : null;
+    const dau = E('header', 'cr-head', E('div', 'rd-wrap cr-head-in',
+      E('div', null,
+        E('div', 'rd-crumb',
+          dtEl('button', { type: 'button', onclick: () => showPage('home', document.querySelector('.nav-links a[data-page="home"]')) }, t('nav_home')),
+          dtEl('span', { 'aria-hidden': 'true' }, '›'), E('span', null, t('nav_notes')),
+          dtEl('span', { 'aria-hidden': 'true' }, '›'), E('span', 'cr-crumb-on', t('cr_onair'))),
+        E('h1', 'cr-title', t('cr_title'), E('small', null, 'FM 33.3'))),
+      E('p', 'cr-lead', t('cr_lead'))));
 
-    if (!NT.loaded || (NT.loading && !n)) { root.append(E('p', 'nt-empty', t('nt_loading'))); return; }
-    if (NT.failed) { root.append(adm, E('p', 'nt-empty', t('nt_failed'))); return; }
-    if (!n) { root.append(adm, E('p', 'nt-empty', t('nt_empty'))); return; }
+    if (!NT.loaded || (NT.loading && !n)) { ganCon(root, dau, E('p', 'nt-empty', t('nt_loading'))); return; }
+    if (NT.failed) { ganCon(root, dau, adm, E('p', 'nt-empty', t('nt_failed'))); return; }
+    if (!n) { ganCon(root, dau, adm, E('p', 'nt-empty', t('nt_empty'))); return; }
 
-    // -- bàn xoay --
-    const arm = E('div', 'nt-arm'); arm.setAttribute('aria-hidden', 'true');
-    const label = E('div', 'nt-label', dtIcon(n.icon), E('span', null, n.short));
-    label.style.background = n.sleeve;
-    const plat = E('div', 'nt-plat',
-      E('div', 'nt-mat'),
-      E('div', 'nt-rec', E('div', 'nt-sheen'), label, E('div', 'nt-spindle')),
-      E('div', 'nt-pivot'), arm);
-    plat.setAttribute('aria-hidden', 'true');
-
-    const ficLinks = n.fics.map(f => {
-      const a = dtEl('a', { href: f.idx != null ? '#fic-' + f.idx : null, onclick: moFic(f.idx) }, f.title);
-      if (f.sub) a.append(E('i', null, ' — ' + f.sub));
-      return a;
-    });
-    const plays = n.fics.length ? E('div', 'nt-plays', E('span', null, t('nt_plays_in')), ...ficLinks) : E('div', 'nt-plays');
-
-    // thanh thời gian + cue
+    // -- đang phát sóng: thông tin + điều khiển bên trái, đĩa bên phải --
     const track = E('div', 'nt-track');
     R.fill = E('div', 'nt-track-fill'); R.knob = E('div', 'nt-knob');
     R.seek = dtEl('input', { type: 'range', class: 'nt-seek', min: 0, max: 1000, step: 1, value: 0, 'aria-label': t('nt_seek') });
@@ -224,47 +221,68 @@
     });
     track.append(R.knob);
     R.pos = E('span', null, '0:00'); R.len = E('span', null, '–:––');
-    const gioRow = E('div', 'nt-time-row', R.pos, E('span', null, n.cues.length ? t('nt_cue_legend') : ''), R.len);
-    const time = E('div', 'nt-time', track, gioRow);
+    const time = E('div', 'cr-time', R.pos, track, R.len);
 
     const prev = dtEl('button', { type: 'button', class: 'nt-circ', 'aria-label': t('nt_prev') }); prev.append(svg(['M11 3 5 8l6 5', 'M4 3v10'], 16, 16, '0 0 16 16'));
     const next = dtEl('button', { type: 'button', class: 'nt-circ', 'aria-label': t('nt_next') }); next.append(svg(['m5 3 6 5-6 5', 'M12 3v10'], 16, 16, '0 0 16 16'));
     prev.addEventListener('click', () => chonBai(NT.sel - 1)); next.addEventListener('click', () => chonBai(NT.sel + 1));
-    if (NT.notes.length < 2) { prev.disabled = next.disabled = true; }
-    const ctl = E('div', 'nt-ctl', prev, nutTronPlayPause(), next, E('span', 'nt-src', t('nt_source') + ' ' + nguon(n)));
-    R.loi = E('div', 'nt-src'); R.loi.setAttribute('role', 'status');
-    let khuNghe = null;
-    if (!coAmThanh(n)) {
-      khuNghe = dtEl('a', { class: 'nt-ext', href: n.url, target: '_blank', rel: 'noopener noreferrer' }, t('nt_listen_ext'));
-    }
-    const info = E('div', 'nt-info',
-      E('div', 'nt-kicker', t('nt_playing_state_' + (NT.playing ? 'on' : 'off'))),
-      E('div', null, E('div', 'nt-piece', n.piece), E('div', 'nt-comp', n.composer + (n.opus ? ' · ' + n.opus : ''))),
-      plays,
-      coAmThanh(n) ? time : khuNghe,
-      ctl, R.loi);
-    R.kicker = info.firstChild;
-    const deck = E('section', 'nt-deck', plat, info); deck.setAttribute('aria-label', t('nt_turntable'));
-
-    // -- danh sách "Tonight's programme" --
-    const prog = E('aside', 'nt-prog',
-      E('div', 'nt-prog-h', E('h2', null, t('nt_programme')), E('span', null, t('nt_count').replace('{n}', NT.notes.length))));
-    prog.setAttribute('aria-label', t('nt_programme'));
-    NT.notes.forEach((x, k) => {
-      const sl = E('span', 'nt-sleeve', dtIcon(x.icon)); sl.style.background = x.sleeve;
-      const b = dtEl('button', { type: 'button', class: 'nt-pick', 'aria-pressed': k === NT.sel ? 'true' : 'false' });
-      ganCon(b, E('span', 'nt-pick-n', String(k + 1).padStart(2, '0')), sl,
-        E('span', 'nt-pick-t', E('b', null, x.piece), E('small', null, x.composer + ' · ' + t('nt_for') + ' ' + soFic(x))),
-        E('span', 'nt-pick-go', '›'));
-      b.addEventListener('click', () => {
-        if (k === NT.sel) { if (laDienThoai()) { NT.open = true; ve(); } return; }
-        chonBai(k, { mo: laDienThoai() });
-      });
-      prog.append(b);
+    const tron = dtEl('button', { type: 'button', class: 'cr-shuffle' }, t('cr_shuffle'));
+    tron.addEventListener('click', () => {
+      if (NT.notes.length < 2) return;
+      let k = NT.sel; while (k === NT.sel) k = Math.floor(Math.random() * NT.notes.length);
+      chonBai(k);
     });
+    if (NT.notes.length < 2) { prev.disabled = next.disabled = tron.disabled = true; }
+    R.loi = E('div', 'nt-src'); R.loi.setAttribute('role', 'status');
+    const khuNghe = coAmThanh(n) ? null : dtEl('a', { class: 'nt-ext', href: n.url, target: '_blank', rel: 'noopener noreferrer' }, t('nt_listen_ext'));
+    const air = E('section', 'cr-air', E('div', 'rd-wrap cr-air-in',
+      E('div', 'cr-air-info',
+        E('p', 'cr-kicker', E('i'), t('cr_onair') + ' · FM ' + tanSo(NT.sel) + ' · ' + t(n.fics.length ? 'cr_g_notes' : 'cr_g_off')),
+        E('h2', 'cr-piece', n.piece),
+        E('p', 'cr-comp', n.composer + (n.opus ? ' · ' + n.opus : '')),
+        E('div', 'cr-ctl', prev, nutTronPlayPause('cr-play'), next, tron),
+        coAmThanh(n) ? time : khuNghe,
+        E('p', 'nt-src', t('nt_source') + ' ' + nguon(n)), R.loi),
+      E('div', 'cr-vinyl', E('div', 'cr-vinyl-lab', dtIcon(n.icon)))));
+    air.setAttribute('aria-label', t('nt_turntable'));
+    air.querySelector('.cr-vinyl').setAttribute('aria-hidden', 'true');
 
-    // -- tờ note --
-    const dong = n.paras.map(p => E('p', null, p));
+    // -- núm dò đài --
+    const dial = E('div', 'cr-dial');
+    dial.setAttribute('role', 'group'); dial.setAttribute('aria-label', t('cr_dial'));
+    const thang = E('div', 'cr-scale');
+    thang.setAttribute('aria-hidden', 'true');
+    for (let f = 88; f <= 108; f += 4) { const s = E('span', null, String(f)); s.style.left = viTriDial(f) + '%'; thang.append(s); }
+    dial.append(thang);
+    NT.notes.forEach((x, k) => {
+      const b = dtEl('button', { type: 'button', class: 'cr-st', 'aria-pressed': k === NT.sel ? 'true' : 'false',
+        'aria-label': 'FM ' + tanSo(k) + ' · ' + x.piece + ' · ' + x.composer }, E('i'), E('span', null, x.short));
+      b.style.left = viTriDial(+tanSo(k)) + '%';
+      b.addEventListener('click', () => { if (k !== NT.sel) chonBai(k); });
+      dial.append(b);
+    });
+    const kim = E('div', 'cr-needle'); kim.style.left = viTriDial(+tanSo(NT.sel)) + '%'; kim.setAttribute('aria-hidden', 'true');
+    dial.append(kim);
+
+    // -- chương trình tối nay --
+    const nhom = (tieuDe, loc) => {
+      const ds = NT.notes.map((x, k) => ({ x, k })).filter(o => loc(o.x));
+      if (!ds.length) return null;
+      return E('div', 'cr-group', E('h3', null, tieuDe), ...ds.map(({ x, k }) => {
+        const b = dtEl('button', { type: 'button', class: 'cr-row', 'aria-pressed': k === NT.sel ? 'true' : 'false' },
+          E('span', 'cr-fm', 'FM ' + tanSo(k)), E('span', 'cr-row-t', E('b', null, x.piece), E('small', null, x.composer)));
+        b.addEventListener('click', () => {
+          if (k !== NT.sel) chonBai(k);
+          if (laDienThoai()) { const a = document.querySelector('#nt-root .cr-note'); if (a) a.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        });
+        return b;
+      }));
+    };
+    const prog = E('aside', 'cr-prog', E('p', 'cr-prog-h', t('nt_programme')),
+      nhom(t('cr_g_notes'), x => x.fics.length), nhom(t('cr_g_off'), x => !x.fics.length));
+    prog.setAttribute('aria-label', t('nt_programme'));
+
+    // -- ghi chú chương trình --
     const cueRows = n.cues.map(q => {
       const b = dtEl('button', { type: 'button', class: 'nt-cue-row' }, E('span', 'nt-cue-t', fmt(q.t)), E('span', 'nt-cue-x', q.text));
       if (coAmThanh(n)) b.addEventListener('click', () => tuaToi(q.t, true)); else b.disabled = true;
@@ -272,41 +290,23 @@
     });
     R.cueRows = cueRows;
     const dauTien = n.fics.find(f => f.idx != null);
-    const back = dtEl('button', { type: 'button', class: 'nt-back', 'aria-label': t('nt_back') }); back.append(svg(['M11 3 5 9l6 6'], 18, 18, '0 0 18 18'));
-    back.addEventListener('click', dongTo);
-    const chips = E('div', 'nt-chips', ...n.fics.map(f => dtEl('a', { href: f.idx != null ? '#fic-' + f.idx : null, onclick: moFic(f.idx) }, f.title)));
-    const paperIn = E('div', 'nt-paper-in',
-      E('div', 'nt-meta', E('span', null, t('nt_note_no') + ' ' + (NT.sel + 1)), E('span', null, fmtNgay(n.date))),
-      E('div', null, E('h2', null, n.title), E('div', 'nt-on-line', t('nt_on') + ' ' + n.composer + ', ' + n.piece + (laDienThoai() && n.date ? ' · ' + fmtNgay(n.date) : ''))),
-      E('div', 'nt-rule'),
-      n.fics.length ? chips : null,
-      E('div', 'nt-body', ...dong),
+    const note = E('article', 'cr-note',
+      E('p', 'rd-eyebrow', t('cr_note') + (n.date ? ' · ' + fmtNgay(n.date) : '')),
+      E('h2', null, n.title),
       n.quote ? E('blockquote', null, n.quote) : null,
+      E('div', 'nt-body', ...n.paras.map(p => E('p', null, p))),
       n.cues.length ? E('div', 'nt-cues', E('div', 'nt-cues-h', E('h3', null, t('nt_cues')), E('span', null, t('nt_cues_hint'))), ...cueRows) : null,
-      (dauTien || window.skLaAdmin) ? E('div', 'nt-acts',
-        dauTien ? dtEl('a', { class: 'nt-readfic', href: '#fic-' + dauTien.idx, onclick: moFic(dauTien.idx) }, t('nt_read_fic')) : null,
-        window.skLaAdmin ? dtEl('button', { type: 'button', class: 'mini-btn', onclick: () => window.ntAdminMo && window.ntAdminMo(n.id) }, t('nta_edit_this')) : null) : null);
-    const paper = E('article', 'nt-paper' + (NT.open ? ' open' : ''),
-      E('div', 'nt-paper-ring'),
-      E('div', 'nt-sheet-top', back, E('span', null, t('nt_note_no') + ' ' + (NT.sel + 1))),
-      paperIn);
-    paper.setAttribute('role', 'dialog'); paper.setAttribute('aria-label', t('nt_note_no'));
-    R.paper = paper;
+      n.fics.length ? E('div', 'cr-plays', E('p', 'rd-eyebrow', t('nt_plays_in')),
+        ...n.fics.map(f => dtEl('a', { class: 'cr-plays-t', href: f.idx != null ? '#fic-' + f.idx : null, onclick: moFic(f.idx) },
+          f.title, f.sub ? E('em', null, ' ' + f.sub) : null)),
+        dauTien ? dtEl('a', { class: 'rd-btn rd-btn-gold rd-btn-sm', href: '#fic-' + dauTien.idx, onclick: moFic(dauTien.idx) }, t('cr_read')) : null) : null,
+      window.skLaAdmin ? E('div', 'nt-acts', dtEl('button', { type: 'button', class: 'mini-btn', onclick: () => window.ntAdminMo && window.ntAdminMo(n.id) }, t('nta_edit_this'))) : null);
 
-    // -- ghép --
-    const stage = E('div', 'nt-stage',
-      E('div', 'nt-wall', ...['panels', 'lines', 'rail', 'fade', 'glow', 'cord', 'shade'].map(c => { const d = E('div', 'nt-w-' + c); return d; })),
-      E('div', 'nt-hero', E('div', 'nt-eyebrow', t('nt_eyebrow')), E('h1', null, t('nt_title')), E('p', 'nt-lead', t('nt_lead'))),
-      adm,
-      NT.preview ? E('div', 'nt-preview', t('nt_preview')) : null,
-      deck,
-      E('div', 'nt-lower', prog, paper));
-    stage.querySelector('.nt-wall').setAttribute('aria-hidden', 'true');
-    root.append(stage);
+    ganCon(root, dau, adm, NT.preview ? E('div', 'nt-preview rd-wrap', t('nt_preview')) : null,
+      air, E('div', 'rd-wrap cr-dial-wrap', dial), E('div', 'rd-wrap cr-main', note, prog));
     root.classList.toggle('nt-playing', NT.playing);
 
     veMini(n);
-    dongBoTo();
     datCue(); capNhatGio();
   }
   const nguon = n => ({ github: 'GitHub Releases', musopen: 'Musopen', archive: 'archive.org', soundcloud: 'SoundCloud' }[n.source] || n.source);

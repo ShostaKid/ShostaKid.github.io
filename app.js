@@ -1295,6 +1295,7 @@ function openFic(i, ch = 0, cach = 'push') {
 // Nên: chưa bấm intro thì cất yêu cầu lại, để enterSite() phát đúng lúc bấm.
 let daVaoSite = false;
 let nhacChoBam = null;
+let daDinhTuyen = false;
 
 function enterSite() {
   const intro = document.getElementById('intro');
@@ -1352,9 +1353,10 @@ function dungRem(moKhoa) {
       const ds = chapterNames(currentFic);
       b = ds.length > 1 ? (ds[currentChapter] || '') : '';
     } else if (tenTrang[currentPage]) a = t(tenTrang[currentPage]);
+    else b = t('rd_eye');   // cửa chính: rèm thay cho màn chào cũ
     const san = !!nhacChoBam || Date.now() - batDau > 4000
       || (laFic ? (currentPage === 'reading' && !document.querySelector('#reading-body .loading'))
-                : !!hashBanDau);
+                : daDinhTuyen);
     rem.classList.toggle('san', san);
     k.textContent = t('cur_presents');
     ten.textContent = a;
@@ -1386,7 +1388,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Từ trang Commission bấm "Read" (?vao=1): bỏ qua màn chào. Không có cú bấm nào trên
   // trang này nên nhạc chưa được phép phát — giữ daVaoSite=false để yêu cầu nhạc được cất
   // lại, rồi mở khoá ở cú bấm/phím đầu tiên (pha capture: chạy trước onclick của mục nav).
-  if (boQuaChao()) {
+  // Bản giao diện mới: không còn màn chào podium/piano — MỌI lối vào (kể cả link gốc) đều qua tấm rèm,
+  // vì rèm chính là cú chạm mở khoá nhạc. boQuaChao() giữ lại cho welcome.js cũ, không còn được gọi ở đây.
+  {
     // Không dựng rèm cho: nút "Read" của trang Commission (?vao=1, về Home không nhạc) và link huỷ nhận mail (#unsub=…).
     const tuCommission = new URLSearchParams(location.search).has('vao') || location.hash.startsWith('#unsub=');
     intro.style.display = 'none';
@@ -1449,6 +1453,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Mở đúng trang mà URL trỏ tới (link chia sẻ, bookmark, F5).
   hashBanDau = window.location.hash;
   daMoTheoHash = moTheoHash();
+  daDinhTuyen = true;   // rèm của các trang không phải truyện chờ tới lúc này
 });
 
 // ---- Link sâu ----
@@ -1665,7 +1670,7 @@ const i18n = {
     opus_xoa_hoi:'Delete the group “%s”? The %d works in it are NOT deleted — they just stop being grouped.',
     intro_sub:"Don't ask. Just read:)", intro_cta:'Click anywhere to enter',
     nav_zone:'Commissions',
-    nav_rehearsal:'Rehearsal',
+    nav_rehearsal:'In rehearsal',
     rh_eyebrow:"The composer's desk · {n} works in progress", rh_h1:'In rehearsal',
     rh_intro:'Unfinished works, written out bar by bar. Each one fills in as it moves from tuning to premiere, and then it goes on the shelf.',
     rh_all:'All', rh_s1:'Tuning', rh_s2:'Rehearsing', rh_s3:'Dress rehearsal', rh_s4:'Premiere',
@@ -1716,6 +1721,33 @@ const i18n = {
     post_complete:'Complete — no more movements planned',
     post_complete_hint:'Leave unticked while the work is still being written: its liner notes say “In progress”.',
     cur_presents:'ShostaKid presents', cur_tuning:'Tuning…', cur_tap:'Tap to raise the curtain',
+    rd_eye:'Fanfiction, composed like music',
+    rd_lead:'Every story here is written as a piece of classical music. Chapters are movements, and each one comes with a recording that plays while you read.',
+    rd_browse:'Browse the works', rd_step1_t:'Choose a work', rd_step1_p:'Browse by fandom, or by musical form in the Opus.',
+    rd_step2_t:'Listen as you read', rd_step2_p:'Each movement has its own recording, cued to the right bar.',
+    rd_step3_t:'Stay for the next movement', rd_step3_p:'Members can bookmark works and get an email when a new movement is up.',
+    rd_latest:'Latest works', rd_all:'All works', rd_featured:'Featured', rd_loved:'Most loved',
+    rd_opus_p:'Every work belongs to a musical form, from the quiet Nocturne to the full Symphony. Choose a form to see what it holds.',
+    rd_comm_t:'A piece written for you', rd_comm_btn:'Go to commissions',
+    rd_comm_p:'Request a work in the form, fandom and pairing of your choice. Prices, process and terms are on the commissions page.',
+    rd_prices:'Prices', rd_process:'Process', rd_terms:'Terms', rd_samples:'Samples',
+    rd_works_intro:'Every work on the site, newest first. Filter by fandom, form or length, or search by title, pairing and music.',
+    rd_f_fandom:'Fandom', rd_f_form:'Form', rd_f_len:'Length', rd_f_status:'Status', rd_search:'Search title, pairing or music',
+    rd_len_mini:'Miniature · under 2,000 words', rd_len_cham:'Chamber · 2,000 to 5,000', rd_len_sym:'Symphonic · over 5,000',
+    rd_n_works:'{n} works', rd_n_work:'1 work', rd_reset:'Clear filters', rd_sort_loved:'Most loved', rd_more:'Show more ({n})',
+    rd_read:'Read', rd_pairing:'Pairing', rd_music:'Music', rd_size:'Size', rd_warn:'Warnings', rd_tags:'Tags',
+    rd_published:'Published', rd_updated:'Updated', rd_gen:'Gen', rd_lang_en:'English', rd_lang_vi:'Vietnamese',
+    rd_kudos:'kudos', rd_comments:'comments', rd_bms:'bookmarks', rd_pair_on:'Pairing: {s}', rd_by:'by ShostaKid',
+    rd_new:'New', rd_kudos_l:'Kudos', rd_comments_l:'Comments', rd_bms_l:'Bookmarks',
+    rd_fav_eye:'Chosen by the author', rd_more_nav:'More', rd_request:'Request a fic', rd_search_btn:'Search works', rd_profile:'Profile',
+    rd_explore:'Explore', rd_house:'The house', rd_else:'Elsewhere', rd_text_size:'Text size', rd_mv_lab:'Movement {a}', rd_mv_of:'Movement {a} of {b}',
+    rd_next_mv:'Next movement', rd_continue:'Continue', rd_final:'Final movement', rd_back_works:'Back to works',
+    rd_member:'Member', rd_admin:'Composer · admin', rd_since:'Member since {d}', rd_settings:'Account settings',
+    rd_n_bm:'Bookmarks', rd_n_kd:'Kudos given', rd_n_read:'Works read', rd_tab_doc:'Continue reading', rd_tab_luu:'Bookmarks', rd_tab_kd:'Kudos given',
+    rd_resume:'Resume', rd_saved:'Saved {d}', rd_kd_on:'Kudos left {d}', rd_empty_doc:'Nothing in progress yet. Open a work and your place is kept here.',
+    rd_empty_luu:'No bookmarks yet. Press Bookmark on any work to keep it here.', rd_empty_kd:'You have not left kudos yet.',
+    cr_title:'Chamber Radio', cr_lead:'A small station for the pieces I wrote to, and a few I simply kept. Turn the dial, and read why each one plays.',
+    cr_onair:'On air', cr_note:'Programme note', cr_shuffle:'Shuffle', cr_g_notes:'Programme notes', cr_g_off:'Off the record', cr_read:'Read with this playing', cr_dial:'Tuning dial',
     sc_crumb:'ShostaKid / Works', sc_h1:'Score', sc_subh:'Movements', sc_mov:'movements', sc_movement:'Movement',
     sc_work:'work', sc_works:'works', sc_of:'{a} of {b} works', sc_mostly:'Mostly', sc_legend:'Tempo',
     sc_empty_mv:'No work in this movement matches the filters.', sc_min:'min', sc_mvt:'mvt', sc_mvts:'mvts', sc_others:'Others',
@@ -1990,6 +2022,33 @@ const i18n = {
     post_complete:'Đã hoàn thành — không viết thêm chương',
     post_complete_hint:'Để trống khi truyện còn đang viết: liner notes sẽ ghi “Đang viết”.',
     cur_presents:'ShostaKid giới thiệu', cur_tuning:'Đang lên dây…', cur_tap:'Chạm để kéo rèm',
+    rd_eye:'Truyện fanfic, viết như một bản nhạc',
+    rd_lead:'Mỗi truyện ở đây được viết như một bản nhạc cổ điển. Mỗi chương là một movement, và đi kèm một bản nhạc phát trong lúc bạn đọc.',
+    rd_browse:'Xem các truyện', rd_step1_t:'Chọn một truyện', rd_step1_p:'Tìm theo fandom, hoặc theo thể nhạc trong mục Opus.',
+    rd_step2_t:'Vừa đọc vừa nghe', rd_step2_p:'Mỗi movement có bản nhạc riêng, đặt sẵn đúng đoạn.',
+    rd_step3_t:'Chờ movement tiếp theo', rd_step3_p:'Thành viên có thể lưu truyện và nhận mail khi có movement mới.',
+    rd_latest:'Truyện mới', rd_all:'Tất cả truyện', rd_featured:'Truyện chọn lọc', rd_loved:'Được yêu thích nhất',
+    rd_opus_p:'Mỗi truyện thuộc về một thể nhạc, từ Nocturne lặng lẽ đến Symphony đủ cả dàn nhạc. Chọn một thể để xem bên trong có gì.',
+    rd_comm_t:'Một bản nhạc viết riêng cho bạn', rd_comm_btn:'Xem trang Commission',
+    rd_comm_p:'Đặt một truyện theo thể nhạc, fandom và cặp đôi bạn chọn. Bảng giá, quy trình và điều khoản nằm ở trang Commission.',
+    rd_prices:'Bảng giá', rd_process:'Quy trình', rd_terms:'Điều khoản', rd_samples:'Sample',
+    rd_works_intro:'Tất cả truyện trên web, mới nhất trước. Lọc theo fandom, thể nhạc, độ dài, hoặc tìm theo tên truyện, cặp đôi và bản nhạc.',
+    rd_f_fandom:'Fandom', rd_f_form:'Thể nhạc', rd_f_len:'Độ dài', rd_f_status:'Trạng thái', rd_search:'Tìm tên truyện, cặp đôi hoặc bản nhạc',
+    rd_len_mini:'Miniature · dưới 2.000 chữ', rd_len_cham:'Chamber · 2.000 đến 5.000', rd_len_sym:'Symphonic · trên 5.000',
+    rd_n_works:'{n} truyện', rd_n_work:'1 truyện', rd_reset:'Bỏ lọc', rd_sort_loved:'Yêu thích', rd_more:'Xem thêm ({n})',
+    rd_read:'Đọc', rd_pairing:'Cặp đôi', rd_music:'Nhạc', rd_size:'Độ dài', rd_warn:'Cảnh báo', rd_tags:'Thẻ',
+    rd_published:'Ra mắt', rd_updated:'Cập nhật', rd_gen:'Không cặp đôi', rd_lang_en:'Tiếng Anh', rd_lang_vi:'Tiếng Việt',
+    rd_kudos:'kudos', rd_comments:'bình luận', rd_bms:'lượt lưu', rd_pair_on:'Cặp đôi: {s}', rd_by:'của ShostaKid',
+    rd_new:'Mới', rd_kudos_l:'Kudos', rd_comments_l:'Bình luận', rd_bms_l:'Lượt lưu',
+    rd_fav_eye:'Tác giả chọn', rd_more_nav:'Thêm', rd_request:'Đặt truyện', rd_search_btn:'Tìm truyện', rd_profile:'Hồ sơ',
+    rd_explore:'Khám phá', rd_house:'Trong nhà', rd_else:'Nơi khác', rd_text_size:'Cỡ chữ', rd_mv_lab:'Movement {a}', rd_mv_of:'Movement {a} / {b}',
+    rd_next_mv:'Movement tiếp theo', rd_continue:'Đọc tiếp', rd_final:'Movement cuối', rd_back_works:'Về danh sách truyện',
+    rd_member:'Thành viên', rd_admin:'Tác giả · admin', rd_since:'Thành viên từ {d}', rd_settings:'Cài đặt tài khoản',
+    rd_n_bm:'Đã lưu', rd_n_kd:'Kudos đã thả', rd_n_read:'Truyện đã đọc', rd_tab_doc:'Đang đọc dở', rd_tab_luu:'Đã lưu', rd_tab_kd:'Kudos đã thả',
+    rd_resume:'Đọc tiếp', rd_saved:'Lưu ngày {d}', rd_kd_on:'Thả kudos ngày {d}', rd_empty_doc:'Chưa có truyện nào đang đọc. Mở một truyện là chỗ bạn đọc tới sẽ được giữ ở đây.',
+    rd_empty_luu:'Chưa lưu truyện nào. Bấm Lưu truyện ở bất kỳ truyện nào để giữ lại ở đây.', rd_empty_kd:'Bạn chưa thả kudos nào.',
+    cr_title:'Chamber Radio', cr_lead:'Một đài nhỏ cho những bản nhạc tôi viết cùng, và vài bản tôi chỉ giữ lại. Xoay núm, và đọc vì sao mỗi bản được phát.',
+    cr_onair:'Đang phát sóng', cr_note:'Ghi chú chương trình', cr_shuffle:'Ngẫu nhiên', cr_g_notes:'Ghi chú chương trình', cr_g_off:'Ngoài đĩa', cr_read:'Đọc cùng bản nhạc này', cr_dial:'Núm dò đài',
     sc_crumb:'ShostaKid / Truyện', sc_h1:'Tổng phổ', sc_subh:'Các phần', sc_mov:'phần', sc_movement:'Phần',
     sc_work:'truyện', sc_works:'truyện', sc_of:'{a}/{b} truyện', sc_mostly:'Chủ yếu', sc_legend:'Nhịp',
     sc_empty_mv:'Không có truyện nào trong phần này khớp bộ lọc.', sc_min:'phút', sc_mvt:'chương', sc_mvts:'chương', sc_others:'Khác',
