@@ -1696,3 +1696,16 @@ Qua mốc 1280px thì listener `matchMedia` có sẵn gọi lại `renderWorks()
   Chân trang dựng lại bằng JS (`rdKhung()`), gọi lại mỗi lần đổi ngôn ngữ.
 - **Bẫy đã gặp**: phần tử `<nav>` mới nhận nguyên kiểu của thanh điều hướng chính (`nav{…sticky…}` trong `style.css`) — vụn bánh mì, dải
   movement phải dùng `div role="navigation"`. Nút `<button>` cao hơn nội dung thì tự căn giữa dọc → thẻ bìa phải `display:flex;flex-direction:column`.
+
+### Sửa sau lần lên web (31/10/2026)
+
+- **Mốc kết thúc nhạc từng chương** (không migration — `chapters.music` là JSON): form Post / About có ô `.pw-m-end` ("End, seconds").
+  `pwMusicRead()` chỉ ghi khoá `end` khi có và lớn hơn `start` (nhạc cũ không có khoá → phép so `JSON.stringify` "chương có khác nhạc
+  chung không" vẫn khớp). Trình phát: `gioiHanDoan(audio, start, end)` trong `app.js` — tới `end` thì nhỏ dần, quay về `start`, to dần
+  (lặp đoạn tới khi đổi chương); gọi ở cả `playMusic` (kể cả nhánh "cùng bài", vì hai chương cùng bài có thể khác đoạn) và `playMusicDirect`.
+  Chỉ nguồn file (github/musopen/archive); YouTube vốn có `&end=`; SoundCloud nhúng thì không chặn cuối được. iOS bỏ qua `audio.volume`
+  nên trên iPhone/iPad đoạn lặp nhảy thẳng, không nhỏ dần.
+- **Khung thông tin ở đầu trang đọc** (`.rd-ibox`, dựng trong `rdDauDoc()`): theo cách đóng khung AO3 — Archive warning / Form / Fandom /
+  Pairing / Tags / Language / Music / Stats (Published, Updated hoặc Completed, Words, Movements n/n hoặc n/?, Kudos, Comments, Bookmarks).
+  Rating và Characters không có vì DB chưa có dữ liệu (rating đều `not_rated`). Fandom và cặp đôi bấm được → Works đã lọc.
+- Nút phát của thanh nhạc: kích thước cố định, biểu tượng bằng mask SVG, bỏ `transition:all` cũ.

@@ -1739,6 +1739,7 @@ const i18n = {
     rd_published:'Published', rd_updated:'Updated', rd_gen:'Gen', rd_lang_en:'English', rd_lang_vi:'Vietnamese',
     rd_kudos:'kudos', rd_comments:'comments', rd_bms:'bookmarks', rd_pair_on:'Pairing: {s}', rd_by:'by ShostaKid',
     rd_new:'New', rd_kudos_l:'Kudos', rd_comments_l:'Comments', rd_bms_l:'Bookmarks',
+    rd_i_warn:'Archive warning', rd_i_nowarn:'Creator chose not to use archive warnings', rd_i_stats:'Stats', rd_i_completed:'Completed', rd_i_words:'Words', rd_i_mv:'Movements',
     rd_fav_eye:'Chosen by the author', rd_more_nav:'More', rd_request:'Request a fic', rd_search_btn:'Search works', rd_profile:'Profile',
     rd_explore:'Explore', rd_house:'The house', rd_else:'Elsewhere', rd_text_size:'Text size', rd_mv_lab:'Movement {a}', rd_mv_of:'Movement {a} of {b}',
     rd_next_mv:'Next movement', rd_continue:'Continue', rd_final:'Final movement', rd_back_works:'Back to works',
@@ -1866,9 +1867,9 @@ const i18n = {
     post_confirm_new:'Create \"%s\"? It cannot be renamed or removed from this form.',
     post_created:'Created and selected ♪', post_already_there:'That one already exists — selected it for you.',
     post_name_bad:'That name cannot be used.',
-    post_music:'Music', post_music_hint:'Applies to every chapter. A chapter can override it below.',
+    post_music:'Music', post_music_hint:'Applies to every chapter. A chapter can override it below. End is optional: the chapter then plays only the part between Start and End, looping it softly until the reader moves on.',
     post_m_url:'Audio link (GitHub Releases, archive.org…)', post_m_name:'Track name shown to readers',
-    post_m_start:'Start (seconds)', post_ch_music:'Music for this chapter only',
+    post_m_start:'Start (seconds)', post_m_end:'End (seconds, optional)', post_ch_music:'Music for this chapter only',
     post_ch_music_hint:'Leave empty to use the work’s music.',
     bm_head:'My Bookmarks', bm_empty:'You have not bookmarked anything yet.',
     bm_loading:'Loading…', bm_err:'Could not load your bookmarks.',
@@ -2040,6 +2041,7 @@ const i18n = {
     rd_published:'Ra mắt', rd_updated:'Cập nhật', rd_gen:'Không cặp đôi', rd_lang_en:'Tiếng Anh', rd_lang_vi:'Tiếng Việt',
     rd_kudos:'kudos', rd_comments:'bình luận', rd_bms:'lượt lưu', rd_pair_on:'Cặp đôi: {s}', rd_by:'của ShostaKid',
     rd_new:'Mới', rd_kudos_l:'Kudos', rd_comments_l:'Bình luận', rd_bms_l:'Lượt lưu',
+    rd_i_warn:'Cảnh báo', rd_i_nowarn:'Tác giả không dùng cảnh báo', rd_i_stats:'Thống kê', rd_i_completed:'Hoàn thành', rd_i_words:'Số chữ', rd_i_mv:'Movement',
     rd_fav_eye:'Tác giả chọn', rd_more_nav:'Thêm', rd_request:'Đặt truyện', rd_search_btn:'Tìm truyện', rd_profile:'Hồ sơ',
     rd_explore:'Khám phá', rd_house:'Trong nhà', rd_else:'Nơi khác', rd_text_size:'Cỡ chữ', rd_mv_lab:'Movement {a}', rd_mv_of:'Movement {a} / {b}',
     rd_next_mv:'Movement tiếp theo', rd_continue:'Đọc tiếp', rd_final:'Movement cuối', rd_back_works:'Về danh sách truyện',
@@ -2167,9 +2169,9 @@ const i18n = {
     post_new_opus:'Tên nhóm Opus mới (ví dụ: Suite IV · Nocturnal):',
     post_confirm_new_opus:'Tạo nhóm “%s”? Mô tả và thứ tự hiện thì viết sau trên trang Opus.',
     post_name_bad:'Tên này không dùng được.',
-    post_music:'Nhạc nền', post_music_hint:'Dùng cho mọi chương. Từng chương có thể ghi đè bên dưới.',
+    post_music:'Nhạc nền', post_music_hint:'Dùng cho mọi chương. Từng chương có thể ghi đè bên dưới. Ô Kết thúc là tuỳ chọn: điền vào thì chương chỉ phát đoạn từ Bắt đầu tới Kết thúc, hết đoạn thì nhỏ dần rồi lặp lại cho tới khi người đọc sang chương khác.',
     post_m_url:'Link nhạc (GitHub Releases, archive.org…)', post_m_name:'Tên bản nhạc hiện cho người đọc',
-    post_m_start:'Bắt đầu từ giây', post_ch_music:'Nhạc riêng cho chương này',
+    post_m_start:'Bắt đầu từ giây', post_m_end:'Kết thúc ở giây (tuỳ chọn)', post_ch_music:'Nhạc riêng cho chương này',
     post_ch_music_hint:'Để trống thì dùng nhạc chung của truyện.',
     bm_head:'Truyện đã lưu', bm_empty:'Bạn chưa lưu truyện nào.',
     bm_loading:'Đang tải…', bm_err:'Không tải được danh sách đã lưu.',
@@ -2340,6 +2342,25 @@ function phatAudio(audio) {
   });
 }
 
+// Mốc kết thúc của nhạc (music.end, tính bằng giây, nhập ở form Post): chương chỉ dùng đoạn [start, end]
+// của bản nhạc. Tới end thì nhỏ dần rồi quay về start và to dần — người đọc chưa đọc xong thì đoạn nhạc lặp lại.
+// Không có end (hoặc end <= start) = phát như cũ tới hết bài. Chỉ áp cho nguồn file (github / musopen / archive);
+// YouTube đã có &end= trong URL nhúng, SoundCloud nhúng không chặn cuối được.
+const MOC_MO = 1.5;   // giây nhỏ dần / to dần quanh hai mốc
+function gioiHanDoan(audio, start, end) {
+  audio._moc = { start: Math.max(0, Number(start) || 0), end: Number(end) || 0 };
+  if (audio._mocGan) return;
+  audio._mocGan = true;
+  audio.addEventListener('timeupdate', () => {
+    const m = audio._moc;
+    if (!(m.end > m.start)) { if (audio.volume < 1) audio.volume = 1; return; }
+    const c = audio.currentTime;
+    if (c >= m.end || c < m.start - 1) { try { audio.currentTime = m.start; } catch (_) {} audio.volume = 0.05; return; }
+    const v = Math.min(1, (m.end - c) / MOC_MO, (c - m.start) / MOC_MO + 0.05);
+    audio.volume = Math.max(0.05, Math.min(1, v));
+  });
+}
+
 function playMusicDirect(source, url, id, start, end, name) {
   // Chưa bấm intro thì hoãn lại, đừng dựng player để rồi bị chặn im lặng.
   if (!daVaoSite) { nhacChoBam = { loai: 'truc', thamSo: [source, url, id, start, end, name] }; return; }
@@ -2348,6 +2369,7 @@ function playMusicDirect(source, url, id, start, end, name) {
 
   if (source === 'musopen' || source === 'archive' || source === 'github') {
     const audio = taoAudio(url);
+    gioiHanDoan(audio, start, end);
     phatAudio(audio);  // ← gọi NGAY, vẫn trong user gesture
     audio.addEventListener('canplay', () => {
   if (m.start) audio.currentTime = m.start;  // ← chỉ seek sau khi ready
@@ -2402,6 +2424,7 @@ function playMusicDirect(source, url, id, start, end, name) {
       // Cùng bài: không dựng lại player. Khác mốc thì nhảy tới mốc mới.
       if (mocMoi !== nhacDangPhat.start) { try { audio.currentTime = mocMoi; } catch (_) {} }
       nhacDangPhat.start = mocMoi;
+      gioiHanDoan(audio, mocMoi, m.end);
       document.getElementById('music-title').textContent = name || '';
       return;
     }
@@ -2417,6 +2440,7 @@ function playMusicDirect(source, url, id, start, end, name) {
   if (source === 'musopen' || source === 'archive' || source === 'github') {
     // HTML5 audio — direct MP3 link từ musopen.org hoặc archive.org
     const audio = taoAudio(m.url);
+    gioiHanDoan(audio, m.start, m.end);
     phatAudio(audio);  // ← gọi NGAY, vẫn trong user gesture
     audio.addEventListener('canplay', () => {
       if (m.start) audio.currentTime = m.start;  // ← chỉ seek sau khi ready

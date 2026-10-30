@@ -483,11 +483,34 @@ function rdDauDoc() {
   const nchu = rows && rows[ch] ? rdDemChu(rows[ch].content) : 0;
   const ships = (w.ships || []).filter(s => s !== 'Others');
   const nhieu = ten.length > 1;
-  const thongTin = [
-    [w.nch ? soChuong(w.nch) : '', w.words != null ? dtSo(w.words) + ' ' + t('dt_words') : ''].filter(Boolean).join(' · '),
-    [phutDoc(w) ? t('dt_min').replace('{n}', phutDoc(w)) : '', trangThai(w)].filter(Boolean).join(' · '),
-    ships.join(', ')
-  ].filter(Boolean);
+  // Khung thông tin kiểu AO3 (Rating / Warning / Category / Fandom / Relationship / Tags / Language / Stats),
+  // chỉ những dòng web có dữ liệu. Fandom và cặp đôi bấm được → sang Works đã lọc sẵn.
+  const denLoc = fn => () => { fn(); RD_W.n = RD_TRANG; WS.via = null; showPage('works', rdNav('works')); };
+  const dongTT = (k, ...v) => dtEl('div', null, dtEl('dt', null, t(k)), dtEl('dd', null, ...v));
+  const lienKet = (chu, fn) => dtEl('button', { type: 'button', class: 'rd-ilink', onclick: fn }, chu);
+  const canh = f.warning || (w.warnTags || []).join(', ');
+  const xong = w.complete === true;
+  const ngayCuoi = w.newMv ? w.newMv.at : null;
+  const so = (k, v) => v || v === 0 ? dtEl('span', null, t(k) + ': ', dtEl('b', null, v)) : null;
+  const khungTT = dtEl('dl', { class: 'rd-ibox' },
+    dongTT('rd_i_warn', canh ? dtEl('span', { class: 'rd-warn-txt' }, canh) : dtEl('span', { class: 'rd-muted' }, t('rd_i_nowarn'))),
+    g ? dongTT('dt_form', tenDuNhom(g)) : null,
+    dongTT('fandom', lienKet(fandomLabel(w.fandom), denLoc(() => { WS.fandom = w.fandom; WS.ships.clear(); }))),
+    dongTT('rd_pairing', ships.length
+      ? ships.map(s => lienKet(s, denLoc(() => { WS.fandom = 'all'; WS.ships = new Set([s]); })))
+      : dtEl('span', { class: 'rd-muted' }, t('rd_gen'))),
+    (w.tags || []).length ? dongTT('rd_tags', w.tags.map(s => dtEl('span', null, s))) : null,
+    w.lang ? dongTT('dt_language', w.lang === 'vi' ? t('rd_lang_vi') : t('rd_lang_en')) : null,
+    (w.music || []).length ? dongTT('rd_music', nhacText(w)) : null,
+    dongTT('rd_i_stats', dtEl('span', { class: 'rd-istats' },
+      so('rd_published', w.date ? dtNgay(w.date) : ''),
+      so(xong ? 'rd_i_completed' : 'rd_updated', ngayCuoi ? dtNgay(ngayCuoi) : (xong && w.date ? dtNgay(w.date) : '')),
+      so('rd_i_words', w.words != null ? dtSo(w.words) : ''),
+      so('rd_i_mv', w.nch ? w.nch + '/' + (xong ? w.nch : '?') : ''),
+      phutDoc(w) ? dtEl('span', null, t('dt_min').replace('{n}', phutDoc(w))) : null,
+      so('rd_kudos_l', w.kudos != null ? dtSo(w.kudos) : ''),
+      so('rd_comments_l', w.comments ? dtSo(w.comments) : ''),
+      so('rd_bms_l', w.bookmarks ? dtSo(w.bookmarks) : ''))));
 
   head.textContent = '';
   ganCon(head,
@@ -501,8 +524,7 @@ function rdDauDoc() {
       dtEl('p', { class: 'rd-eyebrow' }, [g ? tenNganNhom(g) : '', fandomLabel(w.fandom)].filter(Boolean).join(' · ')),
       dtEl('h1', { class: 'rd-read-t' }, f.title),
       f.subtitle ? dtEl('p', { class: 'rd-read-sub' }, chuTron(f.subtitle)) : null,
-      thongTin.length ? dtEl('p', { class: 'rd-read-meta' }, thongTin.map(x => dtEl('span', null, x))) : null,
-      f.warning ? dtEl('div', { class: 'reading-warning' }, '⚠ ' + f.warning) : null));
+      khungTT));
   if (f.cover) {
     const bia = oBia(f.cover, 'reading-bia');
     if (bia.tagName === 'IMG') { if (f.coverCrop) bia.classList.add('cat-219'); head.append(bia); }

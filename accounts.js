@@ -412,18 +412,25 @@ function pwMusicRead(box) {
   const url = box.querySelector('.pw-m-url').value.trim();
   if (!url) return null;                       // không có link = không có nhạc
   const start = parseInt(box.querySelector('.pw-m-start').value, 10);
-  return {
+  const o = {
     source: box.querySelector('.pw-m-source').value || 'github',
     url,
     start: isNaN(start) ? 0 : Math.max(0, start),
     name: box.querySelector('.pw-m-name').value.trim() || null
   };
+  // Mốc kết thúc (tuỳ chọn): chỉ ghi khoá `end` khi có và lớn hơn mốc bắt đầu — nhạc cũ không có khoá này nên
+  // phép so "chương có khác nhạc chung không" (JSON.stringify) vẫn khớp như trước.
+  const endEl = box.querySelector('.pw-m-end');
+  const end = endEl ? parseInt(endEl.value, 10) : NaN;
+  if (!isNaN(end) && end > o.start) o.end = end;
+  return o;
 }
 
 function pwMusicWrite(box, m) {
   box.querySelector('.pw-m-url').value    = (m && m.url) || '';
   box.querySelector('.pw-m-name').value   = (m && m.name) || '';
   box.querySelector('.pw-m-start').value  = (m && m.start) ? m.start : '';
+  if (box.querySelector('.pw-m-end')) box.querySelector('.pw-m-end').value = (m && m.end) ? m.end : '';
   box.querySelector('.pw-m-source').value = (m && m.source) || 'github';
 }
 

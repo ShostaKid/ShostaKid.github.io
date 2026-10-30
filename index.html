@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wdth,wght@0,62.5..100,300..700;1,62.5..100,300..700&family=Noto+Serif+Display:ital,wght@0,400..600;1,400..600&family=Noto+Serif:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css?v=18">
-<link rel="stylesheet" href="redesign.css?v=5">
+<link rel="stylesheet" href="redesign.css?v=6">
 <!-- Tải sẵn trang Commission trong lúc rảnh để bấm sang là tức thì. -->
 <link rel="prefetch" href="commissions.html">
 <link rel="prefetch" href="commissions.css?v=3">
@@ -289,6 +289,7 @@
           <input type="text" class="pw-m-name" data-i18n-ph="post_m_name" placeholder="Track name">
           <div class="pw-m-row">
             <input type="number" class="pw-m-start" min="0" step="1" data-i18n-ph="post_m_start" placeholder="Start (seconds)">
+            <input type="number" class="pw-m-end" min="1" step="1" data-i18n-ph="post_m_end" placeholder="End (seconds, optional)">
             <select class="pw-m-source">
               <option value="github">GitHub Releases</option>
               <option value="archive">archive.org</option>
@@ -493,6 +494,7 @@
           <input type="text" class="pw-m-name" data-i18n-ph="post_m_name" placeholder="Track name shown to readers">
           <div class="pw-m-row">
             <input type="number" class="pw-m-start" min="0" step="1" data-i18n-ph="post_m_start" placeholder="Start (seconds)">
+            <input type="number" class="pw-m-end" min="1" step="1" data-i18n-ph="post_m_end" placeholder="End (seconds, optional)">
             <select class="pw-m-source">
               <option value="github">GitHub Releases</option>
               <option value="archive">archive.org</option>
@@ -684,8 +686,8 @@
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
 
 <!-- YouTube player ẩn — tự inject bằng JS -->
-<script src="app.js?v=17"></script>
-<script src="redesign.js?v=4"></script>
+<script src="app.js?v=18"></script>
+<script src="redesign.js?v=5"></script>
 <script src="rehearsal.js?v=1"></script>
 <script src="notes.js?v=4"></script>
 <script src="notes-admin.js?v=1"></script>
@@ -696,6 +698,6 @@
      KHÔNG đụng gì tới phần Browse / danh sách truyện:
      phần đó dựng ở script cổ điển (giao diện đĩa than, dữ liệu từ fetchWorksFromDB).
      ============================================= -->
-<script type="module" src="accounts.js?v=9"></script>
+<script type="module" src="accounts.js?v=10"></script>
 </body>
 </html>
