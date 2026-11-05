@@ -9,7 +9,7 @@
 // Màu nền bìa theo fandom — trầm hơn MAU_BIA của bìa đĩa cũ, hợp nền giấy ngà.
 const RD_MAU = {
   'Figure Skating RPF': '#2C3A4F', 'Reverse: 1999': '#5C2B27', 'Honkai: Star Rail': '#2D4239',
-  'Genshin Impact': '#3A3F5E', 'Spider-Verse': '#3B3431', 'Zootopia': '#5A4A2C', 'Others': '#5E584E'
+  'Genshin Impact': '#3A3F5E', 'Spider-Verse': '#3B3431', 'Zootopia': '#5A4A2C', 'Others': '#4F4A42'
 };
 const rdMau = w => RD_MAU[w.fandom] || '#4A4540';
 // "Mới": movement mới trong 14 ngày (coChuongMoi) hoặc truyện vừa ra mắt trong 14 ngày.
