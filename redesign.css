@@ -261,11 +261,11 @@ footer span[style]{color:var(--gold-light)!important;}
   background:var(--cream2);border:1px solid var(--hair);}
 .rd-teaser p:not(.rd-eyebrow){margin:16px 0 30px;max-width:440px;color:var(--ink2);}
 .rd-tiles{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-.rd-tile{display:flex;flex-direction:column;justify-content:space-between;gap:26px;min-height:128px;padding:22px;border:1px solid var(--hair);
-  background:var(--cream);color:var(--ink);text-decoration:none;}
+.rd-tile{display:flex;flex-direction:column;justify-content:space-between;gap:26px;min-height:128px;padding:18px 0 0;border:0;border-top:1px solid var(--hair);
+  background:transparent;color:var(--ink);text-decoration:none;}
 .rd-tile .no{font-family:var(--f-display);font-size:19px;color:var(--gold-dark);}
 .rd-tile b{font-family:var(--f-display);font-weight:500;font-size:22px;}
-.rd-tile:hover{border-color:var(--rd-gold-line);}
+.rd-tile:hover{border-top-color:var(--gold);}
 
 /* ---------- WORKS ---------- */
 .rd-page{display:block;padding:36px 0 96px;}
@@ -305,8 +305,7 @@ footer span[style]{color:var(--gold-light)!important;}
 .rd-pager{display:flex;justify-content:center;margin-top:36px;}
 
 /* Thẻ truyện: khung AO3 (đủ thông tin) + dáng Ficbook (nhãn trái, vạch màu fandom bên trái) */
-.rd-blurb{position:relative;background:var(--cream2);border:1px solid var(--hair);border-left:4px solid var(--fd);padding:26px 30px 22px;}
-[data-theme="dark"] .rd-blurb{border-left-color:color-mix(in srgb,var(--fd),#ffffff 28%);}
+.rd-blurb{position:relative;background:var(--cream2);border:1px solid var(--hair);padding:26px 30px 22px;}
 .rd-blurb.rd-picked{box-shadow:0 0 0 2px var(--gold);}
 .rd-blurb .dt-via{margin:-6px 0 18px;}
 .rd-bl-head{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:18px;align-items:start;}
@@ -375,7 +374,7 @@ footer span[style]{color:var(--gold-light)!important;}
   .rd-resume{grid-template-columns:56px minmax(0,1fr);gap:14px;padding:14px;}
   .rd-resume .rd-cv{width:56px;}
   .rd-resume-go{display:none;}
-  .rd-tile{min-height:96px;padding:16px;}
+  .rd-tile{min-height:96px;padding:14px 0 0;}
   .rd-fsel{flex:1 1 50%;border-bottom:1px solid var(--hair);}
   .rd-fsel:nth-child(2n){border-right:0;}
   .rd-fsel select{width:100%;padding:15px 36px 15px 14px;font-size:13px;}
@@ -496,7 +495,7 @@ footer.rd-ft{display:block;padding:56px 0 32px;background:var(--rd-night);border
 #page-reading .back-btn{display:none;}
 .rd-read-crumb{margin-bottom:40px;}
 .rd-read-hd{text-align:center;}
-.rd-read-t{margin:14px 0 6px;font-family:var(--f-display);font-weight:500;font-size:clamp(36px,5.4vw,60px);line-height:1.1;color:var(--ink);}
+.rd-read-t{margin:0 0 6px;font-family:var(--f-display);font-weight:500;font-size:clamp(36px,5.4vw,60px);line-height:1.1;color:var(--ink);}
 .rd-read-sub{font-family:var(--f-display);font-style:italic;font-size:clamp(22px,2.6vw,28px);color:var(--ink2);}
 .rd-read-meta{display:flex;flex-wrap:wrap;justify-content:center;margin-top:14px;font-stretch:85%;font-size:13.5px;letter-spacing:.04em;color:var(--gold-dark);}
 .rd-read-meta span + span::before{content:'|';margin:0 14px;color:var(--rd-gold-line);}
@@ -715,3 +714,12 @@ p,dd,blockquote,li,.rd-sub,.rd-fav-sum,.rd-hero-lead,.rd-bl-sum,.cr-lead{text-wr
 .rd-hero-tag,.dt-rh-empty,.rd-step b{line-height:1.45;}
 .dt-rh-eyebrow,.rd-bl-date,.rd-card .f,.rd-teaser p{line-height:1.4;}
 .rd-page-hd p,.rd-card .f,.rd-loved .f{line-height:1.5;}
+
+/* =============================================
+   Rà soát giao diện, gói 2 — bỏ dấu hiệu "slop": nhãn nhỏ viết hoa nằm TRÊN tiêu đề (kicker),
+   viền trái màu ở thẻ Works, thẻ lồng thẻ ở khung Commission.
+   Nhãn còn mang thông tin (thể loại · fandom, đếm số tác phẩm) chuyển xuống DƯỚI tiêu đề.
+   ============================================= */
+.rd-sec-lede{margin:8px 0 0;font-size:15px;line-height:1.5;color:var(--ink2);}
+.rd-read-hd .rd-eyebrow{margin:14px 0 0;}
+.dt-rh-head h1+.dt-rh-eyebrow{margin-top:14px;}
