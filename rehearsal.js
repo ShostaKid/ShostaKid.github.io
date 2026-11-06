@@ -174,8 +174,8 @@
 
     goc.append(dtEl('main', { class: 'dt-rh' },
       dtEl('header', { class: 'dt-rh-head' },
-        dtEl('div', null, dtEl('div', { class: 'dt-rh-eyebrow' }, t('rh_eyebrow').replace('{n}', ds.length)),
-          dtEl('h1', null, t('rh_h1'))),
+        dtEl('div', null, dtEl('h1', null, t('rh_h1')),
+          dtEl('div', { class: 'dt-rh-eyebrow' }, t('rh_eyebrow').replace('{n}', ds.length))),
         dtEl('div', { class: 'r' }, dtEl('p', null, t('rh_intro')), but)),
       RH.sua ? null : dtEl('div', { class: 'dt-rh-chips' }, chips),
       giay));

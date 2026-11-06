@@ -76,7 +76,6 @@ function rdManChao(denWorks, denOpus) {
   khuong.append(khoa);
   return dtEl('section', { class: 'rd-hero', 'aria-labelledby': 'rd-hero-t' },
     dtEl('div', { class: 'rd-hero-in' },
-      dtEl('p', { class: 'rd-eyebrow' }, t('rd_eye')),
       dtEl('h1', { class: 'rd-hero-t', id: 'rd-hero-t' }, khuong, dtEl('span', { class: 'tt' }, 'ShostaKid')),
       dtEl('p', { class: 'rd-hero-lead' }, t('rd_lead')),
       // Giữ nguyên chữ "$" — chơi chữ có chủ ý.
@@ -118,8 +117,8 @@ function renderHome() {
           : t('rd_published') + ' ' + dtNgay(w.date))))))) : null,
     chon.length ? dtEl('section', { class: 'rd-sec' }, dtEl('div', { class: 'rd-wrap' },
       dtEl('div', { class: 'rd-sec-hd' }, dtEl('div', null,
-        dtEl('p', { class: 'rd-eyebrow' }, t('rd_fav_eye') + ' · ' + chon.length),
-        dtEl('h2', { class: 'rd-h2' }, t('head_fav')))),
+        dtEl('h2', { class: 'rd-h2' }, t('head_fav')),
+        dtEl('p', { class: 'rd-sec-lede' }, t('rd_fav_eye') + ' · ' + chon.length))),
       dtEl('div', { class: 'rd-favs' }, chon.map(w => dtEl('button', { type: 'button', class: 'rd-card rd-fav', onclick: () => openFic(w.idx) },
         rdBia(w, 'p', rdMoi(w)),
         dtEl('span', { class: 'rd-eyebrow' }, [w.fandom, tenNganNhom(nhomCua(w))].join(' · ')),
@@ -146,7 +145,6 @@ function renderHome() {
           dtEl('span', { class: 'kd' }, '♥ ' + (w.kudos || 0)))))))) : null,
     dtEl('section', { class: 'rd-sec' }, dtEl('div', { class: 'rd-wrap' }, dtEl('div', { class: 'rd-teaser' },
       dtEl('div', null,
-        dtEl('p', { class: 'rd-eyebrow' }, t('nav_zone')),
         dtEl('h2', { class: 'rd-h2' }, t('rd_comm_t')),
         dtEl('p', null, t('rd_comm_p')),
         dtEl('a', { class: 'rd-btn rd-btn-line', href: 'commissions.html' }, t('rd_comm_btn'))),
@@ -521,9 +519,9 @@ function rdDauDoc() {
       dtEl('span', { 'aria-hidden': 'true' }, '›'),
       dtEl('span', null, f.title)),
     dtEl('div', { class: 'rd-read-hd' },
-      dtEl('p', { class: 'rd-eyebrow' }, [g ? tenNganNhom(g) : '', fandomLabel(w.fandom)].filter(Boolean).join(' · ')),
       dtEl('h1', { class: 'rd-read-t' }, f.title),
       f.subtitle ? dtEl('p', { class: 'rd-read-sub' }, chuTron(f.subtitle)) : null,
+      dtEl('p', { class: 'rd-eyebrow' }, [g ? tenNganNhom(g) : '', fandomLabel(w.fandom)].filter(Boolean).join(' · ')),
       khungTT));
   if (f.cover) {
     const bia = oBia(f.cover, 'reading-bia');
