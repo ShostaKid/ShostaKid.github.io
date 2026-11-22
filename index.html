@@ -352,7 +352,7 @@
           <div class="about-ornament" style="font-size:2.8rem;">𝄞</div>
           <div class="section-heading" style="margin-top:1rem;" data-i18n="auth_head">Account</div>
 
-          <div class="auth-tabs">
+          <div class="auth-tabs" id="auth-tabs">
             <button type="button" class="auth-tab active" id="tab-signin" data-i18n="auth_signin">Sign In</button>
             <button type="button" class="auth-tab" id="tab-signup" data-i18n="auth_signup">Sign Up</button>
           </div>
@@ -392,6 +392,20 @@
               <div class="field-hint" data-i18n="auth_password_hint">At least 6 characters.</div>
             </div>
             <button type="submit" class="ao3-link btn-full" id="su-submit" data-i18n="auth_signup_btn">Create Account →</button>
+          </form>
+
+          <form id="form-newpass" style="display:none;">
+            <div class="section-heading" style="font-size:1.1rem;margin:0 0 1rem;" data-i18n="auth_newpw_head">Set a new password</div>
+            <div class="field">
+              <label data-i18n="auth_newpw">New password</label>
+              <input type="password" id="np-password" autocomplete="new-password" required minlength="6">
+              <div class="field-hint" data-i18n="auth_password_hint">At least 6 characters.</div>
+            </div>
+            <div class="field">
+              <label data-i18n="auth_newpw2">Repeat new password</label>
+              <input type="password" id="np-password2" autocomplete="new-password" required minlength="6">
+            </div>
+            <button type="submit" class="ao3-link btn-full" id="np-submit" data-i18n="auth_newpw_btn">Save new password →</button>
           </form>
         </div>
       </div>
@@ -686,7 +700,7 @@
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
 
 <!-- YouTube player ẩn — tự inject bằng JS -->
-<script src="app.js?v=18"></script>
+<script src="app.js?v=19"></script>
 <script src="redesign.js?v=7"></script>
 <script src="rehearsal.js?v=2"></script>
 <script src="notes.js?v=4"></script>
@@ -698,6 +712,6 @@
      KHÔNG đụng gì tới phần Browse / danh sách truyện:
      phần đó dựng ở script cổ điển (giao diện đĩa than, dữ liệu từ fetchWorksFromDB).
      ============================================= -->
-<script type="module" src="accounts.js?v=10"></script>
+<script type="module" src="accounts.js?v=11"></script>
 </body>
 </html>

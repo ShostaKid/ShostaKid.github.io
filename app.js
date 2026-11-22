@@ -1392,7 +1392,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   // vì rèm chính là cú chạm mở khoá nhạc. boQuaChao() giữ lại cho welcome.js cũ, không còn được gọi ở đây.
   {
     // Không dựng rèm cho: nút "Read" của trang Commission (?vao=1, về Home không nhạc) và link huỷ nhận mail (#unsub=…).
-    const tuCommission = new URLSearchParams(location.search).has('vao') || location.hash.startsWith('#unsub=');
+    const tuCommission = new URLSearchParams(location.search).has('vao') || location.hash.startsWith('#unsub=')
+                       || /^#(access_token|error)=/.test(location.hash);   // link trong mail đặt lại mật khẩu (hoặc link hết hạn): không rèm che form
     intro.style.display = 'none';
     // Không hiệu ứng mờ dần 0.8s như khi vào từ màn chào: người đọc vừa bấm "Read" nên phải thấy ngay.
     const site = document.getElementById('site');
@@ -1884,6 +1885,9 @@ const i18n = {
     auth_forgot_q:'Forgot your password?', auth_forgot_btn:'Send reset link',
     auth_reset_need_email:'Enter your email above first, then press this again.',
     auth_reset_sent:'If that email has an account, a reset link is on its way.',
+    auth_newpw_head:'Set a new password', auth_newpw:'New password', auth_newpw2:'Repeat new password', auth_newpw_btn:'Save new password →', auth_newpw_saving:'Saving…',
+    auth_newpw_short:'At least 6 characters.', auth_newpw_diff:'The two passwords do not match.',
+    auth_link_expired:'That reset link is invalid or has expired. Enter your email and press “Send reset link” again.',
     auth_confirm_email:'Almost there — check your inbox and confirm your email, then sign in.',
     auth_welcome:'Welcome back ♪',
     auth_user_taken:'That username is already taken.',
@@ -2186,6 +2190,9 @@ const i18n = {
     auth_forgot_q:'Quên mật khẩu?', auth_forgot_btn:'Gửi link đặt lại',
     auth_reset_need_email:'Nhập email ở trên trước đã, rồi bấm lại nút này.',
     auth_reset_sent:'Nếu email đó có tài khoản, link đặt lại đang trên đường tới.',
+    auth_newpw_head:'Đặt mật khẩu mới', auth_newpw:'Mật khẩu mới', auth_newpw2:'Nhập lại mật khẩu mới', auth_newpw_btn:'Lưu mật khẩu mới →', auth_newpw_saving:'Đang lưu…',
+    auth_newpw_short:'Ít nhất 6 ký tự.', auth_newpw_diff:'Hai mật khẩu không khớp.',
+    auth_link_expired:'Link đặt lại này không hợp lệ hoặc đã hết hạn. Nhập email rồi bấm “Gửi link đặt lại” một lần nữa.',
     auth_confirm_email:'Gần xong rồi — kiểm tra hộp thư và xác nhận email, sau đó đăng nhập.',
     auth_welcome:'Chào mừng quay lại ♪',
     auth_user_taken:'Tên đăng nhập này đã có người dùng.',

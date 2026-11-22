@@ -5,6 +5,11 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 const SB_URL = 'https://oseddxgmwbeduazbomuf.supabase.co';
 const SB_KEY = 'sb_publishable_aOYL383Vt2fI561c0VJqbg_VDcuKqUe';
 
+// Link trong mail "quên mật khẩu" quay về dạng #access_token=…&type=recovery (hoặc #error=… nếu hết hạn).
+// Chụp hash TRƯỚC khi createClient đọc rồi xoá nó khỏi URL.
+const HASH_LUC_VAO = window.location.hash;
+const LA_LINK_HONG_MK = /^#error=/.test(HASH_LUC_VAO);
+
 const sb = createClient(SB_URL, SB_KEY);
 
 const $ = (id) => document.getElementById(id);
@@ -2345,6 +2350,40 @@ function showTab(which) {
   $('form-signup').style.display = isIn ? 'none' : '';
   clearMsg($('auth-msg'));
 }
+// ---------- đặt mật khẩu mới (sau khi bấm link trong mail) ----------
+function moFormMatKhauMoi() {
+  window.showPage('auth', $('nav-signin'), 'replace');
+  $('auth-tabs').style.display = 'none';
+  $('form-signin').style.display = 'none';
+  $('form-signup').style.display = 'none';
+  $('form-newpass').style.display = '';
+  clearMsg($('auth-msg'));
+}
+function dongFormMatKhauMoi() {
+  $('form-newpass').style.display = 'none';
+  $('auth-tabs').style.display = '';
+  showTab('signin');
+}
+$('form-newpass').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = $('np-submit');
+  const p1 = $('np-password').value, p2 = $('np-password2').value;
+  clearMsg($('auth-msg'));
+  if (p1.length < 6) { msg($('auth-msg'), 'auth_newpw_short', 'err'); return; }
+  if (p1 !== p2) { msg($('auth-msg'), 'auth_newpw_diff', 'err'); return; }
+  busy(btn, true, 'auth_newpw_saving');
+  const { error } = await sb.auth.updateUser({ password: p1 });
+  busy(btn, false, 'auth_newpw_btn');
+  if (error) { msg($('auth-msg'), raw(error.message), 'err'); return; }
+  $('np-password').value = ''; $('np-password2').value = '';
+  dongFormMatKhauMoi();
+  window.showPage('profile', $('nav-profile'));
+});
+if (LA_LINK_HONG_MK) {
+  // Link hết hạn / đã dùng: đưa về trang đăng nhập kèm lời giải thích.
+  setTimeout(() => { window.showPage('auth', $('nav-signin'), 'replace'); msg($('auth-msg'), 'auth_link_expired', 'err'); }, 400);
+}
+
 $('tab-signin').addEventListener('click', () => showTab('signin'));
 $('tab-signup').addEventListener('click', () => showTab('signup'));
 
@@ -2489,6 +2528,7 @@ $('btn-signout').addEventListener('click', async () => {
 
 // ---------- đồng bộ trạng thái ----------
 sb.auth.onAuthStateChange((event, session) => {
+  if (event === 'PASSWORD_RECOVERY') { setTimeout(moFormMatKhauMoi, 0); setTimeout(moFormMatKhauMoi, 600); }   // 2 lần: lần sau thắng bước mở trang mặc định lúc tải
   paintNav(session);
   // Đang đứng ở trang đọc mà đăng nhập/đăng xuất thì vẽ lại kudos/bookmark
   // theo danh tính mới, không để nút kẹt ở trạng thái cũ.
