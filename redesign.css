@@ -779,3 +779,5 @@ p,dd,blockquote,li,.rd-sub,.rd-fav-sum,.rd-hero-lead,.rd-bl-sum,.cr-lead{text-wr
 .dt-rh-head h1{font-style:normal;font-size:clamp(56px,7vw,88px);line-height:1;letter-spacing:-.02em;}
 .dt-bm[aria-pressed="true"] .rd-ico{fill:currentColor;}
 .dt-bm .rd-ico{width:1.05em;height:1.05em;}
+/* Nốt nhạc trong nút "Not sure what to read?": cỡ chữ, không phình theo khung. */
+.rd-tempo .dt-ic,.dt-tp-open .dt-ic{display:inline-block;width:1.15em;height:1.15em;vertical-align:-.2em;fill:currentColor;}
