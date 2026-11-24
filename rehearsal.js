@@ -162,7 +162,7 @@
     if (RH.sua) soan(giay);
 
     const but = admin && !RH.sua ? dtEl('button', { type: 'button', class: 'dt-btn-line dt-rh-editbtn', onclick: () => {
-      RH.ban = ds.map(x => Object.assign({}, x)); RH.sua = true; RH.thongBao = null; renderRehearsal(); } }, '✎ ' + t('rh_edit')) : null;
+      RH.ban = ds.map(x => Object.assign({}, x)); RH.sua = true; RH.thongBao = null; renderRehearsal(); } }, t('rh_edit')) : null;
 
     const pencil = document.createElementNS(NS, 'svg');
     [['class', 'dt-rh-pencil'], ['width', 270], ['height', 44], ['viewBox', '0 0 270 44'], ['aria-hidden', 'true']].forEach(([k, v]) => pencil.setAttribute(k, v));

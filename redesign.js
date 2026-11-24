@@ -142,7 +142,7 @@ function renderHome() {
           dtEl('span', { class: 'rank' }, i + 1), rdBia(w, 'm'),
           dtEl('span', { class: 'txt' }, dtEl('span', { class: 't' }, w.title),
             dtEl('span', { class: 'f' }, [chuTron(w.subtitle), w.fandom].filter(Boolean).join(' · '))),
-          dtEl('span', { class: 'kd' }, '♥ ' + (w.kudos || 0)))))))) : null,
+          dtEl('span', { class: 'kd' }, rdIco('heart'), ' ' + (w.kudos || 0)))))))) : null,
     dtEl('section', { class: 'rd-sec' }, dtEl('div', { class: 'rd-wrap' }, dtEl('div', { class: 'rd-teaser' },
       dtEl('div', null,
         dtEl('h2', { class: 'rd-h2' }, t('rd_comm_t')),
@@ -192,7 +192,7 @@ function rdNutLuu(w) {
   return dtEl('button', { type: 'button', class: 'dt-bm rd-btn rd-btn-line rd-btn-sm', 'data-uuid': w.uuid,
     'aria-pressed': (window.skDaLuu && window.skDaLuu.has(w.uuid)) ? 'true' : 'false',
     onclick: e => { if (window.dtLuuTruyen) window.dtLuuTruyen(w, e.currentTarget); } },
-    dtEl('span', { 'aria-hidden': 'true' }, '✦ '), t('dt_bookmark'));
+    dtEl('span', { 'aria-hidden': 'true' }, rdIco('bookmark'), ' '), t('dt_bookmark'));
 }
 
 function rdThe(w) {
@@ -222,7 +222,7 @@ function rdThe(w) {
         dtEl('i', { 'aria-hidden': 'true' }), trangThai(w)) : null,
       w.restricted ? dtEl('span', { class: 'rd-badge lock' }, t('only_member')) : null,
       canh ? dtEl('span', { class: 'rd-badge warn' }, t('dt_cw')) : null,
-      dtEl('span', { class: 'rd-badge kd' }, '♥ ' + (w.kudos || 0))),
+      dtEl('span', { class: 'rd-badge kd' }, rdIco('heart'), ' ' + (w.kudos || 0))),
     dtEl('dl', { class: 'rd-rows' },
       dong('fandom', tag(fandomLabel(w.fandom), () => { WS.fandom = w.fandom; rdLocLai(); })),
       dong('rd_pairing', ships.length
@@ -304,7 +304,7 @@ function renderWorks() {
       dem,
       dtEl('div', { class: 'rd-bar2-r' },
         dtEl('button', { type: 'button', class: 'rd-tempo', onclick: e => moTempo(e.currentTarget) },
-          dtEl('span', { 'aria-hidden': 'true' }, '♩ '), t('dt_tp_btn')),
+          dtEl('span', { 'aria-hidden': 'true' }, dtIcon('note'), ' '), t('dt_tp_btn')),
         dtEl('div', { class: 'rd-sort', role: 'group', 'aria-label': t('dt_order') },
           xep('new', t('dt_newest')), xep('long', t('dt_longest')), xep('loved', t('rd_sort_loved'))))),
     list, trang)));

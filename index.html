@@ -9,12 +9,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wdth,wght@0,62.5..100,300..700;1,62.5..100,300..700&family=Noto+Serif+Display:ital,wght@0,400..600;1,400..600&family=Noto+Serif:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=18">
-<link rel="stylesheet" href="redesign.css?v=9">
+<link rel="stylesheet" href="style.css?v=19">
+<link rel="stylesheet" href="redesign.css?v=12">
 <!-- Tải sẵn trang Commission trong lúc rảnh để bấm sang là tức thì. -->
 <link rel="prefetch" href="commissions.html">
-<link rel="prefetch" href="commissions.css?v=3">
-<link rel="prefetch" href="commissions.js?v=2">
+<link rel="prefetch" href="commissions.css?v=4">
+<link rel="prefetch" href="commissions.js?v=3">
 </head>
 <body>
 <!-- Bộ icon nhạc cụ cho bìa đĩa và bàn xoay Opus. Gọi bằng <svg><use href="#ic-…"></svg>.
@@ -22,6 +22,18 @@
      dòng ghi nguồn nằm ở trang Opus. cello / upright-piano / triangle do Claude Design vẽ;
      c-clef / f-clef / note / viola vẽ tay thêm (09/2026). -->
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <!-- Bộ icon giao diện (nét 1.7, 24px) thay các ký tự ♥ ☆ ✉ ☾ ✎ ▼ ↺ ✦. Tô đặc bằng class .on. -->
+  <symbol id="ic-heart" viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></symbol>
+  <symbol id="ic-bookmark" viewBox="0 0 24 24"><path d="M7 4h10v16l-5-3.6L7 20z"/></symbol>
+  <symbol id="ic-mail" viewBox="0 0 24 24"><rect x="3.5" y="5.5" width="17" height="13" rx="1.5"/><path d="m4 7 8 6 8-6"/></symbol>
+  <symbol id="ic-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></symbol>
+  <symbol id="ic-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.6"/><path d="M12 3.5v2M12 18.5v2M3.5 12h2M18.5 12h2M6 6l1.4 1.4M16.6 16.6 18 18M6 18l1.4-1.4M16.6 7.4 18 6"/></symbol>
+  <symbol id="ic-pencil" viewBox="0 0 24 24"><path d="M4 20l1-4L16.5 4.5a1.8 1.8 0 0 1 2.5 0l.5.5a1.8 1.8 0 0 1 0 2.5L8 19zM14.5 6.5l3 3"/></symbol>
+  <symbol id="ic-chev-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="ic-chev-left" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></symbol>
+  <symbol id="ic-chev-right" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+  <symbol id="ic-diamond" viewBox="0 0 24 24"><path d="M12 4l6.5 8L12 20 5.5 12z"/></symbol>
+  <symbol id="ic-refresh" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.6-5.9M20 4v5h-5"/></symbol>
   <symbol id="rd-crest" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="none" stroke="currentColor" stroke-width="1.3"/><use href="#ic-g-clef" x="14" y="13" width="36" height="38" fill="currentColor"/></symbol>
   <symbol id="ic-violin" viewBox="0 0 512 512" fill="currentColor"><path fill="currentColor" d="m470.9 26l-23 7.69l-.1 12.66l17.8 17.81l12.7-.1l7.7-23.04zm-32.5 37l-227 210.5l27.2 27L449 73.57zm-39.6-19.33L385.7 56.7l15.6 15.5l13.5-12.53zm53.5 53.59l-12.5 13.54l15.5 15.4l13.1-13zm-79.6-27.52l-13 13.02l14.6 14.61l13.5-12.58zm54.5 54.46l-12.5 13.6l14.5 14.5l13.1-13.1zm-124 39.2c-28.7-17.5-72-25.4-116.3 47.8l-7.2-1.4l-7.3 13c3.8 1 13.5 8.2 12.4 12.1c-3.5 11.3-48.2 64.3-70.6 44.5c-2.9-2.6-5.8-5.7-8-9.6l-14.35 7.9c1.23 10-1.95 13.8-6.38 15.8c-82.975 36.6-64.15 78.6-33.01 126.9l3.11-3c22.09-22.2 43.62-54.6 62.73-82.7l6.1-9.3l13 13l10.1-10.1l-10.8-10.9l18.8-7.3l5.1 5.2l33.3-33.4c-2.9-3-5.9-6-8.9-8.9zm45.5 45.5L239 327l-8.9-8.9l-33.3 33.3l5 5.1l-7.1 18.9l-10.9-11l-10.1 10.2l12.8 12.9l-9.2 6.3c-27.6 18.9-60.6 40.6-82.61 62.7l-3.14 3c48.45 31.2 90.45 50 127.05-33c2-4.4 5.7-7.6 15.8-6.4l7.8-14.3c-3.8-2.3-7-5-9.6-8c-19.8-22.4 33.2-67.2 44.5-70.7c3.9-1.1 11 8.6 12.1 12.4l13-7.1l-1.4-7.2c73.2-44.3 65.4-87.7 47.9-116.3M206.9 295l-33.2 33.3l10.1 10.1l33.3-33.3zm-46.3 46.3l-10.2 10.1l10.2 10.1l10.1-10.1zm-33.4 13c-16.4 24.2-34.63 51-54.84 72l2.97 10.3l10.36 3c21.11-20.1 48.01-38.4 72.11-54.8z"/></symbol>
   <symbol id="ic-piano-keys" viewBox="0 0 512 512" fill="currentColor"><path fill="currentColor" d="M24 80v352h64V288H72V80zm96 0v208h-16v144h64V288h-16V80zm80 0v208h-16v144h64V288h-16V80zm80 0v208h-16v144h64V80zm64 0v352h64V288h-16V80zm96 0v208h-16v144h64V80z"/></symbol>
@@ -121,7 +133,7 @@
       </div>
 
       <button id="lang-btn" onclick="toggleLang()" title="Đổi ngôn ngữ / Switch language">VI</button>
-      <button id="theme-btn" onclick="toggleTheme()" title="Toggle theme">☾</button>
+      <button id="theme-btn" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle theme"><svg class="rd-ico i-moon" aria-hidden="true"><use href="#ic-moon"/></svg><svg class="rd-ico i-sun" aria-hidden="true"><use href="#ic-sun"/></svg></button>
     </div>
     </div>
     <!-- Chỉ hiện ở ≤768px: mở/đóng .nav-panel (links + tiện ích) như menu của trang Commission. -->
@@ -145,19 +157,19 @@
          mà người xem chưa đăng nhập). Tự ẩn sau vài giây. -->
     <div id="link-hong"></div>
     <div id="dt-home"></div>
-    <footer><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+    <footer><svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg></footer>
   </div>
 
   <!-- WORKS — kệ đĩa + khung On the turntable. Dựng trong renderWorks(). -->
   <div class="page" id="page-works">
     <div id="dt-works"></div>
-    <footer><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+    <footer><svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg></footer>
   </div><!-- /#page-works -->
 
   <!-- IN REHEARSAL — bàn soạn nhạc: danh sách tác phẩm đang viết. Dựng trong rehearsal.js (renderRehearsal). -->
   <div class="page" id="page-rehearsal">
     <div id="dt-rehearsal"></div>
-    <footer><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+    <footer><svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg></footer>
   </div><!-- /#page-rehearsal -->
 
   <!-- READING -->
@@ -175,23 +187,23 @@
       <div id="work-actions-wrap" style="display:none;">
         <div class="work-actions">
           <button type="button" class="wa-btn" id="btn-kudos">
-            <span class="wa-icon" id="kudos-icon">♡</span>
+            <span class="wa-icon" id="kudos-icon"><svg class="rd-ico" aria-hidden="true"><use href="#ic-heart"/></svg></span>
             <span id="kudos-label" data-i18n="wa_kudos">Kudos</span>
             <span class="wa-count" id="kudos-count"></span>
           </button>
           <button type="button" class="wa-btn" id="btn-bookmark">
-            <span class="wa-icon" id="bookmark-icon">☆</span>
+            <span class="wa-icon" id="bookmark-icon"><svg class="rd-ico" aria-hidden="true"><use href="#ic-bookmark"/></svg></span>
             <span id="bookmark-label" data-i18n="wa_bookmark">Bookmark</span>
           </button>
           <!-- Nhận mail khi có chương mới — chỉ thành viên (khách bấm thì sang trang đăng nhập).
                Mail do GitHub Action notify-new-chapters gửi; xem CLAUDE.md. -->
           <button type="button" class="wa-btn" id="btn-notify" aria-pressed="false">
-            <span class="wa-icon" id="notify-icon">✉</span>
+            <span class="wa-icon" id="notify-icon"><svg class="rd-ico" aria-hidden="true"><use href="#ic-mail"/></svg></span>
             <span id="notify-label" data-i18n="wa_notify">Email me new movements</span>
           </button>
           <!-- Chỉ admin thấy. Đây là lối vào duy nhất của chế độ sửa truyện. -->
           <button type="button" class="wa-btn" id="btn-edit-work" style="display:none;">
-            <span class="wa-icon">✎</span>
+            <span class="wa-icon"><svg class="rd-ico" aria-hidden="true"><use href="#ic-pencil"/></svg></span>
             <span data-i18n="wa_edit">Edit work</span>
           </button>
         </div>
@@ -215,7 +227,7 @@
         <button onclick="toggleComments()" style="font-family:var(--font-ui);font-size:0.78rem;letter-spacing:4px;text-transform:uppercase;color:var(--ui-head);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:1rem;width:100%;padding:0;">
           <span id="comments-label">Show Comments</span>
           <span style="flex:1;height:1px;background:var(--border);display:block;"></span>
-          <span id="comments-arrow">▼</span>
+          <span id="comments-arrow"><svg class="rd-ico" aria-hidden="true"><use href="#ic-chev-down"/></svg></span>
         </button>
 
         <div id="comments-body" style="display:none;margin-top:1.5rem;">
@@ -249,13 +261,13 @@
         </div>
       </div>
     </div>
-    <footer style="margin-top:2rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+    <footer style="margin-top:2rem;"><svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg></footer>
   </div>
 
   <!-- ABOUT -->
   <div class="page" id="page-about" style="background:var(--cream);">
     <div class="about-wrap">
-      <div class="about-ornament">𝄞</div>
+      <div class="about-ornament"><svg class="dt-ic" aria-hidden="true"><use href="#ic-g-clef"/></svg></div>
       <div class="section-heading" style="margin-top:1rem;" data-i18n="about_head">About the Author</div>
       <!-- Nội dung này giờ đọc từ site_content.about trong DB. Bốn đoạn dưới đây
            giữ nguyên làm bản dự phòng khi không gọi được DB (và là thứ hiện ra
@@ -268,7 +280,7 @@
       </div>
       <!-- Chỉ admin thấy -->
       <div style="margin-top:1.5rem;">
-        <button type="button" class="ao3-link" id="btn-edit-about" data-i18n="ab_edit" style="display:none;">✎ Edit this page</button>
+        <button type="button" class="ao3-link" id="btn-edit-about" data-i18n="ab_edit" style="display:none;">Edit this page</button>
       </div>
 
       <!-- Form sửa, ẩn cho tới khi bấm nút trên -->
@@ -318,7 +330,7 @@
         <button type="button" class="ao3-link" onclick="goRequest()" data-i18n="rq_moi_nut">Request a fic →</button>
       </div>
     </div>
-    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+    <footer style="margin-top:4rem;"><svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg></footer>
   </div>
 
   <!-- SIGN IN / SIGN UP -->
@@ -349,7 +361,7 @@
         </div>
 
         <div class="auth-panel">
-          <div class="about-ornament" style="font-size:2.8rem;">𝄞</div>
+          <div class="about-ornament" style="font-size:2.8rem;"><svg class="dt-ic" aria-hidden="true"><use href="#ic-g-clef"/></svg></div>
           <div class="section-heading" style="margin-top:1rem;" data-i18n="auth_head">Account</div>
 
           <div class="auth-tabs" id="auth-tabs">
@@ -410,7 +422,7 @@
         </div>
       </div>
     </div>
-    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+    <footer style="margin-top:4rem;"><svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg></footer>
   </div>
 
   <!-- MY PROFILE -->
@@ -530,7 +542,7 @@
         </div>
       </form>
     </div>
-    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+    <footer style="margin-top:4rem;"><svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg></footer>
   </div>
 
   <!-- GỬI YÊU CẦU -->
@@ -541,7 +553,7 @@
 
       <!-- Chưa đăng nhập: không dựng form, chỉ mời đăng nhập. -->
       <div id="rq-canhbao" class="khoa-hop" style="display:none;">
-        <div class="khoa-bieu">✦</div>
+        <div class="khoa-bieu"><svg class="rd-ico" aria-hidden="true"><use href="#ic-diamond"/></svg></div>
         <h3 data-i18n="rq_need_signin_head">Members only</h3>
         <p data-i18n="rq_need_signin">Requests come with a name attached, so you’ll need an account. It takes a moment.</p>
         <button type="button" class="ao3-link" id="rq-dangnhap" style="margin-top:0;" data-i18n="khoa_nut">Sign in →</button>
@@ -573,7 +585,7 @@
         <div id="rq-ds"></div>
       </div>
     </div>
-    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+    <footer style="margin-top:4rem;"><svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg></footer>
   </div>
 
   <!-- OPUS — bàn xoay chọn thể nhạc. Dựng trong renderOpus(); phần sửa nhóm
@@ -581,13 +593,13 @@
   <div class="page" id="page-opus" style="background:var(--cream);">
     <div class="auth-msg dt-opus-msg" id="opus-msg"></div>
     <div id="dt-opus"></div>
-    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+    <footer style="margin-top:4rem;"><svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg></footer>
   </div>
 
   <!-- NOTES · THE LISTENING ROOM — dựng trong notes.js; dữ liệu do module Supabase cấp (window.fetchNotesFromDB). -->
   <div class="page" id="page-notes">
     <div id="nt-root"></div>
-    <footer><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+    <footer><svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg></footer>
   </div>
 
   <!-- NOTES · công cụ viết note (chỉ admin) — dựng trong notes-admin.js; DB do module Supabase cấp. -->
@@ -607,7 +619,7 @@
 
       <!-- Chưa đăng nhập thì không dựng danh sách. Chủ repo chốt: chỉ thành viên. -->
       <div id="mb-canhbao" class="khoa-hop" style="display:none;">
-        <div class="khoa-bieu">✦</div>
+        <div class="khoa-bieu"><svg class="rd-ico" aria-hidden="true"><use href="#ic-diamond"/></svg></div>
         <h3 data-i18n="only_member">Members only</h3>
         <p data-i18n="mb_need_signin">The member list is for signed-in readers. Sign in to see who else is here.</p>
         <button type="button" class="ao3-link" id="mb-dangnhap" style="margin-top:0;" data-i18n="khoa_nut">Sign in →</button>
@@ -615,7 +627,7 @@
 
       <div id="mb-ds"></div>
     </div>
-    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+    <footer style="margin-top:4rem;"><svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg></footer>
   </div>
 
   <!-- HỒ SƠ MỘT THÀNH VIÊN (chỉ đọc) -->
@@ -624,7 +636,7 @@
       <button class="back-btn" onclick="showPage('members')" data-i18n="mb_back">← Members</button>
       <div id="mb-mot"></div>
     </div>
-    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+    <footer style="margin-top:4rem;"><svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg></footer>
   </div>
 
   <!-- BOOKMARK CỦA TÔI — kệ đĩa riêng, cùng kiểu với trang Works.
@@ -632,7 +644,7 @@
   <div class="page" id="page-bookmarks" style="background:var(--cream);">
     <div class="auth-msg dt-opus-msg" id="bm-msg"></div>
     <div id="bm-list"></div>
-    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+    <footer style="margin-top:4rem;"><svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg></footer>
   </div>
 
   <div class="page" id="page-profile" style="background:var(--cream);">
@@ -687,7 +699,7 @@
         <button type="button" class="ao3-link" id="btn-signout" data-i18n="prof_signout">Sign Out</button>
       </div>
     </div>
-    <footer style="margin-top:4rem;"><span style="color:var(--gold);">✦</span> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <span style="color:var(--gold);">✦</span></footer>
+    <footer style="margin-top:4rem;"><svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg> &nbsp; <span data-i18n="footer">ShostaKid · Have a great day:)</span> &nbsp; <svg class="rd-ico" style="color:var(--gold)" aria-hidden="true"><use href="#ic-diamond"/></svg></footer>
   </div>
 </div>
 
@@ -700,8 +712,8 @@
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
 
 <!-- YouTube player ẩn — tự inject bằng JS -->
-<script src="app.js?v=19"></script>
-<script src="redesign.js?v=7"></script>
+<script src="app.js?v=21"></script>
+<script src="redesign.js?v=8"></script>
 <script src="rehearsal.js?v=2"></script>
 <script src="notes.js?v=4"></script>
 <script src="notes-admin.js?v=1"></script>
@@ -712,6 +724,6 @@
      KHÔNG đụng gì tới phần Browse / danh sách truyện:
      phần đó dựng ở script cổ điển (giao diện đĩa than, dữ liệu từ fetchWorksFromDB).
      ============================================= -->
-<script type="module" src="accounts.js?v=11"></script>
+<script type="module" src="accounts.js?v=12"></script>
 </body>
 </html>

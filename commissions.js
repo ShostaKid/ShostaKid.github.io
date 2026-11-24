@@ -2,8 +2,7 @@
   var $=function(id){return document.getElementById(id)};
 
   /* theme */
-  function setTheme(t){document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('sk-theme',t)}catch(e){}
-    $('themeBtn').textContent=t==='dark'?'☀':'☾'}
+  function setTheme(t){document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('sk-theme',t)}catch(e){}}
   function toggleTheme(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark')}
   $('themeBtn').addEventListener('click',toggleTheme);$('themeBtnM').addEventListener('click',toggleTheme);
   setTheme(document.documentElement.getAttribute('data-theme')||'light');

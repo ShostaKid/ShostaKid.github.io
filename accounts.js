@@ -1082,7 +1082,7 @@ window.dtNutSuaNhom = function (khung, g, soTruyen) {
   const nut = document.createElement('button');
   nut.type = 'button';
   nut.className = 'mini-btn opus-sua-nut';
-  nut.textContent = '✎';
+  nut.textContent = ''; nut.append(window.rdIco('pencil'));
   nut.title = tr('opus_sua');
   nut.setAttribute('aria-label', tr('opus_sua'));
 
@@ -1736,7 +1736,7 @@ function paintActions(session) {
   const given = waMine.kudos || waGuest;
 
   $('kudos-count').textContent = waWork.kudos_count > 0 ? String(waWork.kudos_count) : '';
-  $('kudos-icon').textContent  = given ? '♥' : '♡';
+  $('kudos-icon').firstElementChild.classList.toggle('on', !!given);
   k.classList.toggle('on', given);
 
   const kKey = given ? 'wa_kudos_done' : (session ? 'wa_kudos' : 'wa_kudos_guest');
@@ -1753,7 +1753,7 @@ function paintActions(session) {
   // policy UPDATE của works và chapters.
   $('btn-edit-work').style.display = (currentProfile && currentProfile.is_admin) ? '' : 'none';
 
-  $('bookmark-icon').textContent = waMine.bookmark ? '★' : '☆';
+  $('bookmark-icon').firstElementChild.classList.toggle('on', !!waMine.bookmark);
   $('btn-bookmark').classList.toggle('on', waMine.bookmark);
   const bKey = waMine.bookmark ? 'wa_bookmarked' : 'wa_bookmark';
   $('bookmark-label').dataset.i18n = bKey;
@@ -2260,7 +2260,7 @@ function loadComments() {
   // Đổi truyện thì gập lại và xoá trắng, tránh hiện nhầm bình luận của truyện trước.
   $('comments-body').style.display = 'none';
   $('comments-label').textContent = tr('cmt_show');
-  $('comments-arrow').textContent = '▼';
+  $('comments-arrow').classList.remove('open');
   $('comments-list').textContent = '';
   $('comment-name').value = '';
   $('comment-text').value = '';
@@ -2275,7 +2275,7 @@ window.toggleComments = function () {
   const open = body.style.display === 'none';
   body.style.display = open ? 'block' : 'none';
   $('comments-label').textContent = open ? tr('cmt_hide') : tr('cmt_show');
-  $('comments-arrow').textContent = open ? '▲' : '▼';
+  $('comments-arrow').classList.toggle('open', !!open);
   if (open) fetchComments();
 };
 

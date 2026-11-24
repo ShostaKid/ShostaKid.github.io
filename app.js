@@ -242,6 +242,15 @@ function dtIcon(ten) {
   s.append(u);
   return s;
 }
+// Icon giao diện nét liền (symbol ic-* ở đầu index.html); tô đặc bằng classList.add("on").
+function rdIco(ten, cls) {
+  const s = document.createElementNS(SVGNS, "svg");
+  s.setAttribute("class", "rd-ico" + (cls ? " " + cls : "")); s.setAttribute("aria-hidden", "true"); s.setAttribute("focusable", "false");
+  const u = document.createElementNS(SVGNS, "use"); u.setAttribute("href", "#ic-" + ten);
+  s.append(u);
+  return s;
+}
+window.rdIco = rdIco;
 // Tóm tắt / phụ đề có thể chứa HTML do chủ repo viết (<em>, <br>). Bóc ra chữ
 // trơn bằng DOMParser — không chạy script, không tải ảnh như gán innerHTML.
 function chuTron(s) {
@@ -322,7 +331,7 @@ function nutLuu(w) {
   if (!w.uuid) return null;   // bản dự phòng fics.json không có id thật để lưu
   const b = dtEl('button', { type: 'button', class: 'dt-bm', 'aria-label': t('dt_bookmark'), title: t('dt_bookmark'),
     'aria-pressed': (window.skDaLuu && window.skDaLuu.has(w.uuid)) ? 'true' : 'false', 'data-uuid': w.uuid,
-    onclick: e => { if (window.dtLuuTruyen) window.dtLuuTruyen(w, e.currentTarget); } }, '✦');
+    onclick: e => { if (window.dtLuuTruyen) window.dtLuuTruyen(w, e.currentTarget); } }, rdIco('bookmark'));
   return b;
 }
 // Module gọi hàm này khi danh sách "đã lưu" đổi (đăng nhập/xuất, vừa lưu ở trang đọc).
@@ -366,7 +375,7 @@ function dtLiner(w, co, tuyChon) {
       coChuongMoi(w) ? dtEl('span', { class: 'dt-flag new' }, t('dt_rb_new')) : null,
       w.restricted ? dtEl('span', { class: 'dt-flag lock' }, t('only_member')) : null,
       w.warning ? dtEl('span', { class: 'dt-flag warn', title: w.warning }, t('dt_cw')) : null,
-      w.kudos > 0 ? dtEl('span', { class: 'dt-flag' }, '♥ ' + w.kudos + ' kudos') : null),
+      w.kudos > 0 ? dtEl('span', { class: 'dt-flag' }, rdIco('heart'), ' ' + w.kudos + ' kudos') : null),
     dtEl('div', { class: 'dt-liner-btns' },
       dtEl('button', { type: 'button', class: 'dt-btn', onclick: () => dtMoTruyen(w.idx) },
         co > 200 ? t('dt_play_first') : t('dt_play')),
@@ -748,7 +757,7 @@ function renderWorks() {
           ['Chamber', daiNgan ? 'dt_chamber' : 'dt_chamber_l'], ['Symphonic', daiNgan ? 'dt_symph' : 'dt_symph_l']]
           .map(([k, nhan]) => chip(t(nhan), WS.len === k, () => { WS.len = k; WS.xemHet = false; ve(); })),
           dtEl('button', { type: 'button', class: 'dt-chip dt-tp-open', onclick: e => moTempo(e.currentTarget) },
-            dtEl('span', { 'aria-hidden': 'true' }, '♩'), t('dt_tp_btn'))),
+            dtEl('span', { 'aria-hidden': 'true' }, dtIcon('note')), t('dt_tp_btn'))),
         dtEl('div', { class: 'dt-order' }, dtEl('span', { class: 'dt-f-lab', style: { 'margin-right': '6px' } }, t('dt_order')),
           chip(t('dt_newest'), WS.sort === 'new', () => doiThuTu('new')),
           chip(t('dt_longest'), WS.sort === 'long', () => doiThuTu('long')))));
@@ -825,8 +834,8 @@ function renderOpus() {
   const sau   = dtEl('button', { type: 'button', onclick: () => { xoayToi((OPUS.chon + 1) % NHOM.length); opusVe(); } });
   const nhanM = dtEl('div', { class: 'dt-eyebrow' });
   const dieuHuongM = dtEl('div', { class: 'dt-o-nav-m' },
-    dtEl('button', { type: 'button', 'aria-label': t('dt_prev'), onclick: () => truoc.click() }, '↺'), nhanM,
-    dtEl('button', { type: 'button', 'aria-label': t('dt_next'), onclick: () => sau.click() }, '↻'));
+    dtEl('button', { type: 'button', 'aria-label': t('dt_prev'), onclick: () => truoc.click() }, rdIco('chev-left')), nhanM,
+    dtEl('button', { type: 'button', 'aria-label': t('dt_next'), onclick: () => sau.click() }, rdIco('chev-right')));
   const ds = dtEl('section', { class: 'dt-o-list', 'aria-live': 'polite' });
 
   opusVe = () => {
@@ -840,8 +849,8 @@ function renderOpus() {
     nhanGiua.textContent = '';
     nhanGiua.append(dtIcon(g.icon), dtEl('div', { class: 'dt-eyebrow' }, nhanNhom(g)), dtEl('div', { class: 'nm' }, tenNganNhom(g)), dtEl('div', { class: 'dot' }));
     const p = NHOM[(OPUS.chon - 1 + NHOM.length) % NHOM.length], n = NHOM[(OPUS.chon + 1) % NHOM.length];
-    truoc.textContent = ''; truoc.append(dtEl('span', { class: 'dt-eyebrow' }, '↺ ' + t('dt_prev')), dtEl('span', { class: 'nm' }, tenDuNhom(p)));
-    sau.textContent = '';   sau.append(dtEl('span', { class: 'dt-eyebrow' }, t('dt_next') + ' ↻'), dtEl('span', { class: 'nm' }, tenDuNhom(n)));
+    truoc.textContent = ''; truoc.append(dtEl('span', { class: 'dt-eyebrow' }, rdIco('chev-left'), ' ' + t('dt_prev')), dtEl('span', { class: 'nm' }, tenDuNhom(p)));
+    sau.textContent = '';   sau.append(dtEl('span', { class: 'dt-eyebrow' }, t('dt_next') + ' ', rdIco('chev-right')), dtEl('span', { class: 'nm' }, tenDuNhom(n)));
     nhanM.textContent = nhanNhom(g);
 
     const truyen = worksData.filter(w => w.groupSlug === g.slug).sort((a, b) => soTuNhien(a.title, b.title));
@@ -874,7 +883,7 @@ function renderOpus() {
           }))
         : dtEl('div', { class: 'dt-o-empty' }, t('opus_nhom_trong')),
       dtEl('div', { class: 'dt-credit' }, t('dt_credit')));
-    // Nút ✎ sửa nhóm — chỉ admin; module Supabase dựng và tự kiểm quyền.
+    // Nút sửa nhóm — chỉ admin; module Supabase dựng và tự kiểm quyền.
     if (window.dtNutSuaNhom) window.dtNutSuaNhom(ds, g, truyen.length);
   };
 
@@ -1051,7 +1060,7 @@ function veHopKhoa(body) {
 
   const bieu = document.createElement('div');
   bieu.className = 'khoa-bieu';
-  bieu.textContent = '✦';
+  bieu.append(rdIco('diamond'));
 
   const h = document.createElement('h3');
   h.dataset.i18n = 'only_member';
@@ -1638,7 +1647,7 @@ const i18n = {
     nt_loading:'Setting up the room…', nt_failed:'The room could not be reached right now. Try again in a moment.',
     nt_empty:'The room is being set up. Notes about the music behind the fics will appear here soon.',
     nt_preview:'Preview: these notes are drafts, only you can see them',
-    nta_head:'Notes desk', nta_new:'+ New note', nta_manage:'✎ Manage notes', nta_edit_this:'✎ Edit this note', nta_back_room:'← The Listening Room',
+    nta_head:'Notes desk', nta_new:'+ New note', nta_manage:'Manage notes', nta_edit_this:'Edit this note', nta_back_room:'← The Listening Room',
     nta_on_table:'{n} of 4 on the table', nta_slot:'Slot', nta_off_table:'Off the table', nta_published:'Published', nta_draft:'Draft', nta_edit:'Edit',
     nta_none:'No notes yet. Write the first one.', nta_hint_slot:'Only published notes can go on the table (4 at most). Pick a slot to swap it in; the note that was there goes back off the table.',
     nta_not_admin:'Only the author can write notes.', nta_load_err:'The desk could not be reached. Try again in a moment.',
@@ -1652,14 +1661,14 @@ const i18n = {
     nta_s_cues:'Listening cues', nta_cues_hint:'Moments in the track to jump to (up to 12). Time as m:ss, then what is happening in the fic.', nta_cue_time:'Time', nta_cue_text:'What is happening here', nta_add_cue:'+ Add a cue',
     nta_s_works:'Plays in', nta_works_hint:'The fics that use this piece. Leave empty for a piece you only want to share.', nta_filter_works:'Filter fics…',
     nta_s_publish:'On the table', nta_status:'Status', nta_slot_hint:'A draft is only visible to you. Put a published note in a slot to show it in the room.',
-    nta_save:'Save note →', nta_saving:'Saving…', nta_delete:'Delete this note', nta_saved:'Saved ♪', nta_deleted:'Note deleted.',
+    nta_save:'Save note →', nta_saving:'Saving…', nta_delete:'Delete this note', nta_saved:'Saved', nta_deleted:'Note deleted.',
     nta_delete_ask:'Delete the note about “{a}”? This cannot be undone.', nta_swap_ask:'Slot {n} already holds “{a}”. Put it back off the table and use the slot here?',
     nta_need_core:'Piece, composer and headline are required.', nta_bad_url:'The audio link must be https and from GitHub, musopen.org, archive.org or soundcloud.com.',
     nta_bad_start:'Start time must look like 1:36 or 96.', nta_bad_cue:'Each cue needs a time (like 1:36) and some text.', nta_too_many_cues:'At most 12 cues.',
     nta_err_slot:'That slot is taken. Take the other note off the table first.', nta_err_dup:'A note with this slug already exists.', nta_err_check:'The database refused one of the values',
     nta_err_forbidden:'Only the author can do this. Sign in again.', nta_err_generic:'Could not save. Try again in a moment',
     opus_head:'Opus', opus_ban:'works', opus_the_loai:'forms', opus_truyen:'works',
-    opus_dan:'Every work here is named after a musical form, and the name is not decorative. This is the whole archive laid out by form — a catalogue of works.',
+    opus_dan:'Every work here is named after a musical form, and the name is not decorative. This is the whole archive laid out by form, a catalogue of works.',
     opus_mo_het:'Open all', opus_dong_het:'Close all',
     opus_nhom_trong:'Nothing in this group yet.',
     opus_sua:'Edit this group', opus_luu:'Save', opus_xoa:'Delete group',
@@ -1667,8 +1676,8 @@ const i18n = {
     opus_f_mo:'Description (English)', opus_f_mo_vi:'Description (Vietnamese)',
     opus_f_thu_tu:'Order (smaller comes first)',
     opus_can_ten:'The group needs a name.',
-    opus_da_luu:'Saved ♪', opus_da_xoa:'Group deleted.',
-    opus_xoa_hoi:'Delete the group “%s”? The %d works in it are NOT deleted — they just stop being grouped.',
+    opus_da_luu:'Saved', opus_da_xoa:'Group deleted.',
+    opus_xoa_hoi:'Delete the group “%s”? The %d works in it are NOT deleted, they just stop being grouped.',
     intro_sub:"Don't ask. Just read:)", intro_cta:'Click anywhere to enter',
     nav_zone:'Commissions',
     nav_rehearsal:'In rehearsal',
@@ -1712,14 +1721,14 @@ const i18n = {
     dt_tp_k1:'A quick read', dt_tp_k2:'A steady read', dt_tp_k3:'Settle in',
     dt_tp_m1:'under 8 min', dt_tp_m2:'8 to 20 min', dt_tp_m3:'over 20 min',
     dt_tp_n:'{n} works', dt_tp_surprise:'Surprise me at this tempo', dt_tp_filter:'Just filter the shelf',
-    dt_tp_none:'No work at this tempo is open to you yet.', dt_tp_via:'Picked for you', dt_tp_another:'↻ Another',
+    dt_tp_none:'No work at this tempo is open to you yet.', dt_tp_via:'Picked for you', dt_tp_another:'Another',
     dt_newest:'Newest', dt_longest:'Longest',
     dt_on_shelf:'{n} on the shelf', dt_tap:'tap a sleeve', dt_show_all:'Show the whole shelf ({n})',
     dt_on_tt:'On the turntable', dt_form:'Form', dt_language:'Language', dt_played:'Played with',
     dt_words:'words', dt_mv1:'movement', dt_mvn:'movements', dt_cw:'Content warning',
     dt_rb_new:'New movement', dt_rb_short:'New', dt_status:'Status', dt_complete:'Complete', dt_in_progress:'In progress',
     dt_updated:'Updated', dt_mv_short:'Mvt.',
-    post_complete:'Complete — no more movements planned',
+    post_complete:'Complete: no more movements planned',
     post_complete_hint:'Leave unticked while the work is still being written: its liner notes say “In progress”.',
     cur_presents:'ShostaKid presents', cur_tuning:'Tuning…', cur_tap:'Tap to raise the curtain',
     rd_eye:'Fanfiction, composed like music',
@@ -1778,15 +1787,15 @@ const i18n = {
     cmt_show:'Show Comments', cmt_hide:'Hide Comments',
     cmt_name_ph:'Name (optional)', cmt_body_ph:'Leave a comment...',
     cmt_post:'Post Comment →', cmt_posting:'Posting…',
-    cmt_loading:'Loading…', cmt_empty:'No comments yet. Be the first ♪',
+    cmt_loading:'Loading…', cmt_empty:'No comments yet. Be the first',
     cmt_err:'Could not load comments.', cmt_post_err:'Could not post comment. Please try again.',
     cmt_as:'Commenting as', cmt_author:'Author', cmt_guest_default:'Guest',
     cmt_delete:'Delete', cmt_deleting:'Deleting…', cmt_confirm_del:'Delete this comment?',
     cmt_deleted:'Comment deleted.', cmt_del_err:'Could not delete that comment.',
-    cmt_posted:'Comment posted ♪', cmt_empty_body:'Please write something first.',
+    cmt_posted:'Comment posted', cmt_empty_body:'Please write something first.',
     cmt_too_fast:'You are posting too quickly. Please wait a few minutes.',
     cmt_reply:'Reply', cmt_cancel:'Cancel', cmt_replying_to:'Replying to',
-    cmt_reply_ph:'Write a reply…', cmt_replied:'Reply posted ♪',
+    cmt_reply_ph:'Write a reply…', cmt_replied:'Reply posted',
     anon:'Anonymous',
     loading:'Loading', ch_err:'Could not load chapter. Please check back later.',
     soon:'Coming soon.', pause:'Pause', play:'Play',
@@ -1797,7 +1806,7 @@ const i18n = {
     nav_signin:'Sign In', nav_profile:'My Profile', nav_bookmarks:'My Bookmarks', nav_post:'Post',
     nav_logout:'Log Out',
     rq_moi_nhan:'New',
-    link_hong:'That link points to a work that no longer exists — or one you need to be signed in to read.',
+    link_hong:'That link points to a work that no longer exists, or one you need to be signed in to read.',
     nav_requests:'Request a Fic',
     nav_members:'Members',
     mb_head:'Members',
@@ -1806,13 +1815,13 @@ const i18n = {
     mb_tham_gia:'joined',
     mb_chua_co_bio:'Hasn’t written a bio yet.',
     only_member:'Members only',
-    khoa_loi:'This one is for signed-in readers. An account is free and takes a moment — then this page will open right up.',
+    khoa_loi:'This one is for signed-in readers. An account is free and takes a moment, then this page will open right up.',
     khoa_nut:'Sign in →',
     rq_head:'Request a Fic',
     rq_need_signin_head:'Members only',
     rq_need_signin:'Requests come with a name attached, so you’ll need an account. It takes a moment.',
     rq_body_label:'What would you like to read?',
-    rq_body_ph:'The ship, the mood, an idea — whatever you have.',
+    rq_body_ph:'The ship, the mood, an idea, whatever you have.',
     rq_dem_hint:'/ 200 words',
     rq_feedback_label:'Anything you’d like to say about the site?',
     rq_feedback_ph:'Optional.',
@@ -1825,9 +1834,9 @@ const i18n = {
     rq_moi_about:'Want to read something I haven’t written yet? Tell me.',
     rq_moi_nut:'Request a fic →',
     rq_can_noi_dung:'Write something first.',
-    rq_qua_dai:'That’s over 200 words — trim it a little.',
-    rq_gop_qua_dai:'The site feedback is over 200 words — trim it a little.',
-    rq_da_gui:'Sent. Thank you — I read every one.',
+    rq_qua_dai:'That’s over 200 words. Trim it a little.',
+    rq_gop_qua_dai:'The site feedback is over 200 words. Trim it a little.',
+    rq_da_gui:'Sent. Thank you, I read every one.',
     rq_s_new:'New', rq_s_seen:'Seen', rq_s_writing:'Writing', rq_s_done:'Done', rq_s_declined:'Declined',
     rq_xoa:'Delete', rq_xoa_hoi:'Delete this request?',
     post_head:'Post a Work', post_edit_head:'Edit Work', post_title:'Title', post_subtitle:'Subtitle',
@@ -1835,7 +1844,7 @@ const i18n = {
     post_status:'Status', post_published:'Published', post_draft:'Draft', post_featured:'Show in My Favorite Children',
     post_chapters:'Chapters', post_add_ch:'+ Add chapter', post_del_ch:'Remove chapter', post_ch_title:'Chapter title',
     post_ch_body:'Chapter text', post_add_img:'Insert image', post_uploading:'Uploading…',
-    post_save:'Save Work →', post_saving:'Saving…', post_saved:'Saved ♪',
+    post_save:'Save Work →', post_saving:'Saving…', post_saved:'Saved',
     post_html_hint:'Simple HTML is allowed: <em>, <br>', post_ships_hint:'Hold Ctrl (or Cmd) to pick more than one.',
     post_need_title:'Please enter a title.', post_need_ch:'Add at least one chapter with some text.',
     post_err:'Could not save. Please try again.', post_img_err:'Could not upload that image.',
@@ -1848,8 +1857,8 @@ const i18n = {
     post_cover_url_hint:'Same idea as the music: upload the file to a GitHub release, then paste its link here. Nothing is stored on Supabase this way.',
     post_img_where:'Where should this image go?',
     post_img_top:'At the very top', post_img_after:'After paragraph {n}', post_img_end:'At the very end',
-    post_img_cancel:'Cancel — don’t insert', post_img_done:'Image inserted.',
-    post_restricted:'Members only — hide from readers who aren’t signed in',
+    post_img_cancel:'Cancel, don’t insert', post_img_done:'Image inserted.',
+    post_restricted:'Members only, hide from readers who aren’t signed in',
     post_restricted_hint:'The work disappears from the listing and its chapters cannot be fetched at all unless the reader is signed in. This is enforced by the database, not by hiding it on the page.',
     post_cover:'Cover image',
     post_cover_hint:'One image for the whole work. Shown as the record sleeve on the shelf (cropped square), and above the text when the work is opened.',
@@ -1857,8 +1866,8 @@ const i18n = {
     post_cover_crop:'Crop to a 21:9 band at the top of the reading page',
     post_cover_crop_hint:'Leave off to show the image whole. Turn on for tall images that would otherwise fill the screen before the first line of text.',
     post_add_fandom:'+ New fandom', post_add_ship:'+ New ship',
-    ab_edit:'✎ Edit this page', ab_body_en:'Bio — English', ab_body_vi:'Bio — Vietnamese',
-    ab_save:'Save →', ab_saving:'Saving…', ab_saved:'About page updated ♪',
+    ab_edit:'Edit this page', ab_body_en:'Bio (English)', ab_body_vi:'Bio (Vietnamese)',
+    ab_save:'Save →', ab_saving:'Saving…', ab_saved:'About page updated',
     ab_err:'Could not save the About page.',
     post_new_fandom:'Name of the new fandom:', post_new_ship:'Name of the new ship:',
     post_opus:'Opus', post_add_opus:'+ New group',
@@ -1866,7 +1875,7 @@ const i18n = {
     post_new_opus:'Name of the new Opus group (e.g. Suite IV · Nocturnal):',
     post_confirm_new_opus:'Create the group “%s”? You can write its description and set its order later on the Opus page.',
     post_confirm_new:'Create \"%s\"? It cannot be renamed or removed from this form.',
-    post_created:'Created and selected ♪', post_already_there:'That one already exists — selected it for you.',
+    post_created:'Created and selected', post_already_there:'That one already exists, selected it for you.',
     post_name_bad:'That name cannot be used.',
     post_music:'Music', post_music_hint:'Applies to every chapter. A chapter can override it below. End is optional: the chapter then plays only the part between Start and End, looping it softly until the reader moves on.',
     post_m_url:'Audio link (GitHub Releases, archive.org…)', post_m_name:'Track name shown to readers',
@@ -1888,8 +1897,8 @@ const i18n = {
     auth_newpw_head:'Set a new password', auth_newpw:'New password', auth_newpw2:'Repeat new password', auth_newpw_btn:'Save new password →', auth_newpw_saving:'Saving…',
     auth_newpw_short:'At least 6 characters.', auth_newpw_diff:'The two passwords do not match.',
     auth_link_expired:'That reset link is invalid or has expired. Enter your email and press “Send reset link” again.',
-    auth_confirm_email:'Almost there — check your inbox and confirm your email, then sign in.',
-    auth_welcome:'Welcome back ♪',
+    auth_confirm_email:'Almost there. Check your inbox and confirm your email, then sign in.',
+    auth_welcome:'Welcome back',
     auth_user_taken:'That username is already taken.',
     auth_user_bad:'Username must be 3–30 characters: letters, numbers and underscore only.',
     auth_err:'Something went wrong. Please try again.',
@@ -1901,22 +1910,22 @@ const i18n = {
     prof_avatar_upload_hint:'JPG, PNG or WebP · up to 2 MB. Saved as soon as it finishes uploading.',
     prof_avatar_or:'…or use an image hosted somewhere else',
     prof_avatar_uploading:'Uploading…',
-    prof_avatar_done:'Avatar updated ♪',
+    prof_avatar_done:'Avatar updated',
     prof_avatar_removed:'Avatar removed.',
     prof_avatar_too_big:'That image is over 2 MB. Please pick a smaller one.',
     prof_avatar_bad_type:'Only JPG, PNG and WebP images are accepted.',
     prof_avatar_up_err:'Could not upload that image.',
-    prof_save:'Save Changes →', prof_saving:'Saving…', prof_saved:'Saved ♪',
+    prof_save:'Save Changes →', prof_saving:'Saving…', prof_saved:'Saved',
     prof_signout:'Sign Out', prof_admin:'Admin',
     prof_load_err:'Could not load your profile.',
     prof_need_signin:'Please sign in first.',
     wa_kudos:'Kudos', wa_kudos_guest:'Leave kudos as guest', wa_kudos_done:'Kudos left',
     wa_bookmark:'Bookmark', wa_bookmarked:'Bookmarked',
-    wa_kudos_thanks:'Thank you for the kudos ♪',
-    wa_kudos_guest_thanks:'Thank you — kudos left as a guest ♪',
+    wa_kudos_thanks:'Thank you for the kudos',
+    wa_kudos_guest_thanks:'Thank you. Kudos left as a guest',
     wa_kudos_already:'You have already left kudos for this work.',
     wa_kudos_removed:'Kudos withdrawn.',
-    wa_bm_added:'Saved to your bookmarks ♪', wa_bm_removed:'Removed from your bookmarks.',
+    wa_bm_added:'Saved to your bookmarks', wa_bm_removed:'Removed from your bookmarks.',
     wa_bm_signin:'Please sign in to bookmark this work.',
     wa_notify:'Email me new movements', wa_notify_on:'Emailing you new movements',
     wa_notify_added:'Done. You will get an email when a new movement of this work goes up.',
@@ -1943,7 +1952,7 @@ const i18n = {
     nt_loading:'Đang dọn phòng…', nt_failed:'Chưa vào được phòng nghe lúc này. Thử lại sau một lát nhé.',
     nt_empty:'Phòng nghe đang được dọn. Các note về âm nhạc đằng sau fic sẽ sớm xuất hiện ở đây.',
     nt_preview:'Xem trước: các note này là bản nháp, chỉ bạn thấy',
-    nta_head:'Bàn viết note', nta_new:'+ Note mới', nta_manage:'✎ Quản lý note', nta_edit_this:'✎ Sửa note này', nta_back_room:'← Phòng nghe',
+    nta_head:'Bàn viết note', nta_new:'+ Note mới', nta_manage:'Quản lý note', nta_edit_this:'Sửa note này', nta_back_room:'← Phòng nghe',
     nta_on_table:'{n}/4 note trên bàn', nta_slot:'Vị trí', nta_off_table:'Không trên bàn', nta_published:'Đã đăng', nta_draft:'Nháp', nta_edit:'Sửa',
     nta_none:'Chưa có note nào. Viết note đầu tiên đi.', nta_hint_slot:'Chỉ note đã đăng mới lên bàn được (tối đa 4). Chọn một vị trí để đổi vào; note đang ở đó sẽ xuống khỏi bàn.',
     nta_not_admin:'Chỉ tác giả mới viết được note.', nta_load_err:'Chưa vào được bàn viết note. Thử lại sau một lát nhé.',
@@ -1957,14 +1966,14 @@ const i18n = {
     nta_s_cues:'Điểm nghe', nta_cues_hint:'Những chỗ trong bản nhạc để nhảy tới (tối đa 12). Giờ dạng m:ss, rồi ghi chỗ đó trong fic đang diễn ra gì.', nta_cue_time:'Giờ', nta_cue_text:'Chỗ này đang diễn ra gì', nta_add_cue:'+ Thêm điểm nghe',
     nta_s_works:'Có trong', nta_works_hint:'Các fic dùng bản nhạc này. Để trống nếu chỉ là bản bạn muốn chia sẻ.', nta_filter_works:'Lọc fic…',
     nta_s_publish:'Lên bàn', nta_status:'Trạng thái', nta_slot_hint:'Nháp chỉ mình bạn thấy. Đặt một note đã đăng vào một vị trí để nó hiện trong phòng nghe.',
-    nta_save:'Lưu note →', nta_saving:'Đang lưu…', nta_delete:'Xoá note này', nta_saved:'Đã lưu ♪', nta_deleted:'Đã xoá note.',
+    nta_save:'Lưu note →', nta_saving:'Đang lưu…', nta_delete:'Xoá note này', nta_saved:'Đã lưu', nta_deleted:'Đã xoá note.',
     nta_delete_ask:'Xoá note về “{a}”? Không hoàn tác được.', nta_swap_ask:'Vị trí {n} đang có “{a}”. Cho nó xuống khỏi bàn và dùng vị trí này?',
     nta_need_core:'Cần có tên bản, nhạc sĩ và tiêu đề.', nta_bad_url:'Link nhạc phải là https và từ GitHub, musopen.org, archive.org hoặc soundcloud.com.',
     nta_bad_start:'Giờ bắt đầu phải dạng 1:36 hoặc 96.', nta_bad_cue:'Mỗi điểm nghe cần có giờ (như 1:36) và vài chữ.', nta_too_many_cues:'Tối đa 12 điểm nghe.',
     nta_err_slot:'Vị trí đó đã có note khác. Gỡ note kia xuống trước.', nta_err_dup:'Đã có note trùng đường dẫn.', nta_err_check:'Cơ sở dữ liệu từ chối một giá trị',
     nta_err_forbidden:'Chỉ tác giả làm được việc này. Đăng nhập lại nhé.', nta_err_generic:'Chưa lưu được. Thử lại sau một lát',
     opus_head:'Opus', opus_ban:'bản', opus_the_loai:'thể loại', opus_truyen:'truyện',
-    opus_dan:'Mỗi truyện ở đây mang tên một thể nhạc, và tên đó không phải đặt cho vui. Dưới đây là toàn bộ kho truyện xếp lại theo đúng thể của chúng — như một danh mục tác phẩm.',
+    opus_dan:'Mỗi truyện ở đây mang tên một thể nhạc, và tên đó không phải đặt cho vui. Dưới đây là toàn bộ kho truyện xếp lại theo đúng thể của chúng, như một danh mục tác phẩm.',
     opus_mo_het:'Mở tất cả', opus_dong_het:'Đóng tất cả',
     opus_nhom_trong:'Nhóm này chưa có truyện nào.',
     opus_sua:'Sửa nhóm này', opus_luu:'Lưu', opus_xoa:'Xoá nhóm',
@@ -1972,8 +1981,8 @@ const i18n = {
     opus_f_mo:'Mô tả (tiếng Anh)', opus_f_mo_vi:'Mô tả (tiếng Việt)',
     opus_f_thu_tu:'Thứ tự (số nhỏ đứng trước)',
     opus_can_ten:'Nhóm phải có tên.',
-    opus_da_luu:'Đã lưu ♪', opus_da_xoa:'Đã xoá nhóm.',
-    opus_xoa_hoi:'Xoá nhóm “%s”? %d truyện trong đó KHÔNG bị xoá — chúng chỉ mất chỗ xếp.',
+    opus_da_luu:'Đã lưu', opus_da_xoa:'Đã xoá nhóm.',
+    opus_xoa_hoi:'Xoá nhóm “%s”? %d truyện trong đó KHÔNG bị xoá, chúng chỉ mất chỗ xếp.',
     intro_sub:'Viết là tự nhiên', intro_cta:'Bấm vào bất cứ đâu để vào',
     nav_zone:'Commission',
     nav_rehearsal:'Đang tập',
@@ -2017,14 +2026,14 @@ const i18n = {
     dt_tp_k1:'Đọc nhanh', dt_tp_k2:'Đọc thong thả', dt_tp_k3:'Ngồi hẳn xuống',
     dt_tp_m1:'dưới 8 phút', dt_tp_m2:'8 đến 20 phút', dt_tp_m3:'trên 20 phút',
     dt_tp_n:'{n} truyện', dt_tp_surprise:'Chọn giúp tôi ở nhịp này', dt_tp_filter:'Chỉ lọc kệ thôi',
-    dt_tp_none:'Chưa có truyện nào ở nhịp này dành cho bạn.', dt_tp_via:'Chọn cho bạn', dt_tp_another:'↻ Chọn khác',
+    dt_tp_none:'Chưa có truyện nào ở nhịp này dành cho bạn.', dt_tp_via:'Chọn cho bạn', dt_tp_another:'Chọn khác',
     dt_newest:'Mới nhất', dt_longest:'Dài nhất',
     dt_on_shelf:'{n} đĩa trên kệ', dt_tap:'chạm vào một bìa', dt_show_all:'Xem cả kệ ({n})',
     dt_on_tt:'Trên bàn xoay', dt_form:'Thể', dt_language:'Ngôn ngữ', dt_played:'Nhạc đi kèm',
     dt_words:'chữ', dt_mv1:'chương', dt_mvn:'chương', dt_cw:'Có cảnh báo',
     dt_rb_new:'Chương mới', dt_rb_short:'Mới', dt_status:'Tình trạng', dt_complete:'Đã hoàn thành', dt_in_progress:'Đang viết',
     dt_updated:'Cập nhật', dt_mv_short:'Chương',
-    post_complete:'Đã hoàn thành — không viết thêm chương',
+    post_complete:'Đã hoàn thành: không viết thêm chương',
     post_complete_hint:'Để trống khi truyện còn đang viết: liner notes sẽ ghi “Đang viết”.',
     cur_presents:'ShostaKid giới thiệu', cur_tuning:'Đang lên dây…', cur_tap:'Chạm để kéo rèm',
     rd_eye:'Truyện fanfic, viết như một bản nhạc',
@@ -2083,15 +2092,15 @@ const i18n = {
     cmt_show:'Hiện bình luận', cmt_hide:'Ẩn bình luận',
     cmt_name_ph:'Tên (không bắt buộc)', cmt_body_ph:'Để lại bình luận...',
     cmt_post:'Gửi bình luận →', cmt_posting:'Đang gửi…',
-    cmt_loading:'Đang tải…', cmt_empty:'Chưa có bình luận nào. Bạn là người đầu tiên ♪',
+    cmt_loading:'Đang tải…', cmt_empty:'Chưa có bình luận nào. Bạn là người đầu tiên',
     cmt_err:'Không thể tải bình luận.', cmt_post_err:'Không thể gửi bình luận. Vui lòng thử lại.',
     cmt_as:'Bình luận với tên', cmt_author:'Tác giả', cmt_guest_default:'Khách',
     cmt_delete:'Xoá', cmt_deleting:'Đang xoá…', cmt_confirm_del:'Xoá bình luận này?',
     cmt_deleted:'Đã xoá bình luận.', cmt_del_err:'Không xoá được bình luận.',
-    cmt_posted:'Đã gửi bình luận ♪', cmt_empty_body:'Bạn hãy viết gì đó đã.',
+    cmt_posted:'Đã gửi bình luận', cmt_empty_body:'Bạn hãy viết gì đó đã.',
     cmt_too_fast:'Bạn đang gửi bình luận quá nhanh. Vui lòng đợi vài phút.',
     cmt_reply:'Trả lời', cmt_cancel:'Huỷ', cmt_replying_to:'Đang trả lời',
-    cmt_reply_ph:'Viết trả lời…', cmt_replied:'Đã gửi trả lời ♪',
+    cmt_reply_ph:'Viết trả lời…', cmt_replied:'Đã gửi trả lời',
     anon:'Ẩn danh',
     loading:'Đang tải', ch_err:'Không thể tải chương. Vui lòng thử lại sau.',
     soon:'Sắp ra mắt.', pause:'Dừng', play:'Phát',
@@ -2102,7 +2111,7 @@ const i18n = {
     nav_signin:'Đăng nhập', nav_profile:'Hồ sơ của tôi', nav_bookmarks:'Truyện đã lưu', nav_post:'Đăng truyện',
     nav_logout:'Đăng xuất',
     rq_moi_nhan:'Mới',
-    link_hong:'Link này trỏ tới một truyện không còn tồn tại — hoặc truyện phải đăng nhập mới đọc được.',
+    link_hong:'Link này trỏ tới một truyện không còn tồn tại, hoặc truyện phải đăng nhập mới đọc được.',
     nav_requests:'Gửi yêu cầu',
     nav_members:'Thành viên',
     mb_head:'Thành viên',
@@ -2111,13 +2120,13 @@ const i18n = {
     mb_tham_gia:'tham gia',
     mb_chua_co_bio:'Chưa viết giới thiệu.',
     only_member:'Chỉ thành viên',
-    khoa_loi:'Truyện này dành cho bạn đọc đã đăng nhập. Tạo tài khoản không mất gì và chỉ tốn một lát — xong là đọc được ngay.',
+    khoa_loi:'Truyện này dành cho bạn đọc đã đăng nhập. Tạo tài khoản không mất gì và chỉ tốn một lát, xong là đọc được ngay.',
     khoa_nut:'Đăng nhập →',
     rq_head:'Gửi yêu cầu',
     rq_need_signin_head:'Chỉ thành viên',
     rq_need_signin:'Yêu cầu có gắn tên người gửi, nên bạn cần một tài khoản. Chỉ tốn một lát thôi.',
     rq_body_label:'Bạn muốn đọc gì?',
-    rq_body_ph:'Ship nào, không khí ra sao, một ý tưởng — có gì cứ viết nấy.',
+    rq_body_ph:'Ship nào, không khí ra sao, một ý tưởng, có gì cứ viết nấy.',
     rq_dem_hint:'/ 200 từ',
     rq_feedback_label:'Bạn có muốn góp ý gì cho web không?',
     rq_feedback_ph:'Không bắt buộc.',
@@ -2130,9 +2139,9 @@ const i18n = {
     rq_moi_about:'Muốn đọc thứ tôi chưa viết? Cứ nói với tôi.',
     rq_moi_nut:'Gửi yêu cầu →',
     rq_can_noi_dung:'Viết vài dòng đã nhé.',
-    rq_qua_dai:'Dài quá 200 từ rồi — bạn rút bớt giúp.',
-    rq_gop_qua_dai:'Phần góp ý dài quá 200 từ — bạn rút bớt giúp.',
-    rq_da_gui:'Đã gửi. Cảm ơn bạn — tôi đọc hết đấy.',
+    rq_qua_dai:'Dài quá 200 từ rồi. Bạn rút bớt giúp.',
+    rq_gop_qua_dai:'Phần góp ý dài quá 200 từ. Bạn rút bớt giúp.',
+    rq_da_gui:'Đã gửi. Cảm ơn bạn, tôi đọc hết đấy.',
     rq_s_new:'Mới', rq_s_seen:'Đã xem', rq_s_writing:'Đang viết', rq_s_done:'Xong', rq_s_declined:'Từ chối',
     rq_xoa:'Xoá', rq_xoa_hoi:'Xoá yêu cầu này?',
     post_head:'Đăng truyện', post_edit_head:'Sửa truyện', post_title:'Tiêu đề', post_subtitle:'Phụ đề',
@@ -2140,7 +2149,7 @@ const i18n = {
     post_status:'Trạng thái', post_published:'Đã đăng', post_draft:'Bản nháp', post_featured:'Hiện ở mục truyện tâm đắc',
     post_chapters:'Các chương', post_add_ch:'+ Thêm chương', post_del_ch:'Xoá chương', post_ch_title:'Tên chương',
     post_ch_body:'Nội dung chương', post_add_img:'Chèn ảnh', post_uploading:'Đang tải lên…',
-    post_save:'Lưu truyện →', post_saving:'Đang lưu…', post_saved:'Đã lưu ♪',
+    post_save:'Lưu truyện →', post_saving:'Đang lưu…', post_saved:'Đã lưu',
     post_html_hint:'Dùng được HTML đơn giản: <em>, <br>', post_ships_hint:'Giữ Ctrl (hoặc Cmd) để chọn nhiều.',
     post_need_title:'Bạn cần nhập tiêu đề.', post_need_ch:'Cần ít nhất một chương có nội dung.',
     post_err:'Không lưu được. Bạn thử lại nhé.', post_img_err:'Không tải được ảnh lên.',
@@ -2153,8 +2162,8 @@ const i18n = {
     post_cover_url_hint:'Giống hệt cách làm với nhạc: tải tệp lên một release trên GitHub rồi dán link vào đây. Cách này không tốn dung lượng Supabase.',
     post_img_where:'Đặt ảnh này vào đâu?',
     post_img_top:'Ngay đầu chương', post_img_after:'Sau đoạn {n}', post_img_end:'Cuối chương',
-    post_img_cancel:'Huỷ — không chèn nữa', post_img_done:'Đã chèn ảnh.',
-    post_restricted:'Chỉ thành viên — ẩn với người chưa đăng nhập',
+    post_img_cancel:'Huỷ, không chèn nữa', post_img_done:'Đã chèn ảnh.',
+    post_restricted:'Chỉ thành viên, ẩn với người chưa đăng nhập',
     post_restricted_hint:'Truyện biến mất khỏi danh sách và không thể lấy nội dung chương nếu chưa đăng nhập. Đây là khoá ở tầng database, không phải chỉ ẩn trên giao diện.',
     post_cover:'Ảnh bìa',
     post_cover_hint:'Một ảnh cho cả truyện. Hiện làm bìa đĩa trên kệ (cắt vuông), và ở đầu trang đọc.',
@@ -2162,12 +2171,12 @@ const i18n = {
     post_cover_crop:'Cắt về dải ngang 21:9 ở đầu trang đọc',
     post_cover_crop_hint:'Để tắt thì ảnh hiện nguyên vẹn. Bật cho những ảnh cao, không thì nó chiếm hết màn hình trước dòng chữ đầu tiên.',
     post_add_fandom:'+ Thêm fandom', post_add_ship:'+ Thêm ship',
-    ab_edit:'✎ Sửa trang này', ab_body_en:'Giới thiệu — Tiếng Anh', ab_body_vi:'Giới thiệu — Tiếng Việt',
-    ab_save:'Lưu →', ab_saving:'Đang lưu…', ab_saved:'Đã cập nhật trang giới thiệu ♪',
+    ab_edit:'Sửa trang này', ab_body_en:'Giới thiệu (Tiếng Anh)', ab_body_vi:'Giới thiệu (Tiếng Việt)',
+    ab_save:'Lưu →', ab_saving:'Đang lưu…', ab_saved:'Đã cập nhật trang giới thiệu',
     ab_err:'Không lưu được trang giới thiệu.',
     post_new_fandom:'Tên fandom mới:', post_new_ship:'Tên ship mới:',
     post_confirm_new:'Tạo \"%s\"? Form này không sửa hay xoá lại được.',
-    post_created:'Đã tạo và chọn ♪', post_already_there:'Đã có sẵn — t chọn giúp rồi.',
+    post_created:'Đã tạo và chọn', post_already_there:'Đã có sẵn, t chọn giúp rồi.',
     post_opus:'Opus', post_add_opus:'+ Nhóm mới',
     post_opus_hint:'Truyện này thuộc thể nhạc nào. Hiện trên trang Opus. Chưa quyết thì cứ để “—”.',
     post_new_opus:'Tên nhóm Opus mới (ví dụ: Suite IV · Nocturnal):',
@@ -2193,8 +2202,8 @@ const i18n = {
     auth_newpw_head:'Đặt mật khẩu mới', auth_newpw:'Mật khẩu mới', auth_newpw2:'Nhập lại mật khẩu mới', auth_newpw_btn:'Lưu mật khẩu mới →', auth_newpw_saving:'Đang lưu…',
     auth_newpw_short:'Ít nhất 6 ký tự.', auth_newpw_diff:'Hai mật khẩu không khớp.',
     auth_link_expired:'Link đặt lại này không hợp lệ hoặc đã hết hạn. Nhập email rồi bấm “Gửi link đặt lại” một lần nữa.',
-    auth_confirm_email:'Gần xong rồi — kiểm tra hộp thư và xác nhận email, sau đó đăng nhập.',
-    auth_welcome:'Chào mừng quay lại ♪',
+    auth_confirm_email:'Gần xong rồi. Kiểm tra hộp thư và xác nhận email, sau đó đăng nhập.',
+    auth_welcome:'Chào mừng quay lại',
     auth_user_taken:'Tên đăng nhập này đã có người dùng.',
     auth_user_bad:'Tên đăng nhập phải 3–30 ký tự: chỉ chữ cái, chữ số và dấu gạch dưới.',
     auth_err:'Có lỗi xảy ra. Vui lòng thử lại.',
@@ -2206,22 +2215,22 @@ const i18n = {
     prof_avatar_upload_hint:'JPG, PNG hoặc WebP · tối đa 2 MB. Tải lên xong là tự lưu.',
     prof_avatar_or:'…hoặc dùng ảnh ở nơi khác',
     prof_avatar_uploading:'Đang tải lên…',
-    prof_avatar_done:'Đã cập nhật ảnh đại diện ♪',
+    prof_avatar_done:'Đã cập nhật ảnh đại diện',
     prof_avatar_removed:'Đã gỡ ảnh đại diện.',
     prof_avatar_too_big:'Ảnh vượt quá 2 MB. Chọn ảnh nhỏ hơn nhé.',
     prof_avatar_bad_type:'Chỉ nhận ảnh JPG, PNG và WebP.',
     prof_avatar_up_err:'Không tải được ảnh lên.',
-    prof_save:'Lưu thay đổi →', prof_saving:'Đang lưu…', prof_saved:'Đã lưu ♪',
+    prof_save:'Lưu thay đổi →', prof_saving:'Đang lưu…', prof_saved:'Đã lưu',
     prof_signout:'Đăng xuất', prof_admin:'Quản trị',
     prof_load_err:'Không tải được hồ sơ của bạn.',
     prof_need_signin:'Vui lòng đăng nhập trước.',
     wa_kudos:'Thả tim', wa_kudos_guest:'Thả tim với tư cách khách', wa_kudos_done:'Đã thả tim',
     wa_bookmark:'Lưu truyện', wa_bookmarked:'Đã lưu',
-    wa_kudos_thanks:'Cảm ơn bạn đã thả tim ♪',
-    wa_kudos_guest_thanks:'Cảm ơn bạn — đã thả tim với tư cách khách ♪',
+    wa_kudos_thanks:'Cảm ơn bạn đã thả tim',
+    wa_kudos_guest_thanks:'Cảm ơn bạn. Đã thả tim với tư cách khách',
     wa_kudos_already:'Bạn đã thả tim cho truyện này rồi.',
     wa_kudos_removed:'Đã rút lại tim.',
-    wa_bm_added:'Đã lưu vào danh sách của bạn ♪', wa_bm_removed:'Đã bỏ khỏi danh sách đã lưu.',
+    wa_bm_added:'Đã lưu vào danh sách của bạn', wa_bm_removed:'Đã bỏ khỏi danh sách đã lưu.',
     wa_bm_signin:'Vui lòng đăng nhập để lưu truyện này.',
     wa_notify:'Báo tôi qua mail khi có chương mới', wa_notify_on:'Đang nhận mail chương mới',
     wa_notify_added:'Xong. Bạn sẽ nhận mail khi truyện này có chương mới.',
@@ -2298,7 +2307,6 @@ function toggleTheme() {
   const next = isDark ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('sk-theme', next);
-  document.getElementById('theme-btn').textContent = next === 'dark' ? '☀' : '☾';
 }
 // Áp dụng theme đã lưu ngay khi load
 (function(){
@@ -2306,7 +2314,6 @@ function toggleTheme() {
   document.documentElement.setAttribute('data-theme', saved);
   document.addEventListener('DOMContentLoaded', () => {
     const btn = document.getElementById('theme-btn');
-    if (btn) btn.textContent = saved === 'dark' ? '☀' : '☾';
   });
 })();
 

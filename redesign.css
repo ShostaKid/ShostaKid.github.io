@@ -15,19 +15,24 @@
   --ink:#232323;--ink2:#57544D;--ink3:#6B675F;--border:#DDD8CC;
   --ui:#57544D;--ui-head:#80612A;
   --hair:#E2DED4;--warn:#9A3B22;--on-head:#FFFFFF;
-  --rd-gold-line:#D2C59C;--rd-gold-hover:#715623;--rd-night:#1D1C1A;--rd-night-line:rgba(210,197,156,.22);
+  --rd-gold-line:#D2C59C;--rd-gold-hover:#715623;--rd-night:#1B1B1B;--rd-night-line:rgba(210,197,156,.22);
   --rd-tag-bg:#F1EEE6;--rd-hd:76px;
 }
 [data-theme="dark"]{
-  --cream:#151513;--cream2:#1F1E1B;
+  --cream:#181818;--cream2:#212121;
   --gold:#C2A060;--gold-light:#D3B57A;--gold-dark:#CDAC6B;
-  --ink:#ECE9E1;--ink2:#B6B1A5;--ink3:#8E8A80;--border:#3A372F;
-  --ui:#B6B1A5;--ui-head:#CDAC6B;
-  --hair:#33312C;--warn:#E48A63;--on-head:#151513;
-  --rd-gold-line:#5B4D30;--rd-gold-hover:#E0C285;--rd-night:#0C0C0B;--rd-tag-bg:#2A2925;
+  --ink:#ECECEC;--ink2:#B4B4B4;--ink3:#8A8A8A;--border:#383838;
+  --ui:#B4B4B4;--ui-head:#CDAC6B;
+  --hair:#333333;--warn:#E48A63;--on-head:#181818;
+  --rd-gold-line:#5B4D30;--rd-gold-hover:#E0C285;--rd-night:#0F0F0F;--rd-tag-bg:#2A2A2A;
 }
 [data-lang="vi"]{--font-ui:var(--f-sans);}
 body{font-family:var(--f-sans);font-weight:300;-webkit-font-smoothing:antialiased;}
+button,input,select,textarea{font-family:inherit;}
+:root{color-scheme:light;accent-color:var(--gold);}
+[data-theme="dark"]{color-scheme:dark;}
+html{scrollbar-color:var(--border) var(--cream);}
+input,textarea,[contenteditable]{caret-color:var(--gold);}
 ::selection{background:rgba(163,128,55,.25);}
 
 /* ---------- đầu trang ---------- */
@@ -86,7 +91,7 @@ nav,[data-theme="dark"] nav{background:var(--cream2);border-bottom:1px solid var
 #progress-bar{background:var(--gold);}
 
 /* Chân trang */
-footer,[data-theme="dark"] footer{border-top:1px solid var(--hair);background:var(--rd-night);color:#B3AEA2;padding:28px 24px;
+footer,[data-theme="dark"] footer{border-top:1px solid var(--hair);background:var(--rd-night);color:#B4B4B4;padding:28px 24px;
   font-family:var(--f-sans);font-stretch:85%;font-size:13px;letter-spacing:.12em;}
 footer span[style]{color:var(--gold-light)!important;}
 
@@ -146,7 +151,7 @@ footer span[style]{color:var(--gold-light)!important;}
 .rd-cv-top{position:relative;font-family:var(--f-sans);font-stretch:75%;font-weight:400;font-size:clamp(12px,3.6cqi,13px);letter-spacing:.22em;
   text-transform:uppercase;text-align:center;line-height:1.3;}
 .rd-cv .dt-ic{position:relative;width:32cqi;height:32cqi;color:#D8C38D;fill:currentColor;}
-.rd-cv-lab{position:relative;width:88%;padding:4cqi 5cqi;background:#F4EFE2;color:#26231F;text-align:center;}
+.rd-cv-lab{position:relative;width:88%;padding:4cqi 5cqi;background:#F4EFE2;color:#2A2A2A;text-align:center;}
 .rd-cv-lab b{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-family:var(--f-display);font-weight:500;
   font-size:clamp(13px,6.6cqi,22px);line-height:1.18;}
 .rd-cv-lab i{display:block;margin-top:2.2cqi;font-style:normal;font-family:var(--f-sans);font-stretch:75%;font-weight:400;
@@ -165,8 +170,8 @@ footer span[style]{color:var(--gold-light)!important;}
 .rd-cv-m .dt-ic,.rd-cv-s .dt-ic{width:54cqi;height:54cqi;}
 .rd-flag,.rd-lock{position:absolute;z-index:2;top:12px;padding:4px 10px;font-family:var(--f-sans);font-stretch:75%;font-weight:500;font-size:11px;
   letter-spacing:.18em;text-transform:uppercase;}
-.rd-flag{left:12px;background:var(--gold);color:#16130D;}
-.rd-lock{right:12px;background:#F4EFE2;color:#26231F;}
+.rd-flag{left:12px;background:var(--gold);color:#151515;}
+.rd-lock{right:12px;background:#F4EFE2;color:#2A2A2A;}
 
 /* ---------- HOME ---------- */
 .rd-home{display:block;}
@@ -174,7 +179,7 @@ footer span[style]{color:var(--gold-light)!important;}
   padding:24px clamp(16px,4vw,48px) 0;overflow:hidden;background:var(--rd-night);color:#F3F2EE;}
 .rd-hero-in{position:relative;margin:auto;max-width:860px;padding:48px 0 56px;text-align:center;}
 .rd-hero .rd-eyebrow{color:var(--gold-light);}
-.rd-hero-t{position:relative;margin:18px 0 26px;font-family:var(--f-display);font-weight:500;font-size:clamp(64px,11vw,148px);line-height:1;letter-spacing:-.01em;}
+.rd-hero-t{position:relative;margin:18px 0 26px;font-family:var(--f-display);font-weight:500;font-size:clamp(56px,9vw,96px);line-height:1;letter-spacing:-.01em;}
 .rd-hero-t .tt{position:relative;}
 /* Khuông nhạc chạy ngang sau tên web */
 .rd-staff{position:absolute;top:50%;left:50%;width:100vw;height:96px;margin-top:-44px;transform:translateX(-50%);pointer-events:none;color:#A38037;opacity:.32;}
@@ -182,9 +187,9 @@ footer span[style]{color:var(--gold-light)!important;}
 .rd-staff line{stroke:currentColor;stroke-width:1;}
 .rd-staff .rd-clef{position:absolute;left:max(24px,calc(50% - 620px));top:-38px;width:172px;height:172px;fill:currentColor;}
 .rd-hero-lead{max-width:600px;margin:0 auto;font-size:18px;line-height:1.7;color:#C9C4B8;}
-.rd-hero-tag{margin-top:10px;font-family:var(--f-serif);font-style:italic;font-size:15px;color:#9E998C;}
+.rd-hero-tag{margin-top:10px;font-family:var(--f-serif);font-style:italic;font-size:15px;color:#9A9A9A;}
 .rd-hero-btns{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-top:38px;}
-.rd-hero .rd-btn-gold{background:#A38037;color:#16130D;}
+.rd-hero .rd-btn-gold{background:#A38037;color:#151515;}
 .rd-hero .rd-btn-gold:hover{background:#C2A060;}
 .rd-steps{position:relative;display:grid;grid-template-columns:repeat(3,1fr);width:100%;max-width:1144px;margin:0 auto;list-style:none;
   border-top:1px solid var(--rd-night-line);}
@@ -192,7 +197,7 @@ footer span[style]{color:var(--gold-light)!important;}
 .rd-step:first-child{border-left:0;padding-left:0;}
 .rd-step b{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;font-family:var(--f-display);font-weight:500;font-size:21px;color:#fff;}
 .rd-step b span{font-size:17px;color:#A38037;}
-.rd-step p{font-size:15px;line-height:1.6;color:#A9A498;}
+.rd-step p{font-size:15px;line-height:1.6;color:#A8A8A8;}
 
 .rd-sec{padding:clamp(56px,8vw,96px) 0 0;}
 .rd-sec:last-child{padding-bottom:clamp(56px,8vw,96px);}
@@ -233,15 +238,15 @@ footer span[style]{color:var(--gold-light)!important;}
 .rd-band-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(40px,6vw,88px);align-items:center;}
 .rd-band-l{text-align:center;}
 .rd-band-l .dt-ic{width:70px;height:70px;margin:0 auto 22px;color:#A38037;fill:currentColor;}
-.rd-band-l p{max-width:420px;margin:18px auto 34px;color:#B3AEA2;}
-.rd-band .rd-btn-gold{background:#A38037;color:#16130D;}
+.rd-band-l p{max-width:420px;margin:18px auto 34px;color:#B4B4B4;}
+.rd-band .rd-btn-gold{background:#A38037;color:#151515;}
 .rd-forms{list-style:none;columns:2;column-gap:48px;}
 .rd-forms li{break-inside:avoid;border-top:1px solid var(--rd-night-line);}
 .rd-forms button{display:grid;grid-template-columns:66px minmax(0,1fr) auto;align-items:baseline;gap:12px;width:100%;padding:14px 0;
   background:none;border:0;color:inherit;text-align:left;cursor:pointer;}
 .rd-forms .op{font-family:var(--f-sans);font-stretch:75%;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#A38037;}
 .rd-forms .nm{font-family:var(--f-display);font-weight:500;font-size:20px;line-height:1.25;}
-.rd-forms .n{font-size:14px;color:#A9A498;}
+.rd-forms .n{font-size:14px;color:#A8A8A8;}
 .rd-forms button:hover .nm{color:#C2A060;}
 
 /* Được yêu thích nhất */
@@ -321,7 +326,7 @@ footer span[style]{color:var(--gold-light)!important;}
 .rd-badges{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 16px;}
 .rd-badge{display:inline-flex;align-items:center;gap:7px;padding:3px 12px;border:1px solid var(--hair);border-radius:999px;background:var(--cream);
   font-family:var(--f-sans);font-stretch:85%;font-weight:400;font-size:13px;letter-spacing:.03em;color:var(--ink2);}
-.rd-badge.solid{background:var(--gold);border-color:var(--gold);color:#16130D;}
+.rd-badge.solid{background:var(--gold);border-color:var(--gold);color:#151515;}
 .rd-badge.form{color:var(--gold-dark);border-color:var(--rd-gold-line);}
 .rd-badge i{width:7px;height:7px;border-radius:50%;background:#C08A2E;}
 .rd-badge.done i{background:#5E7D4F;}
@@ -335,7 +340,7 @@ footer span[style]{color:var(--gold-light)!important;}
 .rd-tag{padding:1px 9px;border:0;border-bottom:1px dotted var(--rd-gold-line);border-radius:3px;background:var(--rd-tag-bg);cursor:pointer;
   font-family:var(--f-sans);font-size:14.5px;font-weight:400;color:var(--ink);}
 .rd-tag:hover{color:var(--gold-dark);border-bottom-color:var(--gold);}
-.rd-tag.on{background:var(--gold);border-bottom-color:var(--gold);color:#16130D;}
+.rd-tag.on{background:var(--gold);border-bottom-color:var(--gold);color:#151515;}
 .rd-tag.plain{cursor:default;}
 .rd-warn-txt{color:var(--warn);}
 .rd-bl-sum{padding-top:14px;border-top:1px dashed var(--border);font-family:var(--f-serif);font-size:15.5px;line-height:1.75;color:var(--ink2);white-space:pre-line;}
@@ -397,13 +402,13 @@ footer span[style]{color:var(--gold-light)!important;}
   --nt-paper:#FFFFFF;--nt-paper-ink:#232323;--nt-paper-ui:#57544D;--nt-paper-rule:#E2DED4;--nt-row-on:#F1EEE6;--nt-shadow:rgba(35,35,35,.18);
 }
 [data-theme="dark"]{
-  --nt-bg:#151513;--nt-ink:#ECE9E1;--nt-ink2:#B6B1A5;--nt-ui:#B6B1A5;--nt-gold:#C2A060;--nt-gold-d:#CDAC6B;
-  --nt-link:#CDAC6B;--nt-head:#CDAC6B;--nt-rule:#33312C;--nt-on:#151513;--nt-glow:transparent;
-  --nt-panel:#1C1B19;--nt-seam:#121211;--nt-line:rgba(194,160,96,.07);--nt-plinth:#22211E;--nt-plinth-hi:rgba(255,255,255,.05);--nt-mat:#1A1917;
+  --nt-bg:#181818;--nt-ink:#ECECEC;--nt-ink2:#B4B4B4;--nt-ui:#B4B4B4;--nt-gold:#C2A060;--nt-gold-d:#CDAC6B;
+  --nt-link:#CDAC6B;--nt-head:#CDAC6B;--nt-rule:#333333;--nt-on:#181818;--nt-glow:transparent;
+  --nt-panel:#1D1D1D;--nt-seam:#0C0C0C;--nt-line:rgba(194,160,96,.07);--nt-plinth:#242424;--nt-plinth-hi:rgba(255,255,255,.05);--nt-mat:#1C1C1C;
   --nt-paper:#EDEAE2;--nt-paper-ink:#232323;--nt-paper-ui:#57544D;--nt-paper-rule:#D8D3C7;--nt-row-on:#E6E2D8;--nt-shadow:rgba(0,0,0,.4);
 }
 #page-rehearsal{--rh-bg:#F3F2EE;--rh-ink:#232323;--rh-ink2:#57544D;--rh-ui:#57544D;--rh-head:#8A6A2B;--rh-rule:#D2C59C;--rh-on:#FFFFFF;--rh-glow:transparent;}
-[data-theme="dark"] #page-rehearsal{--rh-bg:#151513;--rh-ink:#ECE9E1;--rh-ink2:#B6B1A5;--rh-ui:#B6B1A5;--rh-head:#CDAC6B;--rh-rule:#3A372F;--rh-on:#151513;--rh-glow:transparent;}
+[data-theme="dark"] #page-rehearsal{--rh-bg:#181818;--rh-ink:#ECECEC;--rh-ink2:#B4B4B4;--rh-ui:#B4B4B4;--rh-head:#CDAC6B;--rh-rule:#383838;--rh-on:#181818;--rh-glow:transparent;}
 
 /* =============================================
    ĐỢT 2 (theo ba bản thiết kế Chamber Radio / Profile / Reading)
@@ -461,27 +466,27 @@ footer span[style]{color:var(--gold-light)!important;}
 }
 
 /* ---------- chân trang mới ---------- */
-footer.rd-ft{display:block;padding:56px 0 32px;background:var(--rd-night);border-top:0;color:#B3AEA2;text-align:left;
+footer.rd-ft{display:block;padding:56px 0 32px;background:var(--rd-night);border-top:0;color:#B4B4B4;text-align:left;
   font-family:var(--f-sans);font-stretch:100%;font-size:15px;letter-spacing:0;text-transform:none;}
 .rd-ft-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:32px;padding-bottom:36px;border-bottom:1px solid var(--rd-night-line);}
 .rd-ft-brand{display:flex;flex-direction:column;align-items:flex-start;gap:18px;}
 .rd-ft-logo{display:flex;align-items:center;gap:12px;padding:0;background:none;border:0;cursor:pointer;color:#A38037;
   font-family:var(--f-sans);font-stretch:75%;font-size:15px;letter-spacing:.24em;text-transform:uppercase;}
 .rd-ft-logo .rd-crest{width:38px;height:38px;}
-.rd-ft .rd-btn-gold{background:#A38037;color:#16130D;}
+.rd-ft .rd-btn-gold{background:#A38037;color:#151515;}
 .rd-ft-col{display:flex;flex-direction:column;align-items:flex-start;gap:9px;}
 .rd-ft-h{margin-bottom:6px;font-stretch:75%;font-weight:500;font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;color:#A38037;}
-.rd-ft-col button,.rd-ft-col a{padding:0;background:none;border:0;cursor:pointer;text-decoration:none;font-family:var(--f-sans);font-size:15px;font-weight:300;color:#D9D5CC;}
+.rd-ft-col button,.rd-ft-col a{padding:0;background:none;border:0;cursor:pointer;text-decoration:none;font-family:var(--f-sans);font-size:15px;font-weight:300;color:#D8D8D8;}
 .rd-ft-col button:hover,.rd-ft-col a:hover{color:#C2A060;}
-.rd-ft-line{margin-top:24px;font-family:var(--f-serif);font-style:italic;font-size:14px;color:#9E998C;}
+.rd-ft-line{margin-top:24px;font-family:var(--f-serif);font-style:italic;font-size:14px;color:#9A9A9A;}
 
 /* ---------- Home: Favorite Children (hiện hết một lượt) ---------- */
 .rd-favs{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:40px 28px;}
 .rd-fav-sum{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-top:8px;font-family:var(--f-serif);font-size:14.5px;line-height:1.6;color:var(--ink2);}
 
 /* ---------- trang đọc ---------- */
-#music-bar,[data-theme="dark"] #music-bar{background:var(--rd-night);border-bottom:0;color:#B3AEA2;gap:16px;min-height:46px;}
-#music-bar .music-toggle{order:-1;flex:none;display:grid;place-items:center;width:30px;height:30px;padding:0;border:0;border-radius:50%;background:#A38037;color:#16130D;font-size:0;}
+#music-bar,[data-theme="dark"] #music-bar{background:var(--rd-night);border-bottom:0;color:#B4B4B4;gap:16px;min-height:46px;}
+#music-bar .music-toggle{order:-1;flex:none;display:grid;place-items:center;width:30px;height:30px;padding:0;border:0;border-radius:50%;background:#A38037;color:#151515;font-size:0;}
 #music-bar .music-toggle::before{content:'';width:10px;height:11px;background:currentColor;clip-path:polygon(0 0,35% 0,35% 100%,0 100%,0 0,65% 0,100% 0,100% 100%,65% 100%,65% 0);}
 #music-bar:has(.music-bars.paused) .music-toggle::before{clip-path:polygon(15% 0,100% 50%,15% 100%);}
 #music-bar .music-bars{display:none;}
@@ -490,7 +495,7 @@ footer.rd-ft{display:block;padding:56px 0 32px;background:var(--rd-night);border
 [data-lang="vi"] .music-now::before{content:'Đang phát';}
 .music-now::after{content:'';flex:1;height:1px;background:var(--rd-night-line);}
 #music-title{flex:none;max-width:52vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--f-display);font-style:normal;font-weight:500;font-size:15px;color:#F3F2EE;}
-#rd-mb-mv{flex:none;font-size:13px;color:#A9A498;}
+#rd-mb-mv{flex:none;font-size:13px;color:#A8A8A8;}
 .reading-wrap{max-width:780px;padding-top:26px;}
 #page-reading .back-btn{display:none;}
 .rd-read-crumb{margin-bottom:40px;}
@@ -519,7 +524,7 @@ footer.rd-ft{display:block;padding:56px 0 32px;background:var(--rd-night);border
   font-family:var(--f-sans)!important;font-stretch:85%;font-size:14px!important;letter-spacing:.04em!important;text-transform:none!important;color:var(--ink)!important;}
 .wa-btn:hover{border-color:var(--gold)!important;color:var(--gold-dark)!important;}
 #float-toggle{width:46px;height:46px;border-radius:50%;border:0;background:#8A6A2B;color:#fff;font-family:var(--f-display);font-size:17px;box-shadow:0 6px 18px rgba(0,0,0,.2);}
-[data-theme="dark"] #float-toggle{background:#A38037;color:#16130D;}
+[data-theme="dark"] #float-toggle{background:#A38037;color:#151515;}
 #font-controls button,#back-top{border-radius:50%;border-color:var(--rd-gold-line);font-family:var(--f-sans);}
 
 /* ---------- trang hồ sơ ---------- */
@@ -553,7 +558,7 @@ footer.rd-ft{display:block;padding:56px 0 32px;background:var(--rd-night);border
 /* ---------- Chamber Radio ---------- */
 #page-notes{background:var(--cream);color:var(--ink);}
 .cr-head{padding:30px 0 34px;background:var(--cream2);border-bottom:1px solid var(--hair);}
-[data-theme="dark"] .cr-head{background:#1A1917;}
+[data-theme="dark"] .cr-head{background:#1C1C1C;}
 .cr-head-in{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px 48px;}
 .cr-crumb-on{color:var(--ink);}
 .cr-title{display:flex;align-items:baseline;gap:16px;font-family:var(--f-display);font-weight:500;font-size:clamp(40px,5vw,60px);line-height:1.1;color:var(--ink);}
@@ -562,25 +567,26 @@ footer.rd-ft{display:block;padding:56px 0 32px;background:var(--rd-night);border
 .cr-air{padding:clamp(48px,7vw,96px) 0;background:var(--rd-night);color:#F3F2EE;}
 .cr-air-in{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:48px;}
 .cr-kicker{display:flex;align-items:center;gap:10px;font-stretch:75%;font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:#C2A060;}
-.cr-kicker i{width:7px;height:7px;border-radius:50%;background:#7E7A71;}
+.cr-kicker i{width:7px;height:7px;border-radius:50%;background:#7A7A7A;}
 #page-notes.nt-playing .cr-kicker i{background:#C24A3A;box-shadow:0 0 0 3px rgba(194,74,58,.25);}
 .cr-piece{margin:16px 0 8px;font-family:var(--f-display);font-weight:500;font-size:clamp(40px,5.4vw,64px);line-height:1.08;}
-.cr-comp{font-size:16px;color:#B3AEA2;}
+.cr-comp{font-size:16px;color:#B4B4B4;}
 .cr-ctl{display:flex;align-items:center;gap:12px;margin:30px 0 22px;}
 .cr-ctl .nt-circ{width:40px;height:40px;border-radius:50%;border:1px solid rgba(243,242,238,.3);background:none;color:#F3F2EE;display:grid;place-items:center;cursor:pointer;}
 .cr-ctl .nt-circ:hover{border-color:#C2A060;color:#C2A060;}
-.cr-ctl .nt-play{width:54px;height:54px;border-radius:50%;border:0;background:#A38037;color:#16130D;display:grid;place-items:center;cursor:pointer;}
+.cr-ctl .nt-play{width:54px;height:54px;border-radius:50%;border:0;background:#A38037;color:#151515;display:grid;place-items:center;cursor:pointer;}
 .cr-ctl .nt-play:disabled{opacity:.4;cursor:default;}
 .cr-shuffle{height:40px;padding:0 20px;border-radius:999px;border:1px solid rgba(243,242,238,.3);background:none;color:#F3F2EE;cursor:pointer;
   font-family:var(--f-sans);font-stretch:85%;font-size:14px;font-weight:500;}
 .cr-shuffle:hover{border-color:#C2A060;color:#C2A060;}
-.cr-time{display:flex;align-items:center;gap:14px;max-width:520px;font-size:13px;color:#A9A498;}
+.cr-time{display:flex;align-items:center;gap:14px;max-width:520px;font-size:13px;color:#A8A8A8;}
 .cr-time .nt-track{flex:1;}
-.cr-air .nt-src{margin-top:12px;font-size:12.5px;color:#7E7A71;}
+.cr-air .nt-src{margin-top:12px;font-size:12.5px;color:#7A7A7A;}
 .cr-air .nt-ext{color:#C2A060;}
 .cr-vinyl{position:relative;width:clamp(220px,26vw,320px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;
-  background:repeating-radial-gradient(circle,#121211 0 2px,#1B1A18 2px 4px);box-shadow:0 0 0 1px rgba(194,160,96,.18),0 24px 50px rgba(0,0,0,.45);}
-.cr-vinyl-lab{width:34%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:#A38037;color:#16130D;}
+  background:conic-gradient(from 25deg,rgba(255,255,255,0) 0 10%,rgba(255,255,255,.16) 17%,rgba(255,255,255,0) 25% 60%,rgba(255,255,255,.16) 67%,rgba(255,255,255,0) 75%),repeating-radial-gradient(circle,#2B2B2B 0 2px,#3A3A3A 2px 4px);
+  box-shadow:0 0 0 2px rgba(194,160,96,.6),0 0 0 8px rgba(194,160,96,.12),0 24px 50px rgba(0,0,0,.6);}
+.cr-vinyl-lab{width:36%;box-shadow:0 0 0 5px #151515,0 0 0 6px rgba(194,160,96,.5);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:#A38037;color:#151515;}
 .cr-vinyl-lab .dt-ic{width:46%;height:46%;fill:currentColor;}
 #page-notes.nt-playing .cr-vinyl{animation:nt-spin 7s linear infinite;}
 .cr-dial-wrap{margin-top:32px;}
@@ -723,3 +729,53 @@ p,dd,blockquote,li,.rd-sub,.rd-fav-sum,.rd-hero-lead,.rd-bl-sum,.cr-lead{text-wr
 .rd-sec-lede{margin:8px 0 0;font-size:15px;line-height:1.5;color:var(--ink2);}
 .rd-read-hd .rd-eyebrow{margin:14px 0 0;}
 .dt-rh-head h1+.dt-rh-eyebrow{margin-top:14px;}
+
+/* ---------- Rà soát theo Impeccable (11/2026) ---------- */
+/* Giảm chuyển động: mọi vòng lặp và hiệu ứng mở trang đều có lối tắt. */
+@media (prefers-reduced-motion:reduce){
+  .page{animation:none;}
+  #site{transition:none;}
+  #page-notes.nt-playing .cr-vinyl,.music-bars span,.loading::after,.auth-disc{animation:none;}
+  .cr-needle,.nav-links a::after{transition:none;}
+}
+/* Vùng bấm tối thiểu 24px (WCAG 2.5.8) cho mọi nút chữ nhỏ. */
+.rd-ft-col button,.rd-ft-col a{min-height:24px;display:inline-flex;align-items:center;}
+.rd-tag,.rd-ilink{min-height:24px;}
+.cr-st{min-height:36px;min-width:28px;}
+.nt-cue-dot{min-width:24px;min-height:24px;}
+.cr-shuffle{padding:0 20px;}
+@media (pointer:coarse){.rd-ft-col button,.rd-ft-col a{min-height:40px;}}
+/* Opus: tiêu đề đứng (không nghiêng), không quá 96px; chữ giới thiệu theo chân phương. */
+.dt-o-head h1{font-style:normal;font-size:clamp(56px,7vw,88px);line-height:1;letter-spacing:-.02em;}
+/* Icon nét liền (thay ký tự Unicode ♥ ☆ ✉ ☾ ✎ ▼ ↺ ✦). */
+.rd-ico{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.15em;flex:none;}
+.rd-ico.on{fill:currentColor;}
+.wa-icon{display:inline-flex;align-items:center;}
+.wa-icon .rd-ico{width:1.2em;height:1.2em;}
+#comments-arrow{display:inline-flex;}
+#comments-arrow .rd-ico{width:16px;height:16px;transition:transform .2s;}
+#comments-arrow.open .rd-ico{transform:rotate(180deg);}
+#theme-btn{display:inline-flex;align-items:center;justify-content:center;}
+#theme-btn .rd-ico{width:18px;height:18px;}
+#theme-btn .i-sun{display:none;}
+[data-theme="dark"] #theme-btn .i-sun{display:block;}
+[data-theme="dark"] #theme-btn .i-moon{display:none;}
+.about-ornament .dt-ic{width:1em;height:1em;fill:currentColor;display:inline-block;}
+.rd-badge .rd-ico,.dt-flag .rd-ico,.kd .rd-ico{width:.95em;height:.95em;margin-right:2px;}
+.dt-o-nav button .rd-ico,.dt-eyebrow .rd-ico{width:1.1em;height:1.1em;}
+.mini-btn .rd-ico{width:1.1em;height:1.1em;}
+/* Chamber: bỏ viền một phía và thẻ lồng thẻ. */
+.cr-note blockquote{padding:0;border-left:0;}
+.cr-note blockquote::before{content:'';display:block;width:34px;height:2px;margin-bottom:14px;background:var(--gold);}
+.cr-row{border-left:0;}
+.cr-row[aria-pressed="true"]{box-shadow:inset 0 0 0 1px var(--rd-gold-line);border-left:0;}
+.cr-plays{padding:22px 0 0;background:none;border:0;border-top:1px solid var(--gold);}
+/* Profile: ba con số thành một dòng thống kê gọn, không còn ba ô "số to + nhãn nhỏ". */
+.rd-pstats{display:flex;flex-wrap:wrap;gap:0;margin:20px 0 36px;}
+.rd-pstat{flex-direction:row;align-items:baseline;gap:8px;padding:0 24px 0 0;background:none;border:0;}
+.rd-pstat + .rd-pstat{padding-left:24px;border-left:1px solid var(--hair);}
+.rd-pstat b{font-size:26px;}
+@media (max-width:640px){.rd-pstat b{font-size:22px;}.rd-pstat{padding-right:14px;}.rd-pstat + .rd-pstat{padding-left:14px;}}
+.dt-rh-head h1{font-style:normal;font-size:clamp(56px,7vw,88px);line-height:1;letter-spacing:-.02em;}
+.dt-bm[aria-pressed="true"] .rd-ico{fill:currentColor;}
+.dt-bm .rd-ico{width:1.05em;height:1.05em;}

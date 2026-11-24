@@ -1709,3 +1709,18 @@ Qua mốc 1280px thì listener `matchMedia` có sẵn gọi lại `renderWorks()
   Pairing / Tags / Language / Music / Stats (Published, Updated hoặc Completed, Words, Movements n/n hoặc n/?, Kudos, Comments, Bookmarks).
   Rating và Characters không có vì DB chưa có dữ liệu (rating đều `not_rated`). Fandom và cặp đôi bấm được → Works đã lọc.
 - Nút phát của thanh nhạc: kích thước cố định, biểu tượng bằng mask SVG, bỏ `transition:all` cũ.
+
+### Rà soát theo repo Impeccable (24/11/2026)
+
+Đối chiếu web với bộ rule của `pbakaus/impeccable` rồi sửa phần lỗi thật; **cố ý giữ** số La Mã, kicker kiểu chương trình hòa nhạc, khuông nhạc, đĩa vinyl (chủ repo chốt).
+- **Nền tối trung tính** (`#181818` trang, `#212121` thẻ, `#0F0F0F` dải tối/chân trang, chữ `#ECECEC`), không còn nâu/vàng; thay đồng loạt các màu nâu tối cũ trong `style.css`/`redesign.css`/`commissions.css`. Vàng chỉ là màu nhấn.
+- **Đĩa vinyl Chamber** nổi hơn: rãnh sáng hơn nền, viền vàng, vệt sáng; nhãn đĩa có vòng viền.
+- Chân trang Chamber ở nền sáng từng bị `#page-notes footer{background:var(--nt-bg)}` (style.css cũ) đổi sang nền kem trong khi chữ thiết kế cho nền đen → đã xoá rule đó.
+- `button,input,select,textarea{font-family:inherit}`; `color-scheme`, `accent-color`, `caret-color`, `scrollbar-color` theo theme.
+- `prefers-reduced-motion` phủ thêm đĩa quay, thanh sóng nhạc, hiệu ứng mở trang; vùng bấm tối thiểu 24px.
+- Chữ chức năng < 11px nâng lên ≥ 11px (sed cả `style.css`, `commissions.css`).
+- Dấu gạch dài (—) bỏ khỏi mọi chuỗi giao diện (i18n); còn lại chỉ là chữ "—" làm giá trị trống.
+- **Icon nét liền thay ký tự**: sprite `ic-heart/bookmark/mail/moon/sun/pencil/chev-*/diamond/refresh` ở đầu `index.html`, helper `rdIco(ten)` ở `app.js`, class `.rd-ico` (`.on` = tô đặc). Kudos/Bookmark/Notify, nút đổi theme, mũi tên bình luận, nút lưu truyện đều dùng SVG. Dấu ✦ ✦ ✦ ngăn cảnh trong truyện giữ nguyên (ký tự trình bày, không phải icon).
+- `commissions.html` dùng Noto như web chính, bảng màu theo cùng token (nền `#F3F2EE`, không còn kem `#FAF7F0`), bỏ blur nền; vẫn giữ mái hiên/ván gỗ.
+- Tiêu đề Opus/Rehearsal đứng (không nghiêng), tối đa 88px; wordmark Home tối đa 96px. Profile: ba ô số thành một dòng thống kê.
+- Chưa làm (để lại): `404.html`, ảnh chia sẻ `og:image`, trang Privacy/Terms, CI chạy test, tách `app.js`/`accounts.js`/`style.css` quá 1.000 dòng, dọn ~250 dòng CSS chết của màn chào/Score cũ.
