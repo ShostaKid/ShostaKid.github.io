@@ -418,7 +418,8 @@ function pwMusicRead(box) {
   if (!url) return null;                       // không có link = không có nhạc
   const start = parseInt(box.querySelector('.pw-m-start').value, 10);
   const o = {
-    source: box.querySelector('.pw-m-source').value || 'github',
+    // Dán link YouTube thì nguồn là YouTube, dù ô chọn đang để gì — phát lại tách id video từ link.
+    source: (typeof laLinkYt === 'function' && laLinkYt(url)) ? 'youtube' : (box.querySelector('.pw-m-source').value || 'github'),
     url,
     start: isNaN(start) ? 0 : Math.max(0, start),
     name: box.querySelector('.pw-m-name').value.trim() || null
@@ -2675,3 +2676,11 @@ window.fetchProfileData = async function () {
   return { since: session.user.created_at, profile: p.data || null,
     bookmarks: b.data || [], kudos: k.data || [], loi: !!(p.error || b.error || k.error) };
 };
+
+// Dán link YouTube vào ô nhạc (truyện, từng chương, About) thì ô nguồn tự chuyển sang YouTube.
+document.addEventListener('input', e => {
+  const el = e.target;
+  if (!el.classList || !el.classList.contains('pw-m-url')) return;
+  const sel = el.closest('.pw-music') && el.closest('.pw-music').querySelector('.pw-m-source');
+  if (sel && typeof laLinkYt === 'function' && laLinkYt(el.value)) sel.value = 'youtube';
+});

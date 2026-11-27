@@ -514,6 +514,7 @@
         <input type="file" id="pw-bia-tep" accept="image/jpeg,image/png,image/webp" style="display:none;">
 
         <div class="sub-heading" data-i18n="post_music">Music</div>
+        <div class="field-hint" style="margin-bottom:0.4rem;" data-i18n="post_m_yt_hint">YouTube: paste any video link.</div>
         <div class="field-hint" style="margin-bottom:0.8rem;" data-i18n="post_music_hint">Applies to every chapter. A chapter can override it below.</div>
         <div class="pw-music" id="pw-music-work">
           <input type="url" class="pw-m-url" data-i18n-ph="post_m_url" placeholder="Audio link (GitHub Releases, archive.org…)">
@@ -712,11 +713,11 @@
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
 
 <!-- YouTube player ẩn — tự inject bằng JS -->
-<script src="app.js?v=21"></script>
+<script src="app.js?v=22"></script>
 <script src="redesign.js?v=8"></script>
 <script src="rehearsal.js?v=2"></script>
-<script src="notes.js?v=4"></script>
-<script src="notes-admin.js?v=1"></script>
+<script src="notes.js?v=5"></script>
+<script src="notes-admin.js?v=2"></script>
 
 <!-- =============================================
      TÀI KHOẢN — Supabase Auth
@@ -724,6 +725,6 @@
      KHÔNG đụng gì tới phần Browse / danh sách truyện:
      phần đó dựng ở script cổ điển (giao diện đĩa than, dữ liệu từ fetchWorksFromDB).
      ============================================= -->
-<script type="module" src="accounts.js?v=12"></script>
+<script type="module" src="accounts.js?v=13"></script>
 </body>
 </html>
