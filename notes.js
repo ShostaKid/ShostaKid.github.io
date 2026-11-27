@@ -8,7 +8,7 @@
 // Âm thanh: MỘT <audio> riêng của phòng nghe, tách khỏi trình phát toàn cục của app.js.
 // Vào phòng thì app.js đã stopMusic() (showPage); bấm phát thì ta stopMusic() lần nữa cho chắc;
 // rời phòng (ntRoi) thì tạm dừng. Nhờ vậy hai bên không bao giờ chồng tiếng.
-// Chỉ nguồn mp3 trực tiếp (github / musopen / archive) mới có thanh thời gian + cue.
+// Nguồn mp3 trực tiếp (github / musopen / archive) và YouTube (player ẩn, YtAudio trong app.js) có thanh thời gian + cue.
 // SoundCloud là iframe, không seek được từ ngoài → hiện link nghe ngoài, cue không bấm được.
 // =============================================
 (function () {
@@ -19,7 +19,8 @@
     open: false,          // điện thoại: tờ note đang mở
     dur: 0, playing: false
   };
-  let A = null;           // <audio> của phòng nghe
+  let A = null;           // player hiện tại của phòng nghe: <audio> (AAu) hoặc YtAudio (AYt, nguồn YouTube)
+  let AAu = null, AYt = null;
   let R = {};             // tham chiếu tới các phần tử cần cập nhật mỗi nhịp (không dựng lại)
   let mini = null;        // thanh phát nhỏ (điện thoại), gắn vào <body>
 
@@ -65,24 +66,28 @@
   }
 
   // ---- âm thanh ----
-  function amThanh() {
-    if (A) return A;
-    A = new Audio();
-    A.preload = 'metadata';
-    A.addEventListener('loadedmetadata', () => {
-      NT.dur = isFinite(A.duration) ? A.duration : 0;
+  // Gắn các sự kiện của phòng nghe vào một player (<audio> hoặc YtAudio — hai bên có chung giao diện). Chỉ xử lý khi nó là player hiện tại.
+  function ganSuKien(a) {
+    a.addEventListener('loadedmetadata', () => {
+      if (A !== a) return;
+      NT.dur = isFinite(a.duration) ? a.duration : 0;
       const n = cur();
       // Bắt đầu từ mốc start của note (nhạc dài, đoạn hay nằm giữa file) — chỉ khi chưa tua tay.
-      if (n && n.start && A.currentTime < 1 && n.start < NT.dur - 1) { try { A.currentTime = n.start; } catch (_) {} }
+      if (n && n.start && a.currentTime < 1 && n.start < NT.dur - 1) { try { a.currentTime = n.start; } catch (_) {} }
       datCue(); capNhatGio();
     });
-    A.addEventListener('timeupdate', capNhatGio);
-    A.addEventListener('play', () => datDangPhat(true));
-    A.addEventListener('pause', () => datDangPhat(false));
-    A.addEventListener('ended', () => { datDangPhat(false); try { A.currentTime = 0; } catch (_) {} capNhatGio(); });
-    A.addEventListener('error', () => { datDangPhat(false); if (R.loi) R.loi.textContent = t('nt_err_track'); });
-    return A;
+    a.addEventListener('timeupdate', () => { if (A === a) capNhatGio(); });
+    a.addEventListener('play', () => { if (A === a) datDangPhat(true); });
+    a.addEventListener('pause', () => { if (A === a) datDangPhat(false); });
+    a.addEventListener('ended', () => { if (A !== a) return; datDangPhat(false); try { a.currentTime = 0; } catch (_) {} capNhatGio(); });
+    a.addEventListener('error', () => { if (A !== a) return; datDangPhat(false); if (R.loi) R.loi.textContent = t(a === AYt ? 'yt_err' : 'nt_err_track'); });
   }
+  function auAudio() {         // <audio> của phòng nghe, dựng một lần
+    if (!AAu) { AAu = new Audio(); AAu.preload = 'metadata'; ganSuKien(AAu); }
+    return AAu;
+  }
+  function amThanh() { return A || (A = auAudio()); }
+  function huyYt() { if (AYt) { AYt.remove(); AYt = null; } }
   function datDangPhat(b) {
     NT.playing = b;
     const root = $('page-notes'); if (root) root.classList.toggle('nt-playing', b);
@@ -91,12 +96,23 @@
     if (R.kicker) R.kicker.textContent = t(b ? 'nt_playing_state_on' : 'nt_playing_state_off');
   }
   function nap1(n) {           // gắn bài của note vào <audio>, chưa phát
-    const a = amThanh();
-    a.pause();
+    if (A) A.pause();
     NT.dur = 0;
     if (R.loi) R.loi.textContent = '';
-    datNguonAm(a, coAmThanh(n) ? n.url : null);   // <source type=…>: iOS không phát file Release nếu chỉ có a.src (xem app.js)
-    a.load();
+    huyYt();
+    if (n.source === 'youtube') {
+      // YouTube: player ẩn + IFrame API (xem YtAudio trong app.js). Dựng sẵn ở trạng thái chưa phát; bấm Play mới phát.
+      if (AAu) { AAu.pause(); datNguonAm(AAu, null); }
+      const id = ytIdTuUrl(n.url);
+      if (!id) { A = auAudio(); if (R.loi) R.loi.textContent = t('yt_err'); datDangPhat(false); return; }
+      AYt = new YtAudio(id, { start: n.start, tuPhat: false });
+      AYt.loop = false;                 // phòng nghe không lặp bài
+      A = AYt; ganSuKien(AYt);
+    } else {
+      const a = auAudio(); A = a;
+      datNguonAm(a, coAmThanh(n) ? n.url : null);   // <source type=…>: iOS không phát file Release nếu chỉ có a.src (xem app.js)
+      a.load();
+    }
     datDangPhat(false);
   }
   function batTat() {
@@ -309,7 +325,7 @@
     veMini(n);
     datCue(); capNhatGio();
   }
-  const nguon = n => ({ github: 'GitHub Releases', musopen: 'Musopen', archive: 'archive.org', soundcloud: 'SoundCloud' }[n.source] || n.source);
+  const nguon = n => ({ github: 'GitHub Releases', musopen: 'Musopen', archive: 'archive.org', soundcloud: 'SoundCloud', youtube: 'YouTube' }[n.source] || n.source);
 
   // thanh phát nhỏ của điện thoại: gắn vào <body> (ngoài .page để position:fixed không lệch)
   function veMini(n) {

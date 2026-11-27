@@ -177,6 +177,7 @@ Migration đã chạy, theo thứ tự:
 28. `suite_iv_description`
 29. `create_notes_listening_room`
 30. `work_subscriptions_and_chapter_notify`
+31. `notes_source_youtube` (nới `notes_source_check` thêm `youtube`; file gốc `scripts/notes/migration_31_notes_source_youtube.sql`)
 
 (Bốn migration `import_*` chạy một lần lúc nhập dữ liệu, đã dọn — không đánh số ở đây.)
 
@@ -1724,3 +1725,30 @@ Qua mốc 1280px thì listener `matchMedia` có sẵn gọi lại `renderWorks()
 - `commissions.html` dùng Noto như web chính, bảng màu theo cùng token (nền `#F3F2EE`, không còn kem `#FAF7F0`), bỏ blur nền; vẫn giữ mái hiên/ván gỗ.
 - Tiêu đề Opus/Rehearsal đứng (không nghiêng), tối đa 88px; wordmark Home tối đa 96px. Profile: ba ô số thành một dòng thống kê.
 - Chưa làm (để lại): `404.html`, ảnh chia sẻ `og:image`, trang Privacy/Terms, CI chạy test, tách `app.js`/`accounts.js`/`style.css` quá 1.000 dòng, dọn ~250 dòng CSS chết của màn chào/Score cũ.
+
+---
+
+## Nhạc YouTube (cập nhật 2026-11-28)
+
+Trước đây nhánh YouTube chỉ là một `<iframe>` thô: không tạm dừng được (đổi `src` = nạp lại cả player, mỗi lần là một lượt phát mới), không seek, và **id video phải khai tay**
+(form Post chỉ lưu link nên `music.id` luôn trống → `embed/undefined`, tức chọn YouTube ở form là hỏng). Chủ repo đã thử trên Edge/Chrome/Cốc Cốc ẩn danh
+(`yt-test.html`): player ẩn 0×0 và 1×1 **không dính quảng cáo**, 200×200 thì dính — nên đổi nhánh này cho khớp bản thử.
+
+- **`YtAudio`** (`app.js`): iframe ẩn 1×1, `opacity:0`, ngoài màn hình, dựng **đồng bộ ngay trong cú bấm** (`autoplay=1`, như nhánh cũ — iOS cần thế),
+  rồi gắn `YT.Player` vào chính iframe đó khi IFrame API tải xong (`napYtApi()`, tải lười khi lần đầu cần YouTube). Có giao diện giống `<audio>`:
+  `currentTime / duration / volume / paused / play() / pause()` + sự kiện `loadedmetadata / timeupdate / play / pause / ended / error`. Nhờ vậy
+  `gioiHanDoan()` (lặp đoạn [start,end], nhỏ dần/to dần), thanh nhạc và **phòng nghe Chamber** (`notes.js`) dùng nó y như `<audio>`.
+- Tạm dừng / phát lại qua `pauseVideo()` / `playVideo()` — **không nạp lại iframe**. Hết bài thì quay về `start` và phát tiếp (lặp), cùng bài ở chương sau
+  chỉ seek tới `start` mới (không dựng lại, nhạc liền cả buổi đọc). `ytAm` là player đang phát; `amHienTai()` trả `<audio>` hoặc `ytAm`.
+- **Id video tách từ link lúc phát** (`ytIdTuUrl`: youtu.be, watch?v=, embed/, shorts/, music.youtube.com, hoặc id trần 11 ký tự), nên DB chỉ cần
+  `chapters.music = {"source":"youtube","url":"https://youtu.be/…","start":…,"end":…,"name":…}`. Truyện cũ khai `id` mà không có `url` vẫn chạy
+  (`khoaNhac()` dùng `yt:<id>` làm khoá "cùng bài" — trước đó `url` undefined làm hai video khác nhau bị coi là một).
+- **Form Post / About**: dán link YouTube vào ô nhạc → ô nguồn tự chuyển sang YouTube (`laLinkYt`), và `pwMusicRead()` ghi `source:'youtube'` dù ô chọn đang để gì.
+- **Notes desk**: nguồn suy từ link (`doiNguon`), link YouTube phải là **link một video** (không phải kênh/danh sách). Cần migration 31 (đã chạy 28/11/2026).
+  Chamber phát YouTube bằng `YtAudio` dựng sẵn ở trạng thái chưa phát (`autoplay=0`); có thanh thời gian + cue như mp3.
+- Lỗi (chặn nhúng 101/150, video không còn 100, API không tải được, không tách được id) → thanh nhạc hiện `yt_err` và nút Play; chương đó nên **đổi nguồn về GitHub Releases**.
+  Trình duyệt chặn tự phát → thanh nhạc về trạng thái tạm dừng, bấm Play (một cú bấm thật) là phát.
+- **Rủi ro cần biết:** điều khoản API của YouTube yêu cầu player nhúng ≥ 200×200 và không được ẩn. Ẩn player đi ngược điều khoản đó; video có thể bị chặn nhúng bất cứ lúc nào.
+  Quảng cáo phụ thuộc video / vùng / tài khoản người nghe nên kết quả test không đảm bảo mãi.
+- Chưa kiểm với YouTube thật trong môi trường dev (không tải được player); đã kiểm toàn bộ logic với IFrame API giả lập (tạm dừng, phát lại, lặp đoạn, hết bài, chặn nhúng,
+  chặn tự phát, cùng bài khác mốc, Chamber). `yt-test.html` (trang thử nội bộ, không link từ đâu) vẫn còn trên `main` — xoá khi không cần nữa.

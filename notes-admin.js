@@ -9,7 +9,7 @@
   'use strict';
   const $ = id => document.getElementById(id);
   const A = { notes: [], tracks: null, edit: null, busy: false, loadErr: false };
-  const SRC = ['github', 'musopen', 'archive', 'soundcloud'];
+  const SRC = ['github', 'musopen', 'archive', 'soundcloud', 'youtube'];
   const E = (tag, cls, ...con) => ganCon(dtEl(tag, cls ? { class: cls } : null), ...con);
 
   const fmt = s => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
@@ -27,6 +27,7 @@
     if (h === 'dl.musopen.org' || h.endsWith('musopen.org')) return 'musopen';
     if (h === 'archive.org' || h.endsWith('.archive.org')) return 'archive';
     if (h === 'soundcloud.com' || h.endsWith('.soundcloud.com')) return 'soundcloud';
+    if (typeof laLinkYt === 'function' && laLinkYt(u)) return ytIdTuUrl(u) ? 'youtube' : null;   // phải là link một video
     return null;
   }
   function noi(key, loi) {

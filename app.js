@@ -1643,7 +1643,7 @@ const i18n = {
     nt_play:'Play', nt_pause:'Pause', nt_prev:'Previous note', nt_next:'Next note', nt_seek:'Seek in the track', nt_jump:'Jump to',
     nt_note_no:'Programme note', nt_on:'on', nt_cues:'Listening cues', nt_cues_hint:'click one to drop the needle there',
     nt_read_fic:'Read the fic with this playing →', nt_back:'Back to programme',
-    nt_listen_ext:'Listen on SoundCloud ↗', nt_err_track:'This track will not play right now.',
+    nt_listen_ext:'Listen on SoundCloud ↗', nt_err_track:'This track will not play right now.', yt_err:'This YouTube track will not play (it may be blocked from embedding).',
     nt_loading:'Setting up the room…', nt_failed:'The room could not be reached right now. Try again in a moment.',
     nt_empty:'The room is being set up. Notes about the music behind the fics will appear here soon.',
     nt_preview:'Preview: these notes are drafts, only you can see them',
@@ -1654,7 +1654,7 @@ const i18n = {
     nta_back_desk:'Back to the desk', nta_editing:'Editing a note',
     nta_s_piece:'The piece', nta_piece:'Piece', nta_composer:'Composer', nta_opus:'Opus (optional)', nta_short:'Label on the disc (optional)',
     nta_title:'Headline of the note', nta_title_hint:'The big title on the paper, e.g. what this piece means to the fic.', nta_lang:'Language of the note text',
-    nta_s_track:'The track', nta_pick_track:'Pick a track already used in a fic', nta_url:'Audio link', nta_url_hint:'GitHub Releases, musopen.org, archive.org or soundcloud.com (https). SoundCloud plays outside the room and cannot have cues.',
+    nta_s_track:'The track', nta_pick_track:'Pick a track already used in a fic', nta_url:'Audio link', nta_url_hint:'GitHub Releases, musopen.org, archive.org, YouTube or soundcloud.com (https). YouTube plays through a hidden player, with seeking and cues. SoundCloud plays outside the room and cannot have cues.',
     nta_source:'Source (detected from the link)', nta_start:'Start at', nta_start_hint:'m:ss or seconds. Where the music begins in the file.',
     nta_s_sleeve:'The sleeve', nta_icon:'Icon', nta_color:'Sleeve colour',
     nta_s_text:'The note', nta_body:'Text', nta_body_hint:'Plain text. Leave a blank line between paragraphs.', nta_quote:'One line to carry into the fic (optional)',
@@ -1663,7 +1663,7 @@ const i18n = {
     nta_s_publish:'On the table', nta_status:'Status', nta_slot_hint:'A draft is only visible to you. Put a published note in a slot to show it in the room.',
     nta_save:'Save note →', nta_saving:'Saving…', nta_delete:'Delete this note', nta_saved:'Saved', nta_deleted:'Note deleted.',
     nta_delete_ask:'Delete the note about “{a}”? This cannot be undone.', nta_swap_ask:'Slot {n} already holds “{a}”. Put it back off the table and use the slot here?',
-    nta_need_core:'Piece, composer and headline are required.', nta_bad_url:'The audio link must be https and from GitHub, musopen.org, archive.org or soundcloud.com.',
+    nta_need_core:'Piece, composer and headline are required.', nta_bad_url:'The audio link must be https and from GitHub, musopen.org, archive.org, YouTube (a video link) or soundcloud.com.',
     nta_bad_start:'Start time must look like 1:36 or 96.', nta_bad_cue:'Each cue needs a time (like 1:36) and some text.', nta_too_many_cues:'At most 12 cues.',
     nta_err_slot:'That slot is taken. Take the other note off the table first.', nta_err_dup:'A note with this slug already exists.', nta_err_check:'The database refused one of the values',
     nta_err_forbidden:'Only the author can do this. Sign in again.', nta_err_generic:'Could not save. Try again in a moment',
@@ -1878,7 +1878,7 @@ const i18n = {
     post_created:'Created and selected', post_already_there:'That one already exists, selected it for you.',
     post_name_bad:'That name cannot be used.',
     post_music:'Music', post_music_hint:'Applies to every chapter. A chapter can override it below. End is optional: the chapter then plays only the part between Start and End, looping it softly until the reader moves on.',
-    post_m_url:'Audio link (GitHub Releases, archive.org…)', post_m_name:'Track name shown to readers',
+    post_m_url:'Audio link (GitHub Releases, archive.org, YouTube…)', post_m_name:'Track name shown to readers', post_m_yt_hint:'YouTube: paste any video link; the source switches to YouTube by itself. It plays through a hidden player with pause, resume and loop. If a video will not play or shows ads, put the same track on GitHub Releases and switch the source back.',
     post_m_start:'Start (seconds)', post_m_end:'End (seconds, optional)', post_ch_music:'Music for this chapter only',
     post_ch_music_hint:'Leave empty to use the work’s music.',
     bm_head:'My Bookmarks', bm_empty:'You have not bookmarked anything yet.',
@@ -1948,7 +1948,7 @@ const i18n = {
     nt_play:'Phát', nt_pause:'Tạm dừng', nt_prev:'Note trước', nt_next:'Note sau', nt_seek:'Tua trong bản nhạc', nt_jump:'Nhảy tới',
     nt_note_no:'Note số', nt_on:'về', nt_cues:'Điểm nghe', nt_cues_hint:'bấm một dòng để đặt kim xuống đúng chỗ đó',
     nt_read_fic:'Đọc fic với bản nhạc này →', nt_back:'Về chương trình',
-    nt_listen_ext:'Nghe trên SoundCloud ↗', nt_err_track:'Bản nhạc này chưa phát được lúc này.',
+    nt_listen_ext:'Nghe trên SoundCloud ↗', nt_err_track:'Bản nhạc này chưa phát được lúc này.', yt_err:'Bản nhạc YouTube này chưa phát được (có thể bị chặn nhúng).',
     nt_loading:'Đang dọn phòng…', nt_failed:'Chưa vào được phòng nghe lúc này. Thử lại sau một lát nhé.',
     nt_empty:'Phòng nghe đang được dọn. Các note về âm nhạc đằng sau fic sẽ sớm xuất hiện ở đây.',
     nt_preview:'Xem trước: các note này là bản nháp, chỉ bạn thấy',
@@ -1959,7 +1959,7 @@ const i18n = {
     nta_back_desk:'Về bàn viết', nta_editing:'Đang sửa một note',
     nta_s_piece:'Bản nhạc', nta_piece:'Tên bản', nta_composer:'Nhạc sĩ', nta_opus:'Opus (không bắt buộc)', nta_short:'Chữ trên nhãn đĩa (không bắt buộc)',
     nta_title:'Tiêu đề của note', nta_title_hint:'Dòng tiêu đề lớn trên tờ giấy, ví dụ bản nhạc này có ý nghĩa gì với fic.', nta_lang:'Ngôn ngữ của chữ trong note',
-    nta_s_track:'Bản thu', nta_pick_track:'Chọn bản nhạc đã dùng ở một fic', nta_url:'Link nhạc', nta_url_hint:'GitHub Releases, musopen.org, archive.org hoặc soundcloud.com (https). SoundCloud phát ngoài phòng nghe và không có cue.',
+    nta_s_track:'Bản thu', nta_pick_track:'Chọn bản nhạc đã dùng ở một fic', nta_url:'Link nhạc', nta_url_hint:'GitHub Releases, musopen.org, archive.org, YouTube hoặc soundcloud.com (https). YouTube phát qua player ẩn, tua được và có cue. SoundCloud phát ngoài phòng nghe và không có cue.',
     nta_source:'Nguồn (tự nhận từ link)', nta_start:'Bắt đầu từ', nta_start_hint:'m:ss hoặc số giây. Chỗ nhạc bắt đầu trong file.',
     nta_s_sleeve:'Bìa đĩa', nta_icon:'Icon', nta_color:'Màu bìa',
     nta_s_text:'Nội dung note', nta_body:'Chữ', nta_body_hint:'Chữ thường. Cách một dòng trống giữa các đoạn.', nta_quote:'Một câu để mang vào fic (không bắt buộc)',
@@ -1968,7 +1968,7 @@ const i18n = {
     nta_s_publish:'Lên bàn', nta_status:'Trạng thái', nta_slot_hint:'Nháp chỉ mình bạn thấy. Đặt một note đã đăng vào một vị trí để nó hiện trong phòng nghe.',
     nta_save:'Lưu note →', nta_saving:'Đang lưu…', nta_delete:'Xoá note này', nta_saved:'Đã lưu', nta_deleted:'Đã xoá note.',
     nta_delete_ask:'Xoá note về “{a}”? Không hoàn tác được.', nta_swap_ask:'Vị trí {n} đang có “{a}”. Cho nó xuống khỏi bàn và dùng vị trí này?',
-    nta_need_core:'Cần có tên bản, nhạc sĩ và tiêu đề.', nta_bad_url:'Link nhạc phải là https và từ GitHub, musopen.org, archive.org hoặc soundcloud.com.',
+    nta_need_core:'Cần có tên bản, nhạc sĩ và tiêu đề.', nta_bad_url:'Link nhạc phải là https và từ GitHub, musopen.org, archive.org, YouTube (link một video) hoặc soundcloud.com.',
     nta_bad_start:'Giờ bắt đầu phải dạng 1:36 hoặc 96.', nta_bad_cue:'Mỗi điểm nghe cần có giờ (như 1:36) và vài chữ.', nta_too_many_cues:'Tối đa 12 điểm nghe.',
     nta_err_slot:'Vị trí đó đã có note khác. Gỡ note kia xuống trước.', nta_err_dup:'Đã có note trùng đường dẫn.', nta_err_check:'Cơ sở dữ liệu từ chối một giá trị',
     nta_err_forbidden:'Chỉ tác giả làm được việc này. Đăng nhập lại nhé.', nta_err_generic:'Chưa lưu được. Thử lại sau một lát',
@@ -2183,7 +2183,7 @@ const i18n = {
     post_confirm_new_opus:'Tạo nhóm “%s”? Mô tả và thứ tự hiện thì viết sau trên trang Opus.',
     post_name_bad:'Tên này không dùng được.',
     post_music:'Nhạc nền', post_music_hint:'Dùng cho mọi chương. Từng chương có thể ghi đè bên dưới. Ô Kết thúc là tuỳ chọn: điền vào thì chương chỉ phát đoạn từ Bắt đầu tới Kết thúc, hết đoạn thì nhỏ dần rồi lặp lại cho tới khi người đọc sang chương khác.',
-    post_m_url:'Link nhạc (GitHub Releases, archive.org…)', post_m_name:'Tên bản nhạc hiện cho người đọc',
+    post_m_url:'Link nhạc (GitHub Releases, archive.org, YouTube…)', post_m_name:'Tên bản nhạc hiện cho người đọc', post_m_yt_hint:'YouTube: dán link một video bất kỳ, nguồn tự chuyển sang YouTube. Nhạc phát qua player ẩn, có tạm dừng, phát lại và lặp. Video nào không phát được hoặc dính quảng cáo thì đưa cùng bản nhạc lên GitHub Releases rồi chuyển nguồn về lại.',
     post_m_start:'Bắt đầu từ giây', post_m_end:'Kết thúc ở giây (tuỳ chọn)', post_ch_music:'Nhạc riêng cho chương này',
     post_ch_music_hint:'Để trống thì dùng nhạc chung của truyện.',
     bm_head:'Truyện đã lưu', bm_empty:'Bạn chưa lưu truyện nào.',
@@ -2318,7 +2318,7 @@ function toggleTheme() {
 })();
 
 // =============================================
-// MUSIC — hỗ trợ 3 nguồn: musopen / soundcloud / youtube
+// MUSIC — các nguồn: github / musopen / archive (thẻ <audio>), soundcloud (iframe), youtube (iframe + IFrame API)
 // =============================================
 // Dựng thẻ <audio> kèm gợi ý loại file. GitHub Releases phục vụ mọi file dạng
 // application/octet-stream, đường dẫn lại không có đuôi, nên iOS (WebKit) không chịu phát nếu
@@ -2349,7 +2349,7 @@ function taoAudio(url) {
 function phatAudio(audio) {
   const p = audio.play();
   if (p && p.catch) p.catch(() => {
-    if (document.getElementById('audio-player') !== audio) return;   // bị thay bài/dừng chủ động, không phải bị chặn
+    if (amHienTai() !== audio) return;   // bị thay bài/dừng chủ động, không phải bị chặn
     musicPlaying = false;
     document.getElementById('musicBars').classList.add('paused');
     document.querySelector('.music-toggle').textContent = t('play');
@@ -2375,6 +2375,166 @@ function gioiHanDoan(audio, start, end) {
   });
 }
 
+// ---- YouTube: iframe ẩn + IFrame API, bọc thành đối tượng GIỐNG <audio> ----
+// Trước đây nhánh YouTube chỉ là một <iframe> thô: không tạm dừng được (đổi src để nạp lại cả player — mỗi lần là một lượt phát mới),
+// không seek, không chỉnh âm lượng, và id video phải khai tay (form Post chỉ lưu link nên id luôn trống → embed/undefined).
+// Giờ: iframe vẫn dựng ĐỒNG BỘ ngay trong cú bấm (autoplay=1, như nhánh cũ — nên trình duyệt coi là thao tác người dùng),
+// rồi gắn YT.Player vào chính iframe đó khi API tải xong. YtAudio có đủ currentTime / duration / volume / paused / play() / pause()
+// và các sự kiện loadedmetadata / timeupdate / play / pause / ended / error, nên gioiHanDoan(), thanh nhạc và phòng nghe
+// (notes.js) dùng nó y như một <audio>. Lặp đoạn [start, end] và lặp cả bài do gioiHanDoan() + vòng lặp trong lớp này lo.
+// Lưu ý: YouTube yêu cầu player nhúng tối thiểu 200×200 và không được ẩn (điều khoản API). Ẩn player đi ngược điều khoản đó;
+// nếu một video bị chặn nhúng / hiện quảng cáo thì đổi nguồn nhạc của chương sang GitHub Releases.
+let ytAm = null;           // YtAudio đang phát ở trình phát chính (nếu có)
+let ytApiPromise = null;
+function napYtApi() {
+  if (window.YT && window.YT.Player) return Promise.resolve();
+  if (ytApiPromise) return ytApiPromise;
+  ytApiPromise = new Promise((ok, loi) => {
+    const truoc = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => { if (typeof truoc === 'function') { try { truoc(); } catch (_) {} } ok(); };
+    const s = document.createElement('script');
+    s.src = 'https://www.youtube.com/iframe_api';
+    s.onerror = () => { ytApiPromise = null; loi(new Error('yt-api')); };
+    document.head.appendChild(s);
+  });
+  return ytApiPromise;
+}
+// Link YouTube bất kỳ (youtu.be, watch?v=, embed/, shorts/, music.youtube.com) hoặc id trần 11 ký tự → id; sai khuôn thì null.
+function ytIdTuUrl(u) {
+  u = String(u || '').trim();
+  if (/^[A-Za-z0-9_-]{11}$/.test(u)) return u;
+  let x; try { x = new URL(u); } catch (_) { return null; }
+  const h = x.hostname.replace(/^(www|m|music)\./, '');
+  let id = null;
+  if (h === 'youtu.be') id = x.pathname.split('/')[1];
+  else if (h === 'youtube.com' || h === 'youtube-nocookie.com') {
+    if (x.pathname === '/watch') id = x.searchParams.get('v');
+    else { const m = /^\/(?:embed|shorts|live|v)\/([^/?#]+)/.exec(x.pathname); if (m) id = m[1]; }
+  }
+  return id && /^[A-Za-z0-9_-]{11}$/.test(id) ? id : null;
+}
+// Chỉ để nhận diện host (form dùng để tự chọn nguồn); có thể là link YouTube nhưng chưa tách được id.
+function laLinkYt(u) {
+  try { return /^(?:(?:www|m|music)\.)?(?:youtube\.com|youtube-nocookie\.com|youtu\.be)$/.test(new URL(String(u).trim()).hostname); }
+  catch (_) { return false; }
+}
+// Khoá so sánh "cùng bài": truyện cũ khai id mà không có url thì url undefined === undefined sẽ nhầm hai video làm một.
+function khoaNhac(m) { return m.url || ('yt:' + (m.id || '')); }
+function amHienTai() { return document.getElementById('audio-player') || ytAm; }
+
+class YtAudio extends EventTarget {
+  constructor(id, o = {}) {
+    super();
+    this.loop = true;                       // chỉ khi hết bài (state 0); lặp đoạn [start,end] do gioiHanDoan() lo
+    this._start = this._start0 = Math.max(0, Math.floor(Number(o.start) || 0));
+    this._p = null; this._san = false; this._dung = false; this._biet = false; this._tg = null;
+    this._muon = o.tuPhat === false ? 'pause' : 'play';   // việc cần làm ngay khi API sẵn sàng
+    this._choi = false; this._vol = 1; this._volGui = 100;
+    const f = document.createElement('iframe');
+    f.id = 'yt-player';
+    f.title = 'YouTube';
+    f.setAttribute('aria-hidden', 'true');
+    f.tabIndex = -1;
+    f.style.cssText = 'position:fixed;width:1px;height:1px;bottom:-10px;left:-10px;opacity:0;pointer-events:none;';
+    f.allow = 'autoplay; encrypted-media';
+    const goc = /^https?:$/.test(location.protocol) ? '&origin=' + encodeURIComponent(location.origin) : '';
+    f.src = 'https://www.youtube.com/embed/' + encodeURIComponent(id) + '?autoplay=' + (o.tuPhat === false ? 0 : 1)
+      + '&start=' + this._start + '&controls=0&rel=0&playsinline=1&enablejsapi=1' + goc;
+    document.body.appendChild(f);
+    this._f = f;
+    napYtApi().then(() => {
+      if (this._dung) return;
+      this._p = new YT.Player(f, { events: {
+        onReady: () => this._sanSang(),
+        onStateChange: e => this._doiTT(e.data),
+        onError: e => this._loi(e.data),
+        onAutoplayBlocked: () => this._chan()
+      } });
+    }).catch(() => { if (!this._dung) this._loi(-1); });
+  }
+  _bao(ten, kem) { const e = new Event(ten); if (kem) Object.assign(e, kem); this.dispatchEvent(e); }
+  _sanSang() {
+    if (this._dung) return;
+    this._san = true;
+    this._volGui = Math.round(this._vol * 100);
+    try { this._p.setVolume(this._volGui); } catch (_) {}
+    if (this._start !== this._start0) { try { this._p.seekTo(this._start, true); } catch (_) {} }
+    try { if (this._muon === 'play') this._p.playVideo(); else this._p.pauseVideo(); } catch (_) {}
+    this._tg = setInterval(() => this._nhip(), 250);
+    this._nhip();
+  }
+  _nhip() {
+    if (this._dung || !this._san) return;
+    if (!this._biet) {
+      let d = 0; try { d = this._p.getDuration() || 0; } catch (_) {}
+      if (d > 0) { this._biet = true; this._bao('loadedmetadata'); }
+    }
+    if (this._choi) this._bao('timeupdate');
+  }
+  _doiTT(s) {
+    if (this._dung) return;
+    if (s === 1 || (s === 3 && this._muon === 'play')) {
+      if (!this._choi) { this._choi = true; this._bao('play'); }
+    } else if (s === 2 || s === 5 || s === -1) {
+      if (this._choi) { this._choi = false; this._bao('pause'); }
+    } else if (s === 0) {
+      if (this.loop && this._muon === 'play') {
+        const m = this._moc;
+        try { this._p.seekTo(m ? m.start : this._start, true); this._p.playVideo(); } catch (_) {}
+      } else {
+        if (this._choi) { this._choi = false; this._bao('pause'); }
+        this._bao('ended');
+      }
+    }
+  }
+  _chan() { this._muon = 'pause'; if (this._choi) this._choi = false; this._bao('pause'); }   // trình duyệt chặn tự phát
+  _loi(ma) { this._muon = 'pause'; this._choi = false; this._bao('error', { code: ma }); }
+  get paused() { return !this._choi; }
+  get currentTime() { if (this._san) { try { return Number(this._p.getCurrentTime()) || 0; } catch (_) {} } return this._start; }
+  set currentTime(v) {
+    v = Math.max(0, Number(v) || 0);
+    if (this._san) { try { this._p.seekTo(v, true); } catch (_) {} } else this._start = v;
+  }
+  get duration() { if (this._san) { try { const d = this._p.getDuration(); if (d > 0) return d; } catch (_) {} } return NaN; }
+  get volume() { return this._vol; }
+  set volume(v) {
+    v = Math.max(0, Math.min(1, Number(v) || 0)); this._vol = v;
+    const r = Math.round(v * 100);
+    if (this._san && r !== this._volGui) { this._volGui = r; try { this._p.setVolume(r); } catch (_) {} }
+  }
+  play() { this._muon = 'play'; if (this._san) { try { this._p.playVideo(); } catch (_) {} } return Promise.resolve(); }
+  pause() { this._muon = 'pause'; if (this._san) { try { this._p.pauseVideo(); } catch (_) {} } }
+  load() {}
+  remove() {
+    this._dung = true; clearInterval(this._tg);
+    try { if (this._p && this._p.destroy) this._p.destroy(); } catch (_) {}
+    if (this._f && this._f.isConnected) this._f.remove();
+  }
+}
+// Thanh nhạc theo trạng thái thật của player YouTube (tạm dừng / phát / bị chặn tự phát).
+function dongBoNutYt(y, choi) {
+  if (ytAm !== y) return;
+  musicPlaying = choi;
+  document.getElementById('musicBars').classList.toggle('paused', !choi);
+  document.querySelector('.music-toggle').textContent = t(choi ? 'pause' : 'play');
+}
+function baoLoiNhac() {
+  musicPlaying = false;
+  document.getElementById('music-bar').classList.remove('hidden');
+  document.getElementById('music-title').textContent = t('yt_err');
+  document.getElementById('musicBars').classList.add('paused');
+  document.querySelector('.music-toggle').textContent = t('play');
+}
+function phatYt(id, start, end) {
+  const y = new YtAudio(id, { start });
+  ytAm = y;
+  gioiHanDoan(y, start, end);
+  y.addEventListener('play', () => dongBoNutYt(y, true));
+  y.addEventListener('pause', () => dongBoNutYt(y, false));
+  y.addEventListener('error', () => { if (ytAm === y) baoLoiNhac(); });
+  return y;
+}
+
 function playMusicDirect(source, url, id, start, end, name) {
   // Chưa bấm intro thì hoãn lại, đừng dựng player để rồi bị chặn im lặng.
   if (!daVaoSite) { nhacChoBam = { loai: 'truc', thamSo: [source, url, id, start, end, name] }; return; }
@@ -2398,15 +2558,11 @@ function playMusicDirect(source, url, id, start, end, name) {
     document.body.appendChild(iframe);
 
   } else {
-    const iframe = document.createElement('iframe');
-    iframe.id = 'yt-player';
-    iframe.style.cssText = 'position:fixed;width:1px;height:1px;bottom:-10px;left:-10px;opacity:0;pointer-events:none;';
-    iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&start=${start||0}${end?'&end='+end:''}&loop=1&playlist=${id}`;
-    iframe.allow = 'autoplay; encrypted-media';
-    iframe.frameBorder = '0';
-    document.body.appendChild(iframe);
+    const yid = id || ytIdTuUrl(url);
+    if (!yid) { baoLoiNhac(); return; }
+    phatYt(yid, start, end);
   }
-  nhacDangPhat = { source, url, start: start || 0 };
+  nhacDangPhat = { source, url: khoaNhac({ url, id }), start: start || 0 };
   musicPlaying = true;
   document.getElementById('music-bar').classList.remove('hidden');
   document.getElementById('music-title').textContent = name;
@@ -2429,20 +2585,21 @@ function playMusicDirect(source, url, id, start, end, name) {
   // lại player. Fic khai mảng (21, 22, 26, 29) thì restart dù mọi mục cùng một
   // bài, và truyện đăng qua form thì luôn restart. Giờ so thẳng bài đang phát.
   const nguon = m.source || 'youtube';
+  const khoa = khoaNhac(m);
   const mocMoi = m.start || 0;
-  const audio  = document.getElementById('audio-player');
-  const cungBai = nhacDangPhat && nhacDangPhat.url === m.url && nhacDangPhat.source === nguon;
+  const am = amHienTai();     // <audio> hoặc YtAudio — cả hai seek được
+  const cungBai = nhacDangPhat && nhacDangPhat.url === khoa && nhacDangPhat.source === nguon;
 
   if (cungBai) {
-    if (audio) {
+    if (am) {
       // Cùng bài: không dựng lại player. Khác mốc thì nhảy tới mốc mới.
-      if (mocMoi !== nhacDangPhat.start) { try { audio.currentTime = mocMoi; } catch (_) {} }
+      if (mocMoi !== nhacDangPhat.start) { try { am.currentTime = mocMoi; } catch (_) {} }
       nhacDangPhat.start = mocMoi;
-      gioiHanDoan(audio, mocMoi, m.end);
+      gioiHanDoan(am, mocMoi, m.end);
       document.getElementById('music-title').textContent = name || '';
       return;
     }
-    // iframe (YouTube/SoundCloud) không seek được từ ngoài; cùng mốc thì để yên,
+    // iframe SoundCloud không seek được từ ngoài; cùng mốc thì để yên,
     // khác mốc thì đành dựng lại.
     if (mocMoi === nhacDangPhat.start) return;
   }
@@ -2472,18 +2629,13 @@ function playMusicDirect(source, url, id, start, end, name) {
     document.body.appendChild(iframe);
 
   } else {
-    // YouTube (fallback)
-    const iframe = document.createElement('iframe');
-    iframe.id = 'yt-player';
-    iframe.style.cssText = 'position:fixed;width:1px;height:1px;bottom:-10px;left:-10px;opacity:0;pointer-events:none;';
-    const end = m.end ? `&end=${m.end}` : '';
-    iframe.src = `https://www.youtube.com/embed/${m.id}?autoplay=1&start=${m.start||0}${end}&loop=1&playlist=${m.id}&enablejsapi=1`;
-    iframe.allow = 'autoplay; encrypted-media';
-    iframe.frameBorder = '0';
-    document.body.appendChild(iframe);
+    // YouTube
+    const yid = m.id || ytIdTuUrl(m.url);
+    if (!yid) { baoLoiNhac(); return; }
+    phatYt(yid, m.start, m.end);
   }
 
-  nhacDangPhat = { source: nguon, url: m.url, start: mocMoi };
+  nhacDangPhat = { source: nguon, url: khoa, start: mocMoi };
   musicPlaying = true;
   document.getElementById('music-bar').classList.remove('hidden');
   document.getElementById('music-title').textContent = name;
@@ -2492,6 +2644,7 @@ function playMusicDirect(source, url, id, start, end, name) {
 }
 
 function stopMusic() {
+  if (ytAm) { ytAm.remove(); ytAm = null; }
   ['yt-player', 'sc-player', 'audio-player'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.remove();
@@ -2503,20 +2656,20 @@ function stopMusic() {
 }
 
 function toggleMusic() {
+  const dangPhat = musicPlaying;   // chốt trước: player YouTube có thể bắn sự kiện đồng bộ và đã đổi musicPlaying
   const audio = document.getElementById('audio-player');
-  const yt    = document.getElementById('yt-player');
   const sc    = document.getElementById('sc-player');
 
   if (audio) {
     if (musicPlaying) { audio.pause(); } else { phatAudio(audio); }
-  } else if (yt) {
-    yt.src = yt.src.replace(musicPlaying ? 'autoplay=1' : 'autoplay=0',
-                            musicPlaying ? 'autoplay=0' : 'autoplay=1');
+  } else if (ytAm) {
+    // Tạm dừng / phát lại qua API — không nạp lại player (nạp lại = một lượt phát mới, có thể kèm quảng cáo mới).
+    if (dangPhat) ytAm.pause(); else ytAm.play();
   } else if (sc) {
     // SoundCloud không pause được qua iframe thuần, reload với auto_play ngược lại
     sc.src = sc.src.replace('auto_play=true','auto_play=false');
   }
-  musicPlaying = !musicPlaying;
+  musicPlaying = !dangPhat;
   document.getElementById('musicBars').classList.toggle('paused', !musicPlaying);
   document.querySelector('.music-toggle').textContent = musicPlaying ? t('pause') : t('play');
 }
