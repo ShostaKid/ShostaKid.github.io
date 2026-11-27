@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>YouTube iframe test</title>
+<style>
+:root{--bg:#F3F2EE;--card:#fff;--ink:#232323;--ink2:#57544D;--rule:#DDD8CC;--gold:#80612A;--ok:#2E6B3A;--bad:#9A3B22;--warn:#8A5A00}
+@media (prefers-color-scheme:dark){:root{--bg:#151513;--card:#1F1E1B;--ink:#ECE9E1;--ink2:#B6B1A5;--rule:#3A372F;--gold:#CDAC6B;--ok:#7CC48A;--bad:#E48A63;--warn:#E0B454}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
+h1{font-size:28px;margin:0 0 8px;font-weight:600}
+h2{font-size:18px;margin:32px 0 10px;font-weight:600}
+p{margin:8px 0;color:var(--ink2)}
+.card{background:var(--card);border:1px solid var(--rule);padding:18px 20px;margin-top:12px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+button{font:inherit;padding:10px 16px;min-height:44px;border:1px solid var(--gold);background:transparent;color:var(--gold);border-radius:999px;cursor:pointer}
+button:hover{background:var(--gold);color:var(--bg)}
+button.solid{background:var(--gold);color:var(--bg)}
+button:disabled{opacity:.45;cursor:default}
+button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+label{display:flex;gap:8px;align-items:center;min-height:44px;cursor:pointer}
+code{font:13px/1.4 ui-monospace,Menlo,Consolas,monospace}
+#stage{margin:14px 0 0;min-height:24px;border:1px dashed var(--rule);padding:8px;display:flex;align-items:center;gap:12px;color:var(--ink2);font-size:14px}
+#log{margin:12px 0 0;max-height:360px;overflow:auto;background:var(--card);border:1px solid var(--rule);padding:10px 12px;font:13px/1.5 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word}
+.flag{color:var(--warn);font-weight:600}.err{color:var(--bad)}.good{color:var(--ok)}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:600}
+.note{font-size:14px}
+</style>
+</head>
+<body>
+<main>
+  <h1>YouTube iframe: ẩn có tránh được quảng cáo không?</h1>
+  <p>Trang thử nội bộ, không link từ đâu trong web, không lưu gì. Cùng một video, ba kích thước player. Nghe bằng tai, rồi bấm kết quả bạn thấy.</p>
+
+  <div class="card note">
+    <strong>Trước khi thử</strong>
+    <ol>
+      <li>Mở trang này trong <strong>cửa sổ ẩn danh</strong> (đăng nhập YouTube Premium sẽ không có quảng cáo, làm sai kết quả).</li>
+      <li>Bật loa. Quảng cáo trong player nhúng có thể chỉ có tiếng mà không có hình.</li>
+      <li>Mỗi lần thử: bấm một nút kích thước, nghe khoảng 30–60 giây, ghi kết quả. Thử mỗi cỡ ít nhất 2–3 lần, vì quảng cáo không xuất hiện đều.</li>
+    </ol>
+  </div>
+
+  <h2>Video</h2>
+  <div class="card">
+    <div class="row">
+      <label for="vid">ID video</label>
+      <input id="vid" type="text" value="TENzstSjsus" size="14" spellcheck="false" autocomplete="off" style="font:inherit;padding:8px 10px;min-height:44px;border:1px solid var(--rule);background:transparent;color:var(--ink)">
+      <span id="vidinfo" style="color:var(--ink2);font-size:14px"></span>
+    </div>
+  </div>
+
+  <h2>Thử</h2>
+  <div class="card">
+    <div class="row" role="group" aria-label="Kích thước player">
+      <button type="button" data-mode="200">200×200 (đối chứng, nhìn thấy)</button>
+      <button type="button" data-mode="1">1×1 ẩn (như nhánh YouTube trong web)</button>
+      <button type="button" data-mode="0">0×0 ẩn</button>
+      <button type="button" id="stop">Dừng</button>
+    </div>
+    <div id="stage" aria-live="polite">Chưa phát.</div>
+    <h2 style="margin-top:22px">Kết quả lần này</h2>
+    <div class="row" role="group" aria-label="Ghi kết quả">
+      <button type="button" class="res" data-res="Có quảng cáo (nghe/thấy)">Có quảng cáo</button>
+      <button type="button" class="res" data-res="Không quảng cáo, nhạc phát">Không quảng cáo, nhạc phát</button>
+      <button type="button" class="res" data-res="Không phát được / bị chặn">Không phát được</button>
+    </div>
+    <table id="tbl" aria-label="Bảng kết quả"><thead><tr><th>Cỡ</th><th>Kết quả</th><th>Nhật ký tự động</th></tr></thead><tbody></tbody></table>
+  </div>
+
+  <h2>Nhật ký tự động</h2>
+  <p class="note">Ghi mỗi lần player đổi trạng thái. Dòng <span class="flag">NGHI QC</span> hiện khi id video trong player khác id bạn nhập, hoặc độ dài video đổi giữa chừng. Đây chỉ là gợi ý, tai bạn là chuẩn.</p>
+  <div class="row"><button type="button" id="copy">Sao chép nhật ký + kết quả</button><span id="copied" style="color:var(--ok);font-size:14px"></span></div>
+  <div id="log" role="log" aria-live="off"></div>
+</main>
+
+<script>
+(function(){
+"use strict";
+var $ = function(id){return document.getElementById(id)};
+var STATES = {"-1":"chưa bắt đầu","0":"kết thúc","1":"đang phát","2":"tạm dừng","3":"đệm","5":"đã nạp"};
+var player = null, mode = null, expectId = '', baseDur = 0, poll = null, t0 = 0, flagged = false, apiReady = false, pending = null;
+var results = [], lastAuto = '';
+
+function now(){ return ((Date.now()-t0)/1000).toFixed(1).padStart(5,' ')+'s'; }
+function log(msg, cls){
+  var el = $('log'), d = document.createElement('div');
+  if(cls) d.className = cls;
+  d.textContent = now()+'  '+msg;
+  el.appendChild(d); el.scrollTop = el.scrollHeight;
+}
+function stage(msg){ $('stage').textContent = msg; }
+function modeLabel(m){ return m==='200'?'200×200':m==='1'?'1×1 ẩn':'0×0 ẩn'; }
+
+function parseId(v){
+  v = (v||'').trim();
+  var m = v.match(/(?:youtu\.be\/|v=|embed\/)([A-Za-z0-9_-]{11})/);
+  if(m) return m[1];
+  return /^[A-Za-z0-9_-]{11}$/.test(v) ? v : '';
+}
+$('vid').addEventListener('input', function(){
+  var id = parseId($('vid').value);
+  $('vidinfo').textContent = id ? '' : 'ID gồm 11 ký tự';
+});
+
+/* API loader: chỉ nạp khi bấm lần đầu */
+function loadApi(cb){
+  if(apiReady) return cb();
+  pending = cb;
+  if(document.getElementById('yt-api')) return;
+  window.onYouTubeIframeAPIReady = function(){ apiReady = true; var f = pending; pending = null; if(f) f(); };
+  var s = document.createElement('script'); s.id = 'yt-api'; s.src = 'https://www.youtube.com/iframe_api';
+  s.onerror = function(){ log('Không nạp được YouTube iframe API (mạng / chặn quảng cáo / chặn domain).','err'); stage('Không nạp được API.'); };
+  document.head.appendChild(s);
+}
+
+function destroy(){
+  if(poll){ clearInterval(poll); poll = null; }
+  if(player && player.destroy){ try{ player.destroy(); }catch(e){} }
+  player = null;
+  var h = $('host'); if(h) h.remove();
+}
+
+function start(m){
+  var id = parseId($('vid').value);
+  if(!id){ stage('Nhập ID video hợp lệ (11 ký tự).'); return; }
+  destroy();
+  mode = m; expectId = id; baseDur = 0; flagged = false; t0 = Date.now();
+  $('log').appendChild(document.createElement('hr'));
+  log('=== Thử '+modeLabel(m)+' · video '+id+' ===');
+  stage('Đang nạp player '+modeLabel(m)+' …');
+  loadApi(function(){ build(m, id); });
+}
+
+function build(m, id){
+  var host = document.createElement('div'); host.id = 'host';
+  var inner = document.createElement('div'); inner.id = 'yt-slot'; host.appendChild(inner);
+  if(m==='200'){
+    host.style.cssText = 'margin-top:12px;width:200px;height:200px';
+    $('stage').after(host);
+  } else {
+    /* Giống nhánh YouTube trong app.js: cố định, ngoài màn hình, trong suốt, không nhận chuột */
+    var s = m==='1' ? '1px' : '0px';
+    host.style.cssText = 'position:fixed;width:'+s+';height:'+s+';bottom:-10px;left:-10px;opacity:0;pointer-events:none;overflow:hidden';
+    document.body.appendChild(host);
+  }
+  var size = m==='200' ? 200 : (m==='1' ? 1 : 0);
+  player = new YT.Player('yt-slot', {
+    width: String(size), height: String(size), videoId: id,
+    playerVars: { autoplay:1, controls: m==='200'?1:0, rel:0, playsinline:1, enablejsapi:1, origin: location.origin },
+    events: {
+      onReady: function(){ log('onReady'); try{ player.playVideo(); }catch(e){} },
+      onStateChange: onState,
+      onError: function(e){
+        var why = {2:'tham số sai',5:'lỗi HTML5',100:'video không còn / riêng tư',101:'chủ video cấm nhúng',150:'chủ video cấm nhúng'}[e.data]||'không rõ';
+        log('LỖI '+e.data+' ('+why+')','err'); stage('Lỗi '+e.data+': '+why);
+      },
+      onAutoplayBlocked: function(){ log('Trình duyệt chặn tự phát. Bấm lại nút, hoặc bấm vào player.','err'); }
+    }
+  });
+  poll = setInterval(tick, 1000);
+}
+
+function info(){
+  var o = {};
+  try{ var vd = player.getVideoData(); o.id = vd && vd.video_id; o.title = vd && vd.title; }catch(e){}
+  try{ o.dur = Math.round(player.getDuration()||0); }catch(e){}
+  try{ o.cur = Math.round(player.getCurrentTime()||0); }catch(e){}
+  return o;
+}
+function onState(e){
+  var o = info();
+  log('state '+e.data+' ('+(STATES[e.data]||'?')+')  id='+(o.id||'?')+'  t='+o.cur+'/'+o.dur+'s');
+  if(e.data===1) stage('Đang phát ('+modeLabel(mode)+'). Nghe và ghi kết quả.');
+  if(e.data===0) stage('Video kết thúc.');
+  check(o);
+}
+function tick(){
+  if(!player || !player.getPlayerState) return;
+  var o = info();
+  if(player.getPlayerState()===1) check(o);
+}
+function check(o){
+  if(!o.id) return;
+  if(o.id !== expectId && !flagged){ flagged = true; log('NGHI QC: id trong player ('+o.id+') khác id nhập ('+expectId+')','flag'); }
+  if(o.dur){
+    if(!baseDur && o.id===expectId) baseDur = o.dur;
+    else if(baseDur && Math.abs(o.dur-baseDur)>2 && o.id===expectId && !flagged){ flagged = true; log('NGHI QC: độ dài đổi '+baseDur+'s → '+o.dur+'s','flag'); }
+  }
+}
+
+document.querySelectorAll('[data-mode]').forEach(function(b){
+  b.addEventListener('click', function(){ start(b.getAttribute('data-mode')); });
+});
+$('stop').addEventListener('click', function(){ destroy(); mode = null; stage('Đã dừng.'); if(t0) log('dừng'); });
+
+document.querySelectorAll('.res').forEach(function(b){
+  b.addEventListener('click', function(){
+    if(!mode){ stage('Chưa thử cỡ nào. Bấm một nút kích thước trước.'); return; }
+    var r = b.getAttribute('data-res');
+    results.push({mode:mode, res:r, auto: flagged ? 'có dòng NGHI QC' : 'không có dòng nghi'});
+    log('KẾT QUẢ ('+modeLabel(mode)+'): '+r,'good');
+    var tr = document.createElement('tr');
+    [modeLabel(mode), r, flagged ? 'có dòng NGHI QC' : 'không có dòng nghi'].forEach(function(t){ var td = document.createElement('td'); td.textContent = t; tr.appendChild(td); });
+    $('tbl').tBodies[0].appendChild(tr);
+  });
+});
+
+$('copy').addEventListener('click', function(){
+  var txt = 'yt-test · video '+parseId($('vid').value)+'\n'
+    + results.map(function(r){return '- '+modeLabel(r.mode)+': '+r.res+' ('+r.auto+')';}).join('\n')
+    + '\n\n'+$('log').innerText;
+  var done = function(ok){ $('copied').textContent = ok ? 'Đã sao chép' : 'Không sao chép được, hãy chọn và copy tay'; setTimeout(function(){ $('copied').textContent=''; }, 3000); };
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(function(){done(true)}, function(){done(false)}); }
+  else done(false);
+});
+})();
+</script>
+</body>
+</html>
